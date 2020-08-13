@@ -1,7 +1,13 @@
 {
   "name": "mdgroupgest",
   "version": "0.1.0",
+  "description": "MD group management system",
+  "author": "Claudio Padilha e Lucas Padilha",
   "main": "public/electron.js",
+  "build": {
+    "appId": "mdgroupgest.manager"
+  },
+  "homepage": "./",
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -20,7 +26,7 @@
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
     "build": "npm run react-build && npm run electron-build",
-    "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
+    "start": "concurrently \"cross-env BROWSER=none npm run react-start\"\"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
     "extends": "react-app"
