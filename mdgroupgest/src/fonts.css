@@ -1,0 +1,71 @@
+@font-face {
+  font-family: "Merry Weather";
+  src: local('Merry Weather'), local('MerryweatherSans'),
+  url("./assets/fonts/MerriweatherSans-ExtraBold.ttf") format('truetype');
+  font-weight: bolder;
+  font-style: bolder;
+}
+
+  @font-face {
+    font-family: "Merry Weather";
+    src: local('Merry Weather'), local('MerryweatherSans'),
+    url("./assets/fonts/MerriweatherSans-Bold.ttf") format('truetype');
+    font-weight: bold;
+    font-style: bold;
+}
+
+@font-face {
+    font-family: "Merry Weather";
+    src: local('Merry Weather'), local('MerryweatherSans'),
+    url("./assets/fonts/MerriweatherSans-Medium.ttf") format('truetype');
+    font-weight: medium;
+    font-style: medium;
+}
+
+@font-face {
+  font-family: "Merry Weather";
+  src: local('Merry Weather'), local('MerryweatherSans'),
+  url("./assets/fonts/MerriweatherSans-Regular.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Merry Weather";
+  src: local('Merry Weather'), local('MerryweatherSans'),
+  url("./assets/fonts/MerriweatherSans-Light.ttf") format('truetype');
+  font-weight: lighter;
+  font-style: lighter;
+}
+
+@font-face {
+  font-family: "Quicksand";
+  src: local('Quicksand'), local('Quicksand'),
+  url("./assets/fonts/Quicksand-Bold.ttf") format('truetype');
+  font-weight: bold;
+  font-style: bold;
+}
+
+@font-face {
+  font-family: "Quicksand";
+  src: local('Quicksand'), local('Quicksand'),
+  url("./assets/fonts/Quicksand-Regular.ttf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Quicksand";
+  src: local('Quicksand'), local('Quicksand'),
+  url("./assets/fonts/Quicksand-Medium.ttf") format('truetype');
+  font-weight: medium;
+  font-style: medium;
+}
+
+@font-face {
+  font-family: "Quicksand";
+  src: local('Quicksand'), local('Quicksand'),
+  url("./assets/fonts/Quicksand-Light.ttf") format('truetype');
+  font-weight: lighter;
+  font-style: lighter;
+}
