@@ -1,12 +1,13 @@
 import axios from 'axios'
 import handleAxiosError from './axiosErrorHandler'
 import routes from '../../'
+// We should import all we need to control the application responsiveness here
 
 export default {
     login: (data) => {
         return new Promise((resolve, reject) => {
             console.log("LOGN PAYLOAD: ", data)
-
+            console.log("ROUTE: ", routes.login_url)
             axios.post(`${routes.login_url}`, data)
 
                 .then((res) => {
