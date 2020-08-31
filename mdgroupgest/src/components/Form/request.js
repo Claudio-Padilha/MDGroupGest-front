@@ -1,0 +1,27 @@
+import axios from 'axios'
+import handleAxiosError from './axiosErrorHandler'
+import routes from '../../'
+
+export default {
+    login: (data) => {
+        return new Promise((resolve, reject) => {
+            console.log("LOGN PAYLOAD: ", data)
+
+            axios.post(`${routes.login_url}`, data)
+
+                .then((res) => {
+                    console.log("RESPONSE: ", res)
+
+                    // HERE WE SHOULD UPDATE FRONTEND'S RESPONSIVE 
+                    // STRUCTURE WITH UPDATED DATA FROM DATABASE
+            
+                    resolve()
+                })
+                .catch(error => {
+                    console.log("ERRO: ", error)
+                    const message = handleAxiosError(error, 'Erro do servidor ao atualizar caminhão')
+                    reject(message)
+                })
+        })
+    },
+}
