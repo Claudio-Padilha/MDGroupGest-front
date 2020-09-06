@@ -2,14 +2,24 @@ import React from "react";
 import PropTypes from "prop-types";
 
 import { ErrorText, Body } from "../Text/text";
-import { TextAreaContainer, StyledTextArea } from "./styles";
+import { StyledTextArea, TextAreaContainer } from "./styles";
 
-const TextArea = ({ error, placeholder, defaultValue, label, onChange }) => (
+const TextArea = ({ 
+  error,
+  placeholder,
+  defaultValue,
+  label,
+  onChange,
+  type
+}) => (
   <TextAreaContainer error={error}>
     {label && <Body>{label}</Body>}
     <StyledTextArea
+      resize={false}
       error={error}
       placeholder={placeholder}
+      onChange={onChange}
+      type={type}
     ></StyledTextArea>
     {error && <ErrorText>{error}</ErrorText>}
   </TextAreaContainer>

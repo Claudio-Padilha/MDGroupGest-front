@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { CONSTANTS } from '../../constants';
+import CONSTANTS from '../../constants?';
 
 export const Jumbo = styled.h1`
   font-family: Space Grotesk;
@@ -7,7 +7,7 @@ export const Jumbo = styled.h1`
   font-weight: bold;
   font-size: 48px;
   line-height: 64px;
-  color: ${props => props.theme.colors.darkBlue};
+  color: ${props => props.CONSTANTS?.colors.darkBlue};
 `;
 
 const headingSizes = [
@@ -42,7 +42,7 @@ export const Heading = styled.h2`
   font-style: normal;
   font-weight: bold;
   ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[0])}
-  color: ${CONSTANTS.colors.black};
+  color: ${CONSTANTS?.colors.black};
 `;
 
 export const SubHeading = styled.h3`
@@ -50,7 +50,7 @@ export const SubHeading = styled.h3`
   font-style: normal;
   font-weight: bold;
   ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[2])}
-  color: ${CONSTANTS.colors.black};
+  color: ${CONSTANTS?.colors.black};
 `;
 
 export const Body = styled.p`
@@ -59,7 +59,7 @@ export const Body = styled.p`
   font-weight: normal;
   font-size: 16px;
   line-height: 24px;
-  color: ${CONSTANTS.colors.mediumGrey};
+  color: ${CONSTANTS?.colors.mediumGrey};
 `;
 export const SmallBody = styled.a`
   padding-top: 1%;
@@ -68,7 +68,7 @@ export const SmallBody = styled.a`
   font-weight: ${props => (props.bold ? "bold" : "normal")};
   font-size: 10px;
   line-height: 16px;
-  color: ${CONSTANTS.colors.mediumGrey};
+  color: ${CONSTANTS?.colors.mediumGrey};
   :hover {
     cursor: pointer;
   }
@@ -95,5 +95,5 @@ export const ButtonText = styled.span`
 `;
 
 export const ErrorText = styled(SmallBody)`
-  color: ${CONSTANTS.colors.red};
+  color: ${CONSTANTS?.colors.red};
 `;

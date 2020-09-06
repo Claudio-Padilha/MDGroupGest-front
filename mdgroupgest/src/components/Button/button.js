@@ -11,11 +11,13 @@ const Button = ({
   isSmall,
   action,
   fullWidth,
-  children
+  children, 
+  type
 }) => {
   if (text) {
     return (
       <StyledButton
+        type={type}
         fullWidth={fullWidth}
         btnType={btnType}
         disabled={isDisabled}
@@ -31,6 +33,7 @@ const Button = ({
 };
 
 Button.propTypes = {
+  type: PropTypes.string,
   isDisabled: PropTypes.bool,
   action: PropTypes.func,
   isSmall: PropTypes.bool,

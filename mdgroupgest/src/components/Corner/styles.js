@@ -1,19 +1,15 @@
 import styled from "styled-components";
 
-const CornerContainer = styled.div`
+const CornerContainer = styled.span`
   display: flex;
   flex-direction: row;
   align-self: flex-end;
-  margin-right: 25%;
-  margin-top: 25%;
 `;
 
-const CornerContainer180 = styled.div`
+const CornerContainer180 = styled.span`
   display: flex;
   flex-direction: row;
   align-self: flex-start;
-  margin-left: 25%;
-  margin-bottom: 25%;
   > img {
     transform: rotate(180deg);
   }

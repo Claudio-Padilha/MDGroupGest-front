@@ -1,11 +1,11 @@
 import styled from "styled-components";
-import { CONSTANTS } from '../../constants';
+import CONSTANTS from '../../constants?';
 
 const InputContainer = styled.div`
   display: flex;
   flex-flow: column nowrap;
   justify-content: flex-end;
-  color: ${CONSTANTS.colors.mediumGrey};
+  color: ${CONSTANTS?.colors.mediumGrey};
 `;
 
 const SubLabelContainer = styled.span`
@@ -16,7 +16,7 @@ const SubLabelContainer = styled.span`
 `;
 
 const StyledInput = styled.input`
-  padding: ${CONSTANTS.margin}px;
+  padding: ${CONSTANTS?.margin}px;
   font-family: Merry Weather;
   font-style: normal;
   font-weight: normal;
