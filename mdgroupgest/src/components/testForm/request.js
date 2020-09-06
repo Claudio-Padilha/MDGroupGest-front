@@ -1,6 +1,6 @@
 import axios from 'axios'
-import handleAxiosError from './axiosErrorHandler'
-import routes from '../../'
+//import handleAxiosError from 'axiosErrorHandler'
+import routes from '../../routes';
 // We should import all we need to control the application responsiveness here
 
 export default {
@@ -16,12 +16,12 @@ export default {
                     // HERE WE SHOULD UPDATE FRONTEND'S RESPONSIVE 
                     // STRUCTURE WITH UPDATED DATA FROM DATABASE
             
-                    resolve()
+                    //resolve()
                 })
                 .catch(error => {
                     console.log("ERRO: ", error)
-                    const message = handleAxiosError(error, 'Erro do servidor ao atualizar caminhão')
-                    reject(message)
+                    //const message = handleAxiosError(error, 'Erro do servidor ao atualizar caminhão')
+                    //reject(message)
                 })
         })
     },

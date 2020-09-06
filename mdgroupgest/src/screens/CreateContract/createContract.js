@@ -12,17 +12,17 @@ import {
 
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
-import Form from '../../components/Forms/normalForm';
+import Form from '../../components/testForm/testForm';
 
 const CreateContract = () => { 
 
-  const mockedFields = [
-    { type: "text", label: "Nome do Comercial" },
-    { type: "text", label: "Nome do Cliente"},
-    { type: "text", label: "NIF/NIPC do Cliente"},
-    { type: "date-field", label: "Data de entrega"},
-    { type: "text", label: "Data de assinatura"},
-    { type: "text", label: "Contacto cliente"}
+  const FIELDS = [
+    { type: "text", key:"comercialName", question: "Nome do Comercial" },
+    { type: "text", key:"clientName", question: "Nome do Cliente"},
+    { type: "text", key:"clientNIF", question: "NIF/NIPC do Cliente"},
+    { type: "date", key:"deliveryDate", question: "Data de entrega"},
+    { type: "text", key:"assignDate", question: "Data de assinatura"},
+    { type: "text", key:"clientContact", question: "Contacto cliente"}
   ];
   
   return (
@@ -32,8 +32,8 @@ const CreateContract = () => {
       <Form 
         top
         bg="primary"
-        fullWidth
-        formFieldsPaginated={mockedFields}
+        isFullWidth={false}
+        formFields={FIELDS}
         btnLabel="Próximo"
         onSubmit={() => console.log('test from submit')}
         onChange={() => console.log('test from changing')}

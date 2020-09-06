@@ -6,6 +6,8 @@ import { MainContainer, LoginContainer } from './styles';
 import Form from '../../components/testForm/testForm';
 import { LogoMD } from '../../components/Logo/logo';
 import { Corner, Corner180} from '../../components/Corner/corner';
+
+import request from '../../components/testForm/request';
  
 const Login = () => {
   const email = "lucas_padilha@icloud.com" // will come from API 
@@ -17,10 +19,11 @@ const Login = () => {
   ];
 
   const handleSubmitForm = (formFields) => {
-    if (formFields.email === email && formFields.password === password) {
-      console.log(formFields, '--> VOCÊ FOI AUTENTICADO COM SUCESSO!')
-    } else
-    console.log(formFields, '--> ACESSO NEGADO!')
+    // if (formFields.email === email && formFields.password === password) {
+    //   console.log(formFields, '--> VOCÊ FOI AUTENTICADO COM SUCESSO!')
+    // } else
+    // console.log(formFields, '--> ACESSO NEGADO!')
+    request.login(formFields);
   };
 
   const HandleConfirmLoginAlert = () => {
