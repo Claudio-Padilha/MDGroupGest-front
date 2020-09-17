@@ -12,7 +12,7 @@ import {
 
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
-import Form from '../../components/Forms/normalForm';
+import Form from '../../components/Form/normalForm';
 
 const CreateOffice = () => { 
 
