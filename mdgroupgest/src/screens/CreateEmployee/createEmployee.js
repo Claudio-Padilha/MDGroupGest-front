@@ -13,50 +13,32 @@ import { LogoMD } from '../../components/Logo/logo';
 import Form from '../../components/Form/normalForm';
 import request from '../../components/Form/request';
 
-const CreateContract = () => {
+const CreateEmployee = () => {
 
   const handleSubmitForm = formFields => { console.log(formFields, '--> VOCÊ FOI AUTENTICADO COM SUCESSO!') };
 
-  const firstPageFIELDS = [
+  const FIELDS = [
+    { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
+    { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF" },
+    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
+    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
+    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
     { type: "dropdown",
-    subType: "twoColumns",
-    side: "right",
-    key: "employeeName",
-    question: "Nome do Comercial",  
-    options: [
-      {
-        value: "Miguel",
-        label: "Miguel"
-      },
-      {
-        value: "Daniel",
-        label: "Daniel"
-      },
-      {
-        value: "Lucas",
-        label: "Lucas"
-      },
-      {
-        value: "Cláudio",
-        label: "Cláudio"
-      }
-    ] 
-  },
-    { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
-    { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
-    { type: "date", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega" },
-    { type: "date", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura" },
-    { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
-  ];
-
-  const secondPageFIELDS = [
-    {type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica"},
-    {type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz"},
-    {type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas"},
-    {type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL"},
-    {type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
-    {type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
-    {type: "text-area", subType: "twoColumns", side: "right", key: "observations", question: "Observações"},
+      subType: "twoColumns",
+      side: "right",
+      key: "employeeOffice",
+      question: "Escritório",  
+      options: [
+        {
+          value: "Lisboa",
+          label: "Lisboa"
+        },
+        {
+          value: "Porto",
+          label: "Porto"
+        }
+      ] 
+    },
   ];
 
   return (
@@ -65,7 +47,7 @@ const CreateContract = () => {
       <LogoContainer><LogoMD /></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
-          formFields={secondPageFIELDS}
+          formFields={FIELDS}
           top
           bg="primary"
           isFullWidth
@@ -76,7 +58,7 @@ const CreateContract = () => {
   )
 }
 
-export default CreateContract;
+export default CreateEmployee;
 
 
 

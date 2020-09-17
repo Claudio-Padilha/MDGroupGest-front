@@ -13,6 +13,20 @@ export const SelectContainer = styled.div`
   > p {
     margin: ${props => props.CONSTANTS?.margin / 2}px 0;
   }
+  > div > div {
+    align-items: center;
+    background-color: #FFF;
+
+    box-shadow: none;
+    cursor: default;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    position: relative;
+    transition: all 300ms;
+    height: 10%;
+    color: #88827C;
+  }
 `;
 export const selectStyles = {
   menu: (provided, state) => ({
