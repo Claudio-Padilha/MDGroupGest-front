@@ -6,7 +6,10 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-const TextWithCalendar = ({label, type, error}) => {
+import { ErrorText, Body } from '../Text/text';
+import { InputContainer } from './styles';
+
+const TextWithCalendar = ({label, error, onChange, type}) => {
   var today = Date.now()
   const [selectedDate, setSelectedDate] = useState(today);
   const [inputType, setInputType] = useState(type || "date-field");
@@ -16,20 +19,28 @@ const TextWithCalendar = ({label, type, error}) => {
   };
 
   return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker
-        margin="normal"
-        id="date-picker-dialog"
-        label={label}
-        format="MM/dd/yyyy"
-        value={selectedDate}
-        type={inputType}
-        onChange={handleDateChange}
-        KeyboardButtonProps={{
-          'aria-label': 'change date',
-        }}
-      />
-    </MuiPickersUtilsProvider>
+    <InputContainer error={error}>
+    {/* {hasIcon && (
+      <nav onClickCapture={handleIconChange}>
+        <Icon name={displayedIcon} />
+      </nav>
+    )} */}
+    {label && <Body>{label}</Body>}
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <KeyboardDatePicker
+          margin="normal"
+          id="date-picker-dialog"
+          format="MM/dd/yyyy"
+          value={selectedDate}
+          type={inputType}
+          onChange={handleDateChange}
+          KeyboardButtonProps={{
+            'aria-label': 'change date',
+          }}
+        />
+      </MuiPickersUtilsProvider>
+    {error && <ErrorText>{error}</ErrorText>}
+    </InputContainer>
   );
 }
 
