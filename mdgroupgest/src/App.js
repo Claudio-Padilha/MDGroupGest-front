@@ -9,7 +9,7 @@ import SwitchButton from './components/ToggleComponent/toggleButton';
 
 function App() {
   return (
-    <CreateContract />
+    <CreateOffice />
   );
 }
 

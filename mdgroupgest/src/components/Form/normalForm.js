@@ -14,7 +14,9 @@ import SwitchButton from "../ToggleComponent/toggleButton";
 const Form = ({ formFields, btnLabel, bg, isFullWidth, children, onSubmit }) => {
   const getInitialValues = () => {
     const initialValues = {};
+    console.log("KEYS: ", Object.keys(formFields));
     const keys = formFields && Object.keys(formFields);
+    console.log(keys)
     keys.forEach((i) => {
       const formField = formFields[i];
       initialValues[formField.key] = formField.value;

@@ -8,7 +8,7 @@ export default {
         return new Promise((resolve, reject) => {
             console.log("LOGN PAYLOAD: ", data);
             console.log("ROUTE: ", routes.login_url);
-            axios.post(`${routes.login_url}`, data)
+            axios.post(`http://localhost:8000/auth/login/`, data)
 
                 .then((res) => {
                     console.log("RESPONSE: ", res);

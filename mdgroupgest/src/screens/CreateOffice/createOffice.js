@@ -17,10 +17,10 @@ import Form from '../../components/Form/normalForm';
 const CreateOffice = () => { 
 
   const mockedFields = [
-    { type: "text", label: "Nome do escritório" },
-    { type: "text", label: "NIPC do escritório"},
-    { type: "text", label: "Endereço do escritório"},
-    { type: "text", label: "Email do escritório"}
+    { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
+    { type: "number", subType: "twoColumns", side: "right", key: "nipc", question: "NIPC" },
+    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
+    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
   ];
   
   return (
@@ -31,7 +31,7 @@ const CreateOffice = () => {
         top
         bg="primary"
         fullWidth
-        formFieldsPaginated={mockedFields}
+        formFields={mockedFields}
         btnLabel="Criar Escritório"
         onSubmit={() => console.log('test from submit')}
         // onChange={() => console.log('test from changing')}
