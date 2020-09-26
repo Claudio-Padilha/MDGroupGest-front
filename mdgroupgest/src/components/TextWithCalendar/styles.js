@@ -10,6 +10,11 @@ const InputContainer = styled.div`
     margin-bottom: 0;
     margin-top: 0;
   }
+  button {
+    position: relative;
+    background-color: #fff;
+    box-shadow: none;
+  }
 `;
 
 const SubLabelContainer = styled.span`

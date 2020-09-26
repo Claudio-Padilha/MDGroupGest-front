@@ -18,11 +18,13 @@ const StyledTextArea = styled.textarea`
   font-family: Merry Weather;
   font-style: normal;
   font-weight: normal;
+  outline: none;
   font-size: 16px;
   line-height: 24px;
   &:focus {
     outline: none;
   }
+  height: 120px;
 `;
 
 export { TextAreaContainer, StyledTextArea };

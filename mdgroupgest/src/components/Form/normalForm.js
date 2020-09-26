@@ -61,7 +61,8 @@ const renderFields = (field, index, formik) => {
     error: formik.errors[field.key],
     label: field.question,
     type: field.type,
-    onChange: formik.handleChange
+    onChange: formik.handleChange,
+    iconName: formik.iconName
   };
 
   switch (field?.type) {

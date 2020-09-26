@@ -37,4 +37,16 @@ export default {
                 })
         });
     },
+    createContract: (data) => {
+        return new Promise((resolve, reject) => {
+            console.log("New Contract Payload --> ", data)
+            axios.post(`${routes.createEmployee}`, data)
+                .then(res => {
+                    console.log("RESPONSE --> ", res);
+                })
+                .catch(error => {
+                    console.log("ERROR --> ", error);
+                })
+        })
+    }
 }

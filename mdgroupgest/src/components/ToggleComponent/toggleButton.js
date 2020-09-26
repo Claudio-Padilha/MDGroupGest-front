@@ -3,22 +3,43 @@ import React, { useState } from 'react';
 import Switch from '@material-ui/core/Switch';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 
-import MainContainer from './styles'; 
+import { ErrorText, Body } from "../Text/text";
 
-const SwitchButton = ({labelName}) => {
+import { MainContainer, ToggleContainer } from './styles'; 
+
+const SwitchButton = ({
+  label,
+  error,
+}) => {
   const [checked, setChecked] = useState(false);
 
   const toggleChecked = () => {
-    setChecked((prev) => !prev );
+    setChecked((checked) => !checked);
   };
 
   return (
     <MainContainer>
-        <FormControlLabel
-          label={labelName}
-          control={<Switch checked={checked} onChange={toggleChecked} color="default" />}
-        />
+
+        {label && <Body>{label}</Body>}
+
+        <ToggleContainer className={"toggleContainer"}>
+          <FormControlLabel
+            control={
+              <Switch
+                inputProps={{
+                  value: checked
+                }}
+                checked={checked}
+                onChange={toggleChecked}
+                color="default"
+              />
+            }
+          />
+        </ToggleContainer>
+        {error && <ErrorText>{error}</ErrorText>}
+
     </MainContainer>
+    
   );
 };
 

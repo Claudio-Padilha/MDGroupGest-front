@@ -77,6 +77,7 @@ const Login = () => {
           top
           bg="primary"
           isFullWidth
+          iconName='ios-lock'
           formFields={FIELDS}
           btnLabel="Entrar"
           onSubmit={handleSubmitForm}

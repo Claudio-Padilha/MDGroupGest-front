@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { ErrorText, Body } from "../Text/text";
@@ -10,20 +10,27 @@ const TextArea = ({
   defaultValue,
   label,
   onChange,
-  type
-}) => (
-  <TextAreaContainer error={error}>
-    {label && <Body>{label}</Body>}
-    <StyledTextArea
-      resize={false}
-      error={error}
-      placeholder={placeholder}
-      onChange={onChange}
-      type={type}
-    ></StyledTextArea>
-    {error && <ErrorText>{error}</ErrorText>}
-  </TextAreaContainer>
-);
+  type,
+  ...otherProps
+}) => {
+  const [inputType, setInputType] = useState(type || "text-area");
+
+  return (
+    <TextAreaContainer error={error}>
+      {label && <Body>{label}</Body>}
+      <StyledTextArea
+        resize={false}
+        error={error}
+        placeholder={placeholder}
+        onChange={onChange}
+        type={inputType}
+        {...otherProps}
+      ></StyledTextArea>
+      {error && <ErrorText>{error}</ErrorText>}
+    </TextAreaContainer>
+  )
+
+};
 
 TextArea.propTypes = {
   error: PropTypes.string,

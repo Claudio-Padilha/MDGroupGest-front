@@ -1,5 +1,5 @@
-import React from 'react';
-import CForm from '../../components/Form/complexForm';
+import React, { useState } from 'react';
+
 
 import {
   MainDiv,
@@ -8,16 +8,19 @@ import {
   CornerRight
 } from './styles';
 
+import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
-import Form from '../../components/Form/normalForm';
 import request from '../../components/Form/request';
 
 const CreateContract = () => {
 
-  const handleSubmitForm = formFields => { console.log(formFields, '--> VOCÊ FOI AUTENTICADO COM SUCESSO!') };
+  const handleSubmitForm = formFields => { request.createContract(formFields) };
 
-  const firstPageFIELDS = [
+  // const [page, setPage] = useState(1)
+
+  // setPage(2) CONTINUAR COM ESSA LÓGICA PARA PAGINAÇÃO (CHAVE DE PAGINA PARA MUDAR COM USESTATE)
+  const FIELDS = [
     { type: "dropdown",
     subType: "twoColumns",
     side: "right",
@@ -44,32 +47,30 @@ const CreateContract = () => {
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
-    { type: "date", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega" },
-    { type: "date", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
-  ];
-
-  const secondPageFIELDS = [
-    {type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica"},
-    {type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz"},
-    {type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas"},
-    {type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL"},
-    {type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
-    {type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
-    {type: "text-area", subType: "twoColumns", side: "right", key: "observations", question: "Observações"},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: true},
+    { type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
+    { type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
+    { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega" },
+    { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura" },
+    { type: "text-area", subType: "twoColumns", side: "right", key: "observations", question: "Observações", initialValue: ''},
+    
   ];
 
   return (
-      <MainDiv>
+    <MainDiv>
       <CornerLeft><Corner180 /></CornerLeft>
       <LogoContainer><LogoMD /></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
-          formFields={secondPageFIELDS}
+          formFields={FIELDS}
           top
           bg="primary"
           isFullWidth
-          btnLabel="Inserir Comercial"
+          btnLabel="Inserir Contrato"
         />
       <CornerRight><Corner /></CornerRight>
     </MainDiv>

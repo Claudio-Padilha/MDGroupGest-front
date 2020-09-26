@@ -27,6 +27,7 @@ const CForm = ({
   errors,
   children,
   isFullWidth,
+  initialValue,
   subType,
   place
 }) => {
@@ -36,11 +37,13 @@ const CForm = ({
     const keys = formFields && Object.keys(formFields);
     keys.forEach((i) => {
       const formField = formFields[i];
-      initialValues[formField.key] = formField.value;
+      initialValues[formField.key] = formField.initialValue;
     });
 
     return initialValues;
   }
+
+  console.log(getInitialValues(), 'VALORES INICIAIS')
 
   return (
     <>
@@ -57,16 +60,19 @@ const CForm = ({
           {
             props => (
               <StyledForm onSubmit={props.handleSubmit}>
-                {formFields &&
-                  formFields.map((field, index) => {
-                    return renderFields(field, index, props);
-                  })}
-                    <Button
-                      type="submit"
-                      isFullWidth={isFullWidth}
-                      btnType="primary"
-                      text={btnLabel}
-                    />
+                <div>
+                  {formFields &&
+                    formFields.map((field, index) => {
+                      return renderFields(field, index, props);
+                    })}
+                </div>
+  
+                <Button
+                  type="submit"
+                  isFullWidth={isFullWidth}
+                  btnType="primary"
+                  text={btnLabel}
+                />
               </StyledForm>
             )
           }
@@ -154,6 +160,9 @@ const renderFields = (field, index, formik) => {
     onChange: formik.handleChange,
     subType: field.subType,
     place: field.place,
+    icon: field.icon,
+    initialValue: field.initialValue,
+    booleanValue: formik.values[field.booleanValue]
   };  
 
   switch (field?.type) {
@@ -186,16 +195,24 @@ const renderFields = (field, index, formik) => {
           />
         </Form.Group>
       );
-    case "date":
+    case "dateField":
       return (
         <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
-          <TextWithCalendar key={field.label} {...fieldProps} />
+          <TextWithCalendar key={field.label} {...fieldProps} onChange={date => formik.setFieldValue(field.label, date.value)} />
         </Form.Group>
       );
     case "toggle":
       return (
         <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
-          <SwitchButton {...fieldProps} />
+          <SwitchButton
+            key={`${field.key}-${index}`}
+            name={field.key}
+            subType={field.subType}
+            side={field.side}
+            initialValue={field.initialValue}
+            value={field.value}
+            label={field.question}
+          />
         </Form.Group>
       );
     default:

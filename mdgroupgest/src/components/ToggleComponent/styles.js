@@ -16,6 +16,16 @@ const MainContainer = styled.div`
   .MuiSwitch-switchBase.Mui-checked {
     color: ${ CONSTANTS?.colors.black }
   }
+  .toggleContainer {
+    width: 45%;
+  }
 `;
 
-export default MainContainer; 
+const ToggleContainer = styled.div`
+  display: flex; 
+  justify-content: space-between;
+`;
+
+
+
+export { MainContainer, ToggleContainer }; 

@@ -20,11 +20,6 @@ const TextWithCalendar = ({label, error, onChange, type}) => {
 
   return (
     <InputContainer error={error}>
-    {/* {hasIcon && (
-      <nav onClickCapture={handleIconChange}>
-        <Icon name={displayedIcon} />
-      </nav>
-    )} */}
     {label && <Body>{label}</Body>}
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker

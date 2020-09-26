@@ -55,9 +55,6 @@ export const FormContainer = styled.div`
     padding: 0;
     padding-bottom: 2%;
   }
-
-
-
 `;
 
 export const RightCFormContainer = styled.div`
@@ -75,8 +72,6 @@ export const LeftCFormContainer = styled.div`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 100vh;
-  
 `;
 
 export const CFormContainer = styled.div`
@@ -91,113 +86,186 @@ max-width: 760px;
 text-align: left;
 width: 100%;
 
-.name, .employeeName {
+.name {
   position: absolute;
-  top: 30%;
+  top: 28%;
   left: 25%;
   width: 15%;
 }
 
-.nif, .clientName {
+.nif {
   position: absolute;
-  top: 43%;
+  top: 41%;
   left: 25%;
   width: 15%;
 }
 
 .contact, .clientNif {
   position: absolute;
-  top: 58%;
+  top: 56%;
   left: 25%;
   width: 15%;
 }
 
 .email, .deliveryDate {
   position: absolute;
-  top: 30%;
+  top: 28%;
   left: 45%;
   width: 25%; 
 }
 
 .address, .signatureDate {
   position: absolute;
-  top: 43%;
+  top: 41%;
   left: 45%;
   width: 25%;
 }
 
 .employeeOffice, .clientContact {
   position: absolute;
-  top: 58%;
+  top: 56%;
   left: 45%;
   width: 25%;
 }
 
-.electronicBill {
+.employeeName {
   position: absolute;
-  top: 58%;
-  left: 45%;
-  width: 25%;
+  top: 27%;
+  left: 20%;
+  width: 15%;
 }
 
-.lightPPI {
+.clientName {
   position: absolute;
-  top: 58%;
-  left: 45%;
-  width: 25%;
+  top: 40%;
+  left: 20%;
+  width: 15%;
 }
 
-.gasPPI {
+.clientNif {
   position: absolute;
-  top: 58%;
-  left: 45%;
-  width: 25%;
+  top: 53%;
+  left: 20%;
+  width: 15%;
+}
+
+.clientContact {
+  position: absolute;
+  top: 66%;
+  left: 20%;
+  width: 15%;
 }
 
 .PEL {
   position: absolute;
-  top: 58%;
-  left: 45%;
-  width: 25%;
+  top: 29%;
+  left: 40%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.lightPPI {
+  position: absolute;
+  top: 29%;
+  left: 49%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.gasPPI {
+  position: absolute;
+  top: 29%;
+  left: 58%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.electronicBill {
+  position: absolute;
+  top: 29%;
+  left: 67%;
+  width: 15%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
 }
 
 .CUI {
   position: absolute;
-  top: 28%;
-  right: 28%;
-  width: 22%;
+  top: 40%;
+  left: 40%;
+  width: 18%;
+  > div > input {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
 }
 
 .CPE {
   position: absolute;
-  top: 38%;
-  right: 28%;
-  width: 22%;
+  top: 40%;
+  left: 60%;
+  width: 18%;
+  > div > input {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
+}
+
+.deliveryDate {
+  position: absolute;
+  top: 53%;
+  left: 40%;
+  width: 12%;
+}
+
+.signatureDate {
+  position: absolute;
+  top: 66%;
+  left: 40%;
+  width: 12%;
 }
 
 .observations {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 25%; 
+  top: 53%;
+  left: 55%;
+  width: 23%;
+}
+
+.fa-check-circle {
+  width: 15%;
+  color: ${CONSTANTS?.colors?.black}
 }
 
 > form {
   width: 100%;
-  height: 100%;
+  height: 80vh;
   justify-content: center;
   display: flex;
   align-items: center;
 }
 
 button {
-  align-self: flex-end;
-  margin-bottom: 10%;
+  position: absolute;
+  top: 85%;
   box-shadow: 0 1px 3px #000;
   outline: none;
-  width: 25%;
-  padding: 2.5%;
-  background-color: #000;
+  width: 17%;
+  height: 7%;
+  background-color: ${CONSTANTS?.colors?.black};
   border: transparent;
 }
 
@@ -249,7 +317,7 @@ export const CFormRow = styled(Row)`
 export const StyledForm = styled(Form)`
   div {
     & > textarea {
-      min-height: 161px;
+      min-height: 100px;
     }
     & > p {
       text-align: left;
