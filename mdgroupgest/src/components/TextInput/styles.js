@@ -23,6 +23,10 @@ const StyledInput = styled.input`
   font-size: 16px;
   line-height: 24px;
   outline: none;
+  border-width: 0px 0px 1px 0px;
+  border-color: ${CONSTANTS.colors.lightGrey};
+  padding: 0;
+  padding-bottom: 2%;
 `;
 
 export { InputContainer, SubLabelContainer, StyledInput };

@@ -49,12 +49,6 @@ export const FormContainer = styled.div`
   .YZKXG {
     width: 100%;
   }
-  .lnIMEg {
-    border-width: 0px 0px 1px 0px;
-    border-color: ${CONSTANTS.colors.lightGrey};
-    padding: 0;
-    padding-bottom: 2%;
-  }
 `;
 
 export const RightCFormContainer = styled.div`
@@ -159,7 +153,7 @@ width: 100%;
 .PEL {
   position: absolute;
   top: 29%;
-  left: 40%;
+  left: 39%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -170,7 +164,7 @@ width: 100%;
 .lightPPI {
   position: absolute;
   top: 29%;
-  left: 49%;
+  left: 48%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -181,7 +175,7 @@ width: 100%;
 .gasPPI {
   position: absolute;
   top: 29%;
-  left: 58%;
+  left: 57%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -192,7 +186,7 @@ width: 100%;
 .electronicBill {
   position: absolute;
   top: 29%;
-  left: 67%;
+  left: 66%;
   width: 15%;
   > div > p  {
     margin-bottom: 1%;
@@ -203,7 +197,7 @@ width: 100%;
 .CUI {
   position: absolute;
   top: 40%;
-  left: 40%;
+  left: 39%;
   width: 18%;
   > div > input {
     position: absolute;
@@ -215,7 +209,7 @@ width: 100%;
 .CPE {
   position: absolute;
   top: 40%;
-  left: 60%;
+  left: 59%;
   width: 18%;
   > div > input {
     position: absolute;
@@ -227,14 +221,14 @@ width: 100%;
 .deliveryDate {
   position: absolute;
   top: 53%;
-  left: 40%;
+  left: 39%;
   width: 12%;
 }
 
 .signatureDate {
   position: absolute;
   top: 66%;
-  left: 40%;
+  left: 39%;
   width: 12%;
 }
 
