@@ -43,8 +43,6 @@ const CForm = ({
     return initialValues;
   }
 
-  console.log(getInitialValues(), 'VALORES INICIAIS')
-
   return (
     <>
       <WidthMessageContainer>

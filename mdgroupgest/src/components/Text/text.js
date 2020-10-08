@@ -42,7 +42,7 @@ export const Heading = styled.h2`
   font-style: normal;
   font-weight: bold;
   ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[0])}
-  color: ${CONSTANTS?.colors.black};
+  color: ${props => (props.isReverseColor ? CONSTANTS?.colors.white : CONSTANTS?.colors.black)};
 `;
 
 export const SubHeading = styled.h3`
@@ -50,16 +50,16 @@ export const SubHeading = styled.h3`
   font-style: normal;
   font-weight: bold;
   ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[2])}
-  color: ${CONSTANTS?.colors.black};
+  color: ${props => (props.isReverseColor ? CONSTANTS?.colors.white : CONSTANTS?.colors.black)};
 `;
 
 export const Body = styled.p`
   font-family: Merry Weather;
   font-style: normal;
   font-weight: normal;
-  font-size: 16px;
+  font-size: ${props => (props.isSmall ? "10px" : "16px")};
   line-height: 24px;
-  color: ${CONSTANTS?.colors.mediumGrey};
+  color: ${props => (props.isReverseColor ? CONSTANTS?.colors.white : CONSTANTS?.colors.mediumGrey)};
 `;
 export const SmallBody = styled.a`
   padding-top: 1%;

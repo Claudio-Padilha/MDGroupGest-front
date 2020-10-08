@@ -1,25 +1,47 @@
 import React, { useState } from 'react';
-
+import { useHistory, useLocation } from 'react-router-dom';
 
 import {
   MainDiv,
   CornerLeft,
   LogoContainer,
-  CornerRight
+  CornerRight, 
+  BackContainer
 } from './styles';
 
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import request from '../../components/Form/request';
+import { BackIcon } from '../../components/Icon/icons';
 
-const CreateContract = () => {
+const CreateContract = ({ state }) => {
 
+  console.log("O URL ANTERIOR É: " + document.referrer)
   const handleSubmitForm = formFields => { request.createContract(formFields) };
+  const history = useHistory();
 
-  // const [page, setPage] = useState(1)
+  const previousUrl = document.referrer;
+  const loginUrl = "http://localhost:3000/";
 
-  // setPage(2) CONTINUAR COM ESSA LÓGICA PARA PAGINAÇÃO (CHAVE DE PAGINA PARA MUDAR COM USESTATE)
+  const refresh = window.location.reload;
+
+  let isFromLogin = previousUrl === loginUrl;
+
+  console.log('VEIO DO LOGIN?', isFromLogin)
+
+  const goBack = () => {
+    if (isFromLogin) {
+      alert("Não é permitido voltar ao ecrã de login.") // mudar pq só "isFromLogin não funciona"
+    }  else {
+      window.history.back();
+    }
+    
+  }
+
+  const location = useLocation();
+  console.log(location)
+
   const FIELDS = [
     { type: "dropdown",
     subType: "twoColumns",
@@ -60,8 +82,12 @@ const CreateContract = () => {
     
   ];
 
+  console.log(isFromLogin);
+
   return (
     <MainDiv>
+      <BackIcon onClick={goBack} color={isFromLogin ? "grey" : "black"}/>
+      
       <CornerLeft><Corner180 /></CornerLeft>
       <LogoContainer><LogoMD /></LogoContainer>
         <CForm 
@@ -125,7 +151,7 @@ export default CreateContract;
 //     {
 //       type: "dropdown",
 //       multi: false,
-//       key: "employeeOffice",
+//       key: "office",
 //       question: "Selecione Escritório",
 //       options: [
 //         {

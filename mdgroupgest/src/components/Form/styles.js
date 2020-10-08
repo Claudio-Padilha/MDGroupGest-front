@@ -115,7 +115,7 @@ width: 100%;
   width: 25%;
 }
 
-.employeeOffice, .clientContact {
+.office, .clientContact {
   position: absolute;
   top: 56%;
   left: 45%;
