@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from "react-router-dom";
 import {
   MDRow,
   MDCol,
@@ -55,10 +56,19 @@ export default function BackOfficeContent(props) {
   const renderMyMonth = () => {
     return (
       <MDCard>
-        <MDCardBody>
-          <SubHeading>Meu mês</SubHeading>
+        <MDCard.Body>
+          <Link
+            to={{
+              pathname: "/MyMonth",
+              state: {
+                data: "MÊS"
+              }
+            }}
+          >
+            <SubHeading>Meu mês</SubHeading>
+          </Link> 
           <Body>1247€</Body>
-        </MDCardBody>
+        </MDCard.Body>
       </MDCard>
     );
   };
@@ -67,7 +77,16 @@ export default function BackOfficeContent(props) {
     return (
       <MDCard isTheMiddleCard>
         <MDCard.Body>
-          <SubHeading>Contratos</SubHeading>
+          <Link
+            to={{
+              pathname: "/ContractList",
+              state: {
+                data: "CONTRATOS",
+              }
+            }}
+          >
+            <SubHeading>Contratos</SubHeading>
+          </Link>
           <Heading>284</Heading>
         </MDCard.Body>
       </MDCard>
@@ -78,7 +97,14 @@ export default function BackOfficeContent(props) {
     return (
       <MDCard>
         <MDCard.Body>
-          <SubHeading>Meus resultados</SubHeading>
+          <Link to={{
+            pathname:"/MyResults",
+            state: {
+              data: "RESULTADOS",
+            }  
+          }}>
+            <SubHeading>Meus resultados</SubHeading>   
+          </Link>
           <Body>+ 12.4%</Body>
         </MDCard.Body>
       </MDCard>

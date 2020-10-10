@@ -17,7 +17,7 @@ export default function BackOfficeHeader(props) {
   const userName = user?.user?.name;
   const userType = user?.user?.user_type.charAt(0).toUpperCase() + user?.user?.user_type.slice(1);
   const history = useHistory();
-
+  
   return (
     <MDContainer>
       <WelcomeWithLogoContainer>

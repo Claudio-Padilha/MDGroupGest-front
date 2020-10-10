@@ -109,23 +109,35 @@ export default {
             })
         })
     },
-    createEmployee: (user) => {
-      console.log(user, 'USER REQUEST')
+    createEmployee: (data) => {
+      console.log(data, 'USER REQUEST')
       var currentToken = localStorage.getItem('currentToken');
 
       var userType = localStorage.getItem('currentUserType');
-
+      
+      const userObj = {
+        office: 1,
+        user: {
+          name: data?.name,
+          email: data?.email,
+          password: "123RRRttt",
+          user_type: userType,
+          nif: data?.nif,
+          contact: data?.contact,
+          address: data?.address,
+        }
+      }
+      
       return new Promise((resolve, reject) => {
-
+ 
         var employeeRequest = {
             method: 'POST',
             url: `http://127.0.0.1:8000/${userType}/`,
             headers: {
                 'Authorization': 'Token ' + currentToken,
-                'Content-Type': 'application/x-www-form-urlencoded'
             },
             json: true,
-            data: user,
+            data: userObj,
             dataType: "json",
             contentType: "application/json"
           };
@@ -133,7 +145,7 @@ export default {
         axios(employeeRequest)
 
         .then(res => {
-            resolve(res);
+          resolve(res);
         })
         .catch(error => {
             const message = 'Erro do servidor';

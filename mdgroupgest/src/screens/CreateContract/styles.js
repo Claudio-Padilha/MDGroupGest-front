@@ -18,7 +18,6 @@ const RightContractContainer = styled.div`
   justify-content: flex-end;
   width: 100%;
   height: 100vh;
-  background-color: red;
 `;
 
 const LeftContractContainer = styled.div`

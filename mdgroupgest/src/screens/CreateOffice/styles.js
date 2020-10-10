@@ -1,8 +1,5 @@
 import styled from 'styled-components';
 
-const Form = styled.form`
-  margin-top: 10%;
-`;
 const MainDiv = styled.div`
   flex: 1;
   display: flex;
@@ -44,6 +41,8 @@ const CornerLeft = styled.span`
 
 const LogoContainer = styled.span`
   flex: 1;
+  height: 20%;
+  width: 20%;
   position: absolute;
   top: 5%;
   left: 10%;
@@ -58,7 +57,6 @@ const CornerRight = styled.span`
 `;
 
 export { 
-  Form,
   MainDiv,
   CornerLeft,
   LogoContainer,

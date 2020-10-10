@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import {
@@ -17,6 +18,8 @@ import Form from '../../components/Form/normalForm';
 import request from '../../components/Form/request';
 
 const CreateEmployee = (props) => {
+
+  const history = useHistory();
 
   console.log('props', props.location.state);
 
@@ -92,27 +95,24 @@ const CreateEmployee = (props) => {
       )
   }
 
-  
-
-
   const handleSubmitForm = formFields => {
 
     const userType = props.location.state.userType;
 
     var currentUserType = localStorage.setItem('currentUserType', userType)
 
-    let employee = `{ 
-      "office": { "id": 1 },
-      "user": { 
-        "name": ${formFields?.name},
-        "nif": ${String(formFields?.nif)},
-        "email": ${formFields?.email},
-        "contact": ${String(formFields?.contact)},
-        "address": ${formFields?.address}, 
-        "user_type": ${userType}
-      } 
-    }`;
-    _ConfirmEmployeeCreation(employee)
+    // let employee = `{ 
+    //   "office": 1,
+    //   "user": { 
+    //     "name": "${formFields?.name}",
+    //     "nif": "${String(formFields?.nif)}",
+    //     "email": "${formFields?.email}",
+    //     "contact": "${String(formFields?.contact)}",
+    //     "address": "${formFields?.address}", 
+    //     "user_type": "${userType}"
+    //   } 
+    // }`;
+    _ConfirmEmployeeCreation(formFields)
   };
 
   const FIELDS = [
@@ -144,7 +144,7 @@ const CreateEmployee = (props) => {
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
         <SubHeading>{props.location.state.title}</SubHeading>
-        <LogoContainer><LogoMD /></LogoContainer>
+        <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
           formFields={FIELDS}

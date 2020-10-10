@@ -169,13 +169,13 @@ const renderFields = (field, index, formik) => {
     case "number":
     case "password":
       return (
-        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
+        <Form.Group as={Col} className={field?.key} >
           <TextInput {...fieldProps} className={"textInput"}/>
         </Form.Group>
       );
     case "text-area":
       return (
-        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
+        <Form.Group as={Col} className={field?.key} >
           <TextArea {...fieldProps} />
         </Form.Group>
       );

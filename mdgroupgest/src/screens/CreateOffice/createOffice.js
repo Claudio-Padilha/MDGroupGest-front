@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 
 import {
   MainContainer,
@@ -12,29 +13,30 @@ import {
 
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
-import Form from '../../components/Form/normalForm';
+import CForm from '../../components/Form/complexForm';
 
 const CreateOffice = () => { 
 
-  const mockedFields = [
-    { type: "text", label: "Nome do escritório" },
-    { type: "text", label: "NIPC do escritório"},
-    { type: "text", label: "Endereço do escritório"},
-    { type: "text", label: "Email do escritório"}
+  const history = useHistory();
+
+  const FIELDS = [
+    { type: "text", key: "officeName", question: "Nome do escritório" },
+    { type: "number", key: "officeNIPC", question: "NIPC do escritório"},
+    { type: "text", key: "officeAddress", question: "Morada do escritório"},
+    { type: "text", key: "officeEmail", question: "Email do escritório"}
   ];
   
   return (
     <MainDiv>
       <CornerLeft><Corner180 /></CornerLeft>
-      <LogoContainer><LogoMD /></LogoContainer>
-      <Form 
+      <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
+      <CForm 
         top
         bg="primary"
-        fullWidth
-        formFieldsPaginated={mockedFields}
+        isFullWidth
+        formFields={FIELDS}
         btnLabel="Criar Escritório"
         onSubmit={() => console.log('test from submit')}
-        // onChange={() => console.log('test from changing')}
       />
       <CornerRight><Corner /></CornerRight>
     </MainDiv>

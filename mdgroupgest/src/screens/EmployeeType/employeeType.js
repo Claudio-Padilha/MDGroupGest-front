@@ -1,9 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { MainContainer, CardsContainer } from "./styles";
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
+
+import {
+  MainContainer,
+  CardsContainer,
+  FirstRow,
+  SecondRow,
+  HomePageButton
+} from "./styles";
 
 import {
   MDCard,
@@ -20,106 +27,91 @@ const EmployeeType = () => {
 
   const renderManagerCard = () => {
     return (
-      <MDCard>
-        <MDCardBody>
-          <SubHeading>Gerente</SubHeading>
-          <Body>
-            <Link to={{
-              pathname:"/CreateEmployee",
-              state: {
-                userType: "manager",
-                title: "Criar Gerente",
-              }  
-            }}>
-              <MDButton>Inserir</MDButton>
-            </Link>
-          </Body>
-        </MDCardBody>
-      </MDCard>
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "manager",
+          title: "Criar Gerente",
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Gerente</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
     );
   };
 
   const renderSecretaryCard = () => {
     return (
-      <MDCard>
-        <MDCardBody>
-          <SubHeading>Secretária</SubHeading>
-          <Body>
-            <Link to={{
-              pathname:"/CreateEmployee",
-              state: {
-                userType: "secretary",
-                title: "Criar Secretária",
-              }  
-            }}>
-              <MDButton>Inserir</MDButton>
-            </Link>
-          </Body>
-        </MDCardBody>
-      </MDCard>
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "secretary",
+          title: "Criar Secretária",
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Secretária</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
     );
   };
 
   const renderComercialCard = () => {
     return (
-      <MDCard>
-        <MDCardBody>
-          <SubHeading>Comercial</SubHeading>
-          <Body>
-            <Link to={{
-              pathname:"/CreateEmployee",
-              state: {
-                userType: "salesPerson",
-                title: "Criar Comercial",
-              }  
-            }}>
-              <MDButton>Inserir</MDButton>
-            </Link>
-          </Body>
-        </MDCardBody>
-      </MDCard>
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "salesPerson",
+          title: "Criar Comercial",
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Comercial</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
     );
   };
 
   const renderInstructorCard = () => {
     return (
-      <MDCard>
-        <MDCardBody>
-          <SubHeading>Instrutor</SubHeading>
-          <Body>
-            <Link to={{
-              pathname:"/CreateEmployee",
-              state: {
-                userType: "instructor",
-                title: "Criar Instrutor",
-              }  
-            }}>
-              <MDButton>Inserir</MDButton>
-            </Link>
-          </Body>
-        </MDCardBody>
-      </MDCard>
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "instructor",
+          title: "Criar Instrutor",
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Instrutor</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
     );
   };
 
   const renderTeamLeaderCard = () => {
     return (
-      <MDCard>
-        <MDCardBody>
-          <SubHeading>Team Leader</SubHeading>
-          <Body>
-            <Link to={{
-              pathname:"/CreateEmployee",
-              state: {
-                userType: "teamLeader",
-                title: "Criar Team Leader",
-              }  
-            }}>
-              <MDButton>Inserir</MDButton>
-            </Link>
-          </Body>
-        </MDCardBody>
-      </MDCard>
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "teamLeader",
+          title: "Criar Team Leader",
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Team Leader</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
     );
   };
 
@@ -127,11 +119,25 @@ const EmployeeType = () => {
     <MainContainer>
       <BackIcon onClick={_goBack} />
       <CardsContainer>
-        {renderManagerCard()}
-        {renderSecretaryCard()}
-        {renderTeamLeaderCard()}
-        {renderInstructorCard()}
-        {renderComercialCard()}
+
+        <FirstRow>
+          {renderManagerCard()}
+          {renderSecretaryCard()}
+          {renderTeamLeaderCard()}
+        </FirstRow>
+        
+        <SecondRow>
+          {renderInstructorCard()}
+          {renderComercialCard()}
+          <HomePageButton>
+            <Body>
+              <Link to={"/BackOffice"}>
+                <MDButton>Cancelar</MDButton>
+              </Link>
+            </Body>
+          </HomePageButton>
+        </SecondRow>
+      
       </CardsContainer>
 
     </MainContainer>

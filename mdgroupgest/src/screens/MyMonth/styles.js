@@ -24,7 +24,7 @@ const MainContainer = styled.div`
   }
 `;
 
-const CardsContainer = styled.div`
+const MyMonthContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -32,25 +32,6 @@ const CardsContainer = styled.div`
   height: 65vh;
   button:hover {
     cursor: pointer
-  }
-`;
-
-const FirstRow = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  height: 100%;
-  a {
-    height: 80%;
-    width: 25%;
-    text-decoration: none;
-    div {
-      align-self: center;
-    }
-    &:hover {
-      animation: ${pulse} 1s infinite;
-    }
   }
 `;
 
@@ -84,8 +65,7 @@ const HomePageButton = styled.div`
 
 export {
   MainContainer,
-  CardsContainer,
-  FirstRow,
+  MyMonthContainer,
   SecondRow,
   HomePageButton
 };

@@ -89,7 +89,7 @@ const CreateContract = ({ state }) => {
       <BackIcon onClick={goBack} color={isFromLogin ? "grey" : "black"}/>
       
       <CornerLeft><Corner180 /></CornerLeft>
-      <LogoContainer><LogoMD /></LogoContainer>
+      <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
           formFields={FIELDS}

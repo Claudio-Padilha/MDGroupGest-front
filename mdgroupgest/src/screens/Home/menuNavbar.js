@@ -46,7 +46,8 @@ export default function MenuNavbar(props) {
       <NavbarOptionsContainer>
         <Body isReverseColor={true}><Link to="/CreateContract" >Inserir Contrato</Link></Body>
         <Body isReverseColor={true}><Link to="/EmployeeType" >Inserir Funcionário</Link></Body>
-        <Body isReverseColor={true}>Opção 3</Body>
+        {user?.user?.user_type === "admin" && <Body isReverseColor={true}><Link to="/CreateOffice" >Inserir Escritório</Link></Body>}
+        
         <Body isReverseColor={true}>Opção 4</Body>
       </NavbarOptionsContainer>
 
