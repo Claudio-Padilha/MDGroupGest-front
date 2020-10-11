@@ -147,6 +147,32 @@ export default {
       })
     });
   },
+  getOffices: () => {
+    var currentToken = localStorage.getItem('currentToken');
+    
+    return new Promise((resolve, reject) => {
+
+      var officeRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/office/`,
+          headers: {
+              'Authorization': 'Token ' + currentToken,
+          },
+        };
+      
+      axios(officeRequest)
+
+      .then(res => {
+        console.log("RESPONSE: ", res)
+        localStorage.setItem('offices', res.data)
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
+  },
   createEmployee: (data) => {
     console.log(data, 'USER REQUEST')
     var currentToken = localStorage.getItem('currentToken');
