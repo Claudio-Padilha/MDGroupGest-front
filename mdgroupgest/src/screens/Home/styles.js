@@ -30,6 +30,10 @@ const NavbarOptionsContainer = styled.div`
   p {
     align-self: center
   }
+  a {
+    text-decoration: none;
+    color: white;
+  }
 `;
 
 const TeamContainer = styled.div`
@@ -51,6 +55,17 @@ const ResultsContainer = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  .card {
+    a {
+      text-decoration: none;
+    }
+  }
+  .cardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
 const ResultsCard = styled.div`
@@ -72,7 +87,7 @@ const WelcomeWithLogoContainer = styled.div`
     padding: 0%;
     margin-left: 2%;
     &:hover {
-      cursor: inherit;;
+      cursor: inherit;
     }
     h3 {
       position: absolute;

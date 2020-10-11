@@ -8,6 +8,7 @@ import EmployeeType from './screens/EmployeeType/employeeType';
 import ContractList from './screens/ContractList/contractList';
 import MyResults from './screens/MyResults/myResults';
 import MyMonth from './screens/MyMonth/myMonth';
+import MyTeam from './screens/MyTeam/myTeam';
 
 import TextWithCalendar from './components/TextWithCalendar/textWithCalendar';
 import SwitchButton from './components/ToggleComponent/toggleButton';
@@ -27,6 +28,7 @@ function App() {
     contractList: "/ContractList",
     myResults: "/MyResults",
     myMonth: "/MyMonth",
+    myTeam: "/MyTeam",
   };
   
   const routes = [
@@ -39,6 +41,7 @@ function App() {
     { path: paths.contractList, component: ContractList },
     { path: paths.myResults, component: MyResults },
     { path: paths.myMonth, component: MyMonth },
+    { path: paths.myTeam, component: MyTeam },
   ];
 
   return (

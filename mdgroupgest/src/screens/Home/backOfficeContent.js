@@ -26,6 +26,7 @@ import {
   ResultsContainer, 
   ResultsCard
 } from './styles';
+import request from '../../components/Form/request';
 
 export default function BackOfficeContent(props) {
   const { destinations, destinationIndex: index } = props;
@@ -45,10 +46,25 @@ export default function BackOfficeContent(props) {
   }, [destination]);
 
   const renderHero = () => {
+    request.getEmployees();
+
+    const employees = localStorage.getItem('myTeam');
+
     return (
       <MDHero>
-        <h2>{destination.header}</h2>
-        <p>{destination.subHeader}</p>
+        <MDContainer>
+          <SubHeading>Minha equipe</SubHeading>
+          <Link
+            to={{
+              pathname: "/MyTeam",
+              state: {
+                team: employees
+              }
+            }}
+          >
+            <Body>Wolverines</Body>  
+          </Link>       
+        </MDContainer>
       </MDHero>
     );
   };
@@ -56,7 +72,7 @@ export default function BackOfficeContent(props) {
   const renderMyMonth = () => {
     return (
       <MDCard>
-        <MDCard.Body>
+        <MDCard.Body className={"cardBody"}>
           <Link
             to={{
               pathname: "/MyMonth",
@@ -76,7 +92,7 @@ export default function BackOfficeContent(props) {
   const renderMyContracts = () => {
     return (
       <MDCard isTheMiddleCard>
-        <MDCard.Body>
+        <MDCard.Body className={"cardBody"}>
           <Link
             to={{
               pathname: "/ContractList",
@@ -96,7 +112,7 @@ export default function BackOfficeContent(props) {
   const renderMyResults = () => {
     return (
       <MDCard>
-        <MDCard.Body>
+        <MDCard.Body className={"cardBody"}>
           <Link to={{
             pathname:"/MyResults",
             state: {

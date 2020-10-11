@@ -21,22 +21,6 @@ export default function MenuNavbar(props) {
     );
   };
 
-  const renderDestinationMenu = () => {
-    const { destinations, destinationIndex: current } = props;
-    return (
-      <MDDropdown>
-        <MDDropdown.Toggle id="destination-menu">
-          {destinations[current].title}
-        </MDDropdown.Toggle>
-        <MDDropdown.Menu alignRight={true}>
-          {props.destinations.map((destination, index) =>
-            renderItem(destination, index)
-          )}
-        </MDDropdown.Menu>
-      </MDDropdown>
-    );
-  };
-
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>

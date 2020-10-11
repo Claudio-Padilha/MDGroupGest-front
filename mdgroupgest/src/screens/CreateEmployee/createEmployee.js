@@ -74,7 +74,12 @@ const CreateEmployee = (props) => {
                 'Boa!',
                 'Funcionário inserido com sucesso.',
                 'success'
-              )
+              ).then((result) => {
+                if(result) {
+                  return history.push("/BackOffice");
+                }
+              });
+
             } catch (error) {
               swalWithBootstrapButtons.fire(
                 'Erro',
@@ -82,13 +87,13 @@ const CreateEmployee = (props) => {
                 'error'
               )
             }
- 
+
         // "!result.isConfimed significa clicar em "'E isso!"
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
               'Cancelado',
               'Corrija o que estava errado...',
-              'error'
+              'info'
             )
           }
         })
@@ -101,17 +106,6 @@ const CreateEmployee = (props) => {
 
     var currentUserType = localStorage.setItem('currentUserType', userType)
 
-    // let employee = `{ 
-    //   "office": 1,
-    //   "user": { 
-    //     "name": "${formFields?.name}",
-    //     "nif": "${String(formFields?.nif)}",
-    //     "email": "${formFields?.email}",
-    //     "contact": "${String(formFields?.contact)}",
-    //     "address": "${formFields?.address}", 
-    //     "user_type": "${userType}"
-    //   } 
-    // }`;
     _ConfirmEmployeeCreation(formFields)
   };
 
