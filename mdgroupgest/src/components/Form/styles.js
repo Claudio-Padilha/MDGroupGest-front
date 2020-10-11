@@ -80,6 +80,34 @@ max-width: 760px;
 text-align: left;
 width: 100%;
 
+.officeName {
+  position: absolute;
+  top: 30%;
+  left: 35%;
+  width: 30%;
+}
+
+.officeNIPC {
+  position: absolute;
+  top: 40%;
+  left: 35%;
+  width: 30%;
+}
+
+.officeAddress {
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  width: 30%;
+}
+
+.officeEmail {
+  position: absolute;
+  top: 60%;
+  left: 35%;
+  width: 30%;
+}
+
 .name {
   position: absolute;
   top: 28%;
@@ -115,7 +143,7 @@ width: 100%;
   width: 25%;
 }
 
-.employeeOffice, .clientContact {
+.office, .clientContact {
   position: absolute;
   top: 56%;
   left: 45%;

@@ -18,7 +18,6 @@ const RightContractContainer = styled.div`
   justify-content: flex-end;
   width: 100%;
   height: 100vh;
-  background-color: red;
 `;
 
 const LeftContractContainer = styled.div`
@@ -59,6 +58,22 @@ const MainDiv = styled.div`
       justify-content: space-around;
     }
   }
+  svg {
+    position: absolute;
+    width: 3%;
+    top: 4%;
+    left: 2%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+`;
+
+const BackContainer = styled.span`
+  flex: 1;
+  position: absolute;
+  top: 83%;
+  left: 0%;
 `;
 
 const CornerLeft = styled.span`
@@ -90,5 +105,6 @@ export {
   MainDiv,
   CornerLeft,
   LogoContainer,
-  CornerRight
+  CornerRight,
+  BackContainer
 };

@@ -1,25 +1,28 @@
-import React from 'react';
+import React, { useState } from "react";
+import MenuNavbar from "./menuNavbar";
+import BackOfficeHeader from "./backOfficeHeader";
+import { Link } from 'react-router-dom';
 
-import { MainContainer } from './styles';
-import Navbar from '../../components/Navbar/navbar';
+import { MainContainer } from "./styles";
 
-const Home = () => {
-  const OPTIONS = [
-    {name: 'test 1'}, 
-    {name: 'test 2'}, 
-    {name: 'test 3'}
-  ];
+export default function Home(props) {
+
+
+  const [destinationIndex, setDestinationIndex] = useState(0);
 
   return (
     <MainContainer>
-      <Navbar 
-
-      >
-        <p>NAVBAR</p>
-      </Navbar>
+      <MenuNavbar
+        {...props}
+        destinationIndex={destinationIndex}
+        setDestinationIndex={setDestinationIndex}
+      />
+      <BackOfficeHeader
+        {...props}
+        destinationIndex={destinationIndex}
+        setDestinationIndex={setDestinationIndex}
+      />
     </MainContainer>
-
-  )
+  );
 }
 
-export default Home;

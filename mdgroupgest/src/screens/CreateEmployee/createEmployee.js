@@ -1,5 +1,6 @@
-import React from 'react';
-import CForm from '../../components/Form/complexForm';
+import React, { useMemo } from 'react';
+import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import {
   MainDiv,
@@ -8,14 +9,105 @@ import {
   CornerRight
 } from './styles';
 
+import { SubHeading } from '../../components/Text/text';
+import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
+import { BackIcon } from '../../components/Icon/icons';
 import Form from '../../components/Form/normalForm';
 import request from '../../components/Form/request';
 
-const CreateEmployee = () => {
+const CreateEmployee = (props) => {
 
-  const handleSubmitForm = formFields => { console.log(formFields, '--> VOCÊ FOI AUTENTICADO COM SUCESSO!') };
+  const history = useHistory();
+
+  console.log('props', props.location.state);
+
+  const previousUrl = document.referrer;
+  const loginUrl = "http://localhost:3000/";
+
+  function _goBack() {
+    window.history.back();    
+  }
+
+  function _ConfirmEmployeeCreation(data) {
+    console.log(data, 'DATA')
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
+
+    var name = data?.name; 
+    var nif = data?.nif?.toString(); 
+    var address = data?.address; 
+    var contact = data?.contact?.toString();
+    var email = data?.email;
+    var office = data?.office; 
+
+      return (
+        swalWithBootstrapButtons.fire({
+        title: 'Confirme os dados do funcionário:',
+        text: 
+          `Nome: ${name ? name : `❌`},
+           NIF: ${nif ? nif : `❌`}.                                               
+           Morada: ${address ? address : `❌`},                                     
+           Contato: ${contact ? contact : `❌`},                             
+           Email: ${email ? email : `❌`},
+           Escritório: ${office ? office : `❌`}
+          `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Refazer',
+        reverseButtons: true
+      }).then((result) => {
+
+        // "result.isConfimed significa clicar em "Refazer"
+          if (result.isConfirmed) {
+            try {
+              request.createEmployee(data);
+              swalWithBootstrapButtons.fire(
+                'Boa!',
+                'Funcionário inserido com sucesso.',
+                'success'
+              ).then((result) => {
+                if(result) {
+                  return history.push("/BackOffice");
+                }
+              });
+
+            } catch (error) {
+              swalWithBootstrapButtons.fire(
+                'Erro',
+                `${error}`,
+                'error'
+              )
+            }
+
+        // "!result.isConfimed significa clicar em "'E isso!"
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
+  }
+
+  const handleSubmitForm = formFields => {
+
+    const userType = props.location.state.userType;
+
+    var currentUserType = localStorage.setItem('currentUserType', userType)
+
+    _ConfirmEmployeeCreation(formFields)
+  };
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
@@ -26,7 +118,7 @@ const CreateEmployee = () => {
     { type: "dropdown",
       subType: "twoColumns",
       side: "right",
-      key: "employeeOffice",
+      key: "office",
       question: "Escritório",  
       options: [
         {
@@ -43,17 +135,19 @@ const CreateEmployee = () => {
 
   return (
       <MainDiv>
-      <CornerLeft><Corner180 /></CornerLeft>
-      <LogoContainer><LogoMD /></LogoContainer>
+        <BackIcon onClick={_goBack} />
+        <CornerLeft><Corner180 /></CornerLeft>
+        <SubHeading>{props.location.state.title}</SubHeading>
+        <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
           formFields={FIELDS}
           top
           bg="primary"
           isFullWidth
-          btnLabel="Inserir Comercial"
+          btnLabel="Inserir"
         />
-      <CornerRight><Corner /></CornerRight>
+        <CornerRight><Corner /></CornerRight>
     </MainDiv>
   )
 }
@@ -106,7 +200,7 @@ export default CreateEmployee;
 //     {
 //       type: "dropdown",
 //       multi: false,
-//       key: "employeeOffice",
+//       key: "office",
 //       question: "Selecione Escritório",
 //       options: [
 //         {

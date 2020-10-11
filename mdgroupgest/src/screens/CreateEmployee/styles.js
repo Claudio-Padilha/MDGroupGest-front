@@ -59,6 +59,26 @@ const MainDiv = styled.div`
       justify-content: space-around;
     }
   }
+  svg {
+    position: absolute;
+    width: 3%;
+    top: 4%;
+    left: 2%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  h3 {
+    position: absolute;
+    top: 16%;
+    left: 24.5%;
+  }
+  form {
+    button {
+      width: 10%;
+      height: 6%;
+    }
+  }
 `;
 
 const CornerLeft = styled.span`
