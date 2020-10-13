@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { pulse } from '../../utils/animations';
+import CONSTANTS from '../../constants';
 
 const MainContainer = styled.div`
   display: flex;
@@ -8,7 +9,7 @@ const MainContainer = styled.div`
   align-items: center;
   height: 100vh;
   min-width: 675px;
-  svg {
+  .backIcon {
     position: absolute;
     width: 3%;
     top: 4%;
@@ -22,6 +23,51 @@ const MainContainer = styled.div`
     display: flex;
     justify-content: center;
   }
+
+
+  .custom-container {
+    background-color: #242424;
+  }
+  
+  .custom .node circle {
+    fill: #F3F3FF;
+    stroke: black;
+    stroke-width: 1px;
+  }
+  
+  .custom .node text {
+    font-size: 11px;
+    background-color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    fill: black;
+    text-shadow: 0 1px 4px ${CONSTANTS.colors.lightGrey};
+    text-color: black;
+  }
+  
+  .custom .node {
+    cursor: pointer;
+  }
+  
+  .custom path.link {
+    fill: none;
+    stroke: ${CONSTANTS.colors.lightGrey};
+    stroke-width: 1.5px;
+  }
+
+  
+  body {
+    background-color: white;
+    overflow: hidden;
+  }
+  
+  span {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #F4F4F4;
+    text-shadow: 0 1px 4px black;
+    float: right;
+  }
+
+
 `;
 
 const MyTeamContainer = styled.div`

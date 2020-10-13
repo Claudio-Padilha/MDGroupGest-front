@@ -122,21 +122,29 @@ width: 100%;
   width: 15%;
 }
 
-.contact, .clientNif {
+.contact {
   position: absolute;
   top: 56%;
   left: 25%;
   width: 15%;
 }
 
-.email, .deliveryDate {
+.clientNif {
+  position: absolute;
+  top: 56%;
+  left: 25%;
+  width: 15%;
+}
+
+.email {
   position: absolute;
   top: 28%;
   left: 45%;
   width: 25%; 
 }
 
-.address, .signatureDate {
+
+.address {
   position: absolute;
   top: 41%;
   left: 45%;
@@ -155,6 +163,9 @@ width: 100%;
   top: 27%;
   left: 20%;
   width: 15%;
+  .css-2b097c-container {
+    width: 70%;
+  }
 }
 
 .clientName {
@@ -162,6 +173,9 @@ width: 100%;
   top: 40%;
   left: 20%;
   width: 15%;
+  input {
+    width: 70%;
+  }
 }
 
 .clientNif {
@@ -169,6 +183,9 @@ width: 100%;
   top: 53%;
   left: 20%;
   width: 15%;
+  input {
+    width: 70%;
+  }
 }
 
 .clientContact {
@@ -176,12 +193,15 @@ width: 100%;
   top: 66%;
   left: 20%;
   width: 15%;
+  input { 
+    width: 70%;
+  }
 }
 
 .PEL {
   position: absolute;
   top: 29%;
-  left: 39%;
+  left: 34%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -192,7 +212,7 @@ width: 100%;
 .lightPPI {
   position: absolute;
   top: 29%;
-  left: 48%;
+  left: 41%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -203,7 +223,7 @@ width: 100%;
 .gasPPI {
   position: absolute;
   top: 29%;
-  left: 57%;
+  left: 48%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -214,7 +234,7 @@ width: 100%;
 .electronicBill {
   position: absolute;
   top: 29%;
-  left: 66%;
+  left: 55%;
   width: 15%;
   > div > p  {
     margin-bottom: 1%;
@@ -225,8 +245,8 @@ width: 100%;
 .CUI {
   position: absolute;
   top: 40%;
-  left: 39%;
-  width: 18%;
+  left: 34%;
+  width: 15%;
   > div > input {
     position: absolute;
     top: 100%;
@@ -237,8 +257,8 @@ width: 100%;
 .CPE {
   position: absolute;
   top: 40%;
-  left: 59%;
-  width: 18%;
+  left: 51%;
+  width: 15%;
   > div > input {
     position: absolute;
     top: 100%;
@@ -248,23 +268,127 @@ width: 100%;
 
 .deliveryDate {
   position: absolute;
-  top: 53%;
-  left: 39%;
+  top: 52.5%;
+  left: 34%;
   width: 12%;
+  .MuiFormControl-marginNormal {
+    margin: 0;
+    width: 70%;
+  }
+  p {
+    margin-bottom: 10%;
+  }
+  button {
+    position: absolute;
+    top: 5%;
+    right: 1%;
+  }
 }
 
 .signatureDate {
   position: absolute;
   top: 66%;
-  left: 39%;
+  left: 34%;
   width: 12%;
+  .MuiFormControl-marginNormal {
+    margin: 0;
+    width: 70%;
+  }
+  p {
+    margin-bottom: 8%;
+  }
+  button {
+    position: absolute;
+    top: 5%;
+    right: 1%;
+  }
 }
 
 .observations {
   position: absolute;
-  top: 53%;
-  left: 55%;
-  width: 23%;
+  top: 52.5%;
+  left: 47%;
+  width: 19%;
+}
+
+.feedbackCall {
+  position: absolute;
+  top: 29%;
+  left: 69%;
+  width: 15%;
+  p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 40%;
+  }
+}
+
+.sellState {
+  position: absolute;
+  top: 41%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 30%;
+  }
+}
+
+.comission {
+  position: absolute;
+  top: 54%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 50%;
+  }
+}
+
+.power {
+  position: absolute;
+  top: 67%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 70%;
+  }
+}
+
+.gasScale {
+  position: absolute;
+  top: 79%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 30%;
+  }
 }
 
 .fa-check-circle {

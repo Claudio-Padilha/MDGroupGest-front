@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import MenuNavbar from "./menuNavbar";
 import BackOfficeHeader from "./backOfficeHeader";
-import { Link } from 'react-router-dom';
 
 import { MainContainer } from "./styles";
 
-export default function Home(props) {
-
+const Home = (props) => {
 
   const [destinationIndex, setDestinationIndex] = useState(0);
 
@@ -24,5 +22,6 @@ export default function Home(props) {
       />
     </MainContainer>
   );
-}
+};
 
+export default Home;

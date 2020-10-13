@@ -9,11 +9,8 @@ import ContractList from './screens/ContractList/contractList';
 import MyResults from './screens/MyResults/myResults';
 import MyMonth from './screens/MyMonth/myMonth';
 import MyTeam from './screens/MyTeam/myTeam';
+import EmployeeDetail from './screens/EmployeeDetail/employeeDetail';
 
-import TextWithCalendar from './components/TextWithCalendar/textWithCalendar';
-import SwitchButton from './components/ToggleComponent/toggleButton';
-import Navbar from './components/Navbar/navbar';
-import { Route } from 'react-router-dom';
 import Router from './router';
 import history from './utils/history';
 
@@ -29,6 +26,7 @@ function App() {
     myResults: "/MyResults",
     myMonth: "/MyMonth",
     myTeam: "/MyTeam",
+    employeeDetail: "/EmployeeDetail",
   };
   
   const routes = [
@@ -42,7 +40,10 @@ function App() {
     { path: paths.myResults, component: MyResults },
     { path: paths.myMonth, component: MyMonth },
     { path: paths.myTeam, component: MyTeam },
+    { path: paths.employeeDetail, component: EmployeeDetail },
   ];
+
+  console.log(localStorage, 'RAM')
 
   return (
     <Router routes={routes} history={history} />

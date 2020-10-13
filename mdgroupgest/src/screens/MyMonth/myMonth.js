@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
+import {  SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import {

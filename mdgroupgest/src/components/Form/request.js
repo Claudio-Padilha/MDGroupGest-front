@@ -1,6 +1,7 @@
 import axios from 'axios'
 import routes from '../../routes';
 import Swal from 'sweetalert2';
+import { useHistory } from 'react-router-dom';
 
 function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
@@ -59,14 +60,14 @@ export default {
           axios.post("http://127.0.0.1:8000/auth/login/", data)
 
               .then((res) => {
-                  window.localStorage.clear()
                   resolve(res);
                   const user = res?.data;
                   const currentAuthToken = res?.data?.user?.token;
 
                   if (currentAuthToken) {
+                    // controlar tipos de requests feitos a partir de user type (DASHBOARD VAI PRECISAR DE USER TYPES DIFERENTES) // SWITCH MELHOR MANEIRA*
                       localStorage.setItem('currentUser', JSON.stringify(user));
-                      localStorage.setItem('currentToken', currentAuthToken)
+                      localStorage.setItem('currentToken', currentAuthToken);
                   }
                   const currentUserOnRAM = localStorage.getItem('currentUser');
                   const currentUser = JSON.parse(currentUserOnRAM);
@@ -101,8 +102,11 @@ export default {
           axios(authOptions)
 
           .then((res) => {
-              localStorage.removeItem('currentToken');
-              localStorage.removeItem('myTeam');
+              localStorage.removeItem('myTeam')
+              localStorage.removeItem('employeeDetail')
+              localStorage.removeItem('currentToken')
+              
+              
               resolve(res);
           })
           .catch(error => {
@@ -112,7 +116,6 @@ export default {
       })
   },
   createOffice: (data) => {
-    console.log(data, 'OFFICE REQUEST')
     var currentToken = localStorage.getItem('currentToken');
     
     const officeObj = {
@@ -192,16 +195,63 @@ export default {
     });
   },
   createContract: (data) => {
-      return new Promise((resolve, reject) => {
-          console.log("New Contract Payload --> ", data)
-          axios.post(`${routes.createEmployee}`, data)
-              .then(res => {
-                  console.log("RESPONSE --> ", res);
-              })
-              .catch(error => {
-                  console.log("ERROR --> ", error);
-              })
+    var currentToken = localStorage.getItem('currentToken');
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var payment = data?.lightPPI ? "Débito Directo" : "Multibanco";
+    
+    var deliveryDate = data?.deliveryDate.toJSON();
+    var deliveryWorkedDate = deliveryDate.substring(0, 9);
+
+    var signatureDate = data?.signatureDate.toJSON();
+    var signatureWorkedDate = signatureDate.substring(0, 9);
+    
+    const contractObj = {
+      user: currentUser?.user?.id, // Receber dinamicamente
+      delivery_date: deliveryWorkedDate,
+      signature_date: signatureWorkedDate,
+      employee_name: data?.employeeName,
+      client_name: data?.clientName,
+      client_nif: data?.clientNif,
+      client_contact: data?.clientContact,
+      electronic_bill: data?.electronicBill ? data?.electronicBill : false,
+      cpe: data?.CPE.toString(),
+      electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
+      cui: data?.CUI.toString(),
+      gas_ppi: data?.gasPPI ? data?.gasPPI : false,
+      pel: data?.pel ? data?.pel : false,
+      observations: data?.observations,
+      employee_comission: data?.comission,
+      feedback_call: data?.feedbackCall,
+      payment: payment,
+      sell_state: data?.sellState,
+      power: data?.power,
+      gas_scale: data?.gasScale
+    }
+
+    return new Promise((resolve, reject) => {
+
+      var contractRequest = {
+          method: 'POST',
+          url: `http://127.0.0.1:8000/contract/`,
+          headers: {
+              'Authorization': 'Token ' + currentToken,
+          },
+          json: true,
+          data: contractObj,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(contractRequest)
+
+      .then(res => {
+        resolve(res);
       })
+      .catch(error => {
+          const message = 'Erro do servidor';
+          reject(message);
+      })
+    });
   },
   getOffices: () => {
     var currentToken = localStorage.getItem('currentToken');
@@ -252,9 +302,10 @@ export default {
       axios(getEmployeesRequest)
 
       .then(res => {
-        console.log(res, 'RESPOSTA');
-        localStorage.setItem('myTeam', res)
+        
+        localStorage.setItem('myTeam', JSON.stringify(res.data));
         resolve(res);
+        
       })
 
       .catch(error => {

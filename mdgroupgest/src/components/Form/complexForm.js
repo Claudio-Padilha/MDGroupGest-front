@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Form, Col, InputGroup } from 'react-bootstrap';
 import { Formik } from 'formik';
+
+import 'date-fns';
+import DateFnsUtils from '@date-io/date-fns';
+import {
+  MuiPickersUtilsProvider,
+  KeyboardDatePicker,
+} from '@material-ui/pickers';
+
+import { ErrorText, Body } from '../Text/text';
 
 import TextInput from "../../components/TextInput/textInput";
 import { Row } from "../../components/Layout/layout";
@@ -12,6 +21,8 @@ import SwitchButton from "../ToggleComponent/toggleButton";
 import { Heading, SubHeading } from "../Text/text";
 
 import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
+
+
 
 const CForm = ({
   formFields,
@@ -148,6 +159,7 @@ const CForm = ({
 };
 
 const renderFields = (field, index, formik) => {
+
   const fieldProps = {
     key: `${field.key}-${index}`,
     name: field.key,
@@ -190,16 +202,40 @@ const renderFields = (field, index, formik) => {
             type="select"
             isMulti={field.multi}
             label={field.question}
+            placeholder={field.placeholder}
           />
         </Form.Group>
       );
     case "dateField":
+      function _handleDateChange(selectedDate) {
+        field.date = selectedDate;
+        return field.date;
+      }
+
       return (
         <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
-          <TextWithCalendar key={field.label} {...fieldProps} onChange={date => formik.setFieldValue(field.label, date.value)} />
+          {field.question && <Body>{field.question}</Body>}
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              margin="normal"
+              id="date-picker-dialog"
+              format="MM/dd/yyyy"
+              value={field.date}
+              onChange={date => formik.setFieldValue(field.key ,_handleDateChange(date))}
+              KeyboardButtonProps={{
+                'aria-label': 'change date',
+              }}
+            />
+          </MuiPickersUtilsProvider>
         </Form.Group>
       );
     case "toggle":
+
+      function _handleChecked () {
+        field.booleanValue = !field.booleanValue
+        return field.booleanValue;
+      }
+
       return (
         <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
           <SwitchButton
@@ -208,8 +244,9 @@ const renderFields = (field, index, formik) => {
             subType={field.subType}
             side={field.side}
             initialValue={field.initialValue}
-            value={field.value}
+            value={field.booleanValue}
             label={field.question}
+            onChange={() => formik.setFieldValue(field.key, _handleChecked())}
           />
         </Form.Group>
       );

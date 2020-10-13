@@ -1,68 +1,80 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import Tree from 'react-tree-graph';
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
+import { SubHeading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
-
 import request from '../../components/Form/request';
 
-import {
-  MainContainer,
-  MyTeamContainer,
-  SecondRow,
-  HomePageButton
-} from "./styles";
+import data from './data';
 
-import {
-  MDCard,
-  MDCardBody,
-  MDButton 
-} from '../../screens/Home/md';
+import { MainContainer } from "./styles";
 
+import { MDCard, MDCardBody } from '../../screens/Home/md';
 
-const MyTeam = ({ state }) => {
-  console.log(state, 'ESTADO DO TIME')
-  function _goBack() {
-    window.history.back();    
+const MyTeam = () => {
+
+  const history = useHistory();
+
+  // aqui cada clique leva a pagina de detalhe de cada funcionário
+  function _handleMainClick (event, nodeKey) {
+    console.log('handle click ', event);
+    console.log('handle click nodeKey', nodeKey);
+
+    localStorage.setItem('employeeDetail', nodeKey)
+    history.push("/EmployeeDetail");
   }
 
-  // aqui terá a lógica para receber os resultados do funcionário
-  const renderResults = () => {
-    return (
-      <Link 
-        to={{
-          pathname: "/MyTeam",
-          state: {
-            team: "data"
-          }
+  // caso haja lógica para o right click
+  function _handleRightClick(event, nodeKey) {
+    event.preventDefault();
+    console.log('handle click right', nodeKey)
+    alert(`Right clicked ${nodeKey}`);
+  }
+
+  var team = localStorage.getItem('myTeam');
+
+  var parsedTeam = JSON.parse(team);
+
+  // const officeId = parsedTeam[0].office;
+  //const teamMembers = parsedTeam[0].user; // ter lógica de map na array para pegar todos
+
+  function _goBack() {
+    history.push("/BackOffice");
+  }
+
+  return (
+    <MainContainer className="custom-container">
+      <BackIcon onClick={_goBack} className={"backIcon"}/>
+      <Tree
+        data={data}
+        height={700}
+        width={1000}
+        nodeRadius={15}
+        animated
+        steps={120}
+        duration={1500}
+        svgProps={{
+          className: 'custom',
         }}
-      >
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>TESTE</SubHeading>
-          </MDCardBody>
-        </MDCard>
-      </Link>
-    );
-  };
-
-  return(
-    <MainContainer>
-      <BackIcon onClick={_goBack} />
-      <MyTeamContainer>
-        <SecondRow>
-          {renderResults()}
-          <HomePageButton>
-            <Body>
-              <Link to={"/BackOffice"}>
-                <MDButton>Cancelar</MDButton>
-              </Link>
-            </Body>
-          </HomePageButton>
-        </SecondRow>
-      
-      </MyTeamContainer>
-
+        gProps={{
+          onClick: _handleMainClick,
+          onContextMenu: _handleRightClick
+        }}
+        nodeShape="image"
+        nodeProps={{
+          height: 30,
+          width: 30,
+          nodeRadius: 15,
+          href: 'https://i.pinimg.com/originals/58/d8/c1/58d8c1a2363061117c2c00018b04e34c.jpg'
+        }}
+        margins={{
+          top: 20,
+          bottom: 10,
+          left: 20,
+          right: 200
+        }}
+      />
     </MainContainer>
   );
 };

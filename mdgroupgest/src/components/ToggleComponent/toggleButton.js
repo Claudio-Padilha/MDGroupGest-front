@@ -6,16 +6,15 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import { ErrorText, Body } from "../Text/text";
 
 import { MainContainer, ToggleContainer } from './styles'; 
+import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
 
 const SwitchButton = ({
   label,
   error,
+  onChange,
+  ...props
 }) => {
-  const [checked, setChecked] = useState(false);
 
-  const toggleChecked = () => {
-    setChecked((checked) => !checked);
-  };
 
   return (
     <MainContainer>
@@ -26,12 +25,9 @@ const SwitchButton = ({
           <FormControlLabel
             control={
               <Switch
-                inputProps={{
-                  value: checked
-                }}
-                checked={checked}
-                onChange={toggleChecked}
+                onChange={onChange}
                 color="default"
+                {...props}
               />
             }
           />

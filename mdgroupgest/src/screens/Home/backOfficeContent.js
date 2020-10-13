@@ -1,70 +1,119 @@
-import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link, useHistory } from "react-router-dom";
+
+import { Avatar } from '@material-ui/core';
+import { AvatarGroup } from '@material-ui/lab';
+
 import {
-  MDRow,
-  MDCol,
   MDCard,
   MDHero,
-  MDButton,
-  MDDropdown,  
   MDContainer,
-  MDList,
-  MDListItem,
-  MDCardSubtitle,
-  MDCardBody, 
-  MDCardTitle,
-  MDCardFooter,
-  MDToggleButton,
-  MDToggleButtonGroup
 } from './md';
 
+import Button from "../../components/Button/button";
 import { Heading, SubHeading, Body } from '../../components/Text/text';
+import data from '../MyTeam/data';
 
 import {
   TeamContainer,
   ContentContainer,
-  ResultsContainer, 
-  ResultsCard
+  ResultsContainer,
+  TeamAvatarsContainer 
 } from './styles';
+
 import request from '../../components/Form/request';
 
-export default function BackOfficeContent(props) {
-  const { destinations, destinationIndex: index } = props;
-  const destination = destinations[index];
+const BackOfficeContent = (props) => {
 
-  const [arrivalSiteIndex, setArrivalSiteIndex] = useState(0);
-  const [carrierIndex, setCarrierIndex] = useState(0);
-  const [cryoSelection, setCryoSelection] = useState(true);
+  var teamLeadersCounter = 0;
+  var instructorsCounter = 0;
+  var salesPersonsCounter = 0;
 
-  useEffect(() => {
-    setCarrierIndex(0);
-    setArrivalSiteIndex(0);
-    setCryoSelection(
-      destination.cryoSleep === "optional" ||
-        destination.cryoSleep === "required"
-    );
-  }, [destination]);
+  const teamLeadersArr = [];
+  const instructorsArr = [];
+  const salesPersonsArr = [];
+
+  // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
+  for (var i = 0; i < 1; i++) {
+
+    var teamLeaders = data?.children;
+    var teamLeadersQuantity = data?.children.length;
+
+      // Loop para colocarmos todos os Team Leaders em uma array só
+      for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
+        teamLeadersArr.push(teamLeaders[qtd]);
+      }   
+
+    teamLeadersCounter += teamLeadersQuantity;
+
+    // Loop sobre os Team Leaders -> Retiramos os INSTRUTORES
+    for (var j = 0; j < teamLeaders.length; j++) {
+
+      var instructors = teamLeaders[j]?.children;
+      var instructorsQuantity = teamLeaders[j]?.children.length;
+      instructorsCounter += instructorsQuantity;
+
+        // Loop para colocarmos todos os instrutores em uma array só
+        for (var qtd = 0; qtd < instructorsQuantity; qtd++) {
+          instructorsArr.push(instructors[qtd]);
+        }         
+
+      // Loop sobre os Instrutores -> Retiramos os COMERCIAIS
+      for (var k = 0; k < instructors.length; k++) {
+
+        var salesPersons = instructors[k]?.children;
+        var salesPersonsQuantity = instructors[k]?.children.length;
+        salesPersonsCounter += salesPersonsQuantity;
+
+          // Loop para colocarmos todos os comerciais em uma array só
+          for (var qtd = 0; qtd < salesPersonsQuantity; qtd++) {
+            salesPersonsArr.push(salesPersons[qtd]);
+          }             
+      }
+    }
+  }
+
+  const totalEmployees = teamLeadersArr.concat(instructorsArr, salesPersonsArr);
+  const quantityOfTotalEmployees = totalEmployees?.length;
+
+  console.log(totalEmployees, 'TODOS')
+  console.log(instructorsArr, 'INSTRUTORES')
+  console.log(quantityOfTotalEmployees, 'QUANTIDADE')
+  // console.log(teamLeadersArr, 'TEAM LEADERS');
+  // console.log(instructorsArr, 'INSTRUTORES');
+  // console.log(salesPersonsArr, 'COMERCIAIS');
+  // console.log(teamLeadersCounter, 'QTD DE TEAM LEADERS');
+  // console.log(instructorsCounter, 'QTD DE INSTRUTORES');
+  // console.log(salesPersonsCounter, 'QTD DE COMERCIAIS');
+
+  const history = useHistory();
 
   const renderHero = () => {
-    request.getEmployees();
 
-    const employees = localStorage.getItem('myTeam');
+    var employees = localStorage.getItem('myTeam');
 
     return (
       <MDHero>
         <MDContainer>
           <SubHeading>Minha equipe</SubHeading>
-          <Link
-            to={{
-              pathname: "/MyTeam",
-              state: {
-                team: employees
-              }
+          <Button
+            fullWidth={false}
+            disabled={false}
+            action={() => {
+              request.getEmployees()
+              history.push("/MyTeam")
             }}
-          >
-            <Body>Wolverines</Body>  
-          </Link>       
+            small={true}
+            text="Wolverines"
+          />
         </MDContainer>
+        <TeamAvatarsContainer>
+          <AvatarGroup max={7}>
+            {totalEmployees.map(employee => (
+              <Avatar alt="Avatar Funcionário" src={employee.photo} />
+            ))}
+          </AvatarGroup>
+        </TeamAvatarsContainer>
       </MDHero>
     );
   };
@@ -137,4 +186,6 @@ export default function BackOfficeContent(props) {
       </ResultsContainer>
     </ContentContainer>
   );
-}
+};
+
+export default BackOfficeContent;

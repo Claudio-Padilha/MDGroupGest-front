@@ -23,9 +23,6 @@ const CreateEmployee = (props) => {
 
   console.log('props', props.location.state);
 
-  const previousUrl = document.referrer;
-  const loginUrl = "http://localhost:3000/";
-
   function _goBack() {
     window.history.back();    
   }
@@ -104,7 +101,7 @@ const CreateEmployee = (props) => {
 
     const userType = props.location.state.userType;
 
-    var currentUserType = localStorage.setItem('currentUserType', userType)
+    localStorage.setItem('currentUserType', userType)
 
     _ConfirmEmployeeCreation(formFields)
   };
