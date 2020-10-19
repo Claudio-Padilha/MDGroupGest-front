@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from "react-router-dom";
 
 import { Avatar } from '@material-ui/core';
@@ -24,6 +24,7 @@ import {
 import request from '../../components/Form/request';
 
 const BackOfficeContent = (props) => {
+  request.getContracts()
 
   var teamLeadersCounter = 0;
   var instructorsCounter = 0;
@@ -79,14 +80,30 @@ const BackOfficeContent = (props) => {
   console.log(totalEmployees, 'TODOS')
   console.log(instructorsArr, 'INSTRUTORES')
   console.log(quantityOfTotalEmployees, 'QUANTIDADE')
-  // console.log(teamLeadersArr, 'TEAM LEADERS');
-  // console.log(instructorsArr, 'INSTRUTORES');
-  // console.log(salesPersonsArr, 'COMERCIAIS');
-  // console.log(teamLeadersCounter, 'QTD DE TEAM LEADERS');
-  // console.log(instructorsCounter, 'QTD DE INSTRUTORES');
-  // console.log(salesPersonsCounter, 'QTD DE COMERCIAIS');
 
   const history = useHistory();
+
+
+  function _getComissions() {
+    var contracts = JSON.parse(localStorage.getItem('contracts'));
+    var comissions = []
+    contracts.map(contract => {
+      comissions.push(parseFloat(contract?.employee_comission))
+    })
+    return comissions;
+  }
+
+  function _calculateComissions() {
+    const comissions = _getComissions();
+    var mySalary = 0
+    for (var i = 0; i < comissions?.length; i++) {
+      mySalary += i
+    }
+
+    return mySalary
+  }
+
+  console.log(_calculateComissions(), 'MEU SALÁRIO')
 
   const renderHero = () => {
 
@@ -119,6 +136,8 @@ const BackOfficeContent = (props) => {
   };
 
   const renderMyMonth = () => {
+
+    
     return (
       <MDCard>
         <MDCard.Body className={"cardBody"}>
@@ -132,13 +151,15 @@ const BackOfficeContent = (props) => {
           >
             <SubHeading>Meu mês</SubHeading>
           </Link> 
-          <Body>1247€</Body>
+          <Body className={"mySalary"}>{`${_calculateComissions()}€`}</Body>
         </MDCard.Body>
       </MDCard>
     );
   };
 
   const renderMyContracts = () => {
+    var contractCounter = JSON.parse(localStorage.getItem('contracts'));
+    var contractCounterParsed = contractCounter?.length;
     return (
       <MDCard isTheMiddleCard>
         <MDCard.Body className={"cardBody"}>
@@ -152,7 +173,21 @@ const BackOfficeContent = (props) => {
           >
             <SubHeading>Contratos</SubHeading>
           </Link>
-          <Heading>284</Heading>
+          <Heading>{contractCounterParsed}</Heading>
+          <Button
+            fullWidth={false}
+            disabled={false}
+            // action={async () => {
+            //   await request.getContracts()
+            //   history.push("/ContractList")
+            // }} Depois da demonstração o request vai ficar no login
+            action={() => {
+              history.push("/ContractList")
+            }}
+
+            small={true}
+            text="Ver contratos"
+          />
         </MDCard.Body>
       </MDCard>
     );

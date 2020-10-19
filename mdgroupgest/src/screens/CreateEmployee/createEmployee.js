@@ -48,13 +48,13 @@ const CreateEmployee = (props) => {
       return (
         swalWithBootstrapButtons.fire({
         title: 'Confirme os dados do funcionário:',
-        text: 
-          `Nome: ${name ? name : `❌`},
-           NIF: ${nif ? nif : `❌`}.                                               
-           Morada: ${address ? address : `❌`},                                     
-           Contato: ${contact ? contact : `❌`},                             
-           Email: ${email ? email : `❌`},
-           Escritório: ${office ? office : `❌`}
+        html: 
+          `<b>Nome:</b> ${name ? name : `❌`} <br>
+           <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
+           <b>Morada:</b> ${address ? address : `❌`} <br>                                    
+           <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
+           <b>Email:</b> ${email ? email : `❌`} <br>
+           <b>Escritório:</b> ${office ? office : `❌`} <br>
           `,
         icon: 'warning',
         showCancelButton: true,

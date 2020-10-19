@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import CONSTANTS from '../../constants';
 import { pulse } from '../../utils/animations';
 
 const MainContainer = styled.div`
@@ -22,36 +23,93 @@ const MainContainer = styled.div`
     display: flex;
     justify-content: center;
   }
+
+  .listContainer {
+    width: 80%;
+    height: 80vh;
+    overflow: scroll;
+
+    .employeeComission {
+      justify-content: center;
+      display: flex;
+      color: ${CONSTANTS.colors.green};
+      font-weight: bold;
+    }
+
+    .clientInfoContent {
+      margin-top: 8%;
+    }
+
+    .clientInfoTitle {
+      margin: 0;
+      color: ${CONSTANTS.colors.black}
+    }
+
+    &::-webkit-scrollbar {
+      width: 0;
+    }
+     
+    &::-webkit-scrollbar-track {
+      box-shadow: none;
+    }
+     
+    &::-webkit-scrollbar-thumb {
+      background-color: darkgrey;
+      outline: 1px solid slategrey;
+    }
+
+    .eachContract {
+      .optionsAboutContract {
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 25%;
+        margin-top: 5%;
+        .secondaryButton {
+          background-color: ${CONSTANTS.colors.white};
+          span {
+            color: ${CONSTANTS.colors.black};
+          }
+        }
+      }
+      .contractComission {
+        margin-top: 3%;
+      }
+      .clientInfo {
+        width: 30%;
+      }
+      .rowOfClientInfo {
+        width: 100%;
+        .pairOfClientInfo {
+          width: 50%;
+        }
+      }
+      height: 40%;
+      margin-top: 2%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+    }
+  }
 `;
 
-const ContractsContainer = styled.div`
+
+const Column = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 80%;
-  height: 65vh;
-  button:hover {
-    cursor: pointer
+  .truncate {
+    width: 250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 `;
 
-const SecondRow = styled.div`
+const Row = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
-  width: 100%;
-  height: 100%;
-  a {
-    height: 80%;
-    width: 25%;
-    text-decoration: none;
-    div {
-      align-self: center;
-    }
-    &:hover {
-      animation: ${pulse} 1s infinite;
-    }
-  }
 `;
 
 const HomePageButton = styled.div`
@@ -61,11 +119,18 @@ const HomePageButton = styled.div`
   align-items: center;
   width: 25%;
   height: 73%;
-`
+`;
+
+const LogoContainer = styled.span`
+  flex: 1;
+  position: absolute;
+  top: 1%;
+  right: 8%;
+`;
 
 export {
   MainContainer,
-  ContractsContainer,
-  SecondRow,
-  HomePageButton
+  Column,
+  Row,
+  LogoContainer
 };

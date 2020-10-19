@@ -3,6 +3,10 @@ import routes from '../../routes';
 import Swal from 'sweetalert2';
 import { useHistory } from 'react-router-dom';
 
+function _currentTokenOnRAM() {
+  return localStorage.getItem('currentToken');
+}
+
 function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
@@ -54,6 +58,7 @@ function _HandleDeniedLogin() {
 
 export default {
   login: (data) => {
+      // this.getContracts()
       return new Promise((resolve, reject) => {
           console.log("LOGN PAYLOAD: ", data);
 
@@ -62,22 +67,60 @@ export default {
               .then((res) => {
                   resolve(res);
                   const user = res?.data;
+
+                  if (user[0] === "invalid credentials") {
+                    _HandleDeniedLogin()
+                  }
+                  
                   const currentAuthToken = res?.data?.user?.token;
+                  const userType = user?.user.user_type;
+                  
+                  console.log(user, 'USUÁRIO LOGADO')
+                  console.log(userType, 'TIPO DE USUÁRIO')
 
                   if (currentAuthToken) {
+                    localStorage.setItem('currentUser', JSON.stringify(user));
+                    localStorage.setItem('currentToken', currentAuthToken);
                     // controlar tipos de requests feitos a partir de user type (DASHBOARD VAI PRECISAR DE USER TYPES DIFERENTES) // SWITCH MELHOR MANEIRA*
-                      localStorage.setItem('currentUser', JSON.stringify(user));
-                      localStorage.setItem('currentToken', currentAuthToken);
-                  }
-                  const currentUserOnRAM = localStorage.getItem('currentUser');
-                  const currentUser = JSON.parse(currentUserOnRAM);
+                    // vai haver vários tipos de requests diferentes lá em baixo  
+                    // switch (userType) {
+                    //     case "admin":
+                    //       requestForAdmin
+                    //     case "manager":
+                    //       requestForManager
+                    //     case "secretary":
+                    //       requestForSecretary
+                    //     case "teamLeader":  
+                    //       requestForTeamLeader
+                    //     case "salesPerson":
+                    //       requestForSalesperson
+                    //     default:
+                    //       break;
+                    //   }
+                    return new Promise((resolve, reject) => {
 
-                  if (currentUser !== null && localStorage.length !== 0) {
-                    _HandleConfirmLoginAlert()
-                  } 
-                  if (currentUser === null || user[0] === "invalid credentials") {
-                    _HandleDeniedLogin()
-                  }           
+                      var contractRequest = {
+                          method: 'GET',
+                          url: `http://127.0.0.1:8000/contract/`,
+                          headers: {
+                              'Authorization': 'Token ' + _currentTokenOnRAM(),
+                          },
+                        };
+                      
+                      axios(contractRequest)
+                
+                      .then(res => {
+                        localStorage.setItem('contracts', JSON.stringify(res.data))
+                        _HandleConfirmLoginAlert()
+                        resolve(res);
+                      })
+                      .catch(error => {
+                          alert("Não foi possível trazer escritórios! \nErro: ", error)
+                          reject(error);
+                      })
+                    });
+                  }
+          
               })
               .catch(error => {
                   const message = 'Erro do servidor.';
@@ -87,13 +130,12 @@ export default {
   },
   logout: () => {
       return new Promise((resolve, reject) => {   
-          var currentToken = localStorage.getItem('currentToken');
 
           var authOptions = {
               method: 'POST',
               url: 'http://127.0.0.1:8000/auth/token/logout',
               headers: {
-                  'Authorization': 'Token ' + currentToken,
+                  'Authorization': 'Token ' + _currentTokenOnRAM(),
                   'Content-Type': 'application/x-www-form-urlencoded'
               },
               json: true
@@ -102,11 +144,14 @@ export default {
           axios(authOptions)
 
           .then((res) => {
-              localStorage.removeItem('myTeam')
-              localStorage.removeItem('employeeDetail')
-              localStorage.removeItem('currentToken')
+              window.localStorage.clear();
+
               
+              // localStorage.removeItem('myTeam')
+              // localStorage.removeItem('employeeDetail')
+              // localStorage.removeItem('currentToken')
               
+
               resolve(res);
           })
           .catch(error => {
@@ -115,8 +160,35 @@ export default {
           })
       })
   },
+
+  getOffices: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var getOfficesRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/office/`,
+        headers: {
+            'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+
+      axios(getOfficesRequest)
+
+      .then(res => {
+        console.log(res);
+        resolve(res);
+      })
+      .catch(error => {
+        console.log(error, 'ERRO');
+        reject(error);
+      })
+    }); 
+  },
   createOffice: (data) => {
-    var currentToken = localStorage.getItem('currentToken');
     
     const officeObj = {
       name: data?.officeName,
@@ -131,7 +203,7 @@ export default {
           method: 'POST',
           url: `http://127.0.0.1:8000/office/`,
           headers: {
-              'Authorization': 'Token ' + currentToken,
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
           data: officeObj,
@@ -150,35 +222,99 @@ export default {
       })
     });
   },
-  getOffices: () => {
-    var currentToken = localStorage.getItem('currentToken');
-    
-    return new Promise((resolve, reject) => {
+  // updateOffice: (data) => {
 
-      var officeRequest = {
-          method: 'GET',
-          url: `http://127.0.0.1:8000/office/`,
-          headers: {
-              'Authorization': 'Token ' + currentToken,
-          },
-        };
+  //   const officeObj = {
+  //     name: data?.officeName,
+  //     email: data?.officeEmail,
+  //     nipc: data?.officeNIPC,
+  //     address: data?.officeAddress,
+  //   }
+
+  //   return new Promise((resolve, reject) => {
       
-      axios(officeRequest)
+  //     var officeUpdateRequest = {
+  //       method: 'PATCH',
+  //       url: `http://127.0.0.1/office/${data?.id}/`,
+  //       headers: {
+  //         'Authorization': 'Token ' + _currentTokenOnRAM(),
+  //       },
+  //       json: true,
+  //       data: officeObj,
+  //       dataType: "json",
+  //       contentType: "application/json"
+  //     }
+
+  //     axios(officeUpdateRequest)
+
+  //     .then(res => {
+  //       resolve(res);
+  //     })
+  //     .catch(err => {
+  //       reject(err);
+  //     })
+  //   })
+  // },
+  deleteOffice: () => {
+
+    return new Promise((resolve, reject) => {
+      
+      var officeDeleteRequest = {
+        method: 'DELETE',
+        url: `http://127.0.0.1/office/`, // id provavelmente
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+
+      axios(officeDeleteRequest)
 
       .then(res => {
-        console.log("RESPONSE: ", res)
-        localStorage.setItem('offices', res.data)
         resolve(res);
       })
-      .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+      .catch(err => {
+        reject(err);
       })
-    });
+    })
+  },
+
+  getEmployees: () => {
+
+    var employeeType = localStorage.getItem('currentUserType');
+
+    return new Promise((resolve, reject) => {
+
+      var getEmployeesRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/${employeeType}/`,
+        headers: { 
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+
+      axios(getEmployeesRequest)
+
+      .then(res => {
+        
+        localStorage.setItem('myTeam', JSON.stringify(res.data));
+        resolve(res);
+        
+      })
+
+      .catch(error => {
+        console.log(error);
+        reject(error);
+      })
+    })
   },
   createEmployee: (data) => {
     console.log(data, 'USER REQUEST')
-    var currentToken = localStorage.getItem('currentToken');
 
     var userType = localStorage.getItem('currentUserType');
     
@@ -201,7 +337,7 @@ export default {
           method: 'POST',
           url: `http://127.0.0.1:8000/${userType}/`,
           headers: {
-              'Authorization': 'Token ' + currentToken,
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
           data: userObj,
@@ -220,8 +356,95 @@ export default {
       })
     });
   },
+  updateEmployee: (data) => {
+
+    const userObj = {
+      office: 1,
+      user: {
+        name: data?.name,
+        email: data?.email,
+        user_type: data?.user_type,
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+      }
+    }
+    
+    return new Promise((resolve, reject) => {
+
+      var employeeUpdateRequest = {
+          method: 'PATCH',
+          url: `http://127.0.0.1:8000/${data?.user_type}/${data?.id}/`, // trazer da tela de navegação
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          json: true,
+          data: userObj,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(employeeUpdateRequest)
+
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+          const message = 'Erro do servidor';
+          reject(message);
+      })
+    });
+  },
+  deleteEmployee: (data) => {
+    return new Promise((resolve, reject) => {
+      
+      var employeeDeleteRequest = {
+        method: 'DELETE',
+        url: `http://127.0.0.1/${data?.userType}/${data?.id}/`, // id vem da página
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+
+      axios(employeeDeleteRequest)
+
+      .then(res => {
+        resolve(res);
+      })
+      .catch(err => {
+        reject(err);
+      })
+    })
+  },
+
+  getContracts: () => {
+    
+    return new Promise((resolve, reject) => {
+
+      var contractRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/contract/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(contractRequest)
+
+      .then(res => {
+        localStorage.setItem('contracts', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
+  },
   createContract: (data) => {
-    var currentToken = localStorage.getItem('currentToken');
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     var payment = data?.lightPPI ? "Débito Directo" : "Multibanco";
     
@@ -260,7 +483,7 @@ export default {
           method: 'POST',
           url: `http://127.0.0.1:8000/contract/`,
           headers: {
-              'Authorization': 'Token ' + currentToken,
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
           data: contractObj,
@@ -271,6 +494,10 @@ export default {
       axios(contractRequest)
 
       .then(res => {
+        let contractsSoFar = JSON.parse(localStorage.getItem('contracts'));
+        let currentContracts = {...res, ...contractsSoFar}
+        localStorage.removeItem('contracts');
+        localStorage.setItem('contracts', currentContracts);
         resolve(res);
       })
       .catch(error => {
@@ -279,65 +506,87 @@ export default {
       })
     });
   },
-  getOffices: () => {
-    var currentToken = localStorage.getItem('currentToken');
+  updateContract: (data) => {
+    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    var payment = data?.lightPPI ? "Débito Directo" : "Multibanco";
+    
+    var deliveryDate = data?.deliveryDate.toJSON();
+    var deliveryWorkedDate = deliveryDate.substring(0, 9);
+
+    var signatureDate = data?.signatureDate.toJSON();
+    var signatureWorkedDate = signatureDate.substring(0, 9);
+    
+    const contractObj = {
+      user: currentUser?.user?.id, // Receber dinamicamente
+      delivery_date: deliveryWorkedDate,
+      signature_date: signatureWorkedDate,
+      employee_name: data?.employeeName,
+      client_name: data?.clientName,
+      client_nif: data?.clientNif,
+      client_contact: data?.clientContact,
+      electronic_bill: data?.electronicBill ? data?.electronicBill : false,
+      cpe: data?.CPE.toString(),
+      electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
+      cui: data?.CUI.toString(),
+      gas_ppi: data?.gasPPI ? data?.gasPPI : false,
+      pel: data?.pel ? data?.pel : false,
+      observations: data?.observations,
+      employee_comission: data?.comission,
+      feedback_call: data?.feedbackCall,
+      payment: payment,
+      sell_state: data?.sellState,
+      power: data?.power,
+      gas_scale: data?.gasScale
+    }
 
     return new Promise((resolve, reject) => {
 
-      var getOfficesRequest = {
-        method: 'GET',
-        url: `http://127.0.0.1:8000/office/`,
-        headers: {
-            'Authorization': 'Token ' + currentToken,
-        },
-        json: true,
-        dataType: "json",
-        contentType: "application/json"
-      }
-
-      axios(getOfficesRequest)
+      var contractRequest = {
+          method: 'FETCH',
+          url: `http://127.0.0.1:8000/contract/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          json: true,
+          data: contractObj,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(contractRequest)
 
       .then(res => {
-        console.log(res);
+        let contractsSoFar = JSON.parse(localStorage.getItem('contracts'));
+        let currentContracts = {...res, ...contractsSoFar}
+        localStorage.removeItem('contracts');
+        localStorage.setItem('contracts', currentContracts);
         resolve(res);
       })
       .catch(error => {
-        console.log(error, 'ERRO');
-        reject(error);
+          const message = 'Erro do servidor';
+          reject(message);
       })
-    }); 
+    });
   },
-  getEmployees: () => {
-    var currentToken = localStorage.getItem('currentToken');
-
-    const employeeType = localStorage.getItem('currentUserType');
-
+  deleteContract: (id) => {
     return new Promise((resolve, reject) => {
-
-      var getEmployeesRequest = {
-        method: 'GET',
-        url: `http://127.0.0.1:8000/secretary/`,
-        headers: { 
-          'Authorization': 'Token ' + currentToken,
+      
+      var contractDeleteRequest = {
+        method: 'DELETE',
+        url: `http://127.0.0.1:8000/contract/${id}/`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
-        json: true,
-        dataType: "json",
-        contentType: "application/json"
       }
 
-      axios(getEmployeesRequest)
+      axios(contractDeleteRequest)
 
       .then(res => {
-        
-        localStorage.setItem('myTeam', JSON.stringify(res.data));
         resolve(res);
-        
       })
-
-      .catch(error => {
-        console.log(error);
-        reject(error);
+      .catch(err => {
+        reject(err);
       })
     })
-  }
+  },
 }

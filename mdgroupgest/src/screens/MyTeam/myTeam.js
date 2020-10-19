@@ -50,9 +50,8 @@ const MyTeam = () => {
         data={data}
         height={700}
         width={1000}
-        nodeRadius={15}
         animated
-        steps={120}
+        steps={90}
         duration={1500}
         svgProps={{
           className: 'custom',

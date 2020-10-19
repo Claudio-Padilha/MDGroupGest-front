@@ -12,7 +12,7 @@ export const Jumbo = styled.h1`
 
 const headingSizes = [
   `
-  font-size: 48px;
+  font-size: 40px;
   line-height: 64px;
   `,
   `
@@ -50,6 +50,14 @@ export const SubHeading = styled.h3`
   font-style: normal;
   font-weight: bold;
   ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[2])}
+  color: ${props => (props.isReverseColor ? CONSTANTS?.colors.white : CONSTANTS?.colors.black)};
+`;
+
+export const SmallSubHeading = styled.h5`
+  font-family: Merry Weather;
+  font-style: normal;
+  font-weight: bold;
+  ${props => (props.size ? headingSizes[props.size - 1] : headingSizes[5])}
   color: ${props => (props.isReverseColor ? CONSTANTS?.colors.white : CONSTANTS?.colors.black)};
 `;
 

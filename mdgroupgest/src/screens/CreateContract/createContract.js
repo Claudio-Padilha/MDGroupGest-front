@@ -31,13 +31,8 @@ const CreateContract = ({ state }) => {
 
   console.log('VEIO DO LOGIN?', isFromLogin)
 
-  const goBack = () => {
-    if (isFromLogin) {
-      alert("Não é permitido voltar ao ecrã de login.") // mudar pq só "isFromLogin não funciona"
-    }  else {
-      window.history.back();
-    }
-    
+  function _goBack() {
+    window.location.assign("/BackOffice") 
   }
 
   function _ConfirmContractCreation(data) {
@@ -105,7 +100,7 @@ const CreateContract = ({ state }) => {
         reverseButtons: true
       }).then((result) => {
 
-        // "result.isConfimed significa clicar em "Refazer"
+        // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
             try {
               request.createContract(data);
@@ -113,8 +108,9 @@ const CreateContract = ({ state }) => {
                 'Boa!',
                 'Contrato inserido com sucesso.',
                 'success'
-              ).then((result) => {
+              ).then(async (result) => {
                 if(result) {
+                  await request.getContracts()
                   return history.push("/ContractList");
                 }
               });
@@ -127,7 +123,7 @@ const CreateContract = ({ state }) => {
               )
             }
  
-        // "!result.isConfimed significa clicar em "'E isso!"
+        // "!result.isConfimed significa clicar em "Refazer" 
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
               'Cancelado',
@@ -406,7 +402,7 @@ const CreateContract = ({ state }) => {
 
   return (
     <MainDiv>
-      <BackIcon onClick={goBack} color={isFromLogin ? "grey" : "black"}/>
+      <BackIcon onClick={_goBack} color={"black"}/>
       
       <CornerLeft><Corner180 /></CornerLeft>
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>

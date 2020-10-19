@@ -10,6 +10,7 @@ import MyResults from './screens/MyResults/myResults';
 import MyMonth from './screens/MyMonth/myMonth';
 import MyTeam from './screens/MyTeam/myTeam';
 import EmployeeDetail from './screens/EmployeeDetail/employeeDetail';
+import ContractDetail from './screens/ContractDetail/contractDetail';
 
 import Router from './router';
 import history from './utils/history';
@@ -27,6 +28,7 @@ function App() {
     myMonth: "/MyMonth",
     myTeam: "/MyTeam",
     employeeDetail: "/EmployeeDetail",
+    contractDetail: "/ContractDetail"
   };
   
   const routes = [
@@ -41,9 +43,8 @@ function App() {
     { path: paths.myMonth, component: MyMonth },
     { path: paths.myTeam, component: MyTeam },
     { path: paths.employeeDetail, component: EmployeeDetail },
+    { path: paths.contractDetail, component: ContractDetail }
   ];
-
-  console.log(localStorage, 'RAM')
 
   return (
     <Router routes={routes} history={history} />

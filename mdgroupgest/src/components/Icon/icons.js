@@ -6,6 +6,7 @@ import { ReactComponent as Back } from '../../assets/icons/back-arrow.svg';
 import { ReactComponent as Logout } from '../../assets/icons/logout.svg';
 import { ReactComponent as Add } from '../../assets/icons/plus-solid.svg';
 import { ReactComponent as Office } from '../../assets/icons/plus-solid.svg';
+import { ReactComponent as SeeMore } from '../../assets/icons/seeMore.svg';
 
 const CheckCircleIcon = ({...props}) => {
   return <CheckCircle {...props}/>;
@@ -27,10 +28,16 @@ const OfficeIcon = ({...props}) => {
   return <Office {...props} />;
 }
 
+const SeeMoreIcon = ({...props}) => {
+  return <SeeMore {...props} />;
+}
+
+
 export {
   CheckCircleIcon,
   BackIcon,
   LogoutIcon,
   AddIcon,
-  OfficeIcon
+  OfficeIcon,
+  SeeMoreIcon
 };

@@ -16,7 +16,7 @@ const Login = () => {
 
   const handleSubmitForm = (formFields) => {
     try {
-      request.login(formFields);
+      request.login(formFields)
     } catch (error) {
       console.log('VOCE NÃO FOI BEM SUCEDIDO')
     }

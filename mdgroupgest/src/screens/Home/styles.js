@@ -112,6 +112,12 @@ const ResultsContainer = styled.div`
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    height: 90%;
+    .mySalary {
+      font-size: 24px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
   }
 `;
 
