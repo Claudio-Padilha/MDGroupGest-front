@@ -1,6 +1,7 @@
 import React from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
+import _ from 'lodash';
 
 import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
@@ -17,18 +18,36 @@ import {
 import {  List } from "semantic-ui-react";
 import request from "../../components/Form/request";
 
-const ContractList = () => {
+const ContractList = (props) => {
+  
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    history.push({
+      pathname: "/BackOffice",
+      state: {
+        fromContractsList: true
+      }
+    })
   }
+
 
   const history = useHistory();
 
-  const localStorage = window.localStorage;
+  var localStorage = window.localStorage;
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
 
-  console.log(contracts, 'CONTRATOS')
+  const fromDelete = props?.location?.state?.fromDelete;
+  const deletedID = props?.location?.state?.deletedID;
+
+  function _removeContractFromRAM() {
+    _.remove(contracts, function(obj) {
+      return obj.id === deletedID
+    })
+  }
+
+  if(fromDelete) {
+    _removeContractFromRAM()
+  }
 
   const renderContract = (contract, i) => {
     return (
@@ -90,16 +109,6 @@ const ContractList = () => {
               small={true}
               text="Ver detalhes"
             />
-            <Button
-              disabled={false}
-              action={() => {
-                request.deleteContract(contract?.id)
-                history.push("/BackOffice")
-              }}
-              small={true}
-              text="Apagar"
-              className={"secondaryButton"}
-            />
           </Column>
           
         </List.Item>
@@ -116,7 +125,16 @@ const ContractList = () => {
         return renderContract(contract, index);
       })}        
       </List>
-      <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
+      <LogoContainer>
+        <LogoMD action={
+          () => history.push({
+            pathname: "/BackOffice",
+            state: {
+              fromContractsList: true
+            }}
+          )}
+        />
+      </LogoContainer>
     </MainContainer>
   )
 

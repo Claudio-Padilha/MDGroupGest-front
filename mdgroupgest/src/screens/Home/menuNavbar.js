@@ -41,7 +41,7 @@ export default function MenuNavbar(props) {
       <ProfileContainer>
         <Avatar
           alt="Profile Image"
-          src="https://i.pinimg.com/originals/58/d8/c1/58d8c1a2363061117c2c00018b04e34c.jpg"
+          src="../../assets/icons/func9.png"
           className={avatarClasses.large}
         />
         <SubHeading isReverseColor={true}>{userName}</SubHeading>

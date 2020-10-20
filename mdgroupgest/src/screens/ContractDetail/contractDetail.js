@@ -1,11 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
+import Swal from 'sweetalert2';
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
+
+import request from '../../components/Form/request'
 
 import {
   MainContainer,
@@ -19,17 +22,76 @@ import { List } from "semantic-ui-react";
 const ContractDetail = (props) => {
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
+  const contractID = props?.location?.state?.data?.id;
+  console.log(contractID, 'ID')
+
+  const [isDeleting, setIsDeleting] = useState(false);
 
   function _goBack() {
     window.location.assign("/ContractList");    
   }
 
+  function _confirmToDeleteContract() {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
+    setIsDeleting(true);
+    
+    return (
+      swalWithBootstrapButtons.fire({
+        title: 'Tem certeza?',
+        text: "Não poderá voltar atrás.",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Sim',
+        cancelButtonText: 'Não, cancelar',
+        reverseButtons: true
+      }).then(async (result) => {
+        if (result.isConfirmed) {
+          request.deleteContract(contractID) 
+          .then(
+            request.getContracts().then(
+              swalWithBootstrapButtons.fire(
+                'Contrato Apagado!',
+                'A operação foi concluída com sucesso.',
+                'success'
+              ).then(history.push({
+                pathname: "/ContractList",
+                state: {
+                  fromDelete: true,
+                  deletedID: contractID
+                }
+              }))
+            )
+          )
+
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) {
+          setIsDeleting(false)
+          swalWithBootstrapButtons.fire(
+            'Ação cancelada!',
+            'Seu contrato está a salvo.',
+            'error'
+          )
+        }
+      })
+    )
+  }
+
+
   const history = useHistory();
+  console.log(isDeleting, 'IS DELETING')
 
   const renderContract = () => {
     return (
       <>
-        <List.Item className={"contract"}>
+        <List.Item className={isDeleting ? "hideContract" : "contract"}>
           <Heading>{`Contrato nº: ${contractNumber}`}</Heading>       
           <List.Content>
 
@@ -122,11 +184,16 @@ const ContractDetail = (props) => {
               </Column>
           </List.Content>
           <Column className={"optionsAboutContract"}>
+
             <Button
               disabled={false}
-              action={() => {
-                history.push("/BackOffice")
-              }}
+              // action={() => {
+              //   Promise.all([
+              //     request.deleteContract(contract?.id),
+              //     request.getOffices(),
+              //   ])
+              // }}
+              action={_confirmToDeleteContract}
               small={true}
               text="Apagar"
               className={"secondaryButton"}

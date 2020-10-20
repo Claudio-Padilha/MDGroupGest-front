@@ -58,7 +58,7 @@ function _HandleDeniedLogin() {
 
 export default {
   login: (data) => {
-      // this.getContracts()
+      
       return new Promise((resolve, reject) => {
           console.log("LOGN PAYLOAD: ", data);
 
@@ -97,6 +97,7 @@ export default {
                     //     default:
                     //       break;
                     //   }
+
                     return new Promise((resolve, reject) => {
 
                       var contractRequest = {

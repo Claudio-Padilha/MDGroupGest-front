@@ -2,7 +2,7 @@ import ReactDOM from "react-dom";
 import React from "react";
 import Home from "./home";
 
-const BackOffice = () => {
+const BackOffice = (props) => {
   const DESTINATIONS = [
     {
       title: "Luna",
@@ -181,7 +181,7 @@ const BackOffice = () => {
         "https://uploads.codesandbox.io/uploads/user/13a9d4ab-104d-4152-bf41-621a9097470b/dBOt-pluto.jpg"
     }
   ];
-  return <Home destinations={DESTINATIONS} />
+  return <Home {...props}/>
 }
 
 

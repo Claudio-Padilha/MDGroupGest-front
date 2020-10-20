@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from "react-router-dom";
+import _ from 'lodash';
 
 import { Avatar } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
@@ -24,7 +25,6 @@ import {
 import request from '../../components/Form/request';
 
 const BackOfficeContent = (props) => {
-  request.getContracts()
 
   var teamLeadersCounter = 0;
   var instructorsCounter = 0;
@@ -83,9 +83,24 @@ const BackOfficeContent = (props) => {
 
   const history = useHistory();
 
+  var contracts = JSON.parse(localStorage.getItem('contracts'));
+
+  var fromContractsList = props?.location?.state?.fromContractsList;
+  var deletedID = props?.location?.state?.deletedID;
+  console.log(props, 'VEIO DE CONTRATOS?')
+
+  function _removeContractFromRAM() {
+    _.remove(contracts, function(obj) {
+      return obj.id === deletedID
+    })
+  }
+
+  if(fromContractsList) {
+    _removeContractFromRAM()
+  }
 
   function _getComissions() {
-    var contracts = JSON.parse(localStorage.getItem('contracts'));
+    
     var comissions = []
     contracts.map(contract => {
       comissions.push(parseFloat(contract?.employee_comission))
@@ -94,16 +109,14 @@ const BackOfficeContent = (props) => {
   }
 
   function _calculateComissions() {
-    const comissions = _getComissions();
+    var comissions = _getComissions();
     var mySalary = 0
-    for (var i = 0; i < comissions?.length; i++) {
-      mySalary += i
+    for (let i = 0; i < comissions?.length; i++) {
+      mySalary += comissions[i]
     }
 
     return mySalary
   }
-
-  console.log(_calculateComissions(), 'MEU SALÁRIO')
 
   const renderHero = () => {
 
@@ -136,7 +149,8 @@ const BackOfficeContent = (props) => {
   };
 
   const renderMyMonth = () => {
-
+    const comissions = _calculateComissions()
+    console.log(comissions)
     
     return (
       <MDCard>

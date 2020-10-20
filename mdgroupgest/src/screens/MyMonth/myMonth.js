@@ -20,7 +20,7 @@ import {
 
 const MyMonth = () => {
   function _goBack() {
-    window.history.back();    
+    window.location.assign("/BackOffice");    
   }
 
   // aqui terá a lógica do mês de cada um

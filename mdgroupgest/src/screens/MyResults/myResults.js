@@ -20,7 +20,7 @@ import {
 
 const MyResults = () => {
   function _goBack() {
-    window.history.back();    
+    window.location.assign("/BackOffice");    
   }
 
   // aqui terá a lógica para receber os resultados do funcionário

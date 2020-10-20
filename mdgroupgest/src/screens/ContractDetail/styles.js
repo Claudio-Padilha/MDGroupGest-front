@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CONSTANTS from '../../constants';
-import { pulse } from '../../utils/animations';
+import { hideContract } from '../../utils/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -26,6 +26,16 @@ const MainContainer = styled.div`
   .optionsAboutContract {
     width: 20%;
   }
+  .hideContract {
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: flex-start;
+    display: flex;
+    width: 70%;
+    height: 80vh;
+    opacity: 0;
+    transition: opacity 1s;
+  }
   .contract {
     justify-content: space-between;
     flex-direction: column;
@@ -33,6 +43,8 @@ const MainContainer = styled.div`
     display: flex;
     width: 70%;
     height: 80vh;
+    opacity: 1;
+    transition: opacity 1s;
   }
   .content {
     height: 80%;
