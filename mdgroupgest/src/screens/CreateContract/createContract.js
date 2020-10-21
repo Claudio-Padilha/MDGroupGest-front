@@ -1,13 +1,12 @@
-import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import React from 'react';
+import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import {
   MainDiv,
   CornerLeft,
   LogoContainer,
-  CornerRight, 
-  BackContainer
+  CornerRight,
 } from './styles';
 
 import CForm from '../../components/Form/complexForm';
@@ -18,25 +17,14 @@ import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = ({ state }) => {
 
-  console.log("O URL ANTERIOR É: " + document.referrer)
   const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
   const history = useHistory();
-
-  const previousUrl = document.referrer;
-  const loginUrl = "http://localhost:3000/";
-
-  const refresh = window.location.reload;
-
-  let isFromLogin = previousUrl === loginUrl;
-
-  console.log('VEIO DO LOGIN?', isFromLogin)
 
   function _goBack() {
     window.location.assign("/BackOffice") 
   }
 
   function _ConfirmContractCreation(data) {
-    console.log(data, 'DADOS')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -134,9 +122,6 @@ const CreateContract = ({ state }) => {
         })
       )
   }
-
-  const location = useLocation();
-  console.log(location)
 
   const FIELDS = [
     { 

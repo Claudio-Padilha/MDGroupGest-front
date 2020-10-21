@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import CONSTANTS from '../../constants';
-import { hideContract } from '../../utils/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -124,15 +123,6 @@ const Column = styled.div`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
-`;
-
-const HomePageButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 25%;
-  height: 73%;
 `;
 
 const LogoContainer = styled.span`

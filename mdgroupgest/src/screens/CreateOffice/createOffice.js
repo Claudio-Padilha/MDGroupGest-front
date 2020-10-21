@@ -12,6 +12,7 @@ import {
 } from './styles';
 
 import { Corner, Corner180 } from '../../components/Corner/corner';
+import { BackIcon } from '../../components/Icon/icons';
 import { LogoMD } from '../../components/Logo/logo';
 import CForm from '../../components/Form/complexForm';
 
@@ -19,8 +20,11 @@ const CreateOffice = () => {
 
   const history = useHistory();
 
+  function _goBack() {
+    window.location.assign("/BackOffice");    
+  }
+
   function _ConfirmOfficeCreation(data) {
-    console.log(data, 'DADOS')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -96,6 +100,7 @@ const CreateOffice = () => {
   
   return (
     <MainDiv>
+      <BackIcon onClick={_goBack} />
       <CornerLeft><Corner180 /></CornerLeft>
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
       <CForm 

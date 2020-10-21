@@ -1,7 +1,5 @@
 import axios from 'axios'
-import routes from '../../routes';
 import Swal from 'sweetalert2';
-import { useHistory } from 'react-router-dom';
 
 function _currentTokenOnRAM() {
   return localStorage.getItem('currentToken');
@@ -60,7 +58,6 @@ export default {
   login: (data) => {
       
       return new Promise((resolve, reject) => {
-          console.log("LOGN PAYLOAD: ", data);
 
           axios.post("http://127.0.0.1:8000/auth/login/", data)
 
@@ -73,10 +70,6 @@ export default {
                   }
                   
                   const currentAuthToken = res?.data?.user?.token;
-                  const userType = user?.user.user_type;
-                  
-                  console.log(user, 'USUÁRIO LOGADO')
-                  console.log(userType, 'TIPO DE USUÁRIO')
 
                   if (currentAuthToken) {
                     localStorage.setItem('currentUser', JSON.stringify(user));
@@ -180,11 +173,9 @@ export default {
       axios(getOfficesRequest)
 
       .then(res => {
-        console.log(res);
         resolve(res);
       })
       .catch(error => {
-        console.log(error, 'ERRO');
         reject(error);
       })
     }); 
@@ -282,9 +273,9 @@ export default {
     })
   },
 
-  getEmployees: () => {
+  getEmployees: (employeeType) => {
 
-    var employeeType = localStorage.getItem('currentUserType');
+    // var employeeType = localStorage.getItem('currentUserType');
 
     return new Promise((resolve, reject) => {
 
@@ -303,19 +294,17 @@ export default {
 
       .then(res => {
         
-        localStorage.setItem('myTeam', JSON.stringify(res.data));
+        localStorage.setItem(`${employeeType}`, JSON.stringify(res.data));
         resolve(res);
         
       })
 
       .catch(error => {
-        console.log(error);
         reject(error);
       })
     })
   },
   createEmployee: (data) => {
-    console.log(data, 'USER REQUEST')
 
     var userType = localStorage.getItem('currentUserType');
     
@@ -468,7 +457,7 @@ export default {
       electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
       cui: data?.CUI.toString(),
       gas_ppi: data?.gasPPI ? data?.gasPPI : false,
-      pel: data?.pel ? data?.pel : false,
+      pel: data?.PEL ? data?.PEL : false,
       observations: data?.observations,
       employee_comission: data?.comission,
       feedback_call: data?.feedbackCall,
@@ -584,6 +573,28 @@ export default {
 
       .then(res => {
         resolve(res);
+        return new Promise((resolve, reject) => {
+
+          var contractRequest = {
+              method: 'GET',
+              url: `http://127.0.0.1:8000/contract/`,
+              headers: {
+                  'Authorization': 'Token ' + _currentTokenOnRAM(),
+              },
+            };
+          
+          axios(contractRequest)
+    
+          .then(res => {
+            localStorage.removeItem('contracts')
+            localStorage.setItem('contracts', JSON.stringify(res.data))
+            resolve(res);
+          })
+          .catch(error => {
+              alert("Não foi possível trazer escritórios! \nErro: ", error)
+              reject(error);
+          })
+        });
       })
       .catch(err => {
         reject(err);

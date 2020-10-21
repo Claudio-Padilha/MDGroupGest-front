@@ -103,20 +103,63 @@ const ResultsContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   .card {
+    display: flex;
+    flex-direction: column;
     a {
       text-decoration: none;
     }
   }
-  .cardBody {
+  .monthCardBody {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     height: 90%;
+    a, h2 {
+      width: 80%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
     .mySalary {
-      font-size: 24px;
+      font-size: 58px;
       font-weight: bold;
       color: ${CONSTANTS.colors.green}
+    }
+  }
+  .contractsCardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    height: 90%;
+    a, h2 {
+      width: 80%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+  }
+  .resultsCardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    margin-top: 10%;
+    align-items: center;
+    height: 90%;
+    a {
+      width: 80%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    h2 {
+      font-size: 32px;
+      color: ${CONSTANTS.colors.green};
+      margin-top: 35%;
     }
   }
 `;

@@ -1,4 +1,4 @@
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 import { fadeIn, increaseSize } from "../../utils/animations";
 
 const LogoContainer = styled.div`

@@ -10,7 +10,6 @@ import { LogoMD } from '../../components/Logo/logo';
 import useLogin from '../../hooks/login';
 
 import { WelcomeWithLogoContainer, LogoContainer } from "./styles";
-import request from '../../components/Form/request';
 import { AddIcon, OfficeIcon } from '../../components/Icon/icons';
 
 export default function BackOfficeHeader(props) {

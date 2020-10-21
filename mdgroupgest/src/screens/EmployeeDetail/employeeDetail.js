@@ -25,7 +25,6 @@ const EmployeeDetail = () => {
 
   var employee = localStorage.getItem('employeeDetail')
 
-  console.log(employee, 'EMPLOYEE FROM DETAIL')
   // aqui terá a lógica do mês de cada um
   const renderEmployeeDetail = () => {
     return (

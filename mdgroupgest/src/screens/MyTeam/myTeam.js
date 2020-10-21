@@ -1,16 +1,12 @@
 import React from "react";
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Tree from 'react-tree-graph';
 
-import { SubHeading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
-import request from '../../components/Form/request';
 
 import data from './data';
 
 import { MainContainer } from "./styles";
-
-import { MDCard, MDCardBody } from '../../screens/Home/md';
 
 const MyTeam = () => {
 
@@ -31,10 +27,6 @@ const MyTeam = () => {
     console.log('handle click right', nodeKey)
     alert(`Right clicked ${nodeKey}`);
   }
-
-  var team = localStorage.getItem('myTeam');
-
-  var parsedTeam = JSON.parse(team);
 
   // const officeId = parsedTeam[0].office;
   //const teamMembers = parsedTeam[0].user; // ter lógica de map na array para pegar todos

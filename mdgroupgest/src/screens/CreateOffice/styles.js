@@ -7,6 +7,15 @@ const MainDiv = styled.div`
   justify-content: center;
   width: 100%;
   height: 100vh;
+  svg {
+    position: absolute;
+    width: 3%;
+    top: 4%;
+    left: 2%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
   .jxbNCh {
     align-self: center;
     background-color: #FFF;
@@ -45,7 +54,7 @@ const LogoContainer = styled.span`
   width: 20%;
   position: absolute;
   top: 5%;
-  left: 10%;
+  left: 40%;
   right: 10%;
 `;
 

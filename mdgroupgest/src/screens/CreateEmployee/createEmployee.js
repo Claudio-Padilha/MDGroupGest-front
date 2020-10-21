@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -14,21 +14,17 @@ import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
-import Form from '../../components/Form/normalForm';
 import request from '../../components/Form/request';
 
 const CreateEmployee = (props) => {
 
   const history = useHistory();
 
-  console.log('props', props.location.state);
-
   function _goBack() {
-    window.history.back();    
+    window.location.assign("/BackOffice");    
   }
 
   function _ConfirmEmployeeCreation(data) {
-    console.log(data, 'DATA')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

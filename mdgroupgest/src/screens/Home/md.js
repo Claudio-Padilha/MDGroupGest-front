@@ -104,16 +104,6 @@ const StyledContainer = styled(Container)`
   }
 `;
 
-const StyledDropdownToggle = styled(Dropdown.Toggle)`
-  &&& {
-    color: ${CONSTANTS.colors.white};
-    background-color: ${CONSTANTS.colors.black};
-    border-color: ${CONSTANTS.colors.black};
-    font-family: "Alegreya Sans SC", sans-serif;
-  }
-`;
-
-
 export const MDCol = Col;
 export const MDRow = Row;
 export const MDNav = Nav;

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
@@ -12,19 +12,20 @@ import {
   MainContainer,
   Row,
   Column,
-  LogoContainer
+  LogoContainer,
+  EmptyContainer
 } from "./styles";
 
-import {  List } from "semantic-ui-react";
-import request from "../../components/Form/request";
+import { List } from "semantic-ui-react";
 
 const ContractList = (props) => {
-  
+
   function _goBack() {
     history.push({
       pathname: "/BackOffice",
       state: {
-        fromContractsList: true
+        fromContractsList: true,
+        deletedID: deletedID
       }
     })
   }
@@ -34,10 +35,16 @@ const ContractList = (props) => {
 
   var localStorage = window.localStorage;
 
-  var contracts = JSON.parse(localStorage.getItem('contracts'));
+  const contracts = useMemo(() => {
+    if (props?.location?.state?.data) {
+      return props?.location?.state?.data
+    } else {
+      return JSON.parse(localStorage.getItem('contracts'))
+    }
+  },[props])
 
-  const fromDelete = props?.location?.state?.fromDelete;
-  const deletedID = props?.location?.state?.deletedID;
+  var fromDelete = props?.location?.state?.fromDelete;
+  var deletedID = props?.location?.state?.deletedID;
 
   function _removeContractFromRAM() {
     _.remove(contracts, function(obj) {
@@ -45,7 +52,7 @@ const ContractList = (props) => {
     })
   }
 
-  if(fromDelete) {
+  if(deletedID) {
     _removeContractFromRAM()
   }
 
@@ -121,9 +128,16 @@ const ContractList = (props) => {
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} color={"black"}/>
       <List divided verticalAlign="middle" className={"listContainer"}>
-      {contracts.map(function(contract, index) {
-        return renderContract(contract, index);
-      })}        
+      {contracts?.length === 0 && 
+        <EmptyContainer>
+          <SubHeading>Ainda não há contratos...</SubHeading>
+        </EmptyContainer>
+      }
+      {contracts && 
+        contracts.map(function(contract, index) {
+          return renderContract(contract, index);
+        })
+      }        
       </List>
       <LogoContainer>
         <LogoMD action={

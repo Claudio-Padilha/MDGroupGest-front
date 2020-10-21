@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Form, Col, InputGroup } from 'react-bootstrap';
+import React from 'react';
+import { Form, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
 
 import 'date-fns';
@@ -9,20 +9,16 @@ import {
   KeyboardDatePicker,
 } from '@material-ui/pickers';
 
-import { ErrorText, Body } from '../Text/text';
+import { Body } from '../Text/text';
 
 import TextInput from "../../components/TextInput/textInput";
-import { Row } from "../../components/Layout/layout";
 import TextArea from "../../components/TextArea/textArea";
 import Select from "../../components/Select/select";
 import Button from "../../components/Button/button";
-import TextWithCalendar from "../TextWithCalendar/textWithCalendar";
 import SwitchButton from "../ToggleComponent/toggleButton";
 import { Heading, SubHeading } from "../Text/text";
 
 import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
-
-
 
 const CForm = ({
   formFields,

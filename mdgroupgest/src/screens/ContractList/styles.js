@@ -1,6 +1,5 @@
 import styled from 'styled-components';
 import CONSTANTS from '../../constants';
-import { pulse } from '../../utils/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -128,9 +127,18 @@ const LogoContainer = styled.span`
   right: 8%;
 `;
 
+const EmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
 export {
   MainContainer,
   Column,
   Row,
-  LogoContainer
+  LogoContainer,
+  EmptyContainer
 };

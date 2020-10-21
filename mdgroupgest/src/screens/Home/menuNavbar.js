@@ -25,17 +25,6 @@ export default function MenuNavbar(props) {
   const history = useHistory();
   const avatarClasses = useStyles();
 
-  const renderItem = (destination, index) => {
-    return (
-      <MDDropdown.Item
-        onSelect={() => props.setDestinationIndex(index)}
-        key={index}
-      >
-        {destination.title}
-      </MDDropdown.Item>
-    );
-  };
-
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>
@@ -51,6 +40,7 @@ export default function MenuNavbar(props) {
         <OptionsDiv>
           <Body isReverseColor={true}><Link to="/CreateContract" >Inserir Contrato</Link></Body>
           <Body isReverseColor={true}><Link to="/EmployeeType" >Inserir Funcionário</Link></Body>
+          <Body isReverseColor={true}><Link to="/ChooseEmployeeTypeToSee" >Ver Funcionários</Link></Body>
           {user?.user?.user_type === "admin" && <Body isReverseColor={true}><Link to="/CreateOffice" >Inserir Escritório</Link></Body>}
         </OptionsDiv>
 

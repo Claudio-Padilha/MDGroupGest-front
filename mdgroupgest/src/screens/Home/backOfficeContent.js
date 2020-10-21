@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
@@ -55,7 +55,7 @@ const BackOfficeContent = (props) => {
       instructorsCounter += instructorsQuantity;
 
         // Loop para colocarmos todos os instrutores em uma array só
-        for (var qtd = 0; qtd < instructorsQuantity; qtd++) {
+        for (let qtd = 0; qtd < instructorsQuantity; qtd++) {
           instructorsArr.push(instructors[qtd]);
         }         
 
@@ -67,7 +67,7 @@ const BackOfficeContent = (props) => {
         salesPersonsCounter += salesPersonsQuantity;
 
           // Loop para colocarmos todos os comerciais em uma array só
-          for (var qtd = 0; qtd < salesPersonsQuantity; qtd++) {
+          for (let qtd = 0; qtd < salesPersonsQuantity; qtd++) {
             salesPersonsArr.push(salesPersons[qtd]);
           }             
       }
@@ -77,17 +77,11 @@ const BackOfficeContent = (props) => {
   const totalEmployees = teamLeadersArr.concat(instructorsArr, salesPersonsArr);
   const quantityOfTotalEmployees = totalEmployees?.length;
 
-  console.log(totalEmployees, 'TODOS')
-  console.log(instructorsArr, 'INSTRUTORES')
-  console.log(quantityOfTotalEmployees, 'QUANTIDADE')
-
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
 
-  var fromContractsList = props?.location?.state?.fromContractsList;
   var deletedID = props?.location?.state?.deletedID;
-  console.log(props, 'VEIO DE CONTRATOS?')
 
   function _removeContractFromRAM() {
     _.remove(contracts, function(obj) {
@@ -95,12 +89,7 @@ const BackOfficeContent = (props) => {
     })
   }
 
-  if(fromContractsList) {
-    _removeContractFromRAM()
-  }
-
   function _getComissions() {
-    
     var comissions = []
     contracts.map(contract => {
       comissions.push(parseFloat(contract?.employee_comission))
@@ -114,13 +103,14 @@ const BackOfficeContent = (props) => {
     for (let i = 0; i < comissions?.length; i++) {
       mySalary += comissions[i]
     }
-
     return mySalary
   }
 
-  const renderHero = () => {
+  if(deletedID)
+    { _removeContractFromRAM() }
 
-    var employees = localStorage.getItem('myTeam');
+
+  const renderHero = () => {
 
     return (
       <MDHero>
@@ -150,11 +140,10 @@ const BackOfficeContent = (props) => {
 
   const renderMyMonth = () => {
     const comissions = _calculateComissions()
-    console.log(comissions)
     
     return (
       <MDCard>
-        <MDCard.Body className={"cardBody"}>
+        <MDCard.Body className={"monthCardBody"}>
           <Link
             to={{
               pathname: "/MyMonth",
@@ -165,18 +154,16 @@ const BackOfficeContent = (props) => {
           >
             <SubHeading>Meu mês</SubHeading>
           </Link> 
-          <Body className={"mySalary"}>{`${_calculateComissions()}€`}</Body>
+          <Heading className={"mySalary"}>{`${_calculateComissions()}€`}</Heading>
         </MDCard.Body>
       </MDCard>
     );
   };
 
   const renderMyContracts = () => {
-    var contractCounter = JSON.parse(localStorage.getItem('contracts'));
-    var contractCounterParsed = contractCounter?.length;
     return (
       <MDCard isTheMiddleCard>
-        <MDCard.Body className={"cardBody"}>
+        <MDCard.Body className={"contractsCardBody"}>
           <Link
             to={{
               pathname: "/ContractList",
@@ -187,7 +174,7 @@ const BackOfficeContent = (props) => {
           >
             <SubHeading>Contratos</SubHeading>
           </Link>
-          <Heading>{contractCounterParsed}</Heading>
+          <Heading>{contracts?.length}</Heading>
           <Button
             fullWidth={false}
             disabled={false}
@@ -196,7 +183,12 @@ const BackOfficeContent = (props) => {
             //   history.push("/ContractList")
             // }} Depois da demonstração o request vai ficar no login
             action={() => {
-              history.push("/ContractList")
+              history.push({
+                pathname: "/ContractList",
+                state: {
+                  data: contracts
+                }
+              })
             }}
 
             small={true}
@@ -210,7 +202,7 @@ const BackOfficeContent = (props) => {
   const renderMyResults = () => {
     return (
       <MDCard>
-        <MDCard.Body className={"cardBody"}>
+        <MDCard.Body className={"resultsCardBody"}>
           <Link to={{
             pathname:"/MyResults",
             state: {
@@ -219,7 +211,7 @@ const BackOfficeContent = (props) => {
           }}>
             <SubHeading>Meus resultados</SubHeading>   
           </Link>
-          <Body>+ 12.4%</Body>
+          <Heading>+ 12.4%</Heading>
         </MDCard.Body>
       </MDCard>
     );

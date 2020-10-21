@@ -80,7 +80,7 @@ const HomePageButton = styled.div`
   align-items: center;
   width: 25%;
   height: 73%;
-`
+`;
 
 export {
   MainContainer,

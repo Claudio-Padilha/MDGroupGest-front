@@ -23,7 +23,6 @@ const ContractDetail = (props) => {
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
-  console.log(contractID, 'ID')
 
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -86,7 +85,6 @@ const ContractDetail = (props) => {
 
 
   const history = useHistory();
-  console.log(isDeleting, 'IS DELETING')
 
   const renderContract = () => {
     return (
@@ -126,15 +124,15 @@ const ContractDetail = (props) => {
                     <Body className={"field"}>{` ${contract?.electronic_bill ? "🟢" : "🔴"}`}</Body>
 
                     <SmallSubHeading><b>PPI Luz:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.light_ppi ? "🟢" : "🔴"}`}</Body>
+                    <Body className={"field"}>{` ${contract?.electricity_ppi ? "🟢" : "🔴"}`}</Body>
                   </Column>
 
                   <Column>
                     <SmallSubHeading><b>PPI Gás:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.gas_ppi ? "🟢" : "🔴"}`}</Body>
 
-                    <SmallSubHeading><b>Fatura Electrónica:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.electronic_bill ? "🟢" : "🔴"}`}</Body>
+                    <SmallSubHeading><b>PEL:</b></SmallSubHeading>
+                    <Body className={"field"}>{` ${contract?.pel ? "🟢" : "🔴"}`}</Body>
                   </Column>
                 </Row>
               </Column>
