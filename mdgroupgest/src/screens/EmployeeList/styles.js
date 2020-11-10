@@ -84,6 +84,8 @@ const MainContainer = styled.div`
           margin-bottom: 0;
         }
         display: flex;
+        flex-direction: column;
+        height: 80%;
         justify-content: space-around;
         width: 100%;
         margin-left: 2%;

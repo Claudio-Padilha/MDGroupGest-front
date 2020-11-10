@@ -63,6 +63,7 @@ export default {
 
               .then((res) => {
                   resolve(res);
+                  console.log(res, 'RESPOSTA DO LOGIN')
                   const user = res?.data;
 
                   if (user[0] === "invalid credentials") {
@@ -309,11 +310,11 @@ export default {
     var userType = localStorage.getItem('currentUserType');
     
     const userObj = {
-      office: 1,
+      office: 8,
       user: {
         name: data?.name,
         email: data?.email,
-        password: "123RRRttt",
+        password: "Mdgroup2020@",
         user_type: userType,
         nif: data?.nif,
         contact: data?.contact,

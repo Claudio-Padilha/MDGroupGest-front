@@ -15,13 +15,19 @@ import { LogoMD } from '../../components/Logo/logo';
 import request from '../../components/Form/request';
 import { BackIcon } from '../../components/Icon/icons';
 
-const CreateContract = ({ state }) => {
+const CreateContract = (props) => {
+
+  console.log(props, 'ESTADO')
+
+  const cameFromChoice = props?.location?.state?.cameFromChoice;
 
   const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
   const history = useHistory();
 
   function _goBack() {
-    window.location.assign("/BackOffice") 
+    cameFromChoice ? 
+      window.location.assign("/ChooseTypeOfContract") :
+      window.location.assign("/BackOffice") 
   }
 
   function _ConfirmContractCreation(data) {

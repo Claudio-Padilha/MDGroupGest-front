@@ -430,7 +430,7 @@ button {
   padding-bottom: 2%;
 }
 
-@media only screen and (max-width: 468px) {
+@media only screen and (max-width: 768px) {
   display: none;
 }
 
@@ -441,7 +441,7 @@ export const WidthMessageContainer = styled.div`
   margin 20%;
   flex-direction: column;
   justify-content: center;
-  @media only screen and (min-width: 468px) {
+  @media only screen and (min-width: 768px) {
     display: none;
   }
   > h3 {

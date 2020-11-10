@@ -1,4 +1,6 @@
 import styled from 'styled-components';
+import CONSTANTS from '../../constants';
+import { pulse } from '../../utils/animations';
 
 const MainContainer = styled.div`
   display: flex;
@@ -69,6 +71,17 @@ const MainDiv = styled.div`
   }
 `;
 
+const CardsContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  width: 80%;
+  height: 65vh;
+  button:hover {
+    cursor: pointer
+  }
+`;
+
 const BackContainer = styled.span`
   flex: 1;
   position: absolute;
@@ -98,13 +111,88 @@ const CornerRight = styled.span`
   right: 15%;
 `;
 
+const FirstRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  a {
+    height: 80%;
+    width: 25%;
+    text-decoration: none;
+    div {
+      align-self: center;
+    }
+    &:hover {
+      animation: ${pulse} 1s infinite;
+    }
+  }
+`;
+
+const SecondRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  a {
+    height: 80%;
+    width: 25%;
+    text-decoration: none;
+    div {
+      align-self: center;
+    }
+    &:hover {
+      animation: ${pulse} 1s infinite;
+    }
+  }
+`;
+
+const GoHomeButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  height: 73%;
+`;
+
+const MainContainerEType = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  min-width: 675px;
+  svg {
+    position: absolute;
+    width: 3%;
+    top: 4%;
+    left: 2%;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .card {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+  }
+`;
+
 export { 
   MainContainer,
   RightContractContainer,
   LeftContractContainer,
   MainDiv,
+  FirstRow,
+  SecondRow,
   CornerLeft,
   LogoContainer,
+  GoHomeButton,
   CornerRight,
-  BackContainer
+  BackContainer,
+  CardsContainer,
+  MainContainerEType
 };

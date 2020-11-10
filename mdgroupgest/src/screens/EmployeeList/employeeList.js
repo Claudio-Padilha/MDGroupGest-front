@@ -55,6 +55,8 @@ const EmployeeList = (props) => {
   const renderEmployee = (employee, i) => {
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1)
+
+    console.log(employee, 'FUNCIONÁRIO LEK')
     return (
       <>
         <Row className={"titleRow"}>
@@ -72,6 +74,32 @@ const EmployeeList = (props) => {
               <Body><b>Nome:</b></Body>
               <Body>  
                 {employee?.user?.name}
+              </Body>
+            </List.Content>
+            <List.Content>
+              <Body><b>NIF:</b></Body>
+              <Body>{employee?.user?.nif}</Body>
+            </List.Content>
+          </Column>
+
+          <Column className={"employeeInfo"}>
+            <List.Content>
+              <Body><b>Morada:</b></Body>
+              <Body>  
+                {employee?.user?.address}
+              </Body>
+            </List.Content>
+            <List.Content>
+              <Body><b>E-mail:</b></Body>
+              <Body>{employee?.user?.email}</Body>
+            </List.Content>
+          </Column>
+
+          <Column className={"employeeInfo"}>
+            <List.Content>
+              <Body><b>Contacto:</b></Body>
+              <Body>  
+                {employee?.user?.contact}
               </Body>
             </List.Content>
             <List.Content>

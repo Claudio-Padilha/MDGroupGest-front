@@ -25,6 +25,15 @@ export default function MenuNavbar(props) {
   const history = useHistory();
   const avatarClasses = useStyles();
 
+  function _handleMyProfileNavigation() {
+    history.push({
+      pathname: "/MyProfile",
+      state: {
+        data: user
+      }
+    })
+  }
+
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>
@@ -34,11 +43,11 @@ export default function MenuNavbar(props) {
           className={avatarClasses.large}
         />
         <SubHeading isReverseColor={true}>{userName}</SubHeading>
-        <Body isSmall isReverseColor>Ver perfil</Body>
+        <Body isSmall isReverseColor onClick={_handleMyProfileNavigation} className={"myProfileLink"}>Ver perfil</Body>
       </ProfileContainer>
       <NavbarOptionsContainer>
         <OptionsDiv>
-          <Body isReverseColor={true}><Link to="/CreateContract" >Inserir Contrato</Link></Body>
+          <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>
           <Body isReverseColor={true}><Link to="/EmployeeType" >Inserir Funcionário</Link></Body>
           <Body isReverseColor={true}><Link to="/ChooseEmployeeTypeToSee" >Ver Funcionários</Link></Body>
           {user?.user?.user_type === "admin" && <Body isReverseColor={true}><Link to="/CreateOffice" >Inserir Escritório</Link></Body>}

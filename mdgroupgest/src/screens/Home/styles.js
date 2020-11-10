@@ -25,6 +25,12 @@ const ProfileContainer = styled.div`
   .makeStyles-large-2 {
     margin-top: 20%;
   }
+  .myProfileLink {
+    font-weight: bold;
+    &:hover {
+      cursor: pointer;
+    }
+  }
 `;
 
 const NavbarOptionsContainer = styled.div`

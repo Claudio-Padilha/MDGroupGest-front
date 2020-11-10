@@ -9,10 +9,11 @@ import ContractList from './screens/ContractList/contractList';
 import MyResults from './screens/MyResults/myResults';
 import MyMonth from './screens/MyMonth/myMonth';
 import MyTeam from './screens/MyTeam/myTeam';
-import EmployeeDetail from './screens/EmployeeDetail/employeeDetail';
 import EmployeeList from './screens/EmployeeList/employeeList';
 import ContractDetail from './screens/ContractDetail/contractDetail';
 import ChooseEmployeeTypeToSee from './screens/EmployeeList/chooseEmployeeTypeToSee';
+import ChooseTypeOfContract from './screens/CreateContract/chooseTypeOfContract';
+import MyProfile from './screens/MyProfile/myProfile';
 
 import Router from './router';
 import history from './utils/history';
@@ -29,10 +30,11 @@ function App() {
     myResults: "/MyResults",
     myMonth: "/MyMonth",
     myTeam: "/MyTeam",
-    employeeDetail: "/EmployeeDetail",
     employeeList: "/EmployeeList",
     contractDetail: "/ContractDetail",
-    chooseEmployeeTypeToSee: "/ChooseEmployeeTypeToSee"
+    chooseEmployeeTypeToSee: "/ChooseEmployeeTypeToSee",
+    chooseTypeOfContract: "/ChooseTypeOfContract",
+    myProfile: "/MyProfile"
   };
   
   const routes = [
@@ -46,10 +48,11 @@ function App() {
     { path: paths.myResults, component: MyResults },
     { path: paths.myMonth, component: MyMonth },
     { path: paths.myTeam, component: MyTeam },
-    { path: paths.employeeDetail, component: EmployeeDetail },
     { path: paths.employeeList, component: EmployeeList },
     { path: paths.contractDetail, component: ContractDetail },
-    { path: paths.chooseEmployeeTypeToSee, component: ChooseEmployeeTypeToSee }
+    { path: paths.chooseEmployeeTypeToSee, component: ChooseEmployeeTypeToSee },
+    { path: paths.chooseTypeOfContract, component: ChooseTypeOfContract },
+    { path: paths.myProfile, component: MyProfile },
   ];
 
   return (

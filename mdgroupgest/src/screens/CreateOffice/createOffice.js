@@ -41,7 +41,7 @@ const CreateOffice = () => {
 
       return (
         swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados do funcionário:',
+        title: 'Confirme os dados do escritório:',
         text: 
           `Nome: ${name ? name : `❌`},
            NIPC: ${nipc ? nipc : `❌`}.                                               
