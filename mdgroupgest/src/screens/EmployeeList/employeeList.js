@@ -2,11 +2,14 @@ import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
+import Swal from 'sweetalert2';
 
 import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
+
+import request from '../../components/Form/request'
 
 import {
   MainContainer,
@@ -53,10 +56,56 @@ const EmployeeList = (props) => {
   // }
 
   const renderEmployee = (employee, i) => {
+
+    function _confirmToDeleteEmployee() {
+      console.log(employee, 'data')
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: true
+      })
+      
+      return (
+        swalWithBootstrapButtons.fire({
+          title: 'Tem certeza?',
+          text: "Não poderá voltar atrás.",
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sim',
+          cancelButtonText: 'Não, cancelar',
+          reverseButtons: true
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            request.deleteEmployee(employee) 
+            .then(
+              request.getContracts().then(
+                swalWithBootstrapButtons.fire(
+                  'Funcionário Excluído!',
+                  'A operação foi concluída com sucesso.',
+                  'success'
+                )
+              )
+            )
+  
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Ação cancelada!',
+              'Seu funcionário não foi excluído.',
+              'error'
+            )
+          }
+        })
+      )
+    }
+
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1)
 
-    console.log(employee, 'FUNCIONÁRIO LEK')
     return (
       <>
         <Row className={"titleRow"}>
@@ -119,6 +168,20 @@ const EmployeeList = (props) => {
               }}
               small={true}
               text="Gerar contrato"
+            />
+
+            <Button
+              disabled={false}
+              // action={() => {
+              //   Promise.all([
+              //     request.deleteContract(contract?.id),
+              //     request.getOffices(),
+              //   ])
+              // }}
+              action={_confirmToDeleteEmployee}
+              small={true}
+              text="Excluir"
+              className={"secondaryButton"}
             />
           </Column>
           

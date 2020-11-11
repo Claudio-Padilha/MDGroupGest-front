@@ -8,7 +8,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
 
-import request from '../../components/Form/request'
+import request from '../../components/Form/request';
 
 import {
   MainContainer,

@@ -66,7 +66,10 @@ const MainContainer = styled.div`
         justify-content: space-between;
         align-items: center;
         height: 25%;
-        margin-top: 5%;
+        margin-top: 1%;
+        button {
+          margin-top: 7%;
+        }
         .secondaryButton {
           background-color: ${CONSTANTS.colors.white};
           span {

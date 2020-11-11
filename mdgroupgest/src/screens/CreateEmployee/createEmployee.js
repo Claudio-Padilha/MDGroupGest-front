@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -16,12 +16,22 @@ import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 import request from '../../components/Form/request';
 
+import { useOffices } from '../../hooks/offices';
+import { useOfficesActions } from '../../hooks/offices';
+
 const CreateEmployee = (props) => {
 
   const history = useHistory();
 
+  const officesList = props?.location?.state?.officesList;
+
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    history.push({
+      pathname: "/EmployeeType",
+      state: {
+        fromEmployeeCreation: true
+      }
+    });    
   }
 
   function _ConfirmEmployeeCreation(data) {
@@ -113,16 +123,7 @@ const CreateEmployee = (props) => {
       side: "right",
       key: "office",
       question: "Escritório",  
-      options: [
-        {
-          value: "Lisboa",
-          label: "Lisboa"
-        },
-        {
-          value: "Porto",
-          label: "Porto"
-        }
-      ] 
+      options: officesList
     },
   ];
 

@@ -174,6 +174,7 @@ export default {
       axios(getOfficesRequest)
 
       .then(res => {
+        localStorage.setItem('offices', JSON.stringify(res.data));
         resolve(res);
       })
       .catch(error => {
@@ -391,7 +392,7 @@ export default {
       
       var employeeDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1/${data?.userType}/${data?.id}/`, // id vem da página
+        url: `http://127.0.0.1/${data?.user?.user_type}/${data?.id}/`, // id vem da página
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },

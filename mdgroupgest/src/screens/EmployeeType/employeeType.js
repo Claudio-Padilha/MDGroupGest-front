@@ -17,13 +17,26 @@ import {
   MDCardBody,
   MDButton 
 } from '../../screens/Home/md';
-
-
+import request from "../../components/Form/request";
 
 const EmployeeType = () => {
   function _goBack() {
-    window.history.back();    
+    window.location.assign("/BackOffice");    
   }
+
+  function offices() {
+    request.getOffices()
+    const officesList = JSON.parse(localStorage.getItem('offices'));
+
+    return officesList?.map(office => {
+      return {
+        value: office?.id,
+        label: office?.name
+      }
+    })
+  }
+
+  console.log(offices(), 'lista de offices')
 
   const renderManagerCard = () => {
     return (
@@ -32,6 +45,7 @@ const EmployeeType = () => {
         state: {
           userType: "manager",
           title: "Criar Gerente",
+          officesList: offices()
         }  
       }}>
         <MDCard className={"card"}>
@@ -50,6 +64,7 @@ const EmployeeType = () => {
         state: {
           userType: "secretary",
           title: "Criar Secretária",
+          officesList: offices()
         }  
       }}>
         <MDCard className={"card"}>
@@ -68,6 +83,7 @@ const EmployeeType = () => {
         state: {
           userType: "salesPerson",
           title: "Criar Comercial",
+          officesList: offices()
         }  
       }}>
         <MDCard className={"card"}>
@@ -86,6 +102,7 @@ const EmployeeType = () => {
         state: {
           userType: "instructor",
           title: "Criar Instrutor",
+          officesList: offices()
         }  
       }}>
         <MDCard className={"card"}>
@@ -104,6 +121,7 @@ const EmployeeType = () => {
         state: {
           userType: "teamLeader",
           title: "Criar Team Leader",
+          officesList: offices()
         }  
       }}>
         <MDCard className={"card"}>
