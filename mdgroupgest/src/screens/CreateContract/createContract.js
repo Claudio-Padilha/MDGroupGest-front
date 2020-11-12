@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -17,9 +17,13 @@ import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
 
-  console.log(props, 'ESTADO')
+  const typeOfContractFromProps = props?.location?.state?.type;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
+  const feedbackCalls = props?.location?.state?.feedbackCall;
+  const sellStates = props?.location?.state?.sellState;
+  const paymentMethods = props?.location?.state?.payment;
+  const gasScales = props?.location?.state?.gasScale;
 
   const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
   const history = useHistory();
@@ -129,7 +133,210 @@ const CreateContract = (props) => {
       )
   }
 
-  const FIELDS = [
+  const ELECTRICITYFIELDS = [
+    { 
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o nome",
+      side: "right",
+      key: "employeeName",
+      question: "Nome do Comercial",  
+      options: [
+        {
+          value: "Miguel",
+          label: "Miguel"
+        },
+        {
+          value: "Daniel",
+          label: "Daniel"
+        },
+        {
+          value: "Lucas",
+          label: "Lucas"
+        },
+        {
+          value: "Cláudio",
+          label: "Cláudio"
+        }
+    ] 
+  },
+    { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
+    { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
+    { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
+    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
+    { type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
+    { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
+    { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
+    { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o tipo",
+      side: "right",
+      key: "feedbackCall",
+      question: "Feedback de Chamada",
+      options: feedbackCalls
+    },
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o estado",
+      side: "left",
+      key: "sellState",
+      question: "Estado da venda",
+      options: sellStates
+    },
+
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Selecione",
+      side: "right",
+      key: "paymentMethods",
+      question: "Método de Pagamento",
+      options: paymentMethods
+    },   
+    
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Selecione",
+      side: "left",
+      key: "power",
+      question: "Potência contratada",
+      options: [
+        {
+          value: 1.15,
+          label: "1.15 kVA"
+        },
+        {
+          value: 3.45,
+          label: "3.45 kVA"
+        },
+        {
+          value: 4.6,
+          label: "4.6 kVA"
+        },
+        {
+          value: 5.75,
+          label: "5.75 kVA"
+        },
+        {
+          value: 6.9,
+          label: "6.9 kVA"
+        },
+        {
+          value: 10.35,
+          label: "10.35 kVA"
+        },
+        {
+          value: 13.8,
+          label: "13.8 kVA"
+        },
+        {
+          value: 17.25,
+          label: "17.25 kVA"
+        },
+        {
+          value: 20.7,
+          label: "20.7 kVA"
+        },
+        {
+          value: 27.6,
+          label: "27.6 kVA"
+        },
+        {
+          value: 34.5,
+          label: "34.5 kVA"
+        },
+        {
+          value: 41.41,
+          label: "41.41 kVA"
+        }
+      ] 
+    },
+  ]
+
+  const GASFIELDS = [
+    { 
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o nome",
+      side: "right",
+      key: "employeeName",
+      question: "Nome do Comercial",  
+      options: [
+        {
+          value: "Miguel",
+          label: "Miguel"
+        },
+        {
+          value: "Daniel",
+          label: "Daniel"
+        },
+        {
+          value: "Lucas",
+          label: "Lucas"
+        },
+        {
+          value: "Cláudio",
+          label: "Cláudio"
+        }
+    ] 
+  },
+    { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
+    { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
+    { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
+    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
+    { type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
+    { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
+    { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
+    { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o tipo",
+      side: "right",
+      key: "feedbackCall",
+      question: "Feedback de Chamada",
+      options: feedbackCalls
+    },
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Escolha o estado",
+      side: "left",
+      key: "sellState",
+      question: "Estado da venda",
+      options: sellStates
+    },
+
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Selecione",
+      side: "right",
+      key: "paymentMethods",
+      question: "Método de Pagamento",
+      options: paymentMethods
+    },   
+    
+    {
+      type: "dropdown",
+      subType: "twoColumns",
+      placeholder: "Selecione",
+      side: "right",
+      key: "gasScale",
+      question: "Escalão Gás",
+      options: gasScales
+    },   
+  ]
+
+  const DUALFIELDS = [
     { 
       type: "dropdown",
       subType: "twoColumns",
@@ -175,52 +382,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "feedbackCall",
       question: "Feedback de Chamada",
-      options: [
-        {
-          value: "ok",
-          label: "ok"
-        },
-        {
-          value: "ko",
-          label: "ko"
-        },
-        {
-          value: "ko-b",
-          label: "ko-b"
-        },
-        {
-          value: "ko-c",
-          label: "ko-c"
-        },
-        {
-          value: "ko-d",
-          label: "ko-d"
-        },
-        {
-          value: "ko-e",
-          label: "ko-e"
-        },
-        {
-          value: "ko-f",
-          label: "ko-f"
-        },
-        {
-          value: "ko-h",
-          label: "ko-h"
-        },
-        {
-          value: "ko-j",
-          label: "ko-j"
-        },
-        {
-          value: "pf A",
-          label: "pf A"
-        },
-        {
-          value: "pf B",
-          label: "pf B"
-        }
-      ]
+      options: feedbackCalls
     },
     {
       type: "dropdown",
@@ -229,16 +391,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "sellState",
       question: "Estado da venda",
-      options: [
-        {
-          value: "ok",
-          label: "ok"
-        },
-        {
-          value: "ko",
-          label: "ko"
-        },
-      ] 
+      options: sellStates
     },
 
     {
@@ -246,62 +399,9 @@ const CreateContract = (props) => {
       subType: "twoColumns",
       placeholder: "Selecione",
       side: "right",
-      key: "comission",
-      question: "Comissão Comercial",
-      options: [
-        {
-          value: 1.5,
-          label: "1.50€"
-        },
-        {
-          value: 5,
-          label: "5.00€"
-        },
-        {
-          value: 6.5,
-          label: "6.50€"
-        },
-        {
-          value: 10,
-          label: "10.00€"
-        },
-        {
-          value: 20,
-          label: "20.00€"
-        },
-        {
-          value: 25,
-          label: "25.00€"
-        },
-        {
-          value: 30,
-          label: "30.00€"
-        },
-        {
-          value: 35,
-          label: "35.00€"
-        },
-        {
-          value: 40,
-          label: "40.00€"
-        },
-        {
-          value: 45,
-          label: "45.00€"
-        },
-        {
-          value: 50,
-          label: "50.00€"
-        },
-        {
-          value: 70,
-          label: "70.00€"
-        },
-        {
-          value: 100,
-          label: "100.00€"
-        },
-      ] 
+      key: "paymentMethods",
+      question: "Método de Pagamento",
+      options: paymentMethods
     },   
     
     {
@@ -370,26 +470,29 @@ const CreateContract = (props) => {
       side: "right",
       key: "gasScale",
       question: "Escalão Gás",
-      options: [
-        {
-          value: 1,
-          label: "1"
-        },
-        {
-          value: 2,
-          label: "2"
-        },
-        {
-          value: 3,
-          label: "3"
-        },
-        {
-          value: 4,
-          label: "4"
-        }
-      ]
+      options: gasScales
     },   
   ];
+
+  const typeOfContractForm = useMemo(() => {
+    switch (typeOfContractFromProps) {
+      case "electricity":
+        return ELECTRICITYFIELDS;
+
+      case "gas":
+        return GASFIELDS;
+
+      case "dual":
+        return DUALFIELDS;
+    
+      default:
+        break;
+    }
+  }, [typeOfContractFromProps])
+
+  console.log(typeOfContractForm, 'type of contract')
+
+  // switch para identificar qual contrato tipo de contrato será inserido, mudando a lógica do form
 
   return (
     <MainDiv>
@@ -399,7 +502,7 @@ const CreateContract = (props) => {
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
-          formFields={FIELDS}
+          formFields={typeOfContractForm}
           top
           bg="primary"
           isFullWidth

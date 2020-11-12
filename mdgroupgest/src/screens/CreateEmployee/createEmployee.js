@@ -16,9 +16,6 @@ import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 import request from '../../components/Form/request';
 
-import { useOffices } from '../../hooks/offices';
-import { useOfficesActions } from '../../hooks/offices';
-
 const CreateEmployee = (props) => {
 
   const history = useHistory();

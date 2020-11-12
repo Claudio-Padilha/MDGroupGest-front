@@ -25,15 +25,65 @@ const ChooseTypeOfContract = (props) => {
     window.location.assign("/BackOffice");    
   }
 
+  function _feedbackCall() {
+    request.getFeedbackCall()
+    const feedbackCallList = JSON.parse(localStorage.getItem('feedbackCalls'));
+
+    return feedbackCallList?.map(feedbackCall => {
+      return {
+        value: feedbackCall?.value,
+        label: feedbackCall?.value
+      }
+    })
+  }
+
+  function _sellState() {
+    request.getSellState()
+    const sellStatesList = JSON.parse(localStorage.getItem('sellStates'));
+    
+    return sellStatesList?.map(sellState => {
+      return {
+        value: sellState?.value,
+        label: sellState?.value
+      }
+    })
+  }
+
+  function _payment() {
+    request.getPayment()
+    const paymentsList = JSON.parse(localStorage.getItem('payments'));
+    
+    return paymentsList?.map(payment => {
+      return {
+        value: payment?.value,
+        label: payment?.value
+      }
+    })
+  }
+
+  function _gasScale() {
+    request.getGasScale()
+    const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
+    
+    return gasScalesList?.map(gasScale => {
+      return {
+        value: gasScale?.value,
+        label: gasScale?.value
+      }
+    })
+  }
+
   const renderElectricityCard = () => {
 
     return (
       <Link to={{
         pathname:"/CreateContract",
         state: {
-          title: "Electricidade",
           type: "electricity",
           cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          payment: _payment(),
         }  
       }}>
         <MDCard className={"card"}>
@@ -50,9 +100,12 @@ const ChooseTypeOfContract = (props) => {
       <Link to={{
         pathname:"/CreateContract",
         state: {
-          title: "Gás",
           type: "gas",
           cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          gasScale: _gasScale(),
+          payment: _payment()
         }  
       }}>
         <MDCard className={"card"}>
@@ -70,8 +123,11 @@ const ChooseTypeOfContract = (props) => {
         pathname:"/CreateContract",
         state: {
           type: "dual",
-          title: "Team Leader",
           cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          payment: _payment(),
+          gasScale: _gasScale()
         }  
       }}>
         <MDCard className={"card"}>

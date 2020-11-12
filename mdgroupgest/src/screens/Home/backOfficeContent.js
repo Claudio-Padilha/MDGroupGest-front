@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
@@ -6,6 +6,7 @@ import { Avatar } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
 
 import {
+  MDRow,
   MDCard,
   MDHero,
   MDContainer,
@@ -23,6 +24,7 @@ import {
 } from './styles';
 
 import request from '../../components/Form/request';
+import { ko } from 'date-fns/locale';
 
 const BackOfficeContent = (props) => {
 
@@ -80,6 +82,28 @@ const BackOfficeContent = (props) => {
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
+
+  const koContracts = [];
+  const okContracts = [];
+  const rContracts = [];
+
+  function _sellStateOfContract() {
+
+    for(let i = 0; i < contracts?.length; i++) {
+
+      if(contracts[i]?.sell_state === "r") {
+        rContracts.push(contracts[i]);
+      } else if (contracts[i]?.sell_state === "ok"){
+        okContracts.push(contracts[i]);
+      } else {
+        koContracts.push(contracts[i]);
+      }
+    }
+
+    return koContracts, okContracts, rContracts;
+  }
+
+  _sellStateOfContract()
 
   var deletedID = props?.location?.state?.deletedID;
 
@@ -168,13 +192,29 @@ const BackOfficeContent = (props) => {
             to={{
               pathname: "/ContractList",
               state: {
-                data: "CONTRATOS",
+                data: contracts,
               }
             }}
           >
             <SubHeading>Contratos</SubHeading>
           </Link>
           <Heading>{contracts?.length}</Heading>
+          <MDRow>
+            { okContracts &&
+              <Body>
+                {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ok 🟢`} 
+              </Body>
+            }
+
+            { rContracts && 
+              <Body>
+                {rContracts?.length}  {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar 🟡`} 
+              </Body>
+            }
+            
+            <Body>{koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} anulados 🔴`} </Body>
+          </MDRow>
+
           <Button
             fullWidth={false}
             disabled={false}
@@ -192,7 +232,7 @@ const BackOfficeContent = (props) => {
             }}
 
             small={true}
-            text="Ver contratos"
+            text="Ver todos"
           />
         </MDCard.Body>
       </MDCard>

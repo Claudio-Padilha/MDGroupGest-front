@@ -343,7 +343,7 @@ width: 100%;
   }
 }
 
-.comission {
+.paymentMethods {
   position: absolute;
   top: 54%;
   left: 69%;

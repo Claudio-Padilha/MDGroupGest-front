@@ -461,7 +461,7 @@ export default {
       gas_ppi: data?.gasPPI ? data?.gasPPI : false,
       pel: data?.PEL ? data?.PEL : false,
       observations: data?.observations,
-      employee_comission: data?.comission,
+      employee_comission: 100.00,
       feedback_call: data?.feedbackCall,
       payment: payment,
       sell_state: data?.sellState,
@@ -602,5 +602,107 @@ export default {
         reject(err);
       })
     })
+  },
+
+  getFeedbackCall: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var feedbackCallRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/feedBackCall/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(feedbackCallRequest)
+
+      .then(res => {
+        localStorage.setItem('feedbackCalls', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
+  },
+
+  getSellState: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var sellStateRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/sellState/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(sellStateRequest)
+
+      .then(res => {
+        localStorage.setItem('sellStates', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
+  },
+
+  getPayment: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var paymentsRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/payment/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(paymentsRequest)
+
+      .then(res => {
+        localStorage.setItem('payments', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
+  },
+
+  // here we gonna have getPower()
+
+  getGasScale: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var gasScaleRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/gasScale/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(gasScaleRequest)
+
+      .then(res => {
+        localStorage.setItem('gasScales', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => {
+          alert("Não foi possível trazer escritórios! \nErro: ", error)
+          reject(error);
+      })
+    });
   },
 }

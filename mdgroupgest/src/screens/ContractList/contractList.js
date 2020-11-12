@@ -57,11 +57,39 @@ const ContractList = (props) => {
   }
 
   const renderContract = (contract, i) => {
+    console.log(contract?.sell_state,'contract')
+    const sellState = contract?.sell_state
+
+    const stateOfContract = () => {
+      if(sellState === "r") {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Por recuperar</Body><Body>🟡</Body>
+          </Row>
+        )
+      } else if (sellState === "ok") {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Ok</Body><Body>🟢</Body>
+          </Row>
+        )
+      } else {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Anulado</Body><Body>🔴</Body>
+          </Row>
+        )
+      }
+    }
+
     return (
       <>
         <List.Item key={contract.id} className={"eachContract"}>
           <Column className={"clientInfo"}>
-            <SubHeading>{`Contrato nº: ${i + 1}`}</SubHeading>
+            <Column>
+              <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${i + 1}`}</SubHeading>
+              <Body style={{marginTop: -15, marginBottom: 10}}>{stateOfContract()}</Body>
+            </Column> 
             <Row className={"rowOfClientInfo"}>
               <Column className={"pairOfClientInfo"}>
                 <List.Content>

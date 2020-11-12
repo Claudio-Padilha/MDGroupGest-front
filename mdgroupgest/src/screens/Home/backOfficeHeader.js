@@ -19,7 +19,7 @@ export default function BackOfficeHeader(props) {
   const history = useHistory();
 
   function _insertContract() {
-    history.push("/CreateContract");
+    history.push("/ChooseTypeOfContract");
   }
   
   return (
