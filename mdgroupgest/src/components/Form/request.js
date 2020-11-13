@@ -294,11 +294,9 @@ export default {
 
       axios(getEmployeesRequest)
 
-      .then(res => {
-        
+      .then(res => {      
         localStorage.setItem(`${employeeType}`, JSON.stringify(res.data));
-        resolve(res);
-        
+        resolve(res);     
       })
 
       .catch(error => {
@@ -431,8 +429,8 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+        alert("Não foi possível trazer escritórios! \nErro: ", error)
+        reject(error);
       })
     });
   },

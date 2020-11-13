@@ -72,6 +72,36 @@ const ChooseTypeOfContract = (props) => {
       }
     })
   }
+  const allEmployees = []
+
+  const managers = JSON.parse(localStorage?.getItem('manager'));
+  const teamLeaders = JSON.parse(localStorage?.getItem('teamLeader'));
+  const instructors = JSON.parse(localStorage?.getItem('instructor'));
+  const salesPersons = JSON.parse(localStorage?.getItem('salesPerson'));
+
+  function _getAllEmployees() {
+    if(managers.length !== 0) {
+      allEmployees.push(...managers);
+    }
+
+    if(teamLeaders.length !== 0) {
+      allEmployees.push(...teamLeaders);
+    }
+
+    if(instructors.length !== 0) {
+      allEmployees.push(...instructors);
+    }
+
+    if(salesPersons.length !== 0) {
+      allEmployees.push(...salesPersons);
+    }
+
+    return allEmployees
+  }
+
+  _getAllEmployees()
+
+  console.log(allEmployees, 'employees from type')
 
   const renderElectricityCard = () => {
 
@@ -127,7 +157,8 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _feedbackCall(),
           sellState: _sellState(),
           payment: _payment(),
-          gasScale: _gasScale()
+          gasScale: _gasScale(),
+          employees: allEmployees
         }  
       }}>
         <MDCard className={"card"}>

@@ -64,19 +64,19 @@ const ContractList = (props) => {
       if(sellState === "r") {
         return (
           <Row>
-            <Body style={{marginRight: "2%"}}>Por recuperar</Body><Body>🟡</Body>
+            <Body style={{marginRight: "2%"}}>Por recuperar</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟡</Body>
           </Row>
         )
       } else if (sellState === "ok") {
         return (
           <Row>
-            <Body style={{marginRight: "2%"}}>Ok</Body><Body>🟢</Body>
+            <Body style={{marginRight: "2%"}}>Válido</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟢</Body>
           </Row>
         )
       } else {
         return (
           <Row>
-            <Body style={{marginRight: "2%"}}>Anulado</Body><Body>🔴</Body>
+            <Body style={{marginRight: "2%"}}>Anulado</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🔴</Body>
           </Row>
         )
       }

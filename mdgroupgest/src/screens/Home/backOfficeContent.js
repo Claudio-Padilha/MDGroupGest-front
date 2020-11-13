@@ -86,6 +86,9 @@ const BackOfficeContent = (props) => {
   const koContracts = [];
   const okContracts = [];
   const rContracts = [];
+  const allContracts = [];
+
+  console.log(contracts, 'contracts')
 
   function _sellStateOfContract() {
 
@@ -100,10 +103,37 @@ const BackOfficeContent = (props) => {
       }
     }
 
-    return koContracts, okContracts, rContracts;
+    allContracts.push(...rContracts, ...okContracts, ...koContracts)
+
+    return koContracts, okContracts, rContracts, allContracts;
   }
 
   _sellStateOfContract()
+
+    // "x" is ko contracts qtd
+    const x = koContracts?.length;
+
+    // "y" is ok contracts qtd
+    const y = okContracts?.length;
+
+    // "z" is r contracts qtd
+    const z = rContracts?.length;
+
+    // "k" is total contracts qtd
+    const a = allContracts?.length;
+
+  function _getPercentage(percent, total) {
+    const p = (percent / total) * 100;
+    return p.toFixed(2);
+  }
+
+  const koPercentage = _getPercentage(x, a);
+  const okPercentage = _getPercentage(y, a);
+  const rPercentage = _getPercentage(z, a);
+
+  console.log(koPercentage, 'kopercentage')
+  console.log(okPercentage, 'okpercentage')
+  console.log(rPercentage, 'rpercentage')
 
   var deletedID = props?.location?.state?.deletedID;
 
@@ -196,23 +226,30 @@ const BackOfficeContent = (props) => {
               }
             }}
           >
-            <SubHeading>Contratos</SubHeading>
+            <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos</SubHeading>
           </Link>
-          <Heading>{contracts?.length}</Heading>
+          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{contracts?.length}</Heading>
           <MDRow>
-            { okContracts &&
+            { okContracts?.length !== 0 &&
               <Body>
-                {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ok 🟢`} 
+                {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"} 🟢`} 
               </Body>
             }
 
-            { rContracts && 
+            { rContracts?.length !== 0 && 
               <Body>
                 {rContracts?.length}  {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar 🟡`} 
               </Body>
             }
             
-            <Body>{koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} anulados 🔴`} </Body>
+            { koContracts?.length !== 0 && 
+              <Body style={{marginBottom: 30}}>
+                {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"} 🔴`}
+              </Body>
+            }
+
+            { contracts?.length === 0 && <Body>Você não tem contratos ainda.</Body>}
+            
           </MDRow>
 
           <Button
@@ -251,7 +288,14 @@ const BackOfficeContent = (props) => {
           }}>
             <SubHeading>Meus resultados</SubHeading>   
           </Link>
-          <Heading>+ 12.4%</Heading>
+          <Heading style={{color: "#37981F",marginTop: 30, marginBottom: 0}}>{`${okPercentage}%`}</Heading>
+          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos válidos</Body>
+          <Heading style={{color: "#FEC35A",marginTop: 0, marginBottom: 0}}>{`${rPercentage}%`}</Heading>
+          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos por recuperar</Body>
+          <Heading style={{color: "#FF461E",marginTop: 0, marginBottom: 0}}>{`${koPercentage}%`}</Heading>
+          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos anulados</Body>
+
+          <Body style={{display: 'flex', alignSelf: 'flex-end', alignContent: "flex-start"}}>🟢</Body>
         </MDCard.Body>
       </MDCard>
     );

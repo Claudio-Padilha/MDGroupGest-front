@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import Swal from 'sweetalert2';
 
-import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import { Heading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
@@ -83,6 +83,28 @@ const ContractDetail = (props) => {
     )
   }
 
+  console.log(contract?.sell_state, 'sell state')
+
+  const state = useMemo(() => {
+    if(contract?.sell_state === "ok") {
+      return "🟢";
+    } else if (contract?.sell_state === "r") {
+      return "🟡";
+    } else {
+      return "🔴";
+    }
+  }, [contract])
+
+
+  const stateMessage = useMemo(() => {
+    if(contract?.sell_state === "ok") {
+      return "Válido";
+    } else if (contract?.sell_state === "r") {
+      return "Por recuperar";
+    } else {
+      return "Anulado";
+    }
+  }, [contract])
 
   const history = useHistory();
 
@@ -90,7 +112,29 @@ const ContractDetail = (props) => {
     return (
       <>
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
-          <Heading>{`Contrato nº: ${contractNumber}`}</Heading>       
+
+          <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
+          <Row>
+            <Body style={
+              {
+                fontWeight: "bold",
+                marginLeft: 5,
+                marginTop: -35,
+                marginBottom: 40,
+                textShadow: "2px 2px 4px rgba(200, 200, 200, 0.8)"
+              }
+            }>{`Estado: ${state}`}</Body>   
+            <Body style={
+              {
+                fontSize: 14,
+                marginLeft: 10,
+                marginTop: -35,
+                marginBottom: 40,
+              }
+            }>{stateMessage}</Body>
+          </Row>
+
+
           <List.Content>
 
               <Column className={"firstColumn"}> 
