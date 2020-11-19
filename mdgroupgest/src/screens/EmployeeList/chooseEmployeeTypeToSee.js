@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
@@ -27,16 +27,19 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const cameFromList = props?.location?.state?.fromEmployeeList;
 
+  const allEmployees = useMemo(() => {
+    request.getAllEmployees();
+    return JSON.parse(localStorage?.getItem('allEmployees'));
+  }, []);
+
   const renderManagerCard = () => {
-    if (!cameFromList) {
-      request.getEmployees("manager")
-    }
     return (
       <Link to={{
         pathname:"/EmployeeList",
         state: {
           userType: "manager",
           title: "Gerente",
+          data: allEmployees?.manager
         }  
       }}>
         <MDCard className={"card"}>
@@ -49,15 +52,13 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderSecretaryCard = () => {
-    if (!cameFromList) {
-      request.getEmployees("secretary")
-    }
     return (
       <Link to={{
         pathname:"/EmployeeList",
         state: {
           userType: "secretary",
           title: "Secretária",
+          data: allEmployees?.secretary
         }  
       }}>
         <MDCard className={"card"}>
@@ -70,15 +71,13 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderComercialCard = () => {
-    if (!cameFromList) {
-      request.getEmployees("salesPerson")
-    }
     return (
       <Link to={{
         pathname:"/EmployeeList",
         state: {
           userType: "salesPerson",
           title: "Comercial",
+          data: allEmployees?.sales_person
         }  
       }}>
         <MDCard className={"card"}>
@@ -91,15 +90,13 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderInstructorCard = () => {
-    if (!cameFromList) {
-      request.getEmployees("instructor")
-    }
     return (
       <Link to={{
         pathname:"/EmployeeList",
         state: {
           userType: "instructor",
           title: "Instrutor",
+          data: allEmployees?.instructor
         }  
       }}>
         <MDCard className={"card"}>
@@ -112,15 +109,13 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderTeamLeaderCard = () => {
-    if (!cameFromList) {
-      request.getEmployees("teamLeader")
-    }
     return (
       <Link to={{
         pathname:"/EmployeeList",
         state: {
           userType: "teamLeader",
           title: "Team Leader",
+          data: allEmployees?.team_leader
         }  
       }}>
         <MDCard className={"card"}>

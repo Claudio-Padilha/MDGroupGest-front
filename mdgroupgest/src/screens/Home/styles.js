@@ -115,12 +115,123 @@ const ResultsContainer = styled.div`
       text-decoration: none;
     }
   }
+
+  .officeMonth {
+    padding-top: 0;
+    box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-left: -2%;
+    width: 100%;
+    a, h2 {
+      width: 100%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    .mySalary {
+      margin: 0;
+      font-size: 58px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
+  }
+
+  .officeMonthResult {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    a, h2 {
+      width: 100%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    .mySalary {
+      margin: 0;
+      font-size: 58px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
+  }
+
+  .officeMonthCardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 19.75vh;
+    width: 100%;
+    a, h2 {
+      width: 80%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    .mySalary {
+      margin: 0;
+      font-size: 58px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
+  }
+
+  .managerMonth {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+    a, h2 {
+      width: 100%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    .mySalary {
+      margin: 0;
+      font-size: 58px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
+  }
+
+  .managerMonthCardBody {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+    height: 19.75vh;
+    width: 100%;
+    margin-bottom: 0;
+    a, h2 {
+      width: 80%;
+      text-align: center;
+      h3 {
+        margin-left: 0;
+      }
+    }
+    .mySalary {
+      margin: 0;
+      font-size: 58px;
+      font-weight: bold;
+      color: ${CONSTANTS.colors.green}
+    }
+  }
+
+
   .monthCardBody {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center;
     height: 90%;
+    width: 100%;
     a, h2 {
       width: 80%;
       text-align: center;

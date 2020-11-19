@@ -14,6 +14,8 @@ import ContractDetail from './screens/ContractDetail/contractDetail';
 import ChooseEmployeeTypeToSee from './screens/EmployeeList/chooseEmployeeTypeToSee';
 import ChooseTypeOfContract from './screens/CreateContract/chooseTypeOfContract';
 import MyProfile from './screens/MyProfile/myProfile';
+import OfficeMonthResultDetail from './screens/OfficeResultDetail/officeResultDetail';
+import EditEmployee from './screens/EditEmployee/editEmployee';
 
 import Router from './router';
 import history from './utils/history';
@@ -34,7 +36,9 @@ function App() {
     contractDetail: "/ContractDetail",
     chooseEmployeeTypeToSee: "/ChooseEmployeeTypeToSee",
     chooseTypeOfContract: "/ChooseTypeOfContract",
-    myProfile: "/MyProfile"
+    myProfile: "/MyProfile",
+    officeResultDetail: "/OfficeMonthResultDetail",
+    editEmployee: "/EmployeeEdit"
   };
   
   const routes = [
@@ -53,6 +57,8 @@ function App() {
     { path: paths.chooseEmployeeTypeToSee, component: ChooseEmployeeTypeToSee },
     { path: paths.chooseTypeOfContract, component: ChooseTypeOfContract },
     { path: paths.myProfile, component: MyProfile },
+    { path: paths.officeResultDetail, component: OfficeMonthResultDetail },
+    { path: paths.editEmployee, component: EditEmployee }
   ];
 
   return (

@@ -9,11 +9,15 @@ const MainContainer = styled.div`
   align-items: center;
   height: 100vh;
   min-width: 675px;
-  svg {
-    position: absolute;
-    width: 3%;
+  .backIcon {
+    position: absolute; 
     top: 4%;
     left: 2%;
+  }
+  svg {
+    width: 3%;
+
+
     &:hover {
       cursor: pointer;
     }
@@ -65,11 +69,8 @@ const MainContainer = styled.div`
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 25%;
+        height: 50%;
         margin-top: 1%;
-        button {
-          margin-top: 7%;
-        }
         .secondaryButton {
           background-color: ${CONSTANTS.colors.white};
           span {

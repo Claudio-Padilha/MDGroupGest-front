@@ -1,13 +1,16 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
 import Swal from 'sweetalert2';
+import { PDFDownloadLink } from '@react-pdf/renderer';
 
-import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import { SubHeading, Body, SmallBody, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
-import { BackIcon } from '../../components/Icon/icons';
+import { BackIcon, EditIcon } from '../../components/Icon/icons';
+
+import ContractDocumentPDF from './employmentContract';
 
 import request from '../../components/Form/request'
 
@@ -22,40 +25,43 @@ import {
 import { List } from "semantic-ui-react";
 
 const EmployeeList = (props) => {
+  const history = useHistory();
+
+  const employees = props?.location?.state?.data;
+  const userType = props?.location?.state?.userType;
+
+  console.log(props, 'props from employee list')
+  const [isDeleting, setIsDeleting] = useState(false)
+
+  if(isDeleting) {
+    request.getEmployees(`${userType}`)
+  }
+  const currentEmployees = JSON.parse(localStorage?.getItem(`${userType}`))
+
+  console.log(currentEmployees, 'currentEmployees')
+
+  console.log(isDeleting, 'is Deleting')
 
   function _goBack() {
     history.push({
       pathname: "/ChooseEmployeeTypeToSee",
       state: {
-        fromEmployeeList: true
+        cameFromDeleting: isDeleting
       }
     })
   }
 
-  const history = useHistory();
-
-  var localStorage = window.localStorage;
-
-  const employees = useMemo(() => {
-    if (props?.location?.state?.userType) {
-      const employeeType = props?.location?.state?.userType
-      return JSON.parse(localStorage.getItem(employeeType))
-    }
-  },[props])
-
-  console.log(employees, 'FUNCS')
-
-  // function _removeContractFromRAM() {
-  //   _.remove(contracts, function(obj) {
-  //     return obj.id === deletedID
-  //   })
-  // }
-
-  // if(deletedID) {
-  //   _removeContractFromRAM()
-  // }
-
   const renderEmployee = (employee, i) => {
+    if(!employees) {
+      return null;
+    }
+
+    function _handleEditEmployee(employee) {
+      history.push({
+        pathname: "/EmployeeEdit",
+        employeeData: employee
+      })
+    }
 
     function _confirmToDeleteEmployee() {
       console.log(employee, 'data')
@@ -78,14 +84,15 @@ const EmployeeList = (props) => {
           reverseButtons: true
         }).then(async (result) => {
           if (result.isConfirmed) {
-            request.deleteEmployee(employee) 
+            setIsDeleting(true)
+            request.deleteEmployee(employee)         
             .then(
-              request.getContracts().then(
+              request.getAllEmployees().then(
                 swalWithBootstrapButtons.fire(
                   'Funcionário Excluído!',
                   'A operação foi concluída com sucesso.',
                   'success'
-                )
+                ).then(_goBack)
               )
             )
   
@@ -104,11 +111,39 @@ const EmployeeList = (props) => {
     }
 
     const userType = employee?.user?.user_type;
-    const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1)
+    const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
+
+    function _handlePDFButton() {
+      return (
+        <div style={{
+          display: 'flex',
+          alignContent:'center',
+          justifyContent: 'center',
+          backgroundColor: '#000',
+          width: "60%",
+          height: "30px",
+          boxShadow: "2px 2px 3px rgba(200, 200, 200, 0.7)",
+        }}>
+          <PDFDownloadLink
+            document={
+              <ContractDocumentPDF
+                employeeName={employee?.user?.name}
+                employeeNif={employee?.user?.nif}
+                employeeAddress={employee?.user?.address}
+              />
+            }
+            fileName={`contrato${employee?.user?.name}.pdf`}
+            style={{textDecoration: "none", padding: 5, textShadow: "1px 1px 3px rgba(255, 255, 255, 0.3)", color: "#fff"}}
+          >
+            Gerar contrato
+          </PDFDownloadLink>
+        </div>
+      )
+    };
 
     return (
       <>
-        <Row className={"titleRow"}>
+        <Row  key={employee?.id} className={"titleRow"}>
           <SubHeading>{`Funcionário nº ${i + 1}`}</SubHeading>
           <Button
             disabled={true}
@@ -116,6 +151,7 @@ const EmployeeList = (props) => {
             text={userTypeCapitalized}
             className={"userTypeTag"}
           />
+          <EditIcon color={"black"} onClick={_handleEditEmployee} style={{display: "flex", width: "20%", height: "50%"}}/>
         </Row>
         <List.Item className={"eachEmployee"}>
           <Column className={"employeeInfo"}>
@@ -158,26 +194,8 @@ const EmployeeList = (props) => {
           </Column>
 
           <Column className={"optionsAboutEmployee"}>
-
             <Button
               disabled={false}
-              action={() => {
-                history.push({
-                  pathname:"/EmployeeDetail",
-                })
-              }}
-              small={true}
-              text="Gerar contrato"
-            />
-
-            <Button
-              disabled={false}
-              // action={() => {
-              //   Promise.all([
-              //     request.deleteContract(contract?.id),
-              //     request.getOffices(),
-              //   ])
-              // }}
               action={_confirmToDeleteEmployee}
               small={true}
               text="Excluir"
@@ -191,20 +209,36 @@ const EmployeeList = (props) => {
     );
   };
 
-  return (
-    <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} color={"black"}/>
-      <List divided verticalAlign="middle" className={"listContainer"}>
-      {employees?.length === 0 && 
+  function _renderOrNot() {
+    if(!employees || employees?.length === 0 || employees === undefined || employees === null) {
+      return (
         <EmptyContainer>
           <SubHeading>Ainda não há funcionários...</SubHeading>
         </EmptyContainer>
+      )
+    } else {
+      if(!isDeleting) {
+        return (
+          employees.map((employee, index) => { 
+            return renderEmployee(employee, index)
+          }) 
+        )
+      } else {
+        return (
+          currentEmployees.map((employee, index) => { 
+            return renderEmployee(employee, index)
+          }) 
+        )
       }
-       {employees && 
-        employees.map((employee, index) => { 
-          return renderEmployee(employee, index)
-        })
-      }         
+
+    };
+  }
+
+  return (
+    <MainContainer id={"mainContainer"}>
+      <BackIcon onClick={_goBack} color={"black"} className={"backIcon"}/>
+      <List divided verticalAlign="middle" className={"listContainer"}>
+        {_renderOrNot()}       
       </List>
       <LogoContainer>
         <LogoMD action={

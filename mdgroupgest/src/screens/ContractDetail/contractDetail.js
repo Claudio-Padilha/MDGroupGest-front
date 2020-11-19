@@ -10,6 +10,7 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import request from '../../components/Form/request';
 
+import CONSTANTS from '../../constants';
 import {
   MainContainer,
   Row,
@@ -23,6 +24,29 @@ const ContractDetail = (props) => {
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
+
+  const state = useMemo(() => {
+    if(contract?.sell_state === "ok") {
+      return "🟢";
+    } else if (contract?.sell_state === "r") {
+      return "🟡";
+    } else {
+      return "🔴";
+    }
+  }, [contract])
+
+
+  const stateMessage = useMemo(() => {
+    if(contract?.sell_state === "ok") {
+      return "Válido";
+    } else if (contract?.sell_state === "r") {
+      return "Por recuperar";
+    } else {
+      return "Anulado";
+    }
+  }, [contract])
+
+  console.log(contract, 'contrato')
 
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -83,28 +107,37 @@ const ContractDetail = (props) => {
     )
   }
 
+  function _detailsOfSellState() {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-info',
+      },
+      buttonsStyling: true
+    })
+    
+    return (
+      swalWithBootstrapButtons.fire({
+        className: 'details',
+        title: `Contrato ${stateMessage.toLowerCase()} ${state}`,
+        html: 
+        `<b>Problemas com este contrato:</b><br>
+        ${contract?.observations}`,
+        icon: `${contract?.sell_state === "r" ? "warning" : "error"}`,
+        confirmButtonText: 'Entendi',
+        reverseButtons: true
+      }).then((result) => {
+        if (result.isConfirmed) {
+          console.log('test from ok')
+        } else if (
+          /* Read more about handling dismissals below */
+          result.dismiss === Swal.DismissReason.cancel
+        ) return null
+      })
+    )
+  }
+
   console.log(contract?.sell_state, 'sell state')
-
-  const state = useMemo(() => {
-    if(contract?.sell_state === "ok") {
-      return "🟢";
-    } else if (contract?.sell_state === "r") {
-      return "🟡";
-    } else {
-      return "🔴";
-    }
-  }, [contract])
-
-
-  const stateMessage = useMemo(() => {
-    if(contract?.sell_state === "ok") {
-      return "Válido";
-    } else if (contract?.sell_state === "r") {
-      return "Por recuperar";
-    } else {
-      return "Anulado";
-    }
-  }, [contract])
 
   const history = useHistory();
 
@@ -132,6 +165,23 @@ const ContractDetail = (props) => {
                 marginBottom: 40,
               }
             }>{stateMessage}</Body>
+            { contract?.sell_state !== "ok" && 
+              <Body 
+                style={
+                  {
+                    fontSize: 12,
+                    textShadow: "8px 8px 12px rgba(230, 230, 230, 0.9)",
+                    color: `${CONSTANTS?.colors?.black}`,
+                    fontWeight: "bold",
+                    marginLeft: 20,
+                    marginTop: -34,
+                    cursor: "pointer",
+                    marginBottom: 40,
+                  }
+                }
+                onClick={_detailsOfSellState}
+              >Ver motivo</Body>
+            }
           </Row>
 
 

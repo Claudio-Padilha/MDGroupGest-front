@@ -80,19 +80,19 @@ const ChooseTypeOfContract = (props) => {
   const salesPersons = JSON.parse(localStorage?.getItem('salesPerson'));
 
   function _getAllEmployees() {
-    if(managers.length !== 0) {
+    if(managers?.length !== 0 && managers) {
       allEmployees.push(...managers);
     }
 
-    if(teamLeaders.length !== 0) {
+    if(teamLeaders?.length !== 0 && teamLeaders) {
       allEmployees.push(...teamLeaders);
     }
 
-    if(instructors.length !== 0) {
+    if(instructors?.length !== 0 && instructors) {
       allEmployees.push(...instructors);
     }
 
-    if(salesPersons.length !== 0) {
+    if(salesPersons?.length !== 0 && salesPersons) {
       allEmployees.push(...salesPersons);
     }
 
@@ -109,7 +109,7 @@ const ChooseTypeOfContract = (props) => {
       <Link to={{
         pathname:"/CreateContract",
         state: {
-          type: "electricity",
+          typeOfContract: "electricity",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
           sellState: _sellState(),
@@ -130,7 +130,7 @@ const ChooseTypeOfContract = (props) => {
       <Link to={{
         pathname:"/CreateContract",
         state: {
-          type: "gas",
+          typeOfContract: "gas",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
           sellState: _sellState(),
@@ -152,7 +152,7 @@ const ChooseTypeOfContract = (props) => {
       <Link to={{
         pathname:"/CreateContract",
         state: {
-          type: "dual",
+          typeOfContract: "dual",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
           sellState: _sellState(),

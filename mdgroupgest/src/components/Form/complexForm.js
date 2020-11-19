@@ -42,10 +42,13 @@ const CForm = ({
   const getInitialValues = () => {
     const initialValues = {};
     const keys = formFields && Object.keys(formFields);
-    keys.forEach((i) => {
-      const formField = formFields[i];
-      initialValues[formField.key] = formField.initialValue;
-    });
+    
+    if(keys) {
+      keys.forEach((i) => {
+        const formField = formFields[i];
+        initialValues[formField.key] = formField.initialValue;
+      });
+    }
 
     return initialValues;
   }

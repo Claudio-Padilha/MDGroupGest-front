@@ -30,7 +30,6 @@ const ContractList = (props) => {
     })
   }
 
-
   const history = useHistory();
 
   var localStorage = window.localStorage;

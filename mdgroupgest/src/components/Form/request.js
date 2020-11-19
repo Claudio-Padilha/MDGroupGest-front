@@ -275,9 +275,33 @@ export default {
     })
   },
 
-  getEmployees: (employeeType) => {
+  getAllEmployees: () => {
+    return new Promise((resolve, reject) => {
+      var getAllEmployeesRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/employees/`,
+        headers: { 
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
 
-    // var employeeType = localStorage.getItem('currentUserType');
+      axios(getAllEmployeesRequest)
+
+      .then(res => {      
+        localStorage.setItem(`allEmployees`, JSON.stringify(res.data));
+        resolve(res);     
+      })
+
+      .catch(error => {
+        reject(error);
+      })
+    })
+  },
+
+  getEmployees: (employeeType) => {
 
     return new Promise((resolve, reject) => {
 
@@ -309,7 +333,7 @@ export default {
     var userType = localStorage.getItem('currentUserType');
     
     const userObj = {
-      office: 8,
+      office: 1,
       user: {
         name: data?.name,
         email: data?.email,
@@ -334,10 +358,12 @@ export default {
           dataType: "json",
           contentType: "application/json"
         };
-      
+      const t = this;
       axios(employeeRequest)
 
-      .then(res => {
+      .then((res, t) => {
+        localStorage.removeItem(`${userType}`);
+        t.getEmployees();
         resolve(res);
       })
       .catch(error => {
@@ -385,24 +411,29 @@ export default {
       })
     });
   },
+  
   deleteEmployee: (data) => {
     return new Promise((resolve, reject) => {
       
       var employeeDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1/${data?.user?.user_type}/${data?.id}/`, // id vem da página
+        url: `http://127.0.0.1:8000/${data?.user?.user_type}/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
+        data: { id: data?.id },
         json: true,
         dataType: "json",
         contentType: "application/json"
       }
 
+      const t = this;
       axios(employeeDeleteRequest)
 
-      .then(res => {
+      .then((res, t) => {
+        localStorage.removeItem(`${data?.user?.user_type}`);
         resolve(res);
+        t.getEmployees()  
       })
       .catch(err => {
         reject(err);
@@ -453,9 +484,9 @@ export default {
       client_nif: data?.clientNif,
       client_contact: data?.clientContact,
       electronic_bill: data?.electronicBill ? data?.electronicBill : false,
-      cpe: data?.CPE.toString(),
+      cpe: data?.CPE?.toString(),
       electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
-      cui: data?.CUI.toString(),
+      cui: data?.CUI?.toString(),
       gas_ppi: data?.gasPPI ? data?.gasPPI : false,
       pel: data?.PEL ? data?.PEL : false,
       observations: data?.observations,
@@ -464,7 +495,8 @@ export default {
       payment: payment,
       sell_state: data?.sellState,
       power: data?.power,
-      gas_scale: data?.gasScale
+      gas_scale: data?.gasScale?.toString()
+      //contract_type: data?.typeOfContract
     }
 
     return new Promise((resolve, reject) => {

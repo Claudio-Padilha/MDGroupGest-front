@@ -3,9 +3,11 @@ import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
 import { Avatar } from '@material-ui/core';
+import Divider from '@material-ui/core/Divider';
 import { AvatarGroup } from '@material-ui/lab';
 
 import {
+  MDCol,
   MDRow,
   MDCard,
   MDHero,
@@ -23,10 +25,18 @@ import {
   TeamAvatarsContainer 
 } from './styles';
 
+import useLogin from '../../hooks/login';
+
 import request from '../../components/Form/request';
 import { ko } from 'date-fns/locale';
 
 const BackOfficeContent = (props) => {
+
+  const currentUser = useLogin();
+
+  const userType = useMemo(() => {
+    return currentUser?.user?.user_type;
+  }, [currentUser]);
 
   var teamLeadersCounter = 0;
   var instructorsCounter = 0;
@@ -88,8 +98,6 @@ const BackOfficeContent = (props) => {
   const rContracts = [];
   const allContracts = [];
 
-  console.log(contracts, 'contracts')
-
   function _sellStateOfContract() {
 
     for(let i = 0; i < contracts?.length; i++) {
@@ -123,17 +131,17 @@ const BackOfficeContent = (props) => {
     const a = allContracts?.length;
 
   function _getPercentage(percent, total) {
-    const p = (percent / total) * 100;
-    return p.toFixed(2);
+    if (percent !== 0 || total !== 0) {
+      const p = (percent / total) * 100;
+      return p.toFixed(2);
+    } else {
+      return 0;
+    }
   }
 
   const koPercentage = _getPercentage(x, a);
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
-
-  console.log(koPercentage, 'kopercentage')
-  console.log(okPercentage, 'okpercentage')
-  console.log(rPercentage, 'rpercentage')
 
   var deletedID = props?.location?.state?.deletedID;
 
@@ -192,9 +200,52 @@ const BackOfficeContent = (props) => {
     );
   };
 
+  const renderOfficeMonth = () => {
+    return (
+      <MDCard className={"officeMonth"}>
+        <MDCard className={"officeMonthResult"}>
+          <MDCard.Body className={"officeMonthCardBody"}>
+            <Link
+              to={{
+                pathname: "/OfficeMonthResultDetail",
+                state: {
+                  contracts: {
+                    all: allContracts,
+                    ok: okContracts,
+                    ko: koContracts,
+                    pending: rContracts
+                  }
+                }
+              }}
+            >
+              <SubHeading>Faturamento</SubHeading>
+            </Link> 
+            <Heading className={"mySalary"}>{`${_calculateComissions() + 9852}€`}</Heading>
+          </MDCard.Body>
+        </MDCard>
+
+        <MDCard className={"managerMonth"}>
+          <MDCard.Body className={"managerMonthCardBody"}>
+            <Link
+              to={{
+                pathname: "/MyMonth",
+                state: {
+                  data: "MÊS"
+                }
+              }}
+            >
+              <SubHeading>Meus lucros</SubHeading>
+            </Link> 
+            <Heading className={"mySalary"}>{`${_calculateComissions()}€`}</Heading>
+          </MDCard.Body>
+        </MDCard>
+
+      </MDCard>
+    )
+  }
+
   const renderMyMonth = () => {
-    const comissions = _calculateComissions()
-    
+
     return (
       <MDCard>
         <MDCard.Body className={"monthCardBody"}>
@@ -305,7 +356,8 @@ const BackOfficeContent = (props) => {
     <ContentContainer>
       <TeamContainer>{renderHero()}</TeamContainer>
       <ResultsContainer>
-        {renderMyMonth()}
+        {userType === "admin" && renderOfficeMonth()} 
+        {userType !== "admin" && renderMyMonth()}  
         {renderMyContracts()}
         {renderMyResults()}
       </ResultsContainer>

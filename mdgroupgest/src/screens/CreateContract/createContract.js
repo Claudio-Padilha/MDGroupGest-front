@@ -17,6 +17,8 @@ import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
 
+  console.log(props, 'props from create contract')
+
   const typeOfContractFromProps = props?.location?.state?.type;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
@@ -502,7 +504,7 @@ const CreateContract = (props) => {
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
-          formFields={typeOfContractForm}
+          formFields={DUALFIELDS}
           top
           bg="primary"
           isFullWidth
