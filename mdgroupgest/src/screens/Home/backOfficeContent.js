@@ -140,6 +140,7 @@ const BackOfficeContent = (props) => {
   }
 
   const koPercentage = _getPercentage(x, a);
+  console.log(koPercentage, 'ko percentage')
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
 
@@ -327,6 +328,18 @@ const BackOfficeContent = (props) => {
     );
   };
 
+  const resultStatus = useMemo(() => {
+    if (okPercentage < 80 && allContracts?.length !== 0) {
+      return "🟡";
+    } else if (okPercentage < 70 && allContracts?.length !== 0) {
+      return "🔴";
+    } else if (okPercentage > 70 && allContracts?.length !== 0){
+      return "🟢";
+    } else {
+      return "⚪️"
+    }
+  }, [okPercentage])
+
   const renderMyResults = () => {
     return (
       <MDCard>
@@ -346,7 +359,7 @@ const BackOfficeContent = (props) => {
           <Heading style={{color: "#FF461E",marginTop: 0, marginBottom: 0}}>{`${koPercentage}%`}</Heading>
           <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos anulados</Body>
 
-          <Body style={{display: 'flex', alignSelf: 'flex-end', alignContent: "flex-start"}}>🟢</Body>
+          <Body style={{display: 'flex', alignSelf: 'center', alignContent: "flex-start"}}>{resultStatus}</Body>
         </MDCard.Body>
       </MDCard>
     );

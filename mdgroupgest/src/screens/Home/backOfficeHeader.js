@@ -17,10 +17,6 @@ export default function BackOfficeHeader(props) {
   const userName = user?.user?.name;
   const userType = user?.user?.user_type.charAt(0).toUpperCase() + user?.user?.user_type.slice(1);
   const history = useHistory();
-
-  function _insertContract() {
-    history.push("/ChooseTypeOfContract");
-  }
   
   return (
     <MDContainer>
@@ -33,7 +29,6 @@ export default function BackOfficeHeader(props) {
           small={true}
           text={userType}
         />
-        <AddIcon onClick={_insertContract} className={"addIcon"}/>
         <LogoContainer><LogoMD /></LogoContainer>
       </WelcomeWithLogoContainer>
   
