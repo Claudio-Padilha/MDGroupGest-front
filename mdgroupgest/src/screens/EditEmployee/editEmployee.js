@@ -1,6 +1,5 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
-import Swal from 'sweetalert2';
 
 import {
   MainDiv,
@@ -14,21 +13,17 @@ import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
-import request from '../../components/Form/request';
 
 const EditEmployee = (props) => {
 
   const history = useHistory();
 
-  const employee = props?.location?.state?.employee;
+  const employee = props?.location?.state?.employeeData;
   console.log(employee, 'funcionário a ser editado')
 
   function _goBack() {
     history.push({
-      pathname: "/CreateEmployee",
-      state: {
-        fromEmployeeCreation: true
-      }
+      pathname: "/EmployeeList",
     });    
   }
 
@@ -129,7 +124,7 @@ const EditEmployee = (props) => {
       <MainDiv>
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
-        <SubHeading>TESTE</SubHeading>
+        <SubHeading>{employee.id}</SubHeading>
         <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={() => console.log('test')}
@@ -137,7 +132,7 @@ const EditEmployee = (props) => {
           top
           bg="primary"
           isFullWidth
-          btnLabel="Inserir"
+          btnLabel="Atualizar"
         />
         <CornerRight><Corner /></CornerRight>
     </MainDiv>

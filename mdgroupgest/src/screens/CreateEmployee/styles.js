@@ -29,6 +29,7 @@ const LeftContractContainer = styled.div`
   width: 100%;
   height: 100vh;
 `;
+
 const MainDiv = styled.div`
   flex: 1;
   display: flex;

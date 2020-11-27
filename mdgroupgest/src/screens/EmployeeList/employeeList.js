@@ -30,7 +30,6 @@ const EmployeeList = (props) => {
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
 
-  console.log(employees, 'employees para ver')
   function _goBack() {
     history.push({
       pathname: "/ChooseEmployeeTypeToSee"
@@ -49,10 +48,12 @@ const EmployeeList = (props) => {
       return null;
     }
 
-    function _handleEditEmployee(employee) {
+    function _handleEditEmployee() {
       history.push({
         pathname: "/EmployeeEdit",
-        employeeData: employee
+        state: {
+          employeeData: employee
+        }
       })
     }
 
