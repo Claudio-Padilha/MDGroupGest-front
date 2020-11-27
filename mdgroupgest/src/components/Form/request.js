@@ -287,11 +287,13 @@ export default {
         dataType: "json",
         contentType: "application/json"
       }
+        
 
       axios(getAllEmployeesRequest)
 
-      .then(res => {      
-        localStorage.setItem(`allEmployees`, JSON.stringify(res.data));
+      .then((res) => {
+        localStorage.removeItem('allEmployees');   
+        localStorage.setItem('allEmployees', JSON.stringify(res.data));
         resolve(res);     
       })
 
@@ -358,12 +360,9 @@ export default {
           dataType: "json",
           contentType: "application/json"
         };
-      const t = this;
       axios(employeeRequest)
 
-      .then((res, t) => {
-        localStorage.removeItem(`${userType}`);
-        t.getEmployees();
+      .then(res => {
         resolve(res);
       })
       .catch(error => {
@@ -427,13 +426,10 @@ export default {
         contentType: "application/json"
       }
 
-      const t = this;
       axios(employeeDeleteRequest)
 
-      .then((res, t) => {
-        localStorage.removeItem(`${data?.user?.user_type}`);
-        resolve(res);
-        t.getEmployees()  
+      .then((res) => {
+        resolve(res); 
       })
       .catch(err => {
         reject(err);

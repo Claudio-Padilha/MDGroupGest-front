@@ -66,7 +66,7 @@ const CreateEmployee = (props) => {
         reverseButtons: true
       }).then((result) => {
 
-        // "result.isConfimed significa clicar em "Refazer"
+        // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
             try {
               request.createEmployee(data);
@@ -74,9 +74,15 @@ const CreateEmployee = (props) => {
                 'Boa!',
                 'Funcionário inserido com sucesso.',
                 'success'
-              ).then((result) => {
+              ).then(async (result) => {
                 if(result) {
-                  return history.push("/BackOffice");
+                  await request.getAllEmployees();
+                  return history.push({
+                    pathname:"/ChooseEmployeeTypeToSee",
+                    state: {
+                      cameFromCreation: true
+                    }
+                  });
                 }
               });
 

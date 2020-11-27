@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
@@ -30,24 +30,17 @@ const EmployeeList = (props) => {
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
 
-  console.log(props, 'props from employee list')
-  const [isDeleting, setIsDeleting] = useState(false)
-
-  if(isDeleting) {
-    request.getEmployees(`${userType}`)
-  }
-  const currentEmployees = JSON.parse(localStorage?.getItem(`${userType}`))
-
-  console.log(currentEmployees, 'currentEmployees')
-
-  console.log(isDeleting, 'is Deleting')
-
+  console.log(employees, 'employees para ver')
   function _goBack() {
     history.push({
-      pathname: "/ChooseEmployeeTypeToSee",
-      state: {
-        cameFromDeleting: isDeleting
-      }
+      pathname: "/ChooseEmployeeTypeToSee"
+    })
+  }
+
+  async function _redirectToEmployeeTypes() {
+    await request.getAllEmployees()
+    history.push({
+      pathname: "ChooseEmployeeTypeToSee",
     })
   }
 
@@ -64,7 +57,6 @@ const EmployeeList = (props) => {
     }
 
     function _confirmToDeleteEmployee() {
-      console.log(employee, 'data')
       const swalWithBootstrapButtons = Swal.mixin({
         customClass: {
           confirmButton: 'btn btn-success',
@@ -84,18 +76,14 @@ const EmployeeList = (props) => {
           reverseButtons: true
         }).then(async (result) => {
           if (result.isConfirmed) {
-            setIsDeleting(true)
-            request.deleteEmployee(employee)         
-            .then(
-              request.getAllEmployees().then(
-                swalWithBootstrapButtons.fire(
-                  'Funcionário Excluído!',
-                  'A operação foi concluída com sucesso.',
-                  'success'
-                ).then(_goBack)
-              )
-            )
-  
+            await request.deleteEmployee(employee)         
+            .then(() => (
+              swalWithBootstrapButtons.fire(
+                'Funcionário Excluído!',
+                'A operação foi concluída com sucesso.',
+                'success'
+              )  
+            )).then(_redirectToEmployeeTypes)      
           } else if (
             /* Read more about handling dismissals below */
             result.dismiss === Swal.DismissReason.cancel
@@ -217,20 +205,9 @@ const EmployeeList = (props) => {
         </EmptyContainer>
       )
     } else {
-      if(!isDeleting) {
-        return (
-          employees.map((employee, index) => { 
-            return renderEmployee(employee, index)
-          }) 
-        )
-      } else {
-        return (
-          currentEmployees.map((employee, index) => { 
-            return renderEmployee(employee, index)
-          }) 
-        )
-      }
-
+      return employees.map((employee, index) => { 
+        return renderEmployee(employee, index)
+      }) 
     };
   }
 
@@ -238,7 +215,7 @@ const EmployeeList = (props) => {
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} color={"black"} className={"backIcon"}/>
       <List divided verticalAlign="middle" className={"listContainer"}>
-        {_renderOrNot()}       
+        {_renderOrNot()}
       </List>
       <LogoContainer>
         <LogoMD action={

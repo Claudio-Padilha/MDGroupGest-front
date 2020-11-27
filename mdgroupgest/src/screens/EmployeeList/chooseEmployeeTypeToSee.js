@@ -25,12 +25,19 @@ const ChooseEmployeeTypeToSee = (props) => {
     window.location.assign("/BackOffice");    
   }
 
-  const cameFromList = props?.location?.state?.fromEmployeeList;
+  console.log(props, 'props para ver') 
+
+  const isFromBackOffice = props?.location?.state?.isFromBackOffice;
+  const isFromCreation = props?.location?.state?.cameFromCreation;
 
   const allEmployees = useMemo(() => {
-    request.getAllEmployees();
+    console.log('entrei desde deletion')
+    request.getAllEmployees()
+    
     return JSON.parse(localStorage?.getItem('allEmployees'));
-  }, []);
+  }, [isFromBackOffice, isFromCreation]);
+
+  console.log(allEmployees, 'VER EMPLOYEES')
 
   const renderManagerCard = () => {
     return (

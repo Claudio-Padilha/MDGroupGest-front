@@ -101,9 +101,16 @@ width: 100%;
   width: 30%;
 }
 
-.officeEmail {
+.officeZipCode {
   position: absolute;
   top: 60%;
+  left: 35%;
+  width: 30%;
+}
+
+.officeEmail {
+  position: absolute;
+  top: 70%;
   left: 35%;
   width: 30%;
 }
