@@ -5,6 +5,40 @@ function _currentTokenOnRAM() {
   return localStorage.getItem('currentToken');
 }
 
+function _firstTimeOfAnUser() {
+  return (
+    Swal.fire({
+      title: 'Bem vindo(a), escolha uma password.',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Confirmar',
+      showLoaderOnConfirm: true,
+      preConfirm: (data) => {
+        return axios.patch("http://127.0.0.1:8000/auth/login/")
+          .then(response => {
+            if (!response.ok) {
+              throw new Error(response.statusText)
+            }
+            return response.json()
+          })
+          .catch(error => {
+            Swal.showValidationMessage(
+              `Request failed: ${error}`
+            )
+          })
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        _HandleConfirmLoginAlert()
+      }
+    })
+  )
+}
+
 function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
@@ -105,8 +139,12 @@ export default {
                       axios(contractRequest)
                 
                       .then(res => {
-                        localStorage.setItem('contracts', JSON.stringify(res.data))
-                        _HandleConfirmLoginAlert()
+                        if(res?.data?.user?.last_login === null) {
+                          _firstTimeOfAnUser()
+                        } else {
+                          localStorage.setItem('contracts', JSON.stringify(res.data))
+                          _HandleConfirmLoginAlert()
+                        }
                         resolve(res);
                       })
                       .catch(error => {
@@ -279,7 +317,7 @@ export default {
     return new Promise((resolve, reject) => {
       var getAllEmployeesRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/employees/`,
+        url: `http://127.0.0.1:8000/employees/1`,
         headers: { 
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -371,25 +409,26 @@ export default {
       })
     });
   },
-  updateEmployee: (data) => {
+  updateEmployee: (formFields, data) => {
+    console.log(formFields, 'form fields')
+    console.log(data, 'data from update employee')
 
     const userObj = {
-      office: 1,
-      user: {
-        name: data?.name,
-        email: data?.email,
-        user_type: data?.user_type,
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
-      }
+      id: data?.id,
+      office: data?.office,
+      name: formFields?.name,
+      email: formFields?.email,
+      user_type: data?.user_type,
+      nif: formFields?.nif,
+      contact: formFields?.contact,
+      address: formFields?.address,
     }
     
     return new Promise((resolve, reject) => {
 
       var employeeUpdateRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/${data?.user_type}/${data?.id}/`, // trazer da tela de navegação
+          url: `http://127.0.0.1:8000/${data?.user_type}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },

@@ -181,7 +181,7 @@ const renderFields = (field, index, formik) => {
     case "password":
       return (
         <Form.Group as={Col} className={field?.key}>
-          <TextInput {...fieldProps} className={"textInput"}/>
+          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
         </Form.Group>
       );
     case "text-area":

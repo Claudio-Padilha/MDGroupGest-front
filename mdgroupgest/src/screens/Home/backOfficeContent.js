@@ -89,6 +89,11 @@ const BackOfficeContent = (props) => {
   const totalEmployees = teamLeadersArr.concat(instructorsArr, salesPersonsArr);
   const quantityOfTotalEmployees = totalEmployees?.length;
 
+  // console.log(totalEmployees, 'totalEmployees')
+  // console.log(teamLeadersArr, 'teamLeadersArr')
+  // console.log(instructorsArr, 'instructorsArr')
+  // console.log(salesPersonsArr, 'salesPersonsArr')
+
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
@@ -140,7 +145,6 @@ const BackOfficeContent = (props) => {
   }
 
   const koPercentage = _getPercentage(x, a);
-  console.log(koPercentage, 'ko percentage')
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
 

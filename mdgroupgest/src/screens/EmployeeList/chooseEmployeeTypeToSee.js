@@ -31,7 +31,6 @@ const ChooseEmployeeTypeToSee = (props) => {
   const isFromCreation = props?.location?.state?.cameFromCreation;
 
   const allEmployees = useMemo(() => {
-    console.log('entrei desde deletion')
     request.getAllEmployees()
     
     return JSON.parse(localStorage?.getItem('allEmployees'));

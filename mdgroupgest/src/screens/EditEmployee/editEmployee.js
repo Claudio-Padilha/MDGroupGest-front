@@ -8,11 +8,13 @@ import {
   CornerRight
 } from './styles';
 
-import { SubHeading } from '../../components/Text/text';
+import { SubHeading, Body } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
+
+import request from '../../components/Form/request';
 
 const EditEmployee = (props) => {
 
@@ -96,38 +98,38 @@ const EditEmployee = (props) => {
   //     )
   // }
 
-  // const handleSubmitForm = formFields => {
+  const handleSubmitForm = formFields => {
+    const data = {
+      office: employee?.office,
+      id: employee?.id,
+      user_type: employee?.user?.user_type
+    }
+    
+    request.updateEmployee(formFields, data)
 
-  //   const userType = props.location.state.userType;
+    // const userType = props.location.state.userType;
 
-  //   localStorage.setItem('currentUserType', userType)
+    // localStorage.setItem('currentUserType', userType)
 
-  //   _ConfirmEmployeeCreation(formFields)
-  // };
+    // _ConfirmEmployeeCreation(formFields)
+  };
 
   const FIELDS = [
-    { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
-    { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF" },
-    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
-    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
-    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
-    { type: "dropdown",
-      subType: "twoColumns",
-      side: "right",
-      key: "office",
-      question: "Escritório",  
-      options: ["teste"]
-    },
+    { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome", place: employee?.user?.name },
+    { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF", place: employee?.user?.nif },
+    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone", place: employee?.user?.contact },
+    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail", place: employee?.user?.email },
+    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada", place: employee?.user?.address }
   ];
-
+  console.log(employee,'func do edit')
   return (
       <MainDiv>
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
-        <SubHeading>{employee.id}</SubHeading>
+        <SubHeading>Editar dados</SubHeading>
         <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
-          onSubmit={() => console.log('test')}
+          onSubmit={handleSubmitForm}
           formFields={FIELDS}
           top
           bg="primary"

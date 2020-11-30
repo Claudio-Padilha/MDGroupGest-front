@@ -137,8 +137,6 @@ const ContractDetail = (props) => {
     )
   }
 
-  console.log(contract?.sell_state, 'sell state')
-
   const history = useHistory();
 
   const renderContract = () => {

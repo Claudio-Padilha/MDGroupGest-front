@@ -56,7 +56,6 @@ const ContractList = (props) => {
   }
 
   const renderContract = (contract, i) => {
-    console.log(contract?.sell_state,'contract')
     const sellState = contract?.sell_state
 
     const stateOfContract = () => {

@@ -26,6 +26,7 @@ import { List } from "semantic-ui-react";
 
 const EmployeeList = (props) => {
   const history = useHistory();
+  console.log(props, 'props da employee list')
 
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
