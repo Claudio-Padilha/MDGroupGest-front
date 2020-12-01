@@ -385,7 +385,7 @@ export default {
       }
     }
     
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       var employeeRequest = {
           method: 'POST',
@@ -404,8 +404,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          const message = 'Erro do servidor';
-          reject(message);
+        resolve(error);
       })
     });
   },
@@ -502,13 +501,12 @@ export default {
   },
   createContract: (data) => {
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    var payment = data?.lightPPI ? "Débito Directo" : "Multibanco";
     
-    var deliveryDate = data?.deliveryDate.toJSON();
-    var deliveryWorkedDate = deliveryDate.substring(0, 9);
+    var deliveryDate = data?.deliveryDate?.toJSON();
+    var deliveryWorkedDate = deliveryDate?.substring(0, 9);
 
-    var signatureDate = data?.signatureDate.toJSON();
-    var signatureWorkedDate = signatureDate.substring(0, 9);
+    var signatureDate = data?.signatureDate?.toJSON();
+    var signatureWorkedDate = signatureDate?.substring(0, 9);
     
     const contractObj = {
       user: currentUser?.user?.id, // Receber dinamicamente
@@ -527,14 +525,14 @@ export default {
       observations: data?.observations,
       employee_comission: 100.00,
       feedback_call: data?.feedbackCall,
-      payment: payment,
+      payment: data?.paymentMethods,
       sell_state: data?.sellState,
       power: data?.power,
       gas_scale: data?.gasScale?.toString()
       //contract_type: data?.typeOfContract
     }
 
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       var contractRequest = {
           method: 'POST',
@@ -558,8 +556,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          const message = 'Erro do servidor';
-          reject(message);
+        resolve(error);
       })
     });
   },

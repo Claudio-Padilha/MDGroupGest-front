@@ -64,36 +64,45 @@ const CreateEmployee = (props) => {
         confirmButtonText: 'É isso!',
         cancelButtonText: 'Refazer',
         reverseButtons: true
-      }).then((result) => {
+      }).then(async (result) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            try {
-              request.createEmployee(data);
-              swalWithBootstrapButtons.fire(
-                'Boa!',
-                'Funcionário inserido com sucesso.',
-                'success'
-              ).then(async (result) => {
-                if(result) {
-                  await request.getAllEmployees();
-                  return history.push({
-                    pathname:"/ChooseEmployeeTypeToSee",
-                    state: {
-                      cameFromCreation: true
-                    }
-                  });
-                }
-              });
+            await request.createEmployee(data)
+            .then(res => {
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
 
-            } catch (error) {
-              swalWithBootstrapButtons.fire(
-                'Erro',
-                `${error}`,
-                'error'
-              )
-            }
-
+              if(clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Funcionário não inserido, tente de novo. (Verifique os campos)',
+                  'error'
+                )
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                swalWithBootstrapButtons.fire(
+                  'Boa!',
+                  'Funcionário inserido com sucesso.',
+                  'success'
+                ).then(async (result) => {
+                  if(result) {
+                    await request.getAllEmployees();
+                    return history.push({
+                      pathname:"/ChooseEmployeeTypeToSee",
+                      state: {
+                        cameFromCreation: true
+                      }
+                    });
+                  }
+                });
+              }
+            })
         // "!result.isConfimed significa clicar em "'E isso!"
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
@@ -150,83 +159,3 @@ const CreateEmployee = (props) => {
 }
 
 export default CreateEmployee;
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import React from 'react';
-
-// import {
-//   MainContainer,
-//   RightContractContainer,
-//   LeftContractContainer,
-//   MainDiv,
-//   CornerLeft,
-//   LogoContainer,
-//   CornerRight
-// } from './styles';
-
-// import { Corner, Corner180 } from '../../components/Corner/corner';
-// import { LogoMD } from '../../components/Logo/logo';
-// import Form from '../../components/Form/normalForm';
-// import request from '../../components/Form/request';
-
-// const CreateEmployee = () => { 
-
-//   const handleSubmitForm = formFields => {
-//     // console.log(formFields, 'Your form was submitted...')
-//     request.createEmployee(formFields);
-//   };
-
-//   const FIELDS = [
-//     { type: "text", key:"employeeFirstName", question: "Primeiro Nome" },
-//     { type: "text", key:"employeeLastName", question: "Último Nome" },
-//     { type: "number", key:"employeeNIF", question: "NIF"},
-//     { type: "email", key:"email", question: "Email"},
-//     { type: "text", key:"address", question: "Morada"},
-//     { type: "number", key:"employeeContact", question: "Contacto"},
-//     {
-//       type: "dropdown",
-//       multi: false,
-//       key: "office",
-//       question: "Selecione Escritório",
-//       options: [
-//         {
-//           value: "miguelOffice",
-//           label: "Miguel Pedro"
-//         },
-//         {
-//           value: "danielOffice",
-//           label: "Daniel Paiva"
-//         }
-//       ]
-//     }
-//   ];
-  
-//   return (
-//     <MainDiv>
-//       <CornerLeft><Corner180 /></CornerLeft>
-//       <LogoContainer><LogoMD /></LogoContainer>
-//       <Form 
-//         top
-//         bg="primary"
-//         isFullWidth={false}
-//         formFields={FIELDS}
-//         btnLabel="Próximo"
-//         onSubmit={handleSubmitForm}
-//       />
-//       <CornerRight><Corner /></CornerRight>
-//     </MainDiv>
-//   ); 
-// };
-
-// export default CreateEmployee;

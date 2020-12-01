@@ -16,6 +16,7 @@ import request from '../../components/Form/request';
 import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
+  console.log(localStorage, 'local storage')
 
   console.log(props, 'props from create contract')
 
@@ -98,31 +99,41 @@ const CreateContract = (props) => {
         confirmButtonText: 'É isso!',
         cancelButtonText: 'Refazer',
         reverseButtons: true
-      }).then((result) => {
+      }).then(async (result) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
-            try {
-              request.createContract(data);
-              swalWithBootstrapButtons.fire(
-                'Boa!',
-                'Contrato inserido com sucesso.',
-                'success'
-              ).then(async (result) => {
-                if(result) {
-                  await request.getContracts()
-                  return history.push("/ContractList");
-                }
-              });
-              
-            } catch (error) {
-              swalWithBootstrapButtons.fire(
-                'Erro',
-                `${error}`,
-                'error'
-              )
-            }
- 
+            await request.createContract(data)
+            .then(res => {
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
+
+              if (clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Contrato não inserido, tente de novo. (Verifique os campos)',
+                  'error'
+                )
+                
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                return swalWithBootstrapButtons.fire(
+                  'Boa!',
+                  'Contrato inserido com sucesso.',
+                  'success'
+                ).then(async (result) => {
+                  if(result) {
+                    await request.getContracts()
+                    return history.push("/ContractList");
+                  }
+                });
+              }
+            })
         // "!result.isConfimed significa clicar em "Refazer" 
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
@@ -134,7 +145,7 @@ const CreateContract = (props) => {
         })
       )
   }
-
+  console.log(localStorage, 'localstorage')
   const ELECTRICITYFIELDS = [
     { 
       type: "dropdown",
