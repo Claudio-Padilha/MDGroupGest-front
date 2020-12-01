@@ -49,6 +49,9 @@ const EmployeeList = (props) => {
       return null;
     }
 
+    const userType = employee?.user?.user_type;
+    const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
+
     function _handleEditEmployee() {
       history.push({
         pathname: "/EmployeeEdit",
@@ -100,20 +103,9 @@ const EmployeeList = (props) => {
       )
     }
 
-    const userType = employee?.user?.user_type;
-    const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-
     function _handlePDFButton() {
       return (
-        <div style={{
-          display: 'flex',
-          alignContent:'center',
-          justifyContent: 'center',
-          backgroundColor: '#000',
-          width: "60%",
-          height: "30px",
-          boxShadow: "2px 2px 3px rgba(200, 200, 200, 0.7)",
-        }}>
+        <div>
           <PDFDownloadLink
             document={
               <ContractDocumentPDF
@@ -190,6 +182,13 @@ const EmployeeList = (props) => {
               small={true}
               text="Excluir"
               className={"secondaryButton"}
+            />
+            <Button
+              disabled={false}
+              action={_handlePDFButton}
+              small={true}
+              text="Gerar contrato"
+              className={"primaryButton"}
             />
           </Column>
           
