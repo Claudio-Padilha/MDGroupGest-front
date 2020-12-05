@@ -109,6 +109,7 @@ const ChooseTypeOfContract = (props) => {
       <Link to={{
         pathname:"/CreateContract",
         state: {
+          title: "Contrato Electricidade",
           typeOfContract: "electricity",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
@@ -125,11 +126,36 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
+  const renderCondominiumElectricityCard = () => {
+
+    return (
+      <Link to={{
+        pathname:"/CreateContract",
+        state: {
+          title: "Contrato Electricidade Condomínio",
+          typeOfContract: "condominium_electricity",
+          cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          payment: _payment(),
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading style={{marginLeft: '-3%'}}>Electricidade</SubHeading>
+            <SubHeading>Condomínio</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
   const renderGasCard = () => {
     return (
       <Link to={{
         pathname:"/CreateContract",
         state: {
+          title: "Contrato Gás",
           typeOfContract: "gas",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
@@ -147,11 +173,36 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
+  const renderCondominiumGasCard = () => {
+    return (
+      <Link to={{
+        pathname:"/CreateContract",
+        state: {
+          title: "Contrato Gás Condomínio",
+          typeOfContract: "condominium_gas",
+          cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          gasScale: _gasScale(),
+          payment: _payment()
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading style={{marginLeft: '35%'}}>Gás</SubHeading>
+            <SubHeading>Condomínio</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
   const renderDualCard = () => {
     return (
       <Link to={{
         pathname:"/CreateContract",
         state: {
+          title: "Contrato Dual",
           typeOfContract: "dual",
           cameFromChoice: true,
           feedbackCall: _feedbackCall(),
@@ -170,6 +221,31 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
+  const renderCondominiumDualCard = () => {
+    return (
+      <Link to={{
+        pathname:"/CreateContract",
+        state: {
+          title: "Contrato Dual Condomínio",
+          typeOfContract: "condominium_dual",
+          cameFromChoice: true,
+          feedbackCall: _feedbackCall(),
+          sellState: _sellState(),
+          payment: _payment(),
+          gasScale: _gasScale(),
+          employees: allEmployees
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading style={{marginLeft: '35%'}}>Dual</SubHeading>
+            <SubHeading>Condomínio</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
   return(
     <MainContainerEType>
       <BackIcon onClick={_goBack} />
@@ -179,17 +255,12 @@ const ChooseTypeOfContract = (props) => {
           {renderElectricityCard()}
           {renderGasCard()}
           {renderDualCard()}
-          
         </FirstRow>
         
         <SecondRow>
-          <GoHomeButton>
-            <Body>
-              <Link to={"/BackOffice"}>
-                <MDButton>Cancelar</MDButton>
-              </Link>
-            </Body>
-          </GoHomeButton>
+          {renderCondominiumElectricityCard()}
+          {renderCondominiumGasCard()}
+          {renderCondominiumDualCard()}
         </SecondRow>
       
       </CardsContainer>

@@ -9,6 +9,7 @@ import {
   CornerRight,
 } from './styles';
 
+import { SubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
@@ -16,11 +17,10 @@ import request from '../../components/Form/request';
 import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
-  console.log(localStorage, 'local storage')
 
   console.log(props, 'props from create contract')
 
-  const typeOfContractFromProps = props?.location?.state?.type;
+  const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
   const feedbackCalls = props?.location?.state?.feedbackCall;
@@ -49,51 +49,104 @@ const CreateContract = (props) => {
 
     var employeeName = data?.employeeName;
     var clientName = data?.clientName ;
-    var clientNIF = data?.clientNif;
+    var clientNif = data?.clientNif;
     var clientContact = data?.clientContact;
-    var pel = data?.PEL;
-    var lightPPI = data?.lightPPI;
-    var gasPPI = data?.gasPPI;
+    var PELForElectricity = data?.PELForElectricity;
+    var PELForDUAL = data?.PELDUAL;
+    var MGIForGas = data?.MGIForGas;
+    var MGIForDUAL = data?.MGIDUAL;
+    var lightPPIDUAL = data?.lightPPIDUAL;
+    var lightPPIForElectricity = data?.lightPPIForElectricity;
+    var gasPPIDUAL = data?.gasPPIDUAL;
+    var gasPPIForGas = data?.gasPPIForGas;
     var electronicBill = data?.electronicBill;
-    var cui = data?.CUI;
-    var cpe = data?.CPE;
+    var CUIForGas = data?.CUIForGas;
+    var CUIDUAL = data?.CUIDUAL;
+    var CPEForElectricity = data?.CPEForElectricity;
     var deliveryDate = data?.deliveryDate;
     var signatureDate = data?.signatureDate;
     var observations = data?.observations;
     var feedbackCall = data?.feedbackCall;
     var sellState = data?.sellState;
-    var employeeComission = data?.comission;
-    var power = data?.power;
-    var gasScale = data?.gasScale;
-    // var deliveryDate = data?.deliveryDate.toJSON();
-    // var deliveryWorkedDate = deliveryDate.substring(0, 9);
+    var paymentMethods = data?.paymentMethods;
+    var powerForElectricity = data?.powerForElectricity;
+    var powerDUAL = data?.powerDUAL;
+    var gasScaleDUAL = data?.gasScaleDUAL;
+    var gasScaleForGas = data?.gasScaleForGas;
 
-    // var signatureDate = data?.signatureDate.toJSON();
-    // var signatureWorkedDate = signatureDate.substring(0, 9);
+    const electricityMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
+    <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
+    <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
+    <b>PEL:</b> ${PELForElectricity ? "Sim" : `Não`} <br>
+    <b>PPI Luz:</b> ${lightPPIForElectricity ? "Sim" : `Não`} <br>
+    <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
+    <b>CPE:</b> ${CPEForElectricity ? CPEForElectricity : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
+    <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
+    <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
+    <b>Potência contratada:</b> ${powerForElectricity ? powerForElectricity : `❌`} <br>`; 
+
+    const gasMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
+    <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
+    <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
+    <b>MGI:</b> ${MGIForGas ? "Sim" : `Não`} <br>
+    <b>PPI Gás:</b> ${gasPPIForGas ? "Sim" : `Não`} <br>
+    <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
+    <b>CUI:</b> ${CUIForGas ? CUIForGas : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
+    <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
+    <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
+    <b>Escalão Gás:</b> ${gasScaleForGas ? gasScaleForGas : `❌`} <br>`; 
+
+    const dualMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
+    <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
+    <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
+    <b>PEL:</b> ${PELForDUAL ? "Sim" : `Não`} <br>
+    <b>MGI:</b> ${MGIForDUAL ? "Sim" : `Não`} <br>
+    <b>PPI Luz:</b> ${lightPPIDUAL ? "Sim" : `Não`} <br>
+    <b>PPI Gás:</b> ${gasPPIDUAL ? "Sim" : `Não`} <br>
+    <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
+    <b>CUI:</b> ${CUIDUAL ? CUIDUAL : `❌`} <br>
+    <b>CUI:</b> ${CUIForGas ? CUIForGas : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
+    <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
+    <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
+    <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods : `❌`} <br>
+    <b>Potência Contratada:</b> ${powerDUAL ? powerDUAL : `❌`} <br>
+    <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
+
+    function _currentConfirmationMessage() {
+      switch (typeOfContractFromProps) {
+        case "electricity":
+        case "condominium_electricity":
+          return electricityMessage;
+  
+        case "gas":
+        case "condominium_gas":
+          return gasMessage;
+  
+        case "dual":
+        case "condominium_dual":
+          return dualMessage;
+      
+        default:
+          break;
+      }
+    }
 
       return (
         swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados do contrato:',
-        html: 
-         `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
-          <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
-          <b>NIF / NIPC:</b> ${clientNIF ? clientNIF : `❌`} <br>                                                               
-          <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
-          <b>PEL:</b> ${pel ? "Sim" : `Não`} <br>
-          <b>PPI Luz:</b> ${lightPPI ? "Sim" : `Não`} <br>
-          <b>PPI Gás:</b> ${gasPPI ? "Sim" : `Não`} <br>
-          <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
-          <b>CUI:</b> ${cui ? cui : `❌`} <br>
-          <b>CPE:</b> ${cpe ? cpe : `❌`} <br>
-          <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
-          <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
-          <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
-          <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
-          <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
-          <b>Comissão:</b> ${employeeComission ? employeeComission : `❌`} <br>
-          <b>Potência contratada:</b> ${power ? power : `❌`} <br>
-          <b>Escalão Gás:</b> ${gasScale ? gasScale : `❌`} <br>` 
-        ,
+        title: 'Confirme os dados inseridos: ',
+        html: _currentConfirmationMessage(),
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'É isso!',
@@ -145,7 +198,7 @@ const CreateContract = (props) => {
         })
       )
   }
-  console.log(localStorage, 'localstorage')
+
   const ELECTRICITYFIELDS = [
     { 
       type: "dropdown",
@@ -176,10 +229,10 @@ const CreateContract = (props) => {
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
-    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
-    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "PELForElectricity", question: "PEL", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPIForElectricity", question: "PPI Luz", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
+    { type: "number", subType: "twoColumns", side: "left", key: "CPEForElectricity", question: "CPE"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
@@ -217,7 +270,7 @@ const CreateContract = (props) => {
       subType: "twoColumns",
       placeholder: "Selecione",
       side: "left",
-      key: "power",
+      key: "powerForElectricity",
       question: "Potência contratada",
       options: [
         {
@@ -270,7 +323,7 @@ const CreateContract = (props) => {
         }
       ] 
     },
-  ]
+  ];
 
   const GASFIELDS = [
     { 
@@ -302,10 +355,10 @@ const CreateContract = (props) => {
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
-    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
-    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "MGIForGas", question: "MGI", booleanValue: false}, // MGI
+    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPIForGas", question: "PPI Gas", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
+    { type: "number", subType: "twoColumns", side: "right", key: "CUIForGas", question: "CUI"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
@@ -343,11 +396,11 @@ const CreateContract = (props) => {
       subType: "twoColumns",
       placeholder: "Selecione",
       side: "right",
-      key: "gasScale",
+      key: "gasScaleForGas",
       question: "Escalão Gás",
       options: gasScales
     },   
-  ]
+  ];
 
   const DUALFIELDS = [
     { 
@@ -379,12 +432,13 @@ const CreateContract = (props) => {
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
-    { type: "toggle", subType: "twoColumns", side: "left", key: "PEL", question: "PEL", booleanValue: false},
-    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPI", question: "PPI Luz", booleanValue: false},
-    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPI", question: "PPI Gas", booleanValue: false},
-    { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "right", key: "CUI", question: "CUI"},
-    { type: "number", subType: "twoColumns", side: "left", key: "CPE", question: "CPE"},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "PELDUAL", question: "PEL", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "MGIDUAL", question: "MGI", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPIDUAL", question: "PPI Luz", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPIDUAL", question: "PPI Gas", booleanValue: false},
+    { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBillDUAL", question: "Factura Electrónica", booleanValue: false},
+    { type: "number", subType: "twoColumns", side: "right", key: "CUIDUAL", question: "CUI"},
+    { type: "number", subType: "twoColumns", side: "left", key: "CPEDUAL", question: "CPE"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
@@ -422,7 +476,7 @@ const CreateContract = (props) => {
       subType: "twoColumns",
       placeholder: "Selecione",
       side: "left",
-      key: "power",
+      key: "powerDUAL",
       question: "Potência contratada",
       options: [
         {
@@ -481,21 +535,27 @@ const CreateContract = (props) => {
       subType: "twoColumns",
       placeholder: "Selecione",
       side: "right",
-      key: "gasScale",
+      key: "gasScaleDUAL",
       question: "Escalão Gás",
       options: gasScales
     },   
   ];
 
-  const typeOfContractForm = useMemo(() => {
+  // switch para identificar tipo de contrato, fazendo match depois do _ de condominium
+  // e depois usar um ternário para identificar se é condomínio ou não para mostrar 
+  // a lista correta de potência 👇🏻
+  const DYNAMICFORMFIELDS = useMemo(() => {
     switch (typeOfContractFromProps) {
       case "electricity":
+      case "condominium_electricity":
         return ELECTRICITYFIELDS;
 
       case "gas":
+      case "condominium_gas":
         return GASFIELDS;
 
       case "dual":
+      case "condominium_dual":
         return DUALFIELDS;
     
       default:
@@ -503,19 +563,16 @@ const CreateContract = (props) => {
     }
   }, [typeOfContractFromProps])
 
-  console.log(typeOfContractForm, 'type of contract')
-
-  // switch para identificar qual contrato tipo de contrato será inserido, mudando a lógica do form
-
   return (
     <MainDiv>
       <BackIcon onClick={_goBack} color={"black"}/>
       
       <CornerLeft><Corner180 /></CornerLeft>
+      <SubHeading>{props?.location?.state?.title}</SubHeading>
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}
-          formFields={DUALFIELDS}
+          formFields={DYNAMICFORMFIELDS}
           top
           bg="primary"
           isFullWidth

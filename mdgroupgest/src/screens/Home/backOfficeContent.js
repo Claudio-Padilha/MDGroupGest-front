@@ -32,6 +32,8 @@ import { ko } from 'date-fns/locale';
 
 const BackOfficeContent = (props) => {
 
+  console.log(localStorage, 'storage')
+
   const currentUser = useLogin();
 
   const userType = useMemo(() => {
@@ -288,19 +290,19 @@ const BackOfficeContent = (props) => {
           <MDRow>
             { okContracts?.length !== 0 &&
               <Body>
-                {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"} 🟢`} 
+                🟢 {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"}`} 
               </Body>
             }
 
             { rContracts?.length !== 0 && 
               <Body>
-                {rContracts?.length}  {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar 🟡`} 
+                🟡 {rContracts?.length} {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar`} 
               </Body>
             }
             
             { koContracts?.length !== 0 && 
               <Body style={{marginBottom: 30}}>
-                {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"} 🔴`}
+                🔴 {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"}`}
               </Body>
             }
 

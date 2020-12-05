@@ -48,7 +48,15 @@ export default function MenuNavbar(props) {
       <NavbarOptionsContainer>
         <OptionsDiv>
           <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>
-          <Body isReverseColor={true}><Link to="/EmployeeType" >Inserir Funcionário</Link></Body>
+          <Body isReverseColor={true}>
+            <Link to={{
+              pathname: "/EmployeeType",
+              state: {
+                isFromBackOffice: true
+              }    
+            }} >Inserir Funcionário</Link>
+          </Body>
+          
           <Body isReverseColor={true}>
             <Link to={{
               pathname: "/ChooseEmployeeTypeToSee",

@@ -9,7 +9,7 @@ import {
   CornerRight
 } from './styles';
 
-import { SubHeading } from '../../components/Text/text';
+import { SubHeading, SmallSubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
@@ -20,7 +20,10 @@ const CreateEmployee = (props) => {
 
   const history = useHistory();
 
-  const officesList = props?.location?.state?.officesList;
+  console.log(props, 'PROPS DA CRIAÇÃO DE EMPLOYEE')
+
+  const officeID = props?.location?.state?.officeID;
+  const officeOBJ = props?.location?.state?.officeOBJ;
 
   function _goBack() {
     history.push({
@@ -31,7 +34,7 @@ const CreateEmployee = (props) => {
     });    
   }
 
-  function _ConfirmEmployeeCreation(data) {
+  function _ConfirmEmployeeCreation(office, data) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -46,7 +49,6 @@ const CreateEmployee = (props) => {
     var address = data?.address; 
     var contact = data?.contact?.toString();
     var email = data?.email;
-    var office = data?.office; 
 
       return (
         swalWithBootstrapButtons.fire({
@@ -57,7 +59,6 @@ const CreateEmployee = (props) => {
            <b>Morada:</b> ${address ? address : `❌`} <br>                                    
            <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
            <b>Email:</b> ${email ? email : `❌`} <br>
-           <b>Escritório:</b> ${office ? office : `❌`} <br>
           `,
         icon: 'warning',
         showCancelButton: true,
@@ -68,7 +69,7 @@ const CreateEmployee = (props) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            await request.createEmployee(data)
+            await request.createEmployee(office, data)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
@@ -92,7 +93,7 @@ const CreateEmployee = (props) => {
                   'success'
                 ).then(async (result) => {
                   if(result) {
-                    await request.getAllEmployees();
+                    await request.getAllEmployees(officeID);
                     return history.push({
                       pathname:"/ChooseEmployeeTypeToSee",
                       state: {
@@ -115,28 +116,21 @@ const CreateEmployee = (props) => {
       )
   }
 
-  const handleSubmitForm = formFields => {
+  const handleSubmitForm = (formFields) => {
 
     const userType = props.location.state.userType;
 
     localStorage.setItem('currentUserType', userType)
 
-    _ConfirmEmployeeCreation(formFields)
+    _ConfirmEmployeeCreation(officeID, formFields)
   };
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
     { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF" },
-    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
-    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
     { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
-    { type: "dropdown",
-      subType: "twoColumns",
-      side: "right",
-      key: "office",
-      question: "Escritório",  
-      options: officesList
-    },
+    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
+    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" }
   ];
 
   return (
@@ -144,6 +138,7 @@ const CreateEmployee = (props) => {
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
         <SubHeading>{props.location.state.title}</SubHeading>
+        <SmallSubHeading className={"officeName"}>{officeOBJ?.name}</SmallSubHeading>
         <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 
           onSubmit={handleSubmitForm}

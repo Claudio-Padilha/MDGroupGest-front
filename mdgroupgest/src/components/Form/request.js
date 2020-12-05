@@ -220,6 +220,32 @@ export default {
       })
     }); 
   },
+  getOffice: (officeID) => {
+
+    return new Promise((resolve, reject) => {
+
+      var getOfficeRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/office/${officeID}`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+
+      axios(getOfficeRequest)
+
+      .then(res => {
+        localStorage.setItem('currentOffice', JSON.stringify(res.data));
+        resolve(res);
+      })
+      .catch(error => {
+        reject(error);
+      })
+    }); 
+  },
   createOffice: (data) => {
     
     const officeObj = {
@@ -313,11 +339,11 @@ export default {
     })
   },
 
-  getAllEmployees: () => {
+  getAllEmployees: (officeID) => {
     return new Promise((resolve, reject) => {
       var getAllEmployeesRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/employees/1`,
+        url: `http://127.0.0.1:8000/employees/${officeID}`,
         headers: { 
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -330,12 +356,13 @@ export default {
       axios(getAllEmployeesRequest)
 
       .then((res) => {
-        localStorage.removeItem('allEmployees');   
+        localStorage.removeItem('allEmployees'); 
         localStorage.setItem('allEmployees', JSON.stringify(res.data));
         resolve(res);     
       })
 
       .catch(error => {
+        localStorage.removeItem('allEmployees');
         reject(error);
       })
     })
@@ -368,12 +395,12 @@ export default {
       })
     })
   },
-  createEmployee: (data) => {
+  createEmployee: (officeID, data) => {
 
     var userType = localStorage.getItem('currentUserType');
     
     const userObj = {
-      office: 1,
+      office: officeID,
       user: {
         name: data?.name,
         email: data?.email,
@@ -503,10 +530,10 @@ export default {
     var currentUser = JSON.parse(localStorage.getItem('currentUser'));
     
     var deliveryDate = data?.deliveryDate?.toJSON();
-    var deliveryWorkedDate = deliveryDate?.substring(0, 9);
+    var deliveryWorkedDate = deliveryDate?.substring(0, 10);
 
     var signatureDate = data?.signatureDate?.toJSON();
-    var signatureWorkedDate = signatureDate?.substring(0, 9);
+    var signatureWorkedDate = signatureDate?.substring(0, 10);
     
     const contractObj = {
       user: currentUser?.user?.id, // Receber dinamicamente

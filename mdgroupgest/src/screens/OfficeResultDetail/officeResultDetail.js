@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Chart from "react-google-charts";
 
-import {  SubHeading, Body } from '../../components/Text/text';
+import {  SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import { useDate } from '../../hooks/date';
@@ -11,7 +11,9 @@ import CONSTANTS from '../../constants';
 import {
   MainContainer,
   OfficeMonthResultContainer,
+  FirstRow,
   SecondRow,
+  ContractsInfo,
   HomePageButton
 } from "./styles";
 
@@ -40,8 +42,8 @@ const OfficeMonthResult = (props) => {
   function _chart(){
     return (
       <Chart
-        width={'500px'}
-        height={'400px'}
+        width={'600px'}
+        height={'500px'}
         chartType="Line"
         loader={<div><Body>Carregando gráfico...</Body></div>}
         data={[
@@ -86,7 +88,7 @@ const OfficeMonthResult = (props) => {
   const renderOfficeMonthResult = () => {
     return (
       <>
-        <div>
+        <div style={{width: '100%', marginLeft: '5%'}}>
           {_chart()}
         </div>
       </>
@@ -97,8 +99,23 @@ const OfficeMonthResult = (props) => {
     <MainContainer>
       <BackIcon className={"backIcon"} onClick={_goBack} />
       <OfficeMonthResultContainer>
-        <SecondRow>
+        <FirstRow>
           {renderOfficeMonthResult()}
+          <ContractsInfo>
+          {all !== 0 ? 
+            <> 
+              <SmallSubHeading>🟢 {ok} {`${ok === 1 ? "contrato" : "contratos"} ${ok === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              <SmallSubHeading>🟡 {pending} {`${pending === 1 ? "contrato" : "contratos"} ${pending === 1 ? "pendente" : "pendentes"}`}</SmallSubHeading>
+              <SmallSubHeading>🔴 {ko} {`${ko === 1 ? "contrato" : "contratos"} ${ko === 1 ? "anulado" : "anulados"}`}</SmallSubHeading>
+              <SmallSubHeading>Total: {all} {`${all === 1 ? "contrato" : "contratos"}`}</SmallSubHeading>
+            </>
+            :
+            <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+          }
+          </ContractsInfo>
+        </FirstRow>
+
+        <SecondRow>
           <HomePageButton>
             <Body>
               <Link to={"/BackOffice"}>

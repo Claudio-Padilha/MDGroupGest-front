@@ -121,7 +121,7 @@ const EditEmployee = (props) => {
     { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail", place: employee?.user?.email },
     { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada", place: employee?.user?.address }
   ];
-  console.log(employee,'func do edit')
+
   return (
       <MainDiv>
         <BackIcon onClick={_goBack} />

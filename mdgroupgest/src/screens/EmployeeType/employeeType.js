@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
@@ -19,24 +19,25 @@ import {
 } from '../../screens/Home/md';
 import request from "../../components/Form/request";
 
-const EmployeeType = () => {
+const EmployeeType = (props) => {
   function _goBack() {
     window.location.assign("/BackOffice");    
   }
 
-  function offices() {
-    request.getOffices()
-    const officesList = JSON.parse(localStorage.getItem('offices'));
+  const cameFromBackOffice = props?.location?.state?.isFromBackOffice;
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
-    return officesList?.map(office => {
-      return {
-        value: office?.id,
-        label: office?.name
-      }
-    })
-  }
+  const currentOfficeObject = useMemo(() => {
+    request.getOffice(currentOfficeID)
 
-  console.log(offices(), 'lista de offices')
+    return JSON.parse(localStorage.getItem('currentOffice'))
+  }, [currentOfficeID])
+
+  const allEmployees = useMemo(() => {
+    request.getAllEmployees(currentOfficeID)
+    
+    return JSON.parse(localStorage?.getItem('allEmployees'));
+  }, [cameFromBackOffice]);
 
   const renderManagerCard = () => {
     return (
@@ -45,7 +46,8 @@ const EmployeeType = () => {
         state: {
           userType: "manager",
           title: "Criar Gerente",
-          officesList: offices()
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject
         }  
       }}>
         <MDCard className={"card"}>
@@ -64,50 +66,14 @@ const EmployeeType = () => {
         state: {
           userType: "secretary",
           title: "Criar Secretária",
-          officesList: offices()
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          manager: allEmployees?.manager
         }  
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading>Secretária</SubHeading>
-          </MDCardBody>
-        </MDCard>
-      </Link>
-    );
-  };
-
-  const renderComercialCard = () => {
-    return (
-      <Link to={{
-        pathname:"/CreateEmployee",
-        state: {
-          userType: "salesPerson",
-          title: "Criar Comercial",
-          officesList: offices()
-        }  
-      }}>
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>Comercial</SubHeading>
-          </MDCardBody>
-        </MDCard>
-      </Link>
-    );
-  };
-
-  const renderInstructorCard = () => {
-    return (
-      <Link to={{
-        pathname:"/CreateEmployee",
-        state: {
-          userType: "instructor",
-          title: "Criar Instrutor",
-          officesList: offices()
-        }  
-      }}>
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>Instrutor</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -121,12 +87,56 @@ const EmployeeType = () => {
         state: {
           userType: "teamLeader",
           title: "Criar Team Leader",
-          officesList: offices()
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          manager: allEmployees?.manager
         }  
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading>Team Leader</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
+  const renderInstructorCard = () => {
+    return (
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "instructor",
+          title: "Criar Instrutor",
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          teamLeaders: allEmployees?.team_leader
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Instrutor</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
+  const renderComercialCard = () => {
+    return (
+      <Link to={{
+        pathname:"/CreateEmployee",
+        state: {
+          userType: "salesPerson",
+          title: "Criar Comercial",
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          instructors: allEmployees?.instructor
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Comercial</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>

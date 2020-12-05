@@ -131,9 +131,9 @@ width: 100%;
 
 .contact {
   position: absolute;
-  top: 56%;
-  left: 25%;
-  width: 15%;
+  top: 41%;
+  left: 45%;
+  width: 25%;
 }
 
 .clientNif {
@@ -150,12 +150,11 @@ width: 100%;
   width: 25%; 
 }
 
-
 .address {
   position: absolute;
-  top: 41%;
-  left: 45%;
-  width: 25%;
+  top: 56%;
+  left: 25%;
+  width: 45%;
 }
 
 .office, .clientContact {
@@ -205,7 +204,7 @@ width: 100%;
   }
 }
 
-.PEL {
+.PELDUAL {
   position: absolute;
   top: 29%;
   left: 34%;
@@ -216,10 +215,10 @@ width: 100%;
   }
 }
 
-.lightPPI {
+.PELForElectricity {
   position: absolute;
   top: 29%;
-  left: 41%;
+  left: 34%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -227,10 +226,65 @@ width: 100%;
   }
 }
 
-.gasPPI {
+.MGIForGas {
   position: absolute;
   top: 29%;
-  left: 48%;
+  left: 34%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.MGIDUAL {
+  position: absolute;
+  top: 29%;
+  left: 40%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.lightPPIDUAL {
+  position: absolute;
+  top: 29%;
+  left: 46%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.lightPPIForElectricity {
+  position: absolute;
+  top: 29%;
+  left: 44%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.gasPPIDUAL {
+  position: absolute;
+  top: 29%;
+  left: 52%;
+  width: 5%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.gasPPIForGas {
+  position: absolute;
+  top: 29%;
+  left: 44%;
   width: 5%;
   > div > p  {
     margin-bottom: 1%;
@@ -249,7 +303,18 @@ width: 100%;
   }
 }
 
-.CUI {
+.electronicBillDUAL {
+  position: absolute;
+  top: 29%;
+  left: 58%;
+  width: 15%;
+  > div > p  {
+    margin-bottom: 1%;
+    margin-top: 0;
+  }
+}
+
+.CUIDUAL {
   position: absolute;
   top: 40%;
   left: 34%;
@@ -261,11 +326,35 @@ width: 100%;
   }
 }
 
-.CPE {
+.CUIForGas {
+  position: absolute;
+  top: 40%;
+  left: 34%;
+  width: 30%;
+  > div > input {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
+}
+
+.CPEDUAL {
   position: absolute;
   top: 40%;
   left: 51%;
   width: 15%;
+  > div > input {
+    position: absolute;
+    top: 100%;
+    width: 100%;
+  }
+}
+
+.CPEForElectricity {
+  position: absolute;
+  top: 40%;
+  left: 34%;
+  width: 30%;
   > div > input {
     position: absolute;
     top: 100%;
@@ -366,7 +455,7 @@ width: 100%;
   }
 }
 
-.power {
+.powerDUAL {
   position: absolute;
   top: 67%;
   left: 69%;
@@ -382,9 +471,41 @@ width: 100%;
   }
 }
 
-.gasScale {
+.powerForElectricity {
+  position: absolute;
+  top: 67%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 70%;
+  }
+}
+
+.gasScaleDUAL {
   position: absolute;
   top: 79%;
+  left: 69%;
+  width: 15%;
+    p {
+    margin-top: 0;
+  }
+  .css-2b097c-container {
+    width: 70%;
+  }
+  .css-1pk01j8-menu {
+    width: 30%;
+  }
+}
+
+.gasScaleForGas {
+  position: absolute;
+  top: 67%;
   left: 69%;
   width: 15%;
     p {

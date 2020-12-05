@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import CONSTANTS from '../../constants';
 
 const MainContainer = styled.div`
   display: flex;
@@ -79,6 +80,13 @@ const MainDiv = styled.div`
       width: 10%;
       height: 6%;
     }
+  }
+
+  .officeName {
+    position: absolute;
+    top: 19%;
+    left: 24.625%;
+    color: ${CONSTANTS?.colors?.lightGrey};
   }
 `;
 

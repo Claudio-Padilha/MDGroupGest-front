@@ -69,6 +69,11 @@ const MainDiv = styled.div`
       cursor: pointer;
     }
   }
+  h3 {
+    position: absolute;
+    top: 16%;
+    left: 19.5%;
+  }
 `;
 
 const CardsContainer = styled.div`

@@ -31,14 +31,16 @@ const EmployeeList = (props) => {
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
 
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+
   function _goBack() {
     history.push({
       pathname: "/ChooseEmployeeTypeToSee"
     })
   }
 
-  async function _redirectToEmployeeTypes() {
-    await request.getAllEmployees()
+  function _redirectToEmployeeTypes() {
+    request.getAllEmployees(currentOfficeID)
     history.push({
       pathname: "ChooseEmployeeTypeToSee",
     })

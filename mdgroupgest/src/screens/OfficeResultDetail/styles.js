@@ -30,10 +30,31 @@ const OfficeMonthResultContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
-  width: 80%;
-  height: 65vh;
+  width: 90%;
+  height: 80vh;
   button:hover {
     cursor: pointer
+  }
+`;
+
+const FirstRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  margin-left: 5%;
+  margin-top: 3%;
+  a {
+    height: 80%;
+    width: 25%;
+    text-decoration: none;
+    div {
+      align-self: center;
+    }
+    &:hover {
+      animation: ${pulse} 1s infinite;
+    }
   }
 `;
 
@@ -56,18 +77,27 @@ const SecondRow = styled.div`
   }
 `;
 
+const ContractsInfo = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+`;
+
 const HomePageButton = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 25%;
-  height: 73%;
-`
+  width: 100%;
+`;
 
 export {
   MainContainer,
   OfficeMonthResultContainer,
+  FirstRow,
   SecondRow,
+  ContractsInfo,
   HomePageButton
 };
