@@ -1,4 +1,4 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
@@ -27,14 +27,25 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
   const isFromCreation = props?.location?.state?.cameFromCreation;
+  const isFromEdit = props?.location?.state?.cameFromEdit;
 
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
-  const allEmployees = useMemo(() => {
-    request.getAllEmployees(currentOfficeID)
+  // const allEmployees = useMemo(() => {
+  //   request.getAllEmployees(currentOfficeID)
+
+  //   const employees = JSON.parse(localStorage?.getItem('allEmployees'));
     
-    return JSON.parse(localStorage?.getItem('allEmployees'));
-  }, [isFromBackOffice, isFromCreation]);
+  //   return employees;
+  // }, [isFromBackOffice, isFromCreation, isFromEdit]);
+
+  function _allEmployees() {
+    if(isFromBackOffice || isFromCreation || isFromEdit) {
+      return request.getAllEmployees(currentOfficeID)
+    }
+    
+    return JSON.parse(localStorage.getItem('allEmployees'))
+  }
 
   const renderManagerCard = () => {
     return (
@@ -43,7 +54,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "manager",
           title: "Gerente",
-          data: allEmployees?.manager
+          data: _allEmployees()?.manager
         }  
       }}>
         <MDCard className={"card"}>
@@ -62,7 +73,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "secretary",
           title: "Secretária",
-          data: allEmployees?.secretary
+          data: _allEmployees().secretary
         }  
       }}>
         <MDCard className={"card"}>
@@ -81,7 +92,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "salesPerson",
           title: "Comercial",
-          data: allEmployees?.sales_person
+          data: _allEmployees().sales_person
         }  
       }}>
         <MDCard className={"card"}>
@@ -100,7 +111,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "instructor",
           title: "Instrutor",
-          data: allEmployees?.instructor
+          data: _allEmployees().instructor
         }  
       }}>
         <MDCard className={"card"}>
@@ -119,7 +130,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "teamLeader",
           title: "Team Leader",
-          data: allEmployees?.team_leader
+          data: _allEmployees().team_leader
         }  
       }}>
         <MDCard className={"card"}>

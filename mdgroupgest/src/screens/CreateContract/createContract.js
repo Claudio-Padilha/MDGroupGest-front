@@ -18,7 +18,7 @@ import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
 
-  console.log(props, 'props from create contract')
+  console.log(props, 'props from create contract');
 
   const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
@@ -137,6 +137,25 @@ const CreateContract = (props) => {
         case "dual":
         case "condominium_dual":
           return dualMessage;
+      
+        default:
+          break;
+      }
+    }
+
+    function _currentTypeOfRequest() {
+      switch (typeOfContractFromProps) {
+        case "electricity":
+        case "condominium_electricity":
+          return request.createContract();
+
+        case "gas":
+        case "condominium_gas":
+          return request.createContract();
+          
+        case "dual":
+        case "condominium_dual":
+          return request.createContract();
       
         default:
           break;

@@ -1,5 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 import {
   MainDiv,
@@ -29,74 +30,80 @@ const EditEmployee = (props) => {
     });    
   }
 
-  // function _ConfirmEmployeeCreation(data) {
+  function _ConfirmEmployeeUpdate(formFields, data) {
+    console.log(formFields?.name, 'TEST')
 
-  //   const swalWithBootstrapButtons = Swal.mixin({
-  //     customClass: {
-  //       confirmButton: 'btn btn-success',
-  //       cancelButton: 'btn btn-danger'
-  //     },
-  //     buttonsStyling: true
-  //   })
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
 
-  //   var name = data?.name; 
-  //   var nif = data?.nif?.toString(); 
-  //   var address = data?.address; 
-  //   var contact = data?.contact?.toString();
-  //   var email = data?.email;
-  //   var office = data?.office; 
+    var name = formFields?.name; 
+    var nif = formFields?.nif?.toString(); 
+    var address = formFields?.address; 
+    var contact = formFields?.contact?.toString();
+    var email = formFields?.email; 
 
-  //     return (
-  //       swalWithBootstrapButtons.fire({
-  //       title: 'Confirme os dados do funcionário:',
-  //       html: 
-  //         `<b>Nome:</b> ${name ? name : `❌`} <br>
-  //          <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
-  //          <b>Morada:</b> ${address ? address : `❌`} <br>                                    
-  //          <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
-  //          <b>Email:</b> ${email ? email : `❌`} <br>
-  //          <b>Escritório:</b> ${office ? office : `❌`} <br>
-  //         `,
-  //       icon: 'warning',
-  //       showCancelButton: true,
-  //       confirmButtonText: 'É isso!',
-  //       cancelButtonText: 'Refazer',
-  //       reverseButtons: true
-  //     }).then((result) => {
+    const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined
 
-  //       // "result.isConfimed significa clicar em "Refazer"
-  //         if (result.isConfirmed) {
-  //           try {
-  //             // request.editEmployee(data);
-  //             swalWithBootstrapButtons.fire(
-  //               'Boa!',
-  //               'Funcionário inserido com sucesso.',
-  //               'success'
-  //             ).then((result) => {
-  //               if(result) {
-  //                 return history.push("/BackOffice");
-  //               }
-  //             });
+      return (
+        swalWithBootstrapButtons.fire({
+        title: `${nothingWasChanged ? "Você não alterou nenhuma informação." : "Confirme os dados do funcionário:"}`,
+        html: 
+            `${name ? `O novo nome será: <b>${name}</b> <br>` : ``}
+             ${nif ? `O novo NIF será: <b>${nif}</b> <br>` : ``}
+             ${address ? `A nova morada será: <b>${address}</b> <br>` : ``}
+             ${email ? `O novo email será: <b>${email}</b> <br>` : ``}
+             ${contact ? `O novo contacto será: <b>${contact}</b> <br>` : ``}
+            `,
+        icon: 'warning',
+        showCancelButton: !nothingWasChanged,
+        confirmButtonText: `${nothingWasChanged ? "Ok" : "É isso!"}`,
+        cancelButtonText: 'Refazer',
+        reverseButtons: true
+      }).then(async (result) => {
 
-  //           } catch (error) {
-  //             swalWithBootstrapButtons.fire(
-  //               'Erro',
-  //               `${error}`,
-  //               'error'
-  //             )
-  //           }
+        // "result.isConfimed significa clicar em "Refazer"
+          if (result.isConfirmed) {
+            await request.updateEmployee(formFields, data)
+            try {
+              swalWithBootstrapButtons.fire(
+                `${nothingWasChanged ? "" : "Boa!"}`,
+                `${nothingWasChanged ? "Os dados permanecem os mesmos." : "Dados alterados com sucesso."}`,
+                'success'
+              ).then((result) => {
+                if(result) {
+                  return history.push({
+                    pathname: "/ChooseEmployeeTypeToSee",
+                    state: {
+                      cameFromEdit: true
+                    }
+                  });
+                }
+              });
 
-  //       // "!result.isConfimed significa clicar em "'E isso!"
-  //         } else if (!result.isConfirmed) {
-  //           swalWithBootstrapButtons.fire(
-  //             'Cancelado',
-  //             'Corrija o que estava errado...',
-  //             'info'
-  //           )
-  //         }
-  //       })
-  //     )
-  // }
+            } catch (error) {
+              swalWithBootstrapButtons.fire(
+                'Erro',
+                `${error}`,
+                'error'
+              )
+            }
+
+        // "!result.isConfimed significa clicar em "'E isso!"
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
+  }
 
   const handleSubmitForm = formFields => {
     const data = {
@@ -105,13 +112,13 @@ const EditEmployee = (props) => {
       user_type: employee?.user?.user_type
     }
     
-    request.updateEmployee(formFields, data)
+    // request.updateEmployee(formFields, data)
 
     // const userType = props.location.state.userType;
 
     // localStorage.setItem('currentUserType', userType)
 
-    // _ConfirmEmployeeCreation(formFields)
+    _ConfirmEmployeeUpdate(formFields, data)
   };
 
   const FIELDS = [

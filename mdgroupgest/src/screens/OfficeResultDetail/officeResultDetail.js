@@ -20,6 +20,8 @@ import {
 import {
   MDCard,
   MDCardBody,
+  MDRow,
+  MDCol,
   MDButton 
 } from '../../screens/Home/md';
 
@@ -102,11 +104,45 @@ const OfficeMonthResult = (props) => {
         <FirstRow>
           {renderOfficeMonthResult()}
           <ContractsInfo>
-          {all !== 0 ? 
+          {all === 0 ? 
             <> 
-              <SmallSubHeading>🟢 {ok} {`${ok === 1 ? "contrato" : "contratos"} ${ok === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
-              <SmallSubHeading>🟡 {pending} {`${pending === 1 ? "contrato" : "contratos"} ${pending === 1 ? "pendente" : "pendentes"}`}</SmallSubHeading>
-              <SmallSubHeading>🔴 {ko} {`${ko === 1 ? "contrato" : "contratos"} ${ko === 1 ? "anulado" : "anulados"}`}</SmallSubHeading>
+            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
+              <MDRow style={{display: 'flex', width: '100%'}}>
+                <MDCol style={{marginRight: '4%'}}><SubHeading>🟢</SubHeading></MDCol>
+
+                <MDCol>
+                  <SmallSubHeading>{ok} {`${ok === 1 ? "contrato" : "contratos"} ${ok === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+                </MDCol>
+              </MDRow>
+
+
+              <MDCol><SubHeading>834€</SubHeading></MDCol>
+            </MDRow>
+
+            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
+              <MDRow style={{display: 'flex', width: '100%'}}>
+                <MDCol style={{marginRight: '4%'}}><SubHeading>🟡</SubHeading></MDCol>
+
+                <MDCol>
+                  <SmallSubHeading>{pending} {`${pending === 1 ? "contrato" : "contratos"} ${pending === 1 ? "pendente" : "pendentes"}`}</SmallSubHeading>
+                </MDCol>
+              </MDRow>
+
+              <MDCol><SubHeading>122€</SubHeading></MDCol>
+            </MDRow>
+
+            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
+              <MDRow style={{display: 'flex', width: '100%'}}>
+                <MDCol style={{marginRight: '4%'}}><SubHeading>🔴</SubHeading></MDCol>
+
+                <MDCol>
+                  <SmallSubHeading>{ko} {`${ko === 1 ? "contrato" : "contratos"} ${ko === 1 ? "anulado" : "anulados"}`}</SmallSubHeading>
+                </MDCol>
+              </MDRow>
+
+              <MDCol><SubHeading>20€</SubHeading></MDCol>
+
+            </MDRow>
               <SmallSubHeading>Total: {all} {`${all === 1 ? "contrato" : "contratos"}`}</SmallSubHeading>
             </>
             :

@@ -148,7 +148,7 @@ export default {
                         resolve(res);
                       })
                       .catch(error => {
-                          alert("Não foi possível trazer escritórios! \nErro: ", error)
+                          
                           reject(error);
                       })
                     });
@@ -475,7 +475,6 @@ export default {
       })
     });
   },
-  
   deleteEmployee: (data) => {
     return new Promise((resolve, reject) => {
       
@@ -521,7 +520,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-        alert("Não foi possível trazer escritórios! \nErro: ", error)
+        
         reject(error);
       })
     });
@@ -644,8 +643,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          const message = 'Erro do servidor';
-          reject(message);
+        reject(error);
       })
     });
   },
@@ -681,9 +679,8 @@ export default {
             localStorage.setItem('contracts', JSON.stringify(res.data))
             resolve(res);
           })
-          .catch(error => {
-              alert("Não foi possível trazer escritórios! \nErro: ", error)
-              reject(error);
+          .catch(error => {  
+            reject(error);
           })
         });
       })
@@ -711,13 +708,11 @@ export default {
         localStorage.setItem('feedbackCalls', JSON.stringify(res.data))
         resolve(res);
       })
-      .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+      .catch(error => {  
+        reject(error);
       })
     });
   },
-
   getSellState: () => {
 
     return new Promise((resolve, reject) => {
@@ -736,13 +731,11 @@ export default {
         localStorage.setItem('sellStates', JSON.stringify(res.data))
         resolve(res);
       })
-      .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+      .catch(error => { 
+        reject(error);
       })
     });
   },
-
   getPayment: () => {
 
     return new Promise((resolve, reject) => {
@@ -761,15 +754,12 @@ export default {
         localStorage.setItem('payments', JSON.stringify(res.data))
         resolve(res);
       })
-      .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+      .catch(error => {  
+        reject(error);
       })
     });
   },
-
   // here we gonna have getPower()
-
   getGasScale: () => {
 
     return new Promise((resolve, reject) => {
@@ -788,9 +778,8 @@ export default {
         localStorage.setItem('gasScales', JSON.stringify(res.data))
         resolve(res);
       })
-      .catch(error => {
-          alert("Não foi possível trazer escritórios! \nErro: ", error)
-          reject(error);
+      .catch(error => { 
+        reject(error);
       })
     });
   },
