@@ -85,7 +85,7 @@ const EmployeeType = (props) => {
       <Link to={{
         pathname:"/CreateEmployee",
         state: {
-          userType: "teamLeader",
+          userType: "team_leader",
           title: "Criar Team Leader",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
@@ -127,7 +127,7 @@ const EmployeeType = (props) => {
       <Link to={{
         pathname:"/CreateEmployee",
         state: {
-          userType: "salesPerson",
+          userType: "sales_person",
           title: "Criar Comercial",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,

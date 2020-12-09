@@ -398,14 +398,28 @@ export default {
   createEmployee: (officeID, data) => {
 
     var userType = localStorage.getItem('currentUserType');
+    console.log(userType, 'userType')
+    var userTypeBody = userType
+
+    var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
+    // function _getUserType() {
+    //   if (userType === "sales_person") {
+    //     return "salesPerson"
+    //   } else if (userType === "team_leader") {
+    //     return "teamLeader"
+    //   } else {
+    //     return userType
+    //   }
+    // }
+
     const userObj = {
       office: officeID,
       user: {
         name: data?.name,
         email: data?.email,
         password: "Mdgroup2020@",
-        user_type: userType,
+        user_type: userTypeBody,
         nif: data?.nif,
         contact: data?.contact,
         address: data?.address,
@@ -416,7 +430,7 @@ export default {
 
       var employeeRequest = {
           method: 'POST',
-          url: `http://127.0.0.1:8000/${userType}/`,
+          url: `http://127.0.0.1:8000/${user_type}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -535,7 +549,9 @@ export default {
     var signatureWorkedDate = signatureDate?.substring(0, 10);
     
     const contractObj = {
-      user: currentUser?.user?.id, // Receber dinamicamente
+      // user: currentUser?.user?.id, // Receber dinamicamente
+      user: 5,
+      office: 1, // id
       delivery_date: deliveryWorkedDate,
       signature_date: signatureWorkedDate,
       employee_name: data?.employeeName,
@@ -543,26 +559,27 @@ export default {
       client_nif: data?.clientNif,
       client_contact: data?.clientContact,
       electronic_bill: data?.electronicBill ? data?.electronicBill : false,
-      cpe: data?.CPE?.toString(),
-      electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
-      cui: data?.CUI?.toString(),
-      gas_ppi: data?.gasPPI ? data?.gasPPI : false,
-      pel: data?.PEL ? data?.PEL : false,
+      cpe: data?.CPEDUAL?.toString(),
+      electricity_ppi: data?.lightPPIDUAL ? data?.lightPPIDUAL : false,
+      mgi: data?.MGIForDUAL ? data?.MGIForDUAL : false,
+      cui: data?.CUIDUAL?.toString(),
+      gas_ppi: data?.gasPPIDUAL ? data?.gasPPIDUAL : false,
+      pel: data?.PELForDUAL ? data?.PELForDUAL : false,
       observations: data?.observations,
-      employee_comission: 100.00,
-      feedback_call: data?.feedbackCall,
-      payment: data?.paymentMethods,
-      sell_state: data?.sellState,
-      power: data?.power,
-      gas_scale: data?.gasScale?.toString()
-      //contract_type: data?.typeOfContract
+      employee_comission: 1, // id
+      feedback_call: 1, // id
+      payment: 1, // id
+      sell_state: 1, // id
+      power: 1, // id
+      gas_scale: 1, // id
+      contract_type: "dual"
     }
 
     return new Promise((resolve) => {
 
       var contractRequest = {
           method: 'POST',
-          url: `http://127.0.0.1:8000/contract/`,
+          url: `http://127.0.0.1:8000/contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -571,6 +588,8 @@ export default {
           dataType: "json",
           contentType: "application/json"
         };
+
+        console.log(contractObj, 'OBJETO DO CONTRATO')
       
       axios(contractRequest)
 

@@ -31,8 +31,8 @@ const ChooseTypeOfContract = (props) => {
 
     return feedbackCallList?.map(feedbackCall => {
       return {
-        value: feedbackCall?.value,
-        label: feedbackCall?.value
+        value: feedbackCall?.id,
+        label: feedbackCall?.name
       }
     })
   }
@@ -43,8 +43,8 @@ const ChooseTypeOfContract = (props) => {
     
     return sellStatesList?.map(sellState => {
       return {
-        value: sellState?.value,
-        label: sellState?.value
+        value: sellState?.id,
+        label: sellState?.name
       }
     })
   }
@@ -55,8 +55,8 @@ const ChooseTypeOfContract = (props) => {
     
     return paymentsList?.map(payment => {
       return {
-        value: payment?.value,
-        label: payment?.value
+        value: payment?.id,
+        label: payment?.name
       }
     })
   }
@@ -67,8 +67,8 @@ const ChooseTypeOfContract = (props) => {
     
     return gasScalesList?.map(gasScale => {
       return {
-        value: gasScale?.value,
-        label: gasScale?.value
+        value: gasScale?.id,
+        label: gasScale?.name
       }
     })
   }

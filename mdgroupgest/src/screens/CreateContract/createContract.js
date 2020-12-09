@@ -63,6 +63,7 @@ const CreateContract = (props) => {
     var CUIForGas = data?.CUIForGas;
     var CUIDUAL = data?.CUIDUAL;
     var CPEForElectricity = data?.CPEForElectricity;
+    var CPEDUAL = data?.CPEDUAL;
     var deliveryDate = data?.deliveryDate;
     var signatureDate = data?.signatureDate;
     var observations = data?.observations;
