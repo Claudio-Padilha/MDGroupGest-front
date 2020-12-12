@@ -7,6 +7,7 @@ import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
+import request from '../../components/Form/request';
 
 import {
   MainContainer,
@@ -56,7 +57,7 @@ const ContractList = (props) => {
   }
 
   const renderContract = (contract, i) => {
-    const sellState = contract?.sell_state
+    var sellState = contract?.sell_state__name
 
     const stateOfContract = () => {
       if(sellState === "r") {

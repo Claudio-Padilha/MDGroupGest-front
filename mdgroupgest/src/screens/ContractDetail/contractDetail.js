@@ -26,9 +26,9 @@ const ContractDetail = (props) => {
   const contractID = props?.location?.state?.data?.id;
 
   const state = useMemo(() => {
-    if(contract?.sell_state === "ok") {
+    if(contract?.sell_state__name === "ok") {
       return "🟢";
-    } else if (contract?.sell_state === "r") {
+    } else if (contract?.sell_state__name === "r") {
       return "🟡";
     } else {
       return "🔴";
@@ -37,9 +37,9 @@ const ContractDetail = (props) => {
 
 
   const stateMessage = useMemo(() => {
-    if(contract?.sell_state === "ok") {
+    if(contract?.sell_state__name === "ok") {
       return "Válido";
-    } else if (contract?.sell_state === "r") {
+    } else if (contract?.sell_state__name === "r") {
       return "Por recuperar";
     } else {
       return "Anulado";
@@ -123,7 +123,7 @@ const ContractDetail = (props) => {
         html: 
         `<b>Problemas com este contrato:</b><br>
         ${contract?.observations}`,
-        icon: `${contract?.sell_state === "r" ? "warning" : "error"}`,
+        icon: `${contract?.sell_state__name === "r" ? "warning" : "error"}`,
         confirmButtonText: 'Entendi',
         reverseButtons: true
       }).then((result) => {
@@ -163,7 +163,7 @@ const ContractDetail = (props) => {
                 marginBottom: 40,
               }
             }>{stateMessage}</Body>
-            { contract?.sell_state !== "ok" && 
+            { contract?.sell_state__name !== "ok" && 
               <Body 
                 style={
                   {
@@ -251,7 +251,7 @@ const ContractDetail = (props) => {
                 <Row className={"secondRowInsideFirstColumn"}>  
                   <Column>
                     <SmallSubHeading><b>Estado da venda:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.sell_state}`}</Body>
+                    <Body className={"field"}>{` ${contract?.sell_state__name}`}</Body>
 
                     <SmallSubHeading><b>Escalão Gás:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.gas_scale}`}</Body>

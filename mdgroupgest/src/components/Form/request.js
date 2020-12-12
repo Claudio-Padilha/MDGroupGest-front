@@ -109,28 +109,16 @@ export default {
                   if (currentAuthToken) {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('currentToken', currentAuthToken);
-                    // controlar tipos de requests feitos a partir de user type (DASHBOARD VAI PRECISAR DE USER TYPES DIFERENTES) // SWITCH MELHOR MANEIRA*
-                    // vai haver vários tipos de requests diferentes lá em baixo  
-                    // switch (userType) {
-                    //     case "admin":
-                    //       requestForAdmin
-                    //     case "manager":
-                    //       requestForManager
-                    //     case "secretary":
-                    //       requestForSecretary
-                    //     case "teamLeader":  
-                    //       requestForTeamLeader
-                    //     case "salesPerson":
-                    //       requestForSalesperson
-                    //     default:
-                    //       break;
-                    //   }
+
+
 
                     return new Promise((resolve, reject) => {
 
+                      //const officeID = user?.user?.office
+
                       var contractRequest = {
                           method: 'GET',
-                          url: `http://127.0.0.1:8000/contract/`,
+                          url: `http://127.0.0.1:8000/contracts/`,
                           headers: {
                               'Authorization': 'Token ' + _currentTokenOnRAM(),
                           },
@@ -521,7 +509,7 @@ export default {
 
       var contractRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/contract/`,
+          url: `http://127.0.0.1:8000/contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -530,6 +518,7 @@ export default {
       axios(contractRequest)
 
       .then(res => {
+        console.log(res, 'res do contrato')
         localStorage.setItem('contracts', JSON.stringify(res.data))
         resolve(res);
       })
@@ -540,41 +529,8 @@ export default {
     });
   },
   createContract: (data) => {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    console.log(data, 'TESTE PARA VER SE TÁ CERTO')
     
-    var deliveryDate = data?.deliveryDate?.toJSON();
-    var deliveryWorkedDate = deliveryDate?.substring(0, 10);
-
-    var signatureDate = data?.signatureDate?.toJSON();
-    var signatureWorkedDate = signatureDate?.substring(0, 10);
-    
-    const contractObj = {
-      // user: currentUser?.user?.id, // Receber dinamicamente
-      user: 5,
-      office: 1, // id
-      delivery_date: deliveryWorkedDate,
-      signature_date: signatureWorkedDate,
-      employee_name: data?.employeeName,
-      client_name: data?.clientName,
-      client_nif: data?.clientNif,
-      client_contact: data?.clientContact,
-      electronic_bill: data?.electronicBill ? data?.electronicBill : false,
-      cpe: data?.CPEDUAL?.toString(),
-      electricity_ppi: data?.lightPPIDUAL ? data?.lightPPIDUAL : false,
-      mgi: data?.MGIForDUAL ? data?.MGIForDUAL : false,
-      cui: data?.CUIDUAL?.toString(),
-      gas_ppi: data?.gasPPIDUAL ? data?.gasPPIDUAL : false,
-      pel: data?.PELForDUAL ? data?.PELForDUAL : false,
-      observations: data?.observations,
-      employee_comission: 1, // id
-      feedback_call: 1, // id
-      payment: 1, // id
-      sell_state: 1, // id
-      power: 1, // id
-      gas_scale: 1, // id
-      contract_type: "dual"
-    }
-
     return new Promise((resolve) => {
 
       var contractRequest = {
@@ -584,12 +540,10 @@ export default {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
-          data: contractObj,
+          data: data,
           dataType: "json",
           contentType: "application/json"
         };
-
-        console.log(contractObj, 'OBJETO DO CONTRATO')
       
       axios(contractRequest)
 
@@ -641,8 +595,8 @@ export default {
     return new Promise((resolve, reject) => {
 
       var contractRequest = {
-          method: 'FETCH',
-          url: `http://127.0.0.1:8000/contract/`,
+          method: 'PATCH',
+          url: `http://127.0.0.1:8000/contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -685,7 +639,7 @@ export default {
 
           var contractRequest = {
               method: 'GET',
-              url: `http://127.0.0.1:8000/contract/`,
+              url: `http://127.0.0.1:8000/contracts/`,
               headers: {
                   'Authorization': 'Token ' + _currentTokenOnRAM(),
               },
@@ -749,6 +703,29 @@ export default {
       .then(res => {
         localStorage.setItem('sellStates', JSON.stringify(res.data))
         resolve(res);
+      })
+      .catch(error => { 
+        reject(error);
+      })
+    });
+  },
+  getSpecificSellState: (id) => {
+
+    return new Promise((resolve, reject) => {
+
+      var sellStateSpecificRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/sellState/${id}`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(sellStateSpecificRequest)
+
+      .then(res => {
+        localStorage.setItem('specificSellState', JSON.stringify(res?.data?.name))
+        resolve(res)
       })
       .catch(error => { 
         reject(error);

@@ -28,6 +28,8 @@ const CreateContract = (props) => {
   const paymentMethods = props?.location?.state?.payment;
   const gasScales = props?.location?.state?.gasScale;
 
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+
   const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
   const history = useHistory();
 
@@ -38,6 +40,8 @@ const CreateContract = (props) => {
   }
 
   function _ConfirmContractCreation(data) {
+
+    console.log(data, 'teste do data')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -74,6 +78,12 @@ const CreateContract = (props) => {
     var powerDUAL = data?.powerDUAL;
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
+
+    var deliveryDateBeforeJSON = deliveryDate?.toJSON();
+    var deliveryWorkedDate = deliveryDateBeforeJSON?.substring(0, 10);
+
+    var signatureDateBeforeJSON = signatureDate?.toJSON();
+    var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
 
     const electricityMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -125,6 +135,31 @@ const CreateContract = (props) => {
     <b>Potência Contratada:</b> ${powerDUAL ? powerDUAL : `❌`} <br>
     <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
 
+    const contractObj = {
+      user: 5,
+      office: currentOfficeID,
+      delivery_date: deliveryWorkedDate,
+      signature_date: signatureWorkedDate,
+      employee_name: employeeName,
+      client_name: clientName,
+      client_nif: clientNif,
+      client_contact: clientContact,
+      electronic_bill: electronicBill ? electronicBill : false,
+      cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL?.toString() : CPEForElectricity?.toString(),
+      electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
+      mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
+      cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL?.toString() : CUIForGas?.toString(),
+      gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
+      pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
+      observations: observations,
+      feedback_call: feedbackCall,
+      payment: paymentMethods,
+      sell_state: sellState,
+      power: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? powerDUAL : powerForElectricity,
+      gas_scale: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasScaleDUAL : gasScaleForGas,
+      contract_type: typeOfContractFromProps
+    }
+
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {
         case "electricity":
@@ -144,25 +179,6 @@ const CreateContract = (props) => {
       }
     }
 
-    function _currentTypeOfRequest() {
-      switch (typeOfContractFromProps) {
-        case "electricity":
-        case "condominium_electricity":
-          return request.createContract();
-
-        case "gas":
-        case "condominium_gas":
-          return request.createContract();
-          
-        case "dual":
-        case "condominium_dual":
-          return request.createContract();
-      
-        default:
-          break;
-      }
-    }
-
       return (
         swalWithBootstrapButtons.fire({
         title: 'Confirme os dados inseridos: ',
@@ -176,7 +192,7 @@ const CreateContract = (props) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
-            await request.createContract(data)
+            await request.createContract(contractObj)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);

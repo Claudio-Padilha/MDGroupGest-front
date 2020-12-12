@@ -32,8 +32,6 @@ import { ko } from 'date-fns/locale';
 
 const BackOfficeContent = (props) => {
 
-  console.log(localStorage, 'storage')
-
   const currentUser = useLogin();
 
   const userType = useMemo(() => {
@@ -109,9 +107,9 @@ const BackOfficeContent = (props) => {
 
     for(let i = 0; i < contracts?.length; i++) {
 
-      if(contracts[i]?.sell_state === "r") {
+      if(contracts[i]?.sell_state__name === "r") {
         rContracts.push(contracts[i]);
-      } else if (contracts[i]?.sell_state === "ok"){
+      } else if (contracts[i]?.sell_state__name === "ok"){
         okContracts.push(contracts[i]);
       } else {
         koContracts.push(contracts[i]);
@@ -313,10 +311,6 @@ const BackOfficeContent = (props) => {
           <Button
             fullWidth={false}
             disabled={false}
-            // action={async () => {
-            //   await request.getContracts()
-            //   history.push("/ContractList")
-            // }} Depois da demonstração o request vai ficar no login
             action={() => {
               history.push({
                 pathname: "/ContractList",
