@@ -344,7 +344,7 @@ export default {
       axios(getAllEmployeesRequest)
 
       .then((res) => {
-        localStorage.removeItem('allEmployees'); 
+        localStorage.removeItem('allEmployees');
         localStorage.setItem('allEmployees', JSON.stringify(res.data));
         resolve(res);     
       })
@@ -386,7 +386,6 @@ export default {
   createEmployee: (officeID, data) => {
 
     var userType = localStorage.getItem('currentUserType');
-    console.log(userType, 'userType')
     var userTypeBody = userType
 
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
@@ -438,8 +437,6 @@ export default {
     });
   },
   updateEmployee: (formFields, data) => {
-    console.log(formFields, 'form fields')
-    console.log(data, 'data from update employee')
 
     const userObj = {
       id: data?.id,
@@ -472,8 +469,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          const message = 'Erro do servidor';
-          reject(message);
+        resolve(error);
       })
     });
   },
@@ -529,7 +525,6 @@ export default {
     });
   },
   createContract: (data) => {
-    console.log(data, 'TESTE PARA VER SE TÁ CERTO')
     
     return new Promise((resolve) => {
 
@@ -709,29 +704,6 @@ export default {
       })
     });
   },
-  getSpecificSellState: (id) => {
-
-    return new Promise((resolve, reject) => {
-
-      var sellStateSpecificRequest = {
-          method: 'GET',
-          url: `http://127.0.0.1:8000/sellState/${id}`,
-          headers: {
-              'Authorization': 'Token ' + _currentTokenOnRAM(),
-          },
-        };
-      
-      axios(sellStateSpecificRequest)
-
-      .then(res => {
-        localStorage.setItem('specificSellState', JSON.stringify(res?.data?.name))
-        resolve(res)
-      })
-      .catch(error => { 
-        reject(error);
-      })
-    });
-  },
   getPayment: () => {
 
     return new Promise((resolve, reject) => {
@@ -764,7 +736,7 @@ export default {
           method: 'GET',
           url: `http://127.0.0.1:8000/gasScale/`,
           headers: {
-              'Authorization': 'Token ' + _currentTokenOnRAM(),
+            'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
         };
       
@@ -779,4 +751,51 @@ export default {
       })
     });
   },
+
+  getOfficeResults: (officeID) => {
+    return new Promise((resolve, reject) => {
+      
+      var officeResultsRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/officeGrossBilling/${officeID}`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(officeResultsRequest)
+
+      .then(res => {
+        console.log(res, 'RESPOSTA DO OFFICE RESULTS')
+        localStorage.setItem('officeResults', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
+  },
+
+  getMySalary: () => {
+    return new Promise((resolve, reject) => {
+
+      var mySalaryRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/myCurrentSalary/`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(mySalaryRequest)
+
+      .then(res => {
+        localStorage.setItem('myCurrentSalary', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
+  }
 }

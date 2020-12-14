@@ -18,7 +18,28 @@ import { BackIcon } from '../../components/Icon/icons';
 
 const CreateContract = (props) => {
 
-  console.log(props, 'props from create contract');
+  const _allEmployeesFromRAM = useMemo(() => {
+    return JSON.parse(localStorage.getItem('allEmployees'))
+  }, [])
+
+  console.log(_allEmployeesFromRAM)
+
+
+
+  function _allEmployees() {
+    var allEmployees = []
+    
+    Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
+      employeeType.map(type => {
+        console.log(type, 'TIPO')
+        allEmployees.push({value: type?.user?.id, label: type?.user?.name})
+      })
+     });
+
+    return allEmployees
+  }
+
+  console.log(_allEmployees(), 'todos')
 
   const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
@@ -51,7 +72,7 @@ const CreateContract = (props) => {
       buttonsStyling: true
     })
 
-    var employeeName = data?.employeeName;
+    var user = data?.employeeName;
     var clientName = data?.clientName ;
     var clientNif = data?.clientNif;
     var clientContact = data?.clientContact;
@@ -85,7 +106,7 @@ const CreateContract = (props) => {
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
 
-    const electricityMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -100,7 +121,7 @@ const CreateContract = (props) => {
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
     <b>Potência contratada:</b> ${powerForElectricity ? powerForElectricity : `❌`} <br>`; 
 
-    const gasMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    const gasMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -115,7 +136,7 @@ const CreateContract = (props) => {
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
     <b>Escalão Gás:</b> ${gasScaleForGas ? gasScaleForGas : `❌`} <br>`; 
 
-    const dualMessage = `<b>Comercial:</b> ${employeeName ? employeeName : `❌`} <br>
+    const dualMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -136,11 +157,10 @@ const CreateContract = (props) => {
     <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
 
     const contractObj = {
-      user: 5,
+      user: user,
       office: currentOfficeID,
       delivery_date: deliveryWorkedDate,
       signature_date: signatureWorkedDate,
-      employee_name: employeeName,
       client_name: clientName,
       client_nif: clientNif,
       client_contact: clientContact,
@@ -243,24 +263,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "employeeName",
       question: "Nome do Comercial",  
-      options: [
-        {
-          value: "Miguel",
-          label: "Miguel"
-        },
-        {
-          value: "Daniel",
-          label: "Daniel"
-        },
-        {
-          value: "Lucas",
-          label: "Lucas"
-        },
-        {
-          value: "Cláudio",
-          label: "Cláudio"
-        }
-    ] 
+      options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
@@ -290,7 +293,6 @@ const CreateContract = (props) => {
       question: "Estado da venda",
       options: sellStates
     },
-
     {
       type: "dropdown",
       subType: "twoColumns",
@@ -299,8 +301,7 @@ const CreateContract = (props) => {
       key: "paymentMethods",
       question: "Método de Pagamento",
       options: paymentMethods
-    },   
-    
+    },      
     {
       type: "dropdown",
       subType: "twoColumns",
@@ -369,24 +370,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "employeeName",
       question: "Nome do Comercial",  
-      options: [
-        {
-          value: "Miguel",
-          label: "Miguel"
-        },
-        {
-          value: "Daniel",
-          label: "Daniel"
-        },
-        {
-          value: "Lucas",
-          label: "Lucas"
-        },
-        {
-          value: "Cláudio",
-          label: "Cláudio"
-        }
-    ] 
+      options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
@@ -416,7 +400,6 @@ const CreateContract = (props) => {
       question: "Estado da venda",
       options: sellStates
     },
-
     {
       type: "dropdown",
       subType: "twoColumns",
@@ -425,8 +408,7 @@ const CreateContract = (props) => {
       key: "paymentMethods",
       question: "Método de Pagamento",
       options: paymentMethods
-    },   
-    
+    },     
     {
       type: "dropdown",
       subType: "twoColumns",
@@ -446,24 +428,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "employeeName",
       question: "Nome do Comercial",  
-      options: [
-        {
-          value: "Miguel",
-          label: "Miguel"
-        },
-        {
-          value: "Daniel",
-          label: "Daniel"
-        },
-        {
-          value: "Lucas",
-          label: "Lucas"
-        },
-        {
-          value: "Cláudio",
-          label: "Cláudio"
-        }
-    ] 
+      options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },

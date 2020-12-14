@@ -39,8 +39,8 @@ const EmployeeList = (props) => {
     })
   }
 
-  function _redirectToEmployeeTypes() {
-    request.getAllEmployees(currentOfficeID)
+  async function _redirectToEmployeeTypes() {
+    await request.getAllEmployees(currentOfficeID)
     history.push({
       pathname: "ChooseEmployeeTypeToSee",
     })
@@ -83,6 +83,7 @@ const EmployeeList = (props) => {
           reverseButtons: true
         }).then(async (result) => {
           if (result.isConfirmed) {
+            console.log('esse é o funcionário: ', employee)
             await request.deleteEmployee(employee)         
             .then(() => (
               swalWithBootstrapButtons.fire(
@@ -128,7 +129,7 @@ const EmployeeList = (props) => {
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
-          <SubHeading>{`Funcionário nº ${i + 1}`}</SubHeading>
+          <SubHeading>{employee?.user?.name}</SubHeading>
           <Button
             disabled={true}
             small={true}

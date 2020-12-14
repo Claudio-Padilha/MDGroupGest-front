@@ -21,6 +21,8 @@ import { List } from "semantic-ui-react";
 
 const ContractList = (props) => {
 
+  request.getContracts()
+
   function _goBack() {
     history.push({
       pathname: "/BackOffice",
@@ -59,23 +61,46 @@ const ContractList = (props) => {
   const renderContract = (contract, i) => {
     var sellState = contract?.sell_state__name
 
+    function _contractType () {
+      switch (contract?.contract_type) {
+        case "dual":
+          return "Dual"
+        case "gas":
+          return "Gás"
+        case "electricity":
+          return "Electricidade"
+        case "condominium_dual":
+          return "Dual Condomínio"
+        case "condominium_gas":
+          return "Gás Condomínio"
+        case "condominium_electricity":
+          return "Electricidade Condomínio"
+      
+        default:
+          break;
+      }
+    }
+
     const stateOfContract = () => {
       if(sellState === "r") {
         return (
           <Row>
             <Body style={{marginRight: "2%"}}>Por recuperar</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟡</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
           </Row>
         )
       } else if (sellState === "ok") {
         return (
           <Row>
             <Body style={{marginRight: "2%"}}>Válido</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟢</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
           </Row>
         )
       } else {
         return (
           <Row>
             <Body style={{marginRight: "2%"}}>Anulado</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🔴</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
           </Row>
         )
       }

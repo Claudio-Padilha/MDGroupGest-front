@@ -33,6 +33,7 @@ import { ko } from 'date-fns/locale';
 const BackOfficeContent = (props) => {
 
   const currentUser = useLogin();
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
@@ -52,10 +53,10 @@ const BackOfficeContent = (props) => {
     var teamLeaders = data?.children;
     var teamLeadersQuantity = data?.children.length;
 
-      // Loop para colocarmos todos os Team Leaders em uma array só
-      for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
-        teamLeadersArr.push(teamLeaders[qtd]);
-      }   
+    // Loop para colocarmos todos os Team Leaders em uma array só
+    for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
+      teamLeadersArr.push(teamLeaders[qtd]);
+    }
 
     teamLeadersCounter += teamLeadersQuantity;
 
@@ -97,6 +98,7 @@ const BackOfficeContent = (props) => {
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
+  console.log(contracts, 'CONTRATOS PARA VER')
 
   const koContracts = [];
   const okContracts = [];
@@ -164,6 +166,24 @@ const BackOfficeContent = (props) => {
     return comissions;
   }
 
+  console.log(currentOfficeID, 'ID DO ESCRITÒRIO')
+
+  const _officeResults = useMemo(() => {
+    request.getOfficeResults(currentOfficeID)
+    
+    return JSON.parse(localStorage.getItem('officeResults'))
+  }, [])
+
+  const _myCurrentSalary = useMemo(() => {
+    request.getMySalary()
+
+    return JSON.parse(localStorage.getItem('myCurrentSalary'))
+  }, [])
+
+  console.log(_officeResults, 'OFFICE RESULTS FINAL')
+  console.log(_myCurrentSalary, 'MEU ATUAL SALÁRIO')
+  
+
   function _calculateComissions() {
     var comissions = _getComissions();
     var mySalary = 0
@@ -225,7 +245,7 @@ const BackOfficeContent = (props) => {
             >
               <SubHeading>Faturamento</SubHeading>
             </Link> 
-            <Heading className={"mySalary"}>{`${_calculateComissions() + 9852}€`}</Heading>
+            <Heading className={"mySalary"}>{`${_officeResults}€`}</Heading>
           </MDCard.Body>
         </MDCard>
 
@@ -285,28 +305,42 @@ const BackOfficeContent = (props) => {
             <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos</SubHeading>
           </Link>
           <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{contracts?.length}</Heading>
-          <MDRow>
+        
+
+          <MDCol style={{width: '100%', marginLeft: '40%', marginBottom: '5%'}}>
             { okContracts?.length !== 0 &&
-              <Body>
-                🟢 {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"}`} 
-              </Body>
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
+                <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
+                <MDCol>
+                  <Body>
+                    {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"}`} 
+                  </Body>
+                </MDCol>
+              </MDRow>
             }
 
-            { rContracts?.length !== 0 && 
-              <Body>
-                🟡 {rContracts?.length} {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar`} 
-              </Body>
-            }
-            
-            { koContracts?.length !== 0 && 
-              <Body style={{marginBottom: 30}}>
-                🔴 {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"}`}
-              </Body>
+            { rContracts?.length !== 0 &&
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
+                <MDCol style={{marginRight: '5%'}}><Body>🟡</Body></MDCol>
+                <MDCol>
+                  <Body>{rContracts?.length} {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar`}</Body>
+                </MDCol>
+              </MDRow>
             }
 
+            { koContracts?.length !== 0  &&
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
+                <MDCol style={{marginRight: '5%'}}><Body>🔴</Body></MDCol>
+                <MDCol>
+                  <Body>
+                    {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"}`}
+                  </Body>
+                </MDCol>
+              </MDRow>
+            }
             { contracts?.length === 0 && <Body>Você não tem contratos ainda.</Body>}
             
-          </MDRow>
+          </MDCol>
 
           <Button
             fullWidth={false}

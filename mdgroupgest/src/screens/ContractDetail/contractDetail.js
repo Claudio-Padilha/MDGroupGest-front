@@ -25,6 +25,28 @@ const ContractDetail = (props) => {
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
 
+  const contractType = useMemo(() => {
+    switch (contract?.contract_type) {
+      case "dual":
+        return "Dual"
+      case "gas":
+        return "Gás"
+      case "electricity":
+        return "Electricidade"
+      case "condominium_dual":
+        return "Dual Condomínio"
+      case "condominium_gas":
+        return "Gás Condomínio"
+      case "condominium_electricity":
+        return "Electricidade Condomínio"
+    
+      default:
+        break;
+    }
+  }, [contract])
+
+  console.log(contract, 'CONTRATO')
+
   const state = useMemo(() => {
     if(contract?.sell_state__name === "ok") {
       return "🟢";
@@ -45,8 +67,6 @@ const ContractDetail = (props) => {
       return "Anulado";
     }
   }, [contract])
-
-  console.log(contract, 'contrato')
 
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -180,6 +200,18 @@ const ContractDetail = (props) => {
                 onClick={_detailsOfSellState}
               >Ver motivo</Body>
             }
+            <Body
+              style={
+                {
+                  fontSize: 14,
+                  textShadow: "8px 8px 12px rgba(230, 230, 230, 0.9)",
+                  color: `${CONSTANTS?.colors?.black}`,
+                  fontWeight: "bold",
+                  marginLeft: 20,
+                  marginTop: -34,
+                  marginBottom: 40,
+                }
+              }>({contractType})</Body>
           </Row>
 
 
@@ -206,7 +238,7 @@ const ContractDetail = (props) => {
                     <Body className={"field"}>{` ${contract?.signature_date}`}</Body>
 
                     <SmallSubHeading><b>Tipo de pagamento:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.payment}`}</Body>
+                    <Body className={"field"}>{` ${contract?.payment__name}`}</Body>
                   </Column>
                 </Row>
 
@@ -233,7 +265,7 @@ const ContractDetail = (props) => {
                 <Row className={"firstRowInsideFirstColumn"}>  
                   <Column>
                     <SmallSubHeading><b>Comercial:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.employee_name}`}</Body>
+                    <Body className={"field"}>{` ${contract?.user__name}`}</Body>
 
                     <SmallSubHeading></SmallSubHeading>
                     <Body className={"field"}></Body>
@@ -254,7 +286,7 @@ const ContractDetail = (props) => {
                     <Body className={"field"}>{` ${contract?.sell_state__name}`}</Body>
 
                     <SmallSubHeading><b>Escalão Gás:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.gas_scale}`}</Body>
+                    <Body className={"field"}>{` ${contract?.gas_scale__name}`}</Body>
 
                     <SmallSubHeading><b>CUI:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.cui}`}</Body>
@@ -265,7 +297,7 @@ const ContractDetail = (props) => {
                     <Body className={"field"}>{` ${contract?.feedback_call}`}</Body>
 
                     <SmallSubHeading><b>Potência:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.power} kVA`}</Body>
+                    <Body className={"field"}>{` ${contract?.power__name}`}</Body>
 
                     <SmallSubHeading><b>CPE:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.cpe}`}</Body>
