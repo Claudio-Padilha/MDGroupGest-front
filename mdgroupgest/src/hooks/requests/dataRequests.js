@@ -73,7 +73,6 @@ export default {
       })
     });
   },
-  // here we gonna have getPower()
   getGasScale: () => {
 
     return new Promise((resolve, reject) => {
@@ -97,6 +96,29 @@ export default {
       })
     });
   },
+  getPower: () => {
+
+    return new Promise((resolve, reject) => {
+
+      var gasScaleRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/power/`,
+          headers: {
+            'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(gasScaleRequest)
+
+      .then(res => {
+        localStorage.setItem('powerList', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => { 
+        reject(error);
+      })
+    });
+  },
   getOfficeResults: (officeID) => {
     return new Promise((resolve, reject) => {
       
@@ -111,6 +133,7 @@ export default {
       axios(officeResultsRequest)
 
       .then(res => {
+        localStorage.removeItem('officeResults')
         localStorage.setItem('officeResults', JSON.stringify(res?.data))
         resolve(res);
       })
@@ -133,6 +156,7 @@ export default {
       axios(mySalaryRequest)
 
       .then(res => {
+        localStorage.removeItem('myCurrentSalary')
         localStorage.setItem('myCurrentSalary', JSON.stringify(res?.data))
         resolve(res);
       })

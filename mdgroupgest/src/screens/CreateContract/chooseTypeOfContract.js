@@ -18,7 +18,7 @@ import {
   MDButton 
 } from '../../screens/Home/md';
 
-import request from '../../components/Form/request';
+import dataRequests from "../../hooks/requests/dataRequests";
 
 const ChooseTypeOfContract = (props) => {
   function _goBack() {
@@ -26,7 +26,7 @@ const ChooseTypeOfContract = (props) => {
   }
 
   const _getFeedbackCall = useCallback(() => {
-    request.getFeedbackCall()
+    dataRequests.getFeedbackCall()
     const feedbackCallList = JSON.parse(localStorage.getItem('feedbackCalls'))
 
     return feedbackCallList?.map(feedbackCall => {
@@ -38,7 +38,7 @@ const ChooseTypeOfContract = (props) => {
   }, [])
 
   const _getSellState = useCallback(() => {
-    request.getSellState()
+    dataRequests.getSellState()
     const sellStatesList = JSON.parse(localStorage.getItem('sellStates'));
     
     return sellStatesList?.map(sellState => {
@@ -50,7 +50,7 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getPayment = useCallback(() => {
-    request.getPayment()
+    dataRequests.getPayment()
     const paymentsList = JSON.parse(localStorage.getItem('payments'));
     
     return paymentsList?.map(payment => {
@@ -62,7 +62,7 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getGasScale = useCallback(() => {
-    request.getGasScale()
+    dataRequests.getGasScale()
     const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
     
     return gasScalesList?.map(gasScale => {
@@ -74,7 +74,7 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getPower = useCallback(() => {
-    request.getPower()
+    dataRequests.getPower()
     const powersList = JSON.parse(localStorage.getItem('powerList'));
     
     return powersList?.map(power => {

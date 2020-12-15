@@ -16,6 +16,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
 import request from '../../components/Form/request';
+import employeesRequests from '../../hooks/requests/employeesRequests';
 
 const EditEmployee = (props) => {
 
@@ -68,7 +69,7 @@ const EditEmployee = (props) => {
 
         // "result.isConfimed significa clicar em "Refazer"
           if (result.isConfirmed) {
-            await request.updateEmployee(formFields, data)
+            await employeesRequests.updateEmployee(formFields, data)
             try {
               swalWithBootstrapButtons.fire(
                 `${nothingWasChanged ? "" : "Boa!"}`,
@@ -111,12 +112,6 @@ const EditEmployee = (props) => {
       id: employee?.id,
       user_type: employee?.user?.user_type
     }
-    
-    // request.updateEmployee(formFields, data)
-
-    // const userType = props.location.state.userType;
-
-    // localStorage.setItem('currentUserType', userType)
 
     _ConfirmEmployeeUpdate(formFields, data)
   };

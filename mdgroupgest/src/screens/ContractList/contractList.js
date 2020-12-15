@@ -9,6 +9,8 @@ import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
 import request from '../../components/Form/request';
 
+import contractsRequests from "../../hooks/requests/contractsRequests";
+
 import {
   MainContainer,
   Row,
@@ -19,9 +21,10 @@ import {
 
 import { List } from "semantic-ui-react";
 
+
 const ContractList = (props) => {
 
-  request.getContracts()
+  contractsRequests.getContracts()
 
   function _goBack() {
     history.push({

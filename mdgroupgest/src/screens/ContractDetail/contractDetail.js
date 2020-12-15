@@ -8,7 +8,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
 
-import request from '../../components/Form/request';
+import contractsRequests from "../../hooks/requests/contractsRequests";
 
 import CONSTANTS from '../../constants';
 import {
@@ -19,6 +19,7 @@ import {
 } from "./styles";
 
 import { List } from "semantic-ui-react";
+
 
 const ContractDetail = (props) => {
   const contract = props?.location?.state?.data;
@@ -95,9 +96,9 @@ const ContractDetail = (props) => {
         reverseButtons: true
       }).then(async (result) => {
         if (result.isConfirmed) {
-          request.deleteContract(contractID) 
+          contractsRequests.deleteContract(contractID) 
           .then(
-            request.getContracts().then(
+            contractsRequests.getContracts().then(
               swalWithBootstrapButtons.fire(
                 'Contrato Apagado!',
                 'A operação foi concluída com sucesso.',
@@ -309,12 +310,6 @@ const ContractDetail = (props) => {
 
             <Button
               disabled={false}
-              // action={() => {
-              //   Promise.all([
-              //     request.deleteContract(contract?.id),
-              //     request.getOffices(),
-              //   ])
-              // }}
               action={_confirmToDeleteContract}
               small={true}
               text="Apagar"

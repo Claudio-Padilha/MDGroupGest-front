@@ -2,7 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-import request from '../../components/Form/request';
+import officesRequests from '../../hooks/requests/officesRequests';
 
 import {
   MainDiv,
@@ -58,7 +58,7 @@ const CreateOffice = () => {
       // "result.isConfimed significa clicar em "Refazer"
         if (result.isConfirmed) {
           try {
-            request.createOffice(data);
+            officesRequests.createOffice(data);
             swalWithBootstrapButtons.fire(
               'Boa!',
               'Escritório inserido com sucesso.',

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 
@@ -6,7 +6,7 @@ import { MDNavbar, MDDropdown } from './md';
 
 import { SubHeading, Body } from '../../components/Text/text';
 import { LogoutIcon } from '../../components/Icon/icons';
-import request from '../../components/Form/request';
+import userRequests from '../../hooks/requests/userRequests';
 
 import useLogin from '../../hooks/login';
 
@@ -21,9 +21,19 @@ import {
 export default function MenuNavbar(props) {
   const user = useLogin();
   const userName = user?.user?.name;
+  const currentUserIsAdmin = user?.user?.is_admin;
 
   const history = useHistory();
   const avatarClasses = useStyles();
+
+  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
+  console.log(localStorage, 'local storage')
+
+  function _setToAdmin(admin) {
+    setIsAdmin(!admin)
+    localStorage.removeItem('isAdmin')
+    localStorage.setItem('isAdmin', !admin)
+  }
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -47,35 +57,53 @@ export default function MenuNavbar(props) {
       </ProfileContainer>
       <NavbarOptionsContainer>
         <OptionsDiv>
-          <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>
-          <Body isReverseColor={true}>
-            <Link to={{
-              pathname: "/EmployeeType",
-              state: {
-                isFromBackOffice: true
-              }    
-            }} >Inserir Funcionário</Link>
-          </Body>
+          {!isAdmin && <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>}
           
-          <Body isReverseColor={true}>
-            <Link to={{
-              pathname: "/ChooseEmployeeTypeToSee",
-              state: {
-                isFromBackOffice: true
-              }
-            }}
-            >Ver Funcionários</Link>
-          </Body>
-          {user?.user?.user_type === "admin" && 
+          { !isAdmin &&
+            <Body isReverseColor={true}>
+              <Link to={{
+                pathname: "/EmployeeType",
+                state: {
+                  isFromBackOffice: true
+                }    
+              }} >Inserir Funcionário</Link>
+            </Body>
+          }
+          
+          { !isAdmin && 
+            <Body isReverseColor={true}>
+              <Link to={{
+                pathname: "/ChooseEmployeeTypeToSee",
+                state: {
+                  isFromBackOffice: true
+                }
+              }}
+              >Ver Funcionários</Link>
+            </Body>
+          }
+
+          { !isAdmin && currentUserIsAdmin && 
+            <Body isReverseColor={true}>
+              <Link onClick={() => _setToAdmin(isAdmin)}>Versão Admin</Link>
+            </Body>
+          }
+
+          { isAdmin && 
             <Body isReverseColor={true}>
               <Link to="/CreateOffice">Inserir Escritório</Link>
+            </Body>
+          }
+
+          { isAdmin && 
+            <Body isReverseColor={true} style={{marginTop: '-10%'}}>
+              <Link onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
             </Body>
           }
         </OptionsDiv>
 
         <LogoutDiv>
           <LogoutIcon className={"logoutIcon"} onClick={() => {
-              request.logout()
+              userRequests.logout()
               history.push("/")
             }}
           /> 

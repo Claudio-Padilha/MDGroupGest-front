@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
@@ -26,9 +26,8 @@ import {
 } from './styles';
 
 import useLogin from '../../hooks/login';
-
-import request from '../../components/Form/request';
-import { ko } from 'date-fns/locale';
+import employeesRequests from '../../hooks/requests/employeesRequests';
+import dataRequests from '../../hooks/requests/dataRequests';
 
 const BackOfficeContent = (props) => {
   console.log(props, 'PROPS DE BACK OFFICE')
@@ -169,6 +168,16 @@ const BackOfficeContent = (props) => {
   //   return comissions;
   // }
 
+  function _getOfficeComissions() {
+    return dataRequests.getOfficeResults(currentOfficeID)
+  }
+  
+  useEffect(() => {
+    setTimeout(() => (
+      _getOfficeComissions()
+    ), 100); 
+  }, [allContracts])
+
   if(deletedID)
     { _removeContractFromRAM() }
 
@@ -182,7 +191,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
-              request.getEmployees()
+              employeesRequests.getEmployees()
               history.push("/MyTeam")
             }}
             small={true}
@@ -375,15 +384,15 @@ const BackOfficeContent = (props) => {
   };
 
   return (
-    <ContentContainer>
-      <TeamContainer>{renderHero()}</TeamContainer>
-      <ResultsContainer>
-        {userType === "admin" || userType === "manager" && renderOfficeMonth()} 
-        {userType !== "admin" || userType === "manager" && renderMyMonth()}  
-        {renderMyContracts()}
-        {renderMyResults()}
-      </ResultsContainer>
-    </ContentContainer>
+      <ContentContainer>
+        <TeamContainer>{renderHero()}</TeamContainer>
+        <ResultsContainer>
+          {userType === "manager" && renderOfficeMonth()} 
+          {userType !== "manager" && renderMyMonth()}
+          {renderMyContracts()}
+          {renderMyResults()}
+        </ResultsContainer>
+      </ContentContainer>
   );
 };
 

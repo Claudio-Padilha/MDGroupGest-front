@@ -1,4 +1,5 @@
 import _currentTokenOnRAM from './currentToken';
+import axios from 'axios';
 
 export default {
   getContracts: () => {

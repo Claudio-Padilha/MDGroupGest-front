@@ -13,18 +13,15 @@ import { SubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
-import request from '../../components/Form/request';
 import { BackIcon } from '../../components/Icon/icons';
+
+import contractsRequests from '../../hooks/requests/contractsRequests';
 
 const CreateContract = (props) => {
 
   const _allEmployeesFromRAM = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [])
-
-  console.log(props, 'PROOOOOOOOPS')
-
-
 
   function _allEmployees() {
     var allEmployees = []
@@ -218,7 +215,7 @@ const CreateContract = (props) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
-            await request.createContract(contractObj)
+            await contractsRequests.createContract(contractObj)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
@@ -243,7 +240,7 @@ const CreateContract = (props) => {
                   'success'
                 ).then(async (result) => {
                   if(result) {
-                    await request.getContracts()
+                    await contractsRequests.getContracts()
                     return history.push("/ContractList");
                   }
                 });

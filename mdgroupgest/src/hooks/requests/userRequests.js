@@ -1,6 +1,9 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
+
 import _currentTokenOnRAM from './currentToken';
+import dataRequests from '../../hooks/requests/dataRequests';
+import employeesRequests from '../../hooks/requests/employeesRequests';
 
 function _firstTimeOfAnUser() {
   return (
@@ -59,7 +62,7 @@ function _HandleConfirmLoginAlert() {
         confirmButtonText: 'Inserir contrato',
         cancelButtonText: 'Ir para dashboard',
         reverseButtons: false
-      }).then((result) => {
+      }).then(async (result) => {
 
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
@@ -67,6 +70,9 @@ function _HandleConfirmLoginAlert() {
          
         // "!result.isConfirmed" significa que foi clicado o botão direito do alerta (Ir para dashboard)  
         } else if (!result.isConfirmed) {
+          await dataRequests.getMySalary()
+          await dataRequests.getOfficeResults(currentUser?.user?.office)
+          await employeesRequests.getAllEmployees(currentUser?.user?.office)
           window.location.assign("/BackOffice")
         } else {
           console.log('nothing was choosed')
@@ -106,6 +112,7 @@ export default {
                 if (currentAuthToken) {
                   localStorage.setItem('currentUser', JSON.stringify(user));
                   localStorage.setItem('currentToken', currentAuthToken);
+                  localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));
 
 
 

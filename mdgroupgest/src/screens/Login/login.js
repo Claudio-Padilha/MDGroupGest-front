@@ -5,7 +5,7 @@ import { MainContainer, LoginContainer } from './styles';
 import Form from '../../components/Form/normalForm';
 import { LogoMD } from '../../components/Logo/logo';
 import { Corner, Corner180} from '../../components/Corner/corner';
-import request from '../../components/Form/request';
+import userRequests from '../../hooks/requests/userRequests';
  
 const Login = () => {
 
@@ -16,7 +16,7 @@ const Login = () => {
 
   const handleSubmitForm = (formFields) => {
     try {
-      request.login(formFields)
+      userRequests.login(formFields)
     } catch (error) {
       console.log('VOCE NÃO FOI BEM SUCEDIDO')
     }

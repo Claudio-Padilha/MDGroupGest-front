@@ -1,13 +1,13 @@
 import React, { useState } from "react";
 import MenuNavbar from "./menuNavbar";
 import BackOfficeHeader from "./backOfficeHeader";
-import request from "../../components/Form/request";
 
 import { MainContainer } from "./styles";
 
 const Home = (props) => {
 
   const [destinationIndex, setDestinationIndex] = useState(0);
+  console.log(props, 'PROPS DA HOME')
 
   return (
     <MainContainer>

@@ -20,6 +20,8 @@ import {
 
 import request from '../../components/Form/request';
 
+import employeesRequests from "../../hooks/requests/employeesRequests";
+
 const ChooseEmployeeTypeToSee = (props) => {
   function _goBack() {
     window.location.assign("/BackOffice");    
@@ -31,17 +33,9 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
-  // const allEmployees = useMemo(() => {
-  //   request.getAllEmployees(currentOfficeID)
-
-  //   const employees = JSON.parse(localStorage?.getItem('allEmployees'));
-    
-  //   return employees;
-  // }, [isFromBackOffice, isFromCreation, isFromEdit]);
-
   function _allEmployees() {
     if(isFromBackOffice || isFromCreation || isFromEdit) {
-      request.getAllEmployees(currentOfficeID)
+      employeesRequests.getAllEmployees(currentOfficeID)
     }
     
     return JSON.parse(localStorage.getItem('allEmployees'))

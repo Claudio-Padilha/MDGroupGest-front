@@ -17,7 +17,9 @@ import {
   MDCardBody,
   MDButton 
 } from '../../screens/Home/md';
-import request from "../../components/Form/request";
+
+import employeesRequests from "../../hooks/requests/employeesRequests";
+import officesRequests from '../../hooks/requests/officesRequests';
 
 const EmployeeType = (props) => {
   function _goBack() {
@@ -28,13 +30,13 @@ const EmployeeType = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   const currentOfficeObject = useMemo(() => {
-    request.getOffice(currentOfficeID)
+    officesRequests.getOffice(currentOfficeID)
 
     return JSON.parse(localStorage.getItem('currentOffice'))
   }, [currentOfficeID])
 
   const allEmployees = useMemo(() => {
-    request.getAllEmployees(currentOfficeID)
+    employeesRequests.getAllEmployees(currentOfficeID)
     
     return JSON.parse(localStorage?.getItem('allEmployees'));
   }, [cameFromBackOffice]);

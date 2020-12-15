@@ -14,7 +14,8 @@ import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
-import request from '../../components/Form/request';
+
+import employeesRequests from '../../hooks/requests/employeesRequests';
 
 const CreateEmployee = (props) => {
 
@@ -69,7 +70,7 @@ const CreateEmployee = (props) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            await request.createEmployee(office, data)
+            await employeesRequests.createEmployee(office, data)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
@@ -93,7 +94,7 @@ const CreateEmployee = (props) => {
                   'success'
                 ).then(async (result) => {
                   if(result) {
-                    await request.getAllEmployees(officeID);
+                    await employeesRequests.getAllEmployees(officeID);
                     return history.push({
                       pathname:"/ChooseEmployeeTypeToSee",
                       state: {

@@ -12,7 +12,7 @@ import { BackIcon, EditIcon } from '../../components/Icon/icons';
 
 import ContractDocumentPDF from './employmentContract';
 
-import request from '../../components/Form/request'
+import employeesRequests from "../../hooks/requests/employeesRequests";
 
 import {
   MainContainer,
@@ -40,7 +40,7 @@ const EmployeeList = (props) => {
   }
 
   async function _redirectToEmployeeTypes() {
-    await request.getAllEmployees(currentOfficeID)
+    await employeesRequests.getAllEmployees(currentOfficeID)
     history.push({
       pathname: "ChooseEmployeeTypeToSee",
     })
@@ -84,7 +84,7 @@ const EmployeeList = (props) => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             console.log('esse é o funcionário: ', employee)
-            await request.deleteEmployee(employee)         
+            await employeesRequests.deleteEmployee(employee)         
             .then(() => (
               swalWithBootstrapButtons.fire(
                 'Funcionário Excluído!',
