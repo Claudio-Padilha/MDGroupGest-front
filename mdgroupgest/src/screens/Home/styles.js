@@ -281,6 +281,33 @@ const ResultsContainer = styled.div`
   }
 `;
 
+const OfficesContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  a {
+    text-decoration: none;
+    width: 30%;
+    div > div {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-around;
+    }
+    div > div > h3 {
+      display: flex;
+      align-self: center;
+      justify-content: center;
+      margin-left: 0;
+      margin-top: 5%;
+      margin-bottom: 5%;
+    }
+    div > div > button {
+      align-self: center;
+    }
+  }
+`;
+
 const ResultsCard = styled.div`
   display: flex;
   flex-direction: column;
@@ -376,6 +403,7 @@ export {
   ProfileContainer,
   ContentContainer,
   ResultsContainer,
+  OfficesContainer,
   TeamAvatarsContainer,
   NavbarOptionsContainer,
   WelcomeWithLogoContainer,

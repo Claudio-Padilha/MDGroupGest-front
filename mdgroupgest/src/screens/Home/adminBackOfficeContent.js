@@ -14,10 +14,11 @@ import useLogin from '../../hooks/login';
 
 import {
   ContentContainer,
-  ResultsContainer
+  OfficesContainer
 } from './styles';
 
 const AdminBackOfficeContent = (props) => {
+  const history = useHistory();
   const currentUser = useLogin();
 
   const userType = useMemo(() => {
@@ -32,6 +33,18 @@ const AdminBackOfficeContent = (props) => {
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading>Escritório 1</SubHeading>
+            <Button
+              fullWidth={false}
+              disabled={false}
+              action={() => {
+                history.push({
+                  pathname: "/ContractList",
+                })
+              }}
+
+              small={true}
+              text="Ver escritório"
+            />
           </MDCardBody>
         </MDCard>
       </Link>
@@ -41,9 +54,9 @@ const AdminBackOfficeContent = (props) => {
   return (
     userType === "admin" ?
       <ContentContainer>
-        <ResultsContainer>
+        <OfficesContainer>
           {renderOfficeCard()}
-        </ResultsContainer>
+        </OfficesContainer>
       </ContentContainer>
     :
     <div style={{display: 'flex', justifyContent: 'center'}}>
