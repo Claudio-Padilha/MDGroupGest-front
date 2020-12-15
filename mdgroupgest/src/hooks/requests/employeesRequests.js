@@ -1,3 +1,6 @@
+import axios from 'axios'
+import Swal from 'sweetalert2';
+
 import _currentTokenOnRAM from './currentToken';
 
 export default {

@@ -22,22 +22,28 @@ const CreateContract = (props) => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [])
 
-  console.log(_allEmployeesFromRAM)
+  console.log(props, 'PROOOOOOOOPS')
 
 
 
   function _allEmployees() {
     var allEmployees = []
-    
-    Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
-      employeeType.map(type => {
-        console.log(type, 'TIPO')
-        allEmployees.push({value: type?.user?.id, label: type?.user?.name})
-      })
-     });
+
+    if(_allEmployeesFromRAM) {
+      Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
+        employeeType.map(type => {
+          console.log(type, 'TIPO')
+          allEmployees.push({value: type?.user?.id, label: type?.user?.name})
+        })
+      });
+    }
 
     return allEmployees
   }
+
+  const powersList = useMemo(() => {
+    return props?.location?.state?.power
+  }, [props]) 
 
   console.log(_allEmployees(), 'todos')
 
@@ -309,56 +315,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "powerForElectricity",
       question: "Potência contratada",
-      options: [
-        {
-          value: 1.15,
-          label: "1.15 kVA"
-        },
-        {
-          value: 3.45,
-          label: "3.45 kVA"
-        },
-        {
-          value: 4.6,
-          label: "4.6 kVA"
-        },
-        {
-          value: 5.75,
-          label: "5.75 kVA"
-        },
-        {
-          value: 6.9,
-          label: "6.9 kVA"
-        },
-        {
-          value: 10.35,
-          label: "10.35 kVA"
-        },
-        {
-          value: 13.8,
-          label: "13.8 kVA"
-        },
-        {
-          value: 17.25,
-          label: "17.25 kVA"
-        },
-        {
-          value: 20.7,
-          label: "20.7 kVA"
-        },
-        {
-          value: 27.6,
-          label: "27.6 kVA"
-        },
-        {
-          value: 34.5,
-          label: "34.5 kVA"
-        },
-        {
-          value: 41.41,
-          label: "41.41 kVA"
-        }
-      ] 
+      options: powersList,
     },
   ];
 
@@ -479,56 +436,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "powerDUAL",
       question: "Potência contratada",
-      options: [
-        {
-          value: 1.15,
-          label: "1.15 kVA"
-        },
-        {
-          value: 3.45,
-          label: "3.45 kVA"
-        },
-        {
-          value: 4.6,
-          label: "4.6 kVA"
-        },
-        {
-          value: 5.75,
-          label: "5.75 kVA"
-        },
-        {
-          value: 6.9,
-          label: "6.9 kVA"
-        },
-        {
-          value: 10.35,
-          label: "10.35 kVA"
-        },
-        {
-          value: 13.8,
-          label: "13.8 kVA"
-        },
-        {
-          value: 17.25,
-          label: "17.25 kVA"
-        },
-        {
-          value: 20.7,
-          label: "20.7 kVA"
-        },
-        {
-          value: 27.6,
-          label: "27.6 kVA"
-        },
-        {
-          value: 34.5,
-          label: "34.5 kVA"
-        },
-        {
-          value: 41.41,
-          label: "41.41 kVA"
-        }
-      ] 
+      options: powersList,
     },   
     
     {

@@ -72,6 +72,18 @@ const ChooseTypeOfContract = (props) => {
       }
     })
   },[])
+
+  const _getPower = useCallback(() => {
+    request.getPower()
+    const powersList = JSON.parse(localStorage.getItem('powerList'));
+    
+    return powersList?.map(power => {
+      return {
+        value: power?.id,
+        label: power?.name
+      }
+    })
+  },[])
   
   const allEmployees = []
 
@@ -116,6 +128,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
+          power: _getPower()
         }  
       }}>
         <MDCard className={"card"}>
@@ -139,6 +152,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
+          power: _getPower()
         }  
       }}>
         <MDCard className={"card"}>
@@ -210,7 +224,8 @@ const ChooseTypeOfContract = (props) => {
           sellState: _getSellState(),
           payment: _getPayment(),
           gasScale: _getGasScale(),
-          employees: allEmployees
+          power: _getPower(),
+          employees: allEmployees,
         }  
       }}>
         <MDCard className={"card"}>
@@ -234,6 +249,7 @@ const ChooseTypeOfContract = (props) => {
           sellState: _getSellState(),
           payment: _getPayment(),
           gasScale: _getGasScale(),
+          power: _getPower(),
           employees: allEmployees
         }  
       }}>

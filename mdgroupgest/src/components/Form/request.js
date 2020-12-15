@@ -1,5 +1,6 @@
 import axios from 'axios'
 import Swal from 'sweetalert2';
+import dataRequests from '../../hooks/requests/dataRequests';
 
 function _currentTokenOnRAM() {
   return localStorage.getItem('currentToken');
@@ -62,7 +63,7 @@ function _HandleConfirmLoginAlert() {
         confirmButtonText: 'Inserir contrato',
         cancelButtonText: 'Ir para dashboard',
         reverseButtons: false
-      }).then((result) => {
+      }).then(async (result) => {
 
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
@@ -70,6 +71,8 @@ function _HandleConfirmLoginAlert() {
          
         // "!result.isConfirmed" significa que foi clicado o botão direito do alerta (Ir para dashboard)  
         } else if (!result.isConfirmed) {
+          await dataRequests.getMySalary()
+          await dataRequests.getOfficeResults(currentUser?.user?.office)
           window.location.assign("/BackOffice")
         } else {
           console.log('nothing was choosed')
@@ -110,11 +113,7 @@ export default {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     localStorage.setItem('currentToken', currentAuthToken);
 
-
-
                     return new Promise((resolve, reject) => {
-
-                      //const officeID = user?.user?.office
 
                       var contractRequest = {
                           method: 'GET',
@@ -135,9 +134,8 @@ export default {
                         }
                         resolve(res);
                       })
-                      .catch(error => {
-                          
-                          reject(error);
+                      .catch(error => {  
+                        reject(error);
                       })
                     });
                   }
@@ -475,10 +473,20 @@ export default {
   },
   deleteEmployee: (data) => {
     return new Promise((resolve, reject) => {
+      console.log(data, 'DADOS')
+      function _userTypeCamelCase() {
+        if(data?.user?.user_type === "team_leader") {
+          return "teamLeader"
+        } else if(data?.user?.user_type === "sales_person") {
+          return "salesPerson"
+        } else {
+          return data?.user?.user_type
+        }
+      }
       
       var employeeDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1:8000/${data?.user?.user_type}/`,
+        url: `http://127.0.0.1:8000/${_userTypeCamelCase()}/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -727,7 +735,6 @@ export default {
       })
     });
   },
-  // here we gonna have getPower()
   getGasScale: () => {
 
     return new Promise((resolve, reject) => {
@@ -751,7 +758,29 @@ export default {
       })
     });
   },
+  getPower: () => {
 
+    return new Promise((resolve, reject) => {
+
+      var gasScaleRequest = {
+          method: 'GET',
+          url: `http://127.0.0.1:8000/power/`,
+          headers: {
+            'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(gasScaleRequest)
+
+      .then(res => {
+        localStorage.setItem('powerList', JSON.stringify(res.data))
+        resolve(res);
+      })
+      .catch(error => { 
+        reject(error);
+      })
+    });
+  },
   getOfficeResults: (officeID) => {
     return new Promise((resolve, reject) => {
       
@@ -775,7 +804,6 @@ export default {
       })
     })
   },
-
   getMySalary: () => {
     return new Promise((resolve, reject) => {
 
@@ -797,5 +825,5 @@ export default {
         resolve(error);
       })
     })
-  }
+  },
 }

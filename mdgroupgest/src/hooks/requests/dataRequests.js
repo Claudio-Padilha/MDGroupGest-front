@@ -1,3 +1,6 @@
+import axios from 'axios'
+import Swal from 'sweetalert2';
+
 import _currentTokenOnRAM from './currentToken';
 
 export default {
@@ -109,6 +112,28 @@ export default {
 
       .then(res => {
         localStorage.setItem('officeResults', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
+  },
+  getMySalary: () => {
+    return new Promise((resolve, reject) => {
+
+      var mySalaryRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/myCurrentSalary/`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(mySalaryRequest)
+
+      .then(res => {
+        localStorage.setItem('myCurrentSalary', JSON.stringify(res?.data))
         resolve(res);
       })
       .catch(error => {

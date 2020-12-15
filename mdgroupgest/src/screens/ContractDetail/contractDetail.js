@@ -189,7 +189,7 @@ const ContractDetail = (props) => {
                   {
                     fontSize: 12,
                     textShadow: "8px 8px 12px rgba(230, 230, 230, 0.9)",
-                    color: `${CONSTANTS?.colors?.black}`,
+                    color: `${CONSTANTS?.colors?.brand?.blue}`,
                     fontWeight: "bold",
                     marginLeft: 20,
                     marginTop: -34,

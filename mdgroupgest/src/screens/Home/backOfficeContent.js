@@ -31,9 +31,12 @@ import request from '../../components/Form/request';
 import { ko } from 'date-fns/locale';
 
 const BackOfficeContent = (props) => {
+  console.log(props, 'PROPS DE BACK OFFICE')
 
   const currentUser = useLogin();
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const officeResults = JSON.parse(localStorage.getItem('officeResults'));
+  const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
 
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
@@ -98,7 +101,7 @@ const BackOfficeContent = (props) => {
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
-  console.log(contracts, 'CONTRATOS PARA VER')
+  console.log(localStorage)
 
   const koContracts = [];
   const okContracts = [];
@@ -158,44 +161,16 @@ const BackOfficeContent = (props) => {
     })
   }
 
-  function _getComissions() {
-    var comissions = []
-    contracts.map(contract => {
-      comissions.push(parseFloat(contract?.employee_comission))
-    })
-    return comissions;
-  }
-
-  console.log(currentOfficeID, 'ID DO ESCRITÒRIO')
-
-  const _officeResults = useMemo(() => {
-    request.getOfficeResults(currentOfficeID)
-    
-    return JSON.parse(localStorage.getItem('officeResults'))
-  }, [])
-
-  const _myCurrentSalary = useMemo(() => {
-    request.getMySalary()
-
-    return JSON.parse(localStorage.getItem('myCurrentSalary'))
-  }, [])
-
-  console.log(_officeResults, 'OFFICE RESULTS FINAL')
-  console.log(_myCurrentSalary, 'MEU ATUAL SALÁRIO')
-  
-
-  function _calculateComissions() {
-    var comissions = _getComissions();
-    var mySalary = 0
-    for (let i = 0; i < comissions?.length; i++) {
-      mySalary += comissions[i]
-    }
-    return mySalary
-  }
+  // function _getComissions() {
+  //   var comissions = []
+  //   contracts.map(contract => {
+  //     comissions.push(parseFloat(contract?.employee_comission))
+  //   })
+  //   return comissions;
+  // }
 
   if(deletedID)
     { _removeContractFromRAM() }
-
 
   const renderHero = () => {
 
@@ -224,7 +199,7 @@ const BackOfficeContent = (props) => {
       </MDHero>
     );
   };
-
+  
   const renderOfficeMonth = () => {
     return (
       <MDCard className={"officeMonth"}>
@@ -245,7 +220,7 @@ const BackOfficeContent = (props) => {
             >
               <SubHeading>Faturamento</SubHeading>
             </Link> 
-            <Heading className={"mySalary"}>{`${_officeResults}€`}</Heading>
+            <Heading className={"mySalary"}>{`${officeResults}€`}</Heading>
           </MDCard.Body>
         </MDCard>
 
@@ -261,7 +236,7 @@ const BackOfficeContent = (props) => {
             >
               <SubHeading>Meus lucros</SubHeading>
             </Link> 
-            <Heading className={"mySalary"}>{`${_calculateComissions()}€`}</Heading>
+            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
 
@@ -284,7 +259,7 @@ const BackOfficeContent = (props) => {
           >
             <SubHeading>Meu mês</SubHeading>
           </Link> 
-          <Heading className={"mySalary"}>{`${_calculateComissions()}€`}</Heading>
+          <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
         </MDCard.Body>
       </MDCard>
     );
@@ -307,7 +282,7 @@ const BackOfficeContent = (props) => {
           <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{contracts?.length}</Heading>
         
 
-          <MDCol style={{width: '100%', marginLeft: '40%', marginBottom: '5%'}}>
+          <MDCol style={{width: '100%', marginLeft: `${contracts?.length === 0 ? '25%' : '40%'}`, marginBottom: '5%'}}>
             { okContracts?.length !== 0 &&
               <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
                 <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
@@ -403,8 +378,8 @@ const BackOfficeContent = (props) => {
     <ContentContainer>
       <TeamContainer>{renderHero()}</TeamContainer>
       <ResultsContainer>
-        {userType === "admin" && renderOfficeMonth()} 
-        {userType !== "admin" && renderMyMonth()}  
+        {userType === "admin" || userType === "manager" && renderOfficeMonth()} 
+        {userType !== "admin" || userType === "manager" && renderMyMonth()}  
         {renderMyContracts()}
         {renderMyResults()}
       </ResultsContainer>
