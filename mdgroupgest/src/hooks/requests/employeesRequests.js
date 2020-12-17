@@ -86,6 +86,7 @@ export default {
         nif: data?.nif,
         contact: data?.contact,
         address: data?.address,
+        is_admin: false
       }
     }
     

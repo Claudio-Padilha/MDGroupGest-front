@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
@@ -21,8 +21,15 @@ import {
 import dataRequests from "../../hooks/requests/dataRequests";
 
 const ChooseTypeOfContract = (props) => {
+  const history = useHistory()
+
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    history.push({
+      pathname: "/BackOffice",
+      state: {
+        cameFromContractCreation: true
+      }
+    })  
   }
 
   const _getFeedbackCall = useCallback(() => {

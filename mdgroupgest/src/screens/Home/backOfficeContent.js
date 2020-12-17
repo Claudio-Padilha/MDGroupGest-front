@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
@@ -36,6 +36,8 @@ const BackOfficeContent = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
+  const currentUserIsAdmin = currentUser?.user?.is_admin;
+  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
 
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;

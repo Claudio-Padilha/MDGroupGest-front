@@ -13,7 +13,8 @@ const Button = ({
   fullWidth,
   children, 
   type,
-  className
+  className,
+  style
 }) => {
   if (text) {
     return (
@@ -25,6 +26,7 @@ const Button = ({
         small={isSmall}
         onClick={action}
         className={className}
+        style={style}
       >
         {children}
         {text && <ButtonText>{text}</ButtonText>}

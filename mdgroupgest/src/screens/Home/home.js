@@ -5,21 +5,15 @@ import BackOfficeHeader from "./backOfficeHeader";
 import { MainContainer } from "./styles";
 
 const Home = (props) => {
-
-  const [destinationIndex, setDestinationIndex] = useState(0);
   console.log(props, 'PROPS DA HOME')
 
   return (
     <MainContainer>
       <MenuNavbar
         {...props}
-        destinationIndex={destinationIndex}
-        setDestinationIndex={setDestinationIndex}
       />
       <BackOfficeHeader
         {...props}
-        destinationIndex={destinationIndex}
-        setDestinationIndex={setDestinationIndex}
       />
     </MainContainer>
   );

@@ -35,7 +35,6 @@ const ContractList = (props) => {
       }
     })
   }
-
   const history = useHistory();
 
   var localStorage = window.localStorage;
@@ -50,6 +49,8 @@ const ContractList = (props) => {
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
+
+  const okContractID = contracts;
 
   function _removeContractFromRAM() {
     _.remove(contracts, function(obj) {
@@ -114,7 +115,23 @@ const ContractList = (props) => {
         <List.Item key={contract.id} className={"eachContract"}>
           <Column className={"clientInfo"}>
             <Column>
-              <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${i + 1}`}</SubHeading>
+              <Row>
+                <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${i + 1}`}</SubHeading>
+                <Button
+                  style={{
+                    width: '30%',
+                    backgroundColor: 'green',
+                    marginLeft: '10%',
+                    marginTop:' -2%',
+                    borderRadius: '10%',
+                    cursor: 'pointer',
+                  }}
+                  disabled={false}
+                  action={() => { contractsRequests.updateContract(contract?.id) }}
+                  small={true}
+                  text="Ativar contrato"
+                />
+              </Row>
               <Body style={{marginTop: -15, marginBottom: 10}}>{stateOfContract()}</Body>
             </Column> 
             <Row className={"rowOfClientInfo"}>

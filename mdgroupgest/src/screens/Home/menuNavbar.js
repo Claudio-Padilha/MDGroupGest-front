@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 
@@ -23,17 +23,29 @@ export default function MenuNavbar(props) {
   const userName = user?.user?.name;
   const currentUserIsAdmin = user?.user?.is_admin;
 
+  console.log(props, 'PROPS DA NAVBAR')
+
+  // const currentUserState = useMemo(() => {
+  //   if (currentUserIsAdmin) {
+  //     return "admin"
+  //   } else {
+  //     return "manager"
+  //   }
+  // }, [currentUserIsAdmin]) 
+
+  // const isUserAdmin = useMemo(() => {
+  //   return currentUserState === "admin";
+  // }, [currentUserState])
+
   const history = useHistory();
   const avatarClasses = useStyles();
 
-  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
-  console.log(localStorage, 'local storage')
-
   function _setToAdmin(admin) {
-    setIsAdmin(!admin)
     localStorage.removeItem('isAdmin')
     localStorage.setItem('isAdmin', !admin)
   }
+
+  const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -43,6 +55,8 @@ export default function MenuNavbar(props) {
       }
     })
   }
+
+  console.log(window.performance.navigation.type, )
 
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
@@ -108,9 +122,7 @@ export default function MenuNavbar(props) {
             }}
           /> 
         </LogoutDiv>
-
       </NavbarOptionsContainer>
-
     </MDNavbar>
   );
 }

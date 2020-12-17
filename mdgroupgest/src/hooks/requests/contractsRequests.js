@@ -1,5 +1,6 @@
 import _currentTokenOnRAM from './currentToken';
 import axios from 'axios';
+import dataRequests from './dataRequests';
 
 export default {
   getContracts: () => {
@@ -57,38 +58,16 @@ export default {
       })
     });
   },
-  updateContract: (data) => {
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    var payment = data?.lightPPI ? "Débito Directo" : "Multibanco";
-    
-    var deliveryDate = data?.deliveryDate.toJSON();
-    var deliveryWorkedDate = deliveryDate.substring(0, 9);
+  updateContract: (contractID) => {
+    dataRequests.getSellState()
 
-    var signatureDate = data?.signatureDate.toJSON();
-    var signatureWorkedDate = signatureDate.substring(0, 9);
+    const sellStates = JSON.parse(localStorage.getItem('sellStates'))
+    console.log(sellStates, 'TESTE')
+    const sellStateOK = sellStates?.filter(sellState => {
+      return sellState?.name === "ok"
+    });
     
-    const contractObj = {
-      user: currentUser?.user?.id, // Receber dinamicamente
-      delivery_date: deliveryWorkedDate,
-      signature_date: signatureWorkedDate,
-      employee_name: data?.employeeName,
-      client_name: data?.clientName,
-      client_nif: data?.clientNif,
-      client_contact: data?.clientContact,
-      electronic_bill: data?.electronicBill ? data?.electronicBill : false,
-      cpe: data?.CPE.toString(),
-      electricity_ppi: data?.lightPPI ? data?.lightPPI : false,
-      cui: data?.CUI.toString(),
-      gas_ppi: data?.gasPPI ? data?.gasPPI : false,
-      pel: data?.pel ? data?.pel : false,
-      observations: data?.observations,
-      employee_comission: data?.comission,
-      feedback_call: data?.feedbackCall,
-      payment: payment,
-      sell_state: data?.sellState,
-      power: data?.power,
-      gas_scale: data?.gasScale
-    }
+    const sellStateID = sellStateOK[0]?.id;
 
     return new Promise((resolve, reject) => {
 
@@ -98,8 +77,8 @@ export default {
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
+          data: { id: contractID, sell_state: sellStateID },
           json: true,
-          data: contractObj,
           dataType: "json",
           contentType: "application/json"
         };

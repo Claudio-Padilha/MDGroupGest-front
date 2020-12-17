@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Link, useHistory } from "react-router-dom";
 
 import {
@@ -20,10 +20,8 @@ import {
 const AdminBackOfficeContent = (props) => {
   const history = useHistory();
   const currentUser = useLogin();
-
-  const userType = useMemo(() => {
-    return currentUser?.user?.user_type;
-  }, [currentUser]);
+  const currentUserIsAdmin = currentUser?.user?.is_admin;
+  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
 
   const renderOfficeCard = () => {
     return (
@@ -52,7 +50,7 @@ const AdminBackOfficeContent = (props) => {
   };
 
   return (
-    userType === "admin" ?
+    isAdmin ?
       <ContentContainer>
         <OfficesContainer>
           {renderOfficeCard()}
@@ -60,7 +58,7 @@ const AdminBackOfficeContent = (props) => {
       </ContentContainer>
     :
     <div style={{display: 'flex', justifyContent: 'center'}}>
-      <p>Você precisar ser administrador para ver este ecrã.</p>
+      <p>Você precisa ser administrador para ver este ecrã.</p>
     </div>        
   );
 }

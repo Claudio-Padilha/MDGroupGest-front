@@ -43,7 +43,7 @@ function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
 
-  const hasPermission = currentUser?.user?.user_type === "admin";
+  const hasPermission = currentUser?.user?.user_type === "manager";
 
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {
@@ -63,16 +63,14 @@ function _HandleConfirmLoginAlert() {
         cancelButtonText: 'Ir para dashboard',
         reverseButtons: false
       }).then(async (result) => {
-
+        await dataRequests.getMySalary()
+        await dataRequests.getOfficeResults(currentUser?.user?.office)
+        await employeesRequests.getAllEmployees(currentUser?.user?.office)
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
-          window.location.assign("/CreateContract");
-         
+          window.location.assign("/ChooseTypeOfContract");
         // "!result.isConfirmed" significa que foi clicado o botão direito do alerta (Ir para dashboard)  
         } else if (!result.isConfirmed) {
-          await dataRequests.getMySalary()
-          await dataRequests.getOfficeResults(currentUser?.user?.office)
-          await employeesRequests.getAllEmployees(currentUser?.user?.office)
           window.location.assign("/BackOffice")
         } else {
           console.log('nothing was choosed')
