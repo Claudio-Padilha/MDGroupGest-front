@@ -169,7 +169,8 @@ const BackOfficeContent = (props) => {
   // }
 
   function _getOfficeComissions() {
-    return dataRequests.getOfficeResults(currentOfficeID)
+    dataRequests.getMySalary()
+    dataRequests.getOfficeResults(currentOfficeID)
   }
   
   useEffect(() => {
