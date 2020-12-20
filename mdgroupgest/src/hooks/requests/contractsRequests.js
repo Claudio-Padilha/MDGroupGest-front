@@ -99,13 +99,16 @@ export default {
   },
   deleteContract: (id) => {
     return new Promise((resolve, reject) => {
+
+
       
       var contractDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1:8000/contract/${id}/`,
+        url: `http://127.0.0.1:8000/contracts/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
+        data: {contract : id}
       }
 
       axios(contractDeleteRequest)
