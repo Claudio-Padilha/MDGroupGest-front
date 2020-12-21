@@ -31,6 +31,8 @@ const ChooseTypeOfContract = (props) => {
       }
     })  
   }
+  dataRequests.getGasScale()
+  dataRequests.getPower()
 
   const _getFeedbackCall = useCallback(() => {
     dataRequests.getFeedbackCall()
@@ -69,19 +71,23 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getGasScale = useCallback((isCondominium) => {
-    dataRequests.getGasScale()
+    
     const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
     
     var filteredGasScale = []
 
-    gasScalesList.forEach(gasScale => {
-      if(gasScale?.is_condominium === isCondominium) {
+    for(let i=0; i < gasScalesList?.length; i++) {
+      if(gasScalesList[i]?.is_condominium === isCondominium) {
         filteredGasScale.push( {
-          value: gasScale?.id,
-          label: gasScale?.name
+          value: gasScalesList[i]?.id,
+          label: gasScalesList[i]?.name
         })
       }
-    })
+    }
+    
+    // gasScalesList.forEach(gasScale => {
+
+    // })
 
     console.log(filteredGasScale, "FILTERED GAS SCALE")
 
@@ -89,19 +95,27 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getPower = useCallback((isCondominium) => {
-    dataRequests.getPower()
     const powersList = JSON.parse(localStorage.getItem('powerList'));
 
     var filteredPowerList = []
-    
-    powersList.forEach(power => {
-      if(power?.is_condominium === isCondominium) {
+
+    for(let i=0; i < powersList?.length; i++) {
+      if(powersList[i]?.is_condominium === isCondominium) {
         filteredPowerList.push( {
-          value: power?.id,
-          label: power?.name,
+          value: powersList[i]?.id,
+          label: powersList[i]?.name
         })
       }
-    })
+    }
+    
+    // powersList.forEach(power => {
+    //   if(power?.is_condominium === isCondominium) {
+    //     filteredPowerList.push( {
+    //       value: power?.id,
+    //       label: power?.name,
+    //     })
+    //   }
+    // })
 
     return filteredPowerList
   },[])
