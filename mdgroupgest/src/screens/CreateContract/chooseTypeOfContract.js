@@ -68,26 +68,31 @@ const ChooseTypeOfContract = (props) => {
     })
   },[])
 
-  const _getGasScale = useCallback(() => {
+  const _getGasScale = useCallback((isCondominium) => {
     dataRequests.getGasScale()
     const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
     
     return gasScalesList?.map(gasScale => {
-      return {
-        value: gasScale?.id,
-        label: gasScale?.name
+      if(gasScale?.isCondominium === isCondominium) {
+        return {
+          value: gasScale?.id,
+          label: gasScale?.name
+        }
       }
     })
   },[])
 
-  const _getPower = useCallback(() => {
+  const _getPower = useCallback((isCondominium) => {
     dataRequests.getPower()
     const powersList = JSON.parse(localStorage.getItem('powerList'));
+    console.log(powersList, 'POWER LIST')
     
     return powersList?.map(power => {
-      return {
-        value: power?.id,
-        label: power?.name
+      if(power?.isCondominium === isCondominium) {
+        return {
+          value: power?.id,
+          label: power?.name,
+        }
       }
     })
   },[])
@@ -121,8 +126,6 @@ const ChooseTypeOfContract = (props) => {
 
   _getAllEmployees()
 
-  console.log(allEmployees, 'employees from type')
-
   const renderElectricityCard = () => {
 
     return (
@@ -135,7 +138,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          power: _getPower()
+          power: _getPower(false)
         }  
       }}>
         <MDCard className={"card"}>
@@ -159,7 +162,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          power: _getPower()
+          power: _getPower(true)
         }  
       }}>
         <MDCard className={"card"}>
@@ -182,7 +185,7 @@ const ChooseTypeOfContract = (props) => {
           cameFromChoice: true,
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
-          gasScale: _getGasScale(),
+          gasScale: _getGasScale(false),
           payment: _getPayment()
         }  
       }}>
@@ -205,7 +208,7 @@ const ChooseTypeOfContract = (props) => {
           cameFromChoice: true,
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
-          gasScale: _getGasScale(),
+          gasScale: _getGasScale(true),
           payment: _getPayment()
         }  
       }}>
@@ -230,8 +233,8 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          gasScale: _getGasScale(),
-          power: _getPower(),
+          gasScale: _getGasScale(false),
+          power: _getPower(false),
           employees: allEmployees,
         }  
       }}>
@@ -255,8 +258,8 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          gasScale: _getGasScale(),
-          power: _getPower(),
+          gasScale: _getGasScale(true),
+          power: _getPower(true),
           employees: allEmployees
         }  
       }}>
