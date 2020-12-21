@@ -72,29 +72,38 @@ const ChooseTypeOfContract = (props) => {
     dataRequests.getGasScale()
     const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
     
-    return gasScalesList?.map(gasScale => {
-      if(gasScale?.isCondominium === isCondominium) {
-        return {
+    var filteredGasScale = []
+
+    gasScalesList.forEach(gasScale => {
+      if(gasScale?.is_condominium === isCondominium) {
+        filteredGasScale.push( {
           value: gasScale?.id,
           label: gasScale?.name
-        }
+        })
       }
     })
+
+    console.log(filteredGasScale, "FILTERED GAS SCALE")
+
+    return filteredGasScale
   },[])
 
   const _getPower = useCallback((isCondominium) => {
     dataRequests.getPower()
     const powersList = JSON.parse(localStorage.getItem('powerList'));
-    console.log(powersList, 'POWER LIST')
+
+    var filteredPowerList = []
     
-    return powersList?.map(power => {
-      if(power?.isCondominium === isCondominium) {
-        return {
+    powersList.forEach(power => {
+      if(power?.is_condominium === isCondominium) {
+        filteredPowerList.push( {
           value: power?.id,
           label: power?.name,
-        }
+        })
       }
     })
+
+    return filteredPowerList
   },[])
   
   const allEmployees = []

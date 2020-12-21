@@ -19,6 +19,8 @@ import contractsRequests from '../../hooks/requests/contractsRequests';
 
 const CreateContract = (props) => {
 
+console.log(props, "PROPPPPPS")
+
   const _allEmployeesFromRAM = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [])
@@ -178,8 +180,8 @@ const CreateContract = (props) => {
       feedback_call: feedbackCall,
       payment: paymentMethods,
       sell_state: sellState,
-      power: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? powerDUAL : powerForElectricity,
-      gas_scale: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasScaleDUAL : gasScaleForGas,
+      power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
+      gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
       contract_type: typeOfContractFromProps
     }
 

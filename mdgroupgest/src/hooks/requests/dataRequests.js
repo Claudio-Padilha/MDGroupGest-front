@@ -100,7 +100,7 @@ export default {
 
     return new Promise((resolve, reject) => {
 
-      var gasScaleRequest = {
+      var gasPowerRequest = {
           method: 'GET',
           url: `http://127.0.0.1:8000/power/`,
           headers: {
@@ -108,10 +108,10 @@ export default {
           },
         };
       
-      axios(gasScaleRequest)
+      axios(gasPowerRequest)
 
       .then(res => {
-        localStorage.setItem('powerList', JSON.stringify(res.data))
+        localStorage.setItem('powerList', JSON.stringify(res.data)) 
         resolve(res);
       })
       .catch(error => { 
