@@ -185,4 +185,32 @@ export default {
       })
     })
   },
+
+  addPhoto: (data) => {
+    return new Promise((resolve, reject) => {
+
+      console.log(data, "DATA INSIDE REQUEST =============================")
+
+      var employeeUpdateRequest = {
+          method: 'PATCH',
+          url: `http://127.0.0.1:8000/${data?.user_type}/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          json: true,
+          data: data,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(employeeUpdateRequest)
+
+      .then(res => {
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    });
+  }
 }
