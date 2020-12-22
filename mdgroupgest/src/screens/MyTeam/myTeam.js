@@ -6,10 +6,13 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import data from './data';
 
+import dataRequests from '../../hooks/requests/dataRequests'
+
 import { MainContainer } from "./styles";
 
 const MyTeam = () => {
 
+  const user = JSON.parse(localStorage.getItem('currentUser'))
   const history = useHistory();
 
   // aqui cada clique leva a pagina de detalhe de cada funcionário
@@ -33,6 +36,129 @@ const MyTeam = () => {
 
   function _goBack() {
     history.push("/BackOffice");
+  }
+
+  async function _getData() {
+    await dataRequests.getMyTeam(user.user.office)
+    const employees = JSON.parse(localStorage.getItem('myTeam'))
+
+    console.log("EMPLOYESS: ", employees)
+
+    const managers = employees['manager']
+    const team_leaders = employees['team_leader']
+    const instructors = employees['instructor']
+    const sales_people = employees['sales_person']
+
+    var data = {
+      name: 'ESCRITÓRIO LUCAS PADILHA',
+      textProps: {x: -30, y: 25},
+      children: []
+    }
+
+    // ************** SECTION TO CONSTRUCT MANAGER LEVEL **************** //
+    for (var i = 0; i < managers.length; i++) {     
+      data.children.push(
+        {
+          name: managers[i].user.name,
+          photo: managers[i].user.avatar,
+          textProps: {x: -30, y: 25},
+          children:[]
+        }
+      )
+
+      for (var j = 0; j < team_leaders.length; j++) {
+        if (team_leaders[j].manager === managers[i].id) {
+          data.children[i].children.push(
+            {
+              name: team_leaders[j].user.name,
+              photo: team_leaders[j].user.avatar,
+              textProps: {x: -30, y: 25},
+              children:[]
+            }
+          )
+
+          for (var k = 0; k < instructors.length; k++) {
+            if (instructors[k].team_leader === team_leaders[j].id) {
+              data.children[i].children[j].children.push(
+                {
+                  name: instructors[k].user.name,
+                  photo: instructors[k].user.avatar,
+                  textProps: {x: -30, y: 25},
+                  children:[]
+                }
+              )
+
+              for (var l = 0; l < sales_people.length; l++){
+                if (sales_people[l].instructor === instructors[k].id) {
+                  data.children[i].children[j].children[k].children.push(
+                    {
+                      name: sales_people[l].user.name,
+                      photo: sales_people[l].user.avatar,
+                      textProps: {x: -30, y: 25},
+                      children:[]
+                    }
+                  )
+                }
+              }
+            }
+          }
+
+          for (var l = 0; l < sales_people.length; l++) {
+            if (sales_people[l].team_leader === team_leaders[j].id) {
+              data.children[i].children[j].children.push(
+                {
+                  name: sales_people[l].user.name,
+                  photo: sales_people[l].user.avatar,
+                  textProps: {x: -30, y: 25},
+                  children:[]
+                }
+              )
+            }
+          }
+        }
+      }
+
+      for (var j = 0; j < instructors.length; j++) {
+        if (instructors[j].manager === managers[i].id) {
+          data.children[i].children.push(
+            {
+              name: instructors[j].user.name,
+              photo: instructors[j].user.avatar,
+              textProps: {x: -30, y: 25},
+              children:[]
+            }
+          )
+
+          for (var k = 0; k < sales_people.length; k++) {
+            if (sales_people[k].instructor === instructors[j].id) {
+              data.children[i].children[j].children.push(
+                {
+                  name: sales_people[k].user.name,
+                  photo: sales_people[k].user.avatar,
+                  textProps: {x: -30, y: 25},
+                  children:[]
+                }
+              )
+            }
+          }
+        }
+      }
+
+      for (var j = 0; j < sales_people.length; j++) {
+        if (sales_people[j].manager === managers[i].id) {
+          data.children[i].children.push(
+            {
+              name: sales_people[j].user.name,
+              photo: sales_people[j].user.avatar,
+              textProps: {x: -30, y: 25},
+              children:[]
+            }
+          )
+        }
+      }
+    }
+    // ************** END OF SECTION TO CONSTRUCT MANAGER LEVEL **************** //
+    console.log(data, "DATAAAAAAAAAAAAAAAAA")
   }
 
   return (
@@ -66,6 +192,8 @@ const MyTeam = () => {
           right: 200
         }}
       />
+
+      <button onClick={_getData} />
     </MainContainer>
   );
 };

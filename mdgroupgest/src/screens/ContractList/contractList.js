@@ -6,7 +6,7 @@ import _ from 'lodash';
 import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
-import { BackIcon } from '../../components/Icon/icons';
+import { BackIcon, EditIcon } from '../../components/Icon/icons';
 import request from '../../components/Form/request';
 
 import contractsRequests from "../../hooks/requests/contractsRequests";
@@ -55,6 +55,15 @@ const ContractList = (props) => {
   function _removeContractFromRAM() {
     _.remove(contracts, function(obj) {
       return obj.id === deletedID
+    })
+  }
+
+  function _handleEditEmployee() {      // CHANGE THIS TO HANDLE CONTRACT UPDATE
+    history.push({
+      pathname: "/EmployeeEdit",
+      // state: {
+      //   employeeData: employee
+      // }
     })
   }
 

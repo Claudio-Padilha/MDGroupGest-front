@@ -165,4 +165,28 @@ export default {
       })
     })
   },
+
+  getMyTeam: (office_id) => {
+    return new Promise((resolve, reject) => {
+
+      var myTeamRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/employees/${office_id}`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(myTeamRequest)
+
+      .then(res => {
+        localStorage.removeItem('myTeam')
+        localStorage.setItem('myTeam', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
+  }
 }
