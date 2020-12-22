@@ -176,9 +176,7 @@ const BackOfficeContent = (props) => {
   }
   
   useEffect(() => {
-    setTimeout(() => (
       _getOfficeComissions()
-    ), 100); 
   }, [allContracts])
 
   if(deletedID)

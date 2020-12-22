@@ -116,11 +116,11 @@ export default {
 
                   return new Promise((resolve, reject) => {
 
-                    //const officeID = user?.user?.office
+                    const officeID = user?.user?.office
 
                     var contractRequest = {
                         method: 'GET',
-                        url: `http://127.0.0.1:8000/contracts/`,
+                        url: `http://127.0.0.1:8000/monthContracts/${officeID}`,
                         headers: {
                             'Authorization': 'Token ' + _currentTokenOnRAM(),
                         },

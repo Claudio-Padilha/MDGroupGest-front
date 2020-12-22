@@ -16,6 +16,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
 import contractsRequests from '../../hooks/requests/contractsRequests';
+import dataRequests from '../../hooks/requests/dataRequests'
 
 const CreateContract = (props) => {
 
@@ -243,6 +244,8 @@ console.log(props, "PROPPPPPS")
                 ).then(async (result) => {
                   if(result) {
                     await contractsRequests.getContracts()
+                    await dataRequests.getOfficeResults(currentOfficeID)
+                    await dataRequests.getMySalary()
                     return history.push("/ContractList");
                   }
                 });

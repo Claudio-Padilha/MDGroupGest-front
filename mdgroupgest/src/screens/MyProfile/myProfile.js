@@ -23,32 +23,30 @@ const MyProfile = (props) => {
   const history = useHistory();
   const avatarClasses = useStyles()
 
-  console.log(user, "USER ===========================")
   const userName = props?.location?.state?.data?.user?.name;
   const email = props?.location?.state?.data?.user?.email;
 
 
  const handleImageAsFile = (e) => {
       const image = e.target.files[0]
-      console.log(image, "IMAGE ===============================")
       setImageAsFile(imageFile => (image))
   }
 
   const handleFireBaseUpload = e => {
     e.preventDefault()
-    console.log('start of upload')
+    // console.log('start of upload')
 
-  
     if(imageAsFile === '' ) {
-      console.error(`not an image, the image file is a ${typeof(imageAsFile)}`)
+      // console.error(`not an image, the image file is a ${typeof(imageAsFile)}`)
+      alert("Selecione uma imagem!")
     }
 
-    const uploadTask = storage.ref(`/images/${imageAsFile.name}`).put(imageAsFile)
+    const uploadTask = storage.ref(`/images/${imageAsFile.name + user.id}`).put(imageAsFile)
 
     uploadTask.on('state_changed', 
     (snapShot) => {
       //takes a snap shot of the process as it is happening
-      console.log(snapShot)
+      // console.log(snapShot)
     }, (err) => {
       //catches the errors
       console.log(err)
@@ -63,11 +61,8 @@ const MyProfile = (props) => {
           user_type: user.user.user_type,
           avatar: fireBaseUrl
         }
-
-        employeesRequests.addPhoto(data)
-
-         
-         setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
+        employeesRequests.addPhoto(data)    
+        setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
        })
     })
   }

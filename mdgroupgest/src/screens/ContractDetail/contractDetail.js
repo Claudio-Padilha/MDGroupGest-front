@@ -9,6 +9,7 @@ import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
 
 import contractsRequests from "../../hooks/requests/contractsRequests";
+import dataRequests from '../../hooks/requests/dataRequests'
 
 import CONSTANTS from '../../constants';
 import {
@@ -25,6 +26,8 @@ const ContractDetail = (props) => {
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
+
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
@@ -97,7 +100,9 @@ const ContractDetail = (props) => {
       }).then(async (result) => {
         if (result.isConfirmed) {
           contractsRequests.deleteContract(contractID) 
-          .then(
+          .then(async () => {
+            await dataRequests.getOfficeResults(currentOfficeID)
+            await dataRequests.getMySalary()
             contractsRequests.getContracts().then(
               swalWithBootstrapButtons.fire(
                 'Contrato Apagado!',
@@ -111,7 +116,7 @@ const ContractDetail = (props) => {
                 }
               }))
             )
-          )
+            })
 
         } else if (
           /* Read more about handling dismissals below */
