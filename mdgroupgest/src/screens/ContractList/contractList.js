@@ -2,12 +2,12 @@ import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
+import Swal from 'sweetalert2';
 
 import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
-import { BackIcon, EditIcon } from '../../components/Icon/icons';
-import request from '../../components/Form/request';
+import { BackIcon } from '../../components/Icon/icons';
 
 import contractsRequests from "../../hooks/requests/contractsRequests";
 
@@ -20,7 +20,6 @@ import {
 } from "./styles";
 
 import { List } from "semantic-ui-react";
-
 
 const ContractList = (props) => {
 
@@ -50,6 +49,7 @@ const ContractList = (props) => {
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
 
+
   const okContractID = contracts;
 
   function _removeContractFromRAM() {
@@ -69,6 +69,67 @@ const ContractList = (props) => {
 
   if(deletedID) {
     _removeContractFromRAM()
+  }
+
+  function _ConfirmContractActivation(contract, i) {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
+
+      return (
+        swalWithBootstrapButtons.fire({
+        title: 'Tem certeza?',
+        html: 
+          `Não é possível desativar um contrato.<br>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then(async (result) => {
+
+        // "result.isConfimed significa clicar em "É isto"
+          if (result.isConfirmed) {
+            await contractsRequests.updateContract(contract?.id)
+            .then(res => {
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
+
+              if(clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Algo correu mal... tente de novo.',
+                  'error'
+                )
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                swalWithBootstrapButtons.fire(
+                  'Boa!',
+                  'Contrato ativado com sucesso.',
+                  'success'
+                )
+              }
+            })
+        // "!result.isConfimed significa clicar em "'E isso!"
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
   }
 
   const renderContract = (contract, i) => {
@@ -118,6 +179,7 @@ const ContractList = (props) => {
         )
       }
     }
+    console.log(contract?.sell_state__name, 'TESTE')
 
     return (
       <>
@@ -126,6 +188,7 @@ const ContractList = (props) => {
             <Column>
               <Row>
                 <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${i + 1}`}</SubHeading>
+              { contract?.sell_state__name !== 'ok' &&
                 <Button
                   style={{
                     width: '30%',
@@ -136,10 +199,11 @@ const ContractList = (props) => {
                     cursor: 'pointer',
                   }}
                   disabled={false}
-                  action={() => { contractsRequests.updateContract(contract?.id) }}
+                  action={() => _ConfirmContractActivation(contract, i)}
                   small={true}
                   text="Ativar contrato"
                 />
+              }
               </Row>
               <Body style={{marginTop: -15, marginBottom: 10}}>{stateOfContract()}</Body>
             </Column> 

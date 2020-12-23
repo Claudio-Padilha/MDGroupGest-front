@@ -47,6 +47,10 @@ const MainContainer = styled.div`
   .custom .node {
     cursor: pointer;
   }
+
+  .custom .node image {
+    border-radius: 50%;
+  }
   
   .custom path.link {
     fill: none;

@@ -36,7 +36,7 @@ const MainContainer = styled.div`
     }
 
     .clientInfoContent {
-      margin-top: 8%;
+      margin-top: 0%;
     }
 
     .clientInfoTitle {

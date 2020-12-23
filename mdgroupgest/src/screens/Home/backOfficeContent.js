@@ -32,7 +32,8 @@ import dataRequests from '../../hooks/requests/dataRequests';
 const BackOfficeContent = (props) => {
   console.log(props, 'PROPS DE BACK OFFICE')
 
-  const currentUser = useLogin();
+  // const currentUser = useLogin();
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
@@ -169,7 +170,7 @@ const BackOfficeContent = (props) => {
   //   })
   //   return comissions;
   // }
-  dataRequests.getMyTeam(currentUser.user.office)
+  dataRequests.getMyTeam(currentUser?.user?.office)
 
   function _getOfficeComissions() {
     dataRequests.getMySalary()

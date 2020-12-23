@@ -186,6 +186,8 @@ console.log(props, "PROPPPPPS")
       contract_type: typeOfContractFromProps
     }
 
+    console.log(contractObj, 'OBJETO DO CONTRATO')
+
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {
         case "electricity":
