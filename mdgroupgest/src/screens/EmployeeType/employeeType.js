@@ -41,6 +41,8 @@ const EmployeeType = (props) => {
     return JSON.parse(localStorage?.getItem('allEmployees'));
   }, [cameFromBackOffice]);
 
+  console.log(allEmployees, 'employees')
+
   const renderManagerCard = () => {
     return (
       <Link to={{
@@ -49,7 +51,8 @@ const EmployeeType = (props) => {
           userType: "manager",
           title: "Criar Gerente",
           officeID: currentOfficeID,
-          officeOBJ: currentOfficeObject
+          officeOBJ: currentOfficeObject,
+          shouldRenderEmployeeAssociation: false
         }  
       }}>
         <MDCard className={"card"}>
@@ -70,7 +73,7 @@ const EmployeeType = (props) => {
           title: "Criar Secretária",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          manager: allEmployees?.manager
+          shouldRenderEmployeeAssociation: false
         }  
       }}>
         <MDCard className={"card"}>
@@ -91,7 +94,8 @@ const EmployeeType = (props) => {
           title: "Criar Team Leader",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          manager: allEmployees?.manager
+          employeeToAssociate: allEmployees?.manager,
+          shouldRenderEmployeeAssociation: true
         }  
       }}>
         <MDCard className={"card"}>
@@ -112,7 +116,8 @@ const EmployeeType = (props) => {
           title: "Criar Instrutor",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          teamLeaders: allEmployees?.team_leader
+          employeeToAssociate: allEmployees?.team_leader.concat(allEmployees?.manager),
+          shouldRenderEmployeeAssociation: true
         }  
       }}>
         <MDCard className={"card"}>
@@ -133,7 +138,8 @@ const EmployeeType = (props) => {
           title: "Criar Comercial",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          instructors: allEmployees?.instructor
+          employeeToAssociate: allEmployees?.instructor.concat(allEmployees?.manager, allEmployees?.team_leader),
+          shouldRenderEmployeeAssociation: true
         }  
       }}>
         <MDCard className={"card"}>

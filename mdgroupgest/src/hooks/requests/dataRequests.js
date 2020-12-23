@@ -167,7 +167,7 @@ export default {
   },
 
   getMyTeam: (office_id) => {
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       var myTeamRequest = {
         method: 'GET',

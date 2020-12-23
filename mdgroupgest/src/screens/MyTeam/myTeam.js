@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Tree from 'react-tree-graph';
 
@@ -31,15 +31,12 @@ const MyTeam = () => {
     alert(`Right clicked ${nodeKey}`);
   }
 
-  // const officeId = parsedTeam[0].office;
-  //const teamMembers = parsedTeam[0].user; // ter lógica de map na array para pegar todos
-
   function _goBack() {
     history.push("/BackOffice");
   }
 
-  async function _getData() {
-    await dataRequests.getMyTeam(user.user.office)
+  function _getData() {
+    
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
     console.log("EMPLOYESS: ", employees)
@@ -55,7 +52,6 @@ const MyTeam = () => {
       children: []
     }
 
-    // ************** SECTION TO CONSTRUCT MANAGER LEVEL **************** //
     for (var i = 0; i < managers.length; i++) {     
       data.children.push(
         {
@@ -157,15 +153,19 @@ const MyTeam = () => {
         }
       }
     }
-    // ************** END OF SECTION TO CONSTRUCT MANAGER LEVEL **************** //
-    console.log(data, "DATAAAAAAAAAAAAAAAAA")
+    return data;
   }
+
+  const dataToProcess = _getData()
+
+
+  console.log(dataToProcess, 'dataToProcess' )
 
   return (
     <MainContainer className="custom-container">
       <BackIcon onClick={_goBack} className={"backIcon"}/>
       <Tree
-        data={data}
+        data={dataToProcess}
         height={700}
         width={1000}
         animated

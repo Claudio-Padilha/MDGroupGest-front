@@ -25,6 +25,9 @@ const CreateEmployee = (props) => {
 
   const officeID = props?.location?.state?.officeID;
   const officeOBJ = props?.location?.state?.officeOBJ;
+  const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
+  const employeeToAssociate = props?.location?.state?.employeeToAssociate;
+  const userTypeToInsert = props?.location?.state?.userType;
 
   function _goBack() {
     history.push({
@@ -35,7 +38,20 @@ const CreateEmployee = (props) => {
     });    
   }
 
+  function _employeeToAssociation() {
+    var employees = []
+
+    if(employeeToAssociate) {
+      Object.values(employeeToAssociate).forEach(function(employee){
+        console.log(employee, 'EMPLOYEE')
+        employees.push({value: { id: employee?.id, employee_type: employee?.user?.user_type}, label: employee?.user?.name })
+      })
+    };
+    return employees
+  }
+
   function _ConfirmEmployeeCreation(office, data) {
+    console.log(data, 'DADOS')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -44,12 +60,110 @@ const CreateEmployee = (props) => {
       },
       buttonsStyling: true
     })
-
+    var employeeTypeOfList = data?.employeeAbove?.employee_type;
     var name = data?.name; 
     var nif = data?.nif?.toString(); 
     var address = data?.address; 
     var contact = data?.contact?.toString();
     var email = data?.email;
+
+    const salesPersonObj = {
+      office: officeID,
+      manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
+      team_leader: employeeTypeOfList === "team_leader" ? data?.employeeAbove?.id : null,
+      instructor: employeeTypeOfList === "instructor" ? data?.employeeAbove?.id : null,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2020@",
+        user_type: "sales_person",
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+        is_admin: false
+      }
+    }
+
+    const instructorObj = {
+      office: officeID,
+      manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
+      team_leader: employeeTypeOfList === "team_leader" ? data?.employeeAbove?.id : null,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2020@",
+        user_type: "instructor",
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+        is_admin: false
+      }
+    }
+
+    const teamLeaderObj = {
+      office: officeID,
+      manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2020@",
+        user_type: "team_leader",
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+        is_admin: false
+      }
+    }
+
+    const secretaryObj = {
+      office: officeID,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2020@",
+        user_type: "secretary",
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+        is_admin: false
+      }
+    }
+
+    const managerObj = {
+      office: officeID,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2020@",
+        user_type: "manager",
+        nif: data?.nif,
+        contact: data?.contact,
+        address: data?.address,
+        is_admin: false
+      }
+    }
+
+    function _userObjBasedOnType() {
+      switch (userTypeToInsert) {
+        case 'sales_person':
+          return salesPersonObj
+        case 'instructor':
+          return instructorObj
+        case 'team_leader':
+          return teamLeaderObj
+        case 'secretary':
+          return secretaryObj
+        case 'manager':
+          return managerObj  
+        default:
+          return;
+      }
+    }
 
       return (
         swalWithBootstrapButtons.fire({
@@ -70,7 +184,7 @@ const CreateEmployee = (props) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            await employeesRequests.createEmployee(office, data)
+            await employeesRequests.createEmployee(userTypeToInsert, _userObjBasedOnType())
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
@@ -131,7 +245,16 @@ const CreateEmployee = (props) => {
     { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF" },
     { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
     { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
-    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" }
+    { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
+    shouldRenderEmployeeAssociation && { 
+      type: "dropdown",
+      subType: "twoColumns",
+      side: "right",
+      key: "employeeAbove",
+      question: "Funcionário responsável",
+      placeholder: "Escolha o nome",
+      options: _employeeToAssociation() 
+    }
   ];
 
   return (

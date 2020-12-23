@@ -154,7 +154,7 @@ width: 100%;
   position: absolute;
   top: 56%;
   left: 25%;
-  width: 45%;
+  width: 28%;
 }
 
 .office, .clientContact {
@@ -162,6 +162,13 @@ width: 100%;
   top: 56%;
   left: 45%;
   width: 25%;
+}
+
+.employeeAbove {
+  position: absolute;
+  top: 56%;
+  left: 55%;
+  width: 15%;
 }
 
 .employeeName {
