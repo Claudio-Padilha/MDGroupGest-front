@@ -169,6 +169,7 @@ const BackOfficeContent = (props) => {
   //   })
   //   return comissions;
   // }
+  dataRequests.getMyTeam(currentUser.user.office)
 
   function _getOfficeComissions() {
     dataRequests.getMySalary()

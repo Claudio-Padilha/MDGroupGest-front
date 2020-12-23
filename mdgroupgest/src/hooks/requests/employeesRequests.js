@@ -59,7 +59,7 @@ export default {
       })
     })
   },
-  createEmployee: (officeID, data) => {
+  createEmployee: (user_type, data) => {
 
     var userType = localStorage.getItem('currentUserType');
     var userTypeBody = userType
@@ -76,19 +76,22 @@ export default {
     //   }
     // }
 
-    const userObj = {
-      office: officeID,
-      user: {
-        name: data?.name,
-        email: data?.email,
-        password: "Mdgroup2020@",
-        user_type: userTypeBody,
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
-        is_admin: false
-      }
-    }
+    // const userObj = {
+    //   office: officeID,
+    //   // manager: , TENDO EM CONSIDERAÇÃO AS ASSOCIAÇÕES CORRETAS
+    //   // team_leader: ,
+    //   // instructor: ,
+    //   user: {
+    //     name: data?.name,
+    //     email: data?.email,
+    //     password: "Mdgroup2020@",
+    //     user_type: userTypeBody,
+    //     nif: data?.nif,
+    //     contact: data?.contact,
+    //     address: data?.address,
+    //     is_admin: false
+    //   }
+    // }
     
     return new Promise((resolve) => {
 
@@ -99,7 +102,7 @@ export default {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
-          data: userObj,
+          data: data,
           dataType: "json",
           contentType: "application/json"
         };
