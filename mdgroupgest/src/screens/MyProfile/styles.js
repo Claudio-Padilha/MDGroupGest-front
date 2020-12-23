@@ -19,6 +19,26 @@ const MainContainer = styled.div`
   }
 `;
 
+const DivUploadPhoto = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  width: 70%;
+  height: 25vh;
+  align-items: center;
+`;
+
+const UploadButton = styled.button`
+  height: 4vh;
+  background-color: black;
+  color: white;
+  border: none;
+  box-shadow: 2px 2px 4px rgba(200,200,200,0.8);
+  cursor: pointer;
+  width: 10%;
+`;
+
+
 export const useStyles = makeStyles((theme) => ({ 
   small: {
     width: theme.spacing(3),
@@ -30,4 +50,4 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export { MainContainer }
+export { MainContainer, DivUploadPhoto, UploadButton }
