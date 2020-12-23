@@ -5,7 +5,7 @@ import { Avatar } from '@material-ui/core';
 import { BackIcon } from '../../components/Icon/icons';
 import { Body } from '../../components/Text/text';
 
-import { MainContainer, useStyles } from './styles';
+import { MainContainer, DivUploadPhoto, UploadButton ,useStyles } from './styles';
 
 import {storage} from "../../firebase/firebase"
 
@@ -25,11 +25,11 @@ const MyProfile = (props) => {
 
   const userName = props?.location?.state?.data?.user?.name;
   const email = props?.location?.state?.data?.user?.email;
-
+  console.log(user, 'user')
 
  const handleImageAsFile = (e) => {
-      const image = e.target.files[0]
-      setImageAsFile(imageFile => (image))
+    const image = e.target.files[0]
+    setImageAsFile(imageFile => (image))
   }
 
   const handleFireBaseUpload = async (e) => {
@@ -51,6 +51,7 @@ const MyProfile = (props) => {
       //catches the errors
       console.log(err)
     }, () => {
+      console.log('antes')
       // gets the functions from storage refences the image storage in firebase by the children
       // gets the download url then sets the image from firebase as the value for the imgUrl key:
       storage.ref('images').child(imageAsFile.name + user?.user?.id).getDownloadURL()
@@ -67,8 +68,6 @@ const MyProfile = (props) => {
        })
     })
   }
-  
-
 
   function _goBack() {
     history.push("/BackOffice");    
@@ -85,12 +84,29 @@ const MyProfile = (props) => {
       <Body>{userName}</Body>
       <Body>{email}</Body>
 
-      <input  
-          type="file"
-          onChange={handleImageAsFile}
-        />
+    <DivUploadPhoto>
+      <input
+        style={{
+          marginTop: '10%',
+          display: 'inline-block',
+          background: 'linear-gradient(top, #f9f9f9, #e3e3e3)',
+          border: '1px solid #999',
+          borderRadius: '3px',
+          padding: '10px 15px',
+          outline: 'none',
+          cursor: 'pointer',
+          textShadow: '1px 1px #fff',
+          fontWeight: '700',
+          fontSize: '10pt',
+          marginBottom: '3%',
+        }}
+        type="file"
+        onChange={handleImageAsFile}
+      />
 
-      <button onClick={handleFireBaseUpload}>UPload Image</button>
+      <UploadButton onClick={handleFireBaseUpload}>Escolher foto</UploadButton>
+    </DivUploadPhoto>
+
 
     </MainContainer>
   )
