@@ -32,7 +32,7 @@ const MyProfile = (props) => {
       setImageAsFile(imageFile => (image))
   }
 
-  const handleFireBaseUpload = e => {
+  const handleFireBaseUpload = async (e) => {
     e.preventDefault()
     // console.log('start of upload')
 
@@ -41,7 +41,7 @@ const MyProfile = (props) => {
       alert("Selecione uma imagem!")
     }
 
-    const uploadTask = storage.ref(`/images/${imageAsFile.name + user.id}`).put(imageAsFile)
+    const uploadTask = storage.ref(`/images/${imageAsFile.name + user.user.id}`).put(imageAsFile)
 
     uploadTask.on('state_changed', 
     (snapShot) => {
@@ -53,15 +53,16 @@ const MyProfile = (props) => {
     }, () => {
       // gets the functions from storage refences the image storage in firebase by the children
       // gets the download url then sets the image from firebase as the value for the imgUrl key:
-      storage.ref('images').child(imageAsFile.name).getDownloadURL()
-       .then(fireBaseUrl => {
+      storage.ref('images').child(imageAsFile.name + user?.user?.id).getDownloadURL()
+       .then(async fireBaseUrl => {
 
         var data = {
           id: user.user.id,
           user_type: user.user.user_type,
           avatar: fireBaseUrl
         }
-        employeesRequests.addPhoto(data)    
+        await employeesRequests.addPhoto(data)  
+      
         setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
        })
     })

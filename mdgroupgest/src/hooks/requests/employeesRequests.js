@@ -206,7 +206,13 @@ export default {
       axios(employeeUpdateRequest)
 
       .then(res => {
-        resolve(res);
+
+        console.log(res.data, "RESPONSE FROM ADD PHOTO")
+
+        localStorage.removeItem('currentUser');
+        localStorage.setItem('currentUser', JSON.stringify(res.data))
+
+        resolve(res)
       })
       .catch(error => {
         resolve(error);
