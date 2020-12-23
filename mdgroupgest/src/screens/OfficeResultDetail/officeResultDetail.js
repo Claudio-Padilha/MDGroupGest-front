@@ -41,6 +41,10 @@ const OfficeMonthResult = (props) => {
   const pending = props?.location?.state?.contracts?.pending?.length;
   const all = props?.location?.state?.contracts?.all?.length;
 
+  function _getData() {
+    
+  }
+
   function _chart(){
     return (
       <Chart
