@@ -25,19 +25,33 @@ import {
 
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
+import officesRequests from '../../hooks/requests/officesRequests'
 
 const BackOfficeContent = (props) => {
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  officesRequests.getOffice(currentUser.user.office)
+
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
   const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
-  const currentUserIsAdmin = currentUser?.user?.is_admin;
+  const currentUserIsAdmin = currentUser?.user?.is_admin;  
+
+
 
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
   }, [currentUser]);
+
+  let dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
+
+  const dataToForm = []
+
+  Object.keys(dataToPopulateGraphic).forEach(function(item){
+    dataToForm.push(dataToPopulateGraphic[item])
+   });
 
   var teamLeadersCounter = 0;
   var instructorsCounter = 0;
@@ -142,6 +156,15 @@ const BackOfficeContent = (props) => {
     // "k" is total contracts qtd
     const a = allContracts?.length;
 
+    console.log(dataToPopulateGraphic, "DATA QUE QUERO VER")
+
+    const dataOfficeResult = [ [
+      'Dias',
+      `${y === 1 || y === 0 ? `(${y}) Válido` : `(${y}) Válidos`}`,
+      `${z === 1 || z === 0 ? `(${z}) Pendente` : `(${z}) Pendentes`}`,
+      `${x === 1 || x === 0 ? `(${x}) Anulado` : `(${x}) Anulados`}`,
+    ], ...dataToForm]
+
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {
       const p = (percent / total) * 100;
@@ -173,6 +196,8 @@ const BackOfficeContent = (props) => {
   useEffect(() => {
       _getOfficeComissions()
   }, [allContracts])
+
+  console.log(dataOfficeResult, "ANTES DE MANDAR PELA PROP")
 
   if(deletedID)
     { _removeContractFromRAM() }
@@ -219,7 +244,8 @@ const BackOfficeContent = (props) => {
                     all: allContracts,
                     ok: okContracts,
                     ko: koContracts,
-                    pending: rContracts
+                    pending: rContracts,
+                    dataToDiagram: dataOfficeResult,
                   }
                 }
               }}

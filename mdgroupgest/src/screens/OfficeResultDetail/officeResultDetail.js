@@ -14,7 +14,8 @@ import {
   FirstRow,
   SecondRow,
   ContractsInfo,
-  HomePageButton
+  HomePageButton,
+  EmptyContainer
 } from "./styles";
 
 import {
@@ -28,7 +29,15 @@ import {
 
 const OfficeMonthResult = (props) => {
 
-  console.log(props, 'props from office result')
+  const data = props?.location?.state?.contracts?.dataToDiagram
+  const user = JSON.parse(localStorage.getItem('currentUser'))
+
+  const ko = props?.location?.state?.contracts?.ko?.length;
+  const ok = props?.location?.state?.contracts?.ok?.length;
+  const pending = props?.location?.state?.contracts?.pending?.length;
+  const all = props?.location?.state?.contracts?.all?.length;
+
+  
 
   const currentMonth = useDate();
 
@@ -36,10 +45,10 @@ const OfficeMonthResult = (props) => {
     window.location.assign("/BackOffice");    
   }
 
-  const ko = props?.location?.state?.contracts?.ko?.length;
-  const ok = props?.location?.state?.contracts?.ok?.length;
-  const pending = props?.location?.state?.contracts?.pending?.length;
-  const all = props?.location?.state?.contracts?.all?.length;
+  console.log(props, "PROPSSSSSSS")
+
+
+  console.log("ANTES DA EXECUTAR O CHART: ", data)
 
   function _chart(){
     return (
@@ -48,28 +57,7 @@ const OfficeMonthResult = (props) => {
         height={'500px'}
         chartType="Line"
         loader={<div><Body>Carregando gráfico...</Body></div>}
-        data={[
-          [
-            'Dias',
-            `${ok === 1 || ok === 0 ? `(${ok}) Válido` : `(${ok}) Válidos`}`,
-            `${pending === 1 || pending === 0 ? `(${pending}) Pendente` : `(${pending}) Pendentes`}`,
-            `${ko === 1 || ko === 0 ? `(${ko}) Anulado` : `(${ko}) Anulados`}`,
-          ], // 2 posição: ok, 3 posição: r, 4 posição ko
-          [1, 12, 3, 1],
-          [2, 15, 1, 3],
-          [3, 1, 6, 2],
-          [4, 10, 2, 5],
-          [5, 9, 4, 7],
-          [6, 8, 6, 1],
-          [7, 1, 8, 0],
-          [8, 4, 1, 4],
-          [9, 5, 3, 2],
-          [10, 6, 1, 4],
-          [11, 7, 3, 1],
-          [12, 4, 0, 2],
-          [13, 7, 1, 4],
-          [14, 1, 3, 7],
-        ]}
+        data={data}
         options={{
           chart: {
             title: `Produção mês ${currentMonth}: `,
@@ -102,55 +90,34 @@ const OfficeMonthResult = (props) => {
       <BackIcon className={"backIcon"} onClick={_goBack} />
       <OfficeMonthResultContainer>
         <FirstRow>
-          {renderOfficeMonthResult()}
+          {all !== 0 ? renderOfficeMonthResult(): <></>}
           <ContractsInfo>
           {all === 0 ? 
             <> 
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🟢</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{ok} {`${ok === 1 ? "contrato" : "contratos"} ${ok === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-
-              <MDCol><SubHeading>834€</SubHeading></MDCol>
-            </MDRow>
-
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🟡</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{pending} {`${pending === 1 ? "contrato" : "contratos"} ${pending === 1 ? "pendente" : "pendentes"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-              <MDCol><SubHeading>122€</SubHeading></MDCol>
-            </MDRow>
-
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🔴</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{ko} {`${ko === 1 ? "contrato" : "contratos"} ${ko === 1 ? "anulado" : "anulados"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-              <MDCol><SubHeading>20€</SubHeading></MDCol>
-
-            </MDRow>
-              <SmallSubHeading>Total: {all} {`${all === 1 ? "contrato" : "contratos"}`}</SmallSubHeading>
+            <EmptyContainer>
+              <SubHeading>Ainda não há contratos...</SubHeading>
+            </EmptyContainer>
             </>
             :
-            <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+            <MDRow style={{display: 'flex', justifyContent: 'space-between'}}>
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+            </MDRow>
+
           }
           </ContractsInfo>
         </FirstRow>
-
+        
+        { all !== 0 ?
         <SecondRow>
           <HomePageButton>
             <Body>
@@ -160,6 +127,10 @@ const OfficeMonthResult = (props) => {
             </Body>
           </HomePageButton>
         </SecondRow>
+        :
+        <>
+        </>
+        } 
       
       </OfficeMonthResultContainer>
 

@@ -94,11 +94,20 @@ const HomePageButton = styled.div`
   width: 100%;
 `;
 
+const EmptyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+`;
+
 export {
   MainContainer,
   OfficeMonthResultContainer,
   FirstRow,
   SecondRow,
   ContractsInfo,
-  HomePageButton
+  HomePageButton,
+  EmptyContainer
 };

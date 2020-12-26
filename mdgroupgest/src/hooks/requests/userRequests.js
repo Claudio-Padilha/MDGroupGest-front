@@ -113,7 +113,7 @@ export default {
                   localStorage.setItem('currentToken', currentAuthToken);
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));
 
-
+                  dataRequests.getOfficesResultsByDay(user?.user?.office)
 
                   return new Promise((resolve, reject) => {
 
