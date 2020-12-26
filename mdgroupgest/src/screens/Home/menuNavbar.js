@@ -2,13 +2,11 @@ import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
 
-import { MDNavbar, MDDropdown } from './md';
+import { MDNavbar } from './md';
 
 import { SubHeading, Body } from '../../components/Text/text';
 import { LogoutIcon } from '../../components/Icon/icons';
 import userRequests from '../../hooks/requests/userRequests';
-
-import useLogin from '../../hooks/login';
 
 import {
   ProfileContainer,

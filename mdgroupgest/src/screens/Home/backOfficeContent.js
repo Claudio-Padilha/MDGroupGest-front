@@ -1,9 +1,8 @@
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
 import { Avatar } from '@material-ui/core';
-import Divider from '@material-ui/core/Divider';
 import { AvatarGroup } from '@material-ui/lab';
 
 import {
@@ -15,8 +14,7 @@ import {
 } from './md';
 
 import Button from "../../components/Button/button";
-import { Heading, SubHeading, Body } from '../../components/Text/text';
-import data from '../MyTeam/data';
+import { Heading, SmallSubHeading, SubHeading, Body } from '../../components/Text/text';
 
 import {
   TeamContainer,
@@ -25,20 +23,17 @@ import {
   TeamAvatarsContainer 
 } from './styles';
 
-import useLogin from '../../hooks/login';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
 
 const BackOfficeContent = (props) => {
-  console.log(props, 'PROPS DE BACK OFFICE')
 
-  // const currentUser = useLogin();
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
+  const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
   const currentUserIsAdmin = currentUser?.user?.is_admin;
-  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
 
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
@@ -52,58 +47,63 @@ const BackOfficeContent = (props) => {
   const instructorsArr = [];
   const salesPersonsArr = [];
 
-  // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
-  for (var i = 0; i < 1; i++) {
+  var employeeCounter = 0
+  const totalEmployeeTypes = []
+  const totalEmployees = []
 
-    var teamLeaders = data?.children;
-    var teamLeadersQuantity = data?.children.length;
-
-    // Loop para colocarmos todos os Team Leaders em uma array só
-    for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
-      teamLeadersArr.push(teamLeaders[qtd]);
-    }
-
-    teamLeadersCounter += teamLeadersQuantity;
-
-    // Loop sobre os Team Leaders -> Retiramos os INSTRUTORES
-    for (var j = 0; j < teamLeaders.length; j++) {
-
-      var instructors = teamLeaders[j]?.children;
-      var instructorsQuantity = teamLeaders[j]?.children.length;
-      instructorsCounter += instructorsQuantity;
-
-        // Loop para colocarmos todos os instrutores em uma array só
-        for (let qtd = 0; qtd < instructorsQuantity; qtd++) {
-          instructorsArr.push(instructors[qtd]);
-        }         
-
-      // Loop sobre os Instrutores -> Retiramos os COMERCIAIS
-      for (var k = 0; k < instructors.length; k++) {
-
-        var salesPersons = instructors[k]?.children;
-        var salesPersonsQuantity = instructors[k]?.children.length;
-        salesPersonsCounter += salesPersonsQuantity;
-
-          // Loop para colocarmos todos os comerciais em uma array só
-          for (let qtd = 0; qtd < salesPersonsQuantity; qtd++) {
-            salesPersonsArr.push(salesPersons[qtd]);
-          }             
-      }
-    }
+  for (var employee in myTeam) {
+    totalEmployeeTypes.push(myTeam[employee])
   }
 
-  const totalEmployees = teamLeadersArr.concat(instructorsArr, salesPersonsArr);
-  const quantityOfTotalEmployees = totalEmployees?.length;
+  totalEmployeeTypes.map(employeeType => {
+    for(let i = 0; i < employeeType?.length; i++) {
+      totalEmployees.push(employeeType[i])
+    }
+  })
 
-  // console.log(totalEmployees, 'totalEmployees')
-  // console.log(teamLeadersArr, 'teamLeadersArr')
-  // console.log(instructorsArr, 'instructorsArr')
-  // console.log(salesPersonsArr, 'salesPersonsArr')
+  // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
+    for (var i = 0; i < 1; i++) {
+
+      var teamLeaders = myTeam?.children;
+      var teamLeadersQuantity = myTeam?.children?.length;
+  
+      // Loop para colocarmos todos os Team Leaders em uma array só
+      for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
+        teamLeadersArr.push(teamLeaders[qtd]);
+      }
+  
+      teamLeadersCounter += teamLeadersQuantity;
+  
+      // Loop sobre os Team Leaders -> Retiramos os INSTRUTORES
+      for (var j = 0; j < teamLeaders?.length; j++) {
+  
+        var instructors = teamLeaders[j]?.children;
+        var instructorsQuantity = teamLeaders[j]?.children?.length;
+        instructorsCounter += instructorsQuantity;
+  
+          // Loop para colocarmos todos os instrutores em uma array só
+          for (let qtd = 0; qtd < instructorsQuantity; qtd++) {
+            instructorsArr.push(instructors[qtd]);
+          }         
+  
+        // Loop sobre os Instrutores -> Retiramos os COMERCIAIS
+        for (var k = 0; k < instructors.length; k++) {
+  
+          var salesPersons = instructors[k]?.children;
+          var salesPersonsQuantity = instructors[k]?.children.length;
+          salesPersonsCounter += salesPersonsQuantity;
+  
+            // Loop para colocarmos todos os comerciais em uma array só
+            for (let qtd = 0; qtd < salesPersonsQuantity; qtd++) {
+              salesPersonsArr.push(salesPersons[qtd]);
+            }             
+        }
+      }
+    }
 
   const history = useHistory();
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
-  console.log(localStorage)
 
   const koContracts = [];
   const okContracts = [];
@@ -163,13 +163,6 @@ const BackOfficeContent = (props) => {
     })
   }
 
-  // function _getComissions() {
-  //   var comissions = []
-  //   contracts.map(contract => {
-  //     comissions.push(parseFloat(contract?.employee_comission))
-  //   })
-  //   return comissions;
-  // }
   dataRequests.getMyTeam(currentUser?.user?.office)
 
   function _getOfficeComissions() {
@@ -202,9 +195,10 @@ const BackOfficeContent = (props) => {
           />
         </MDContainer>
         <TeamAvatarsContainer>
-          <AvatarGroup max={7}>
+          <AvatarGroup max={12}>
             {totalEmployees.map(employee => (
-              <Avatar alt="Avatar Funcionário" src={employee.photo} />
+              console.log(employee, 'FUNCIONÀRIO'),
+              <Avatar alt="Avatar Funcionário" src={employee?.user?.avatar} />
             ))}
           </AvatarGroup>
         </TeamAvatarsContainer>
@@ -238,6 +232,16 @@ const BackOfficeContent = (props) => {
 
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
+            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
+            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
+          </MDCard.Body>
+        </MDCard>
+
+
+
+        {/* <MDCard className={"managerMonth"}>
+          <MDCard.Body className={"managerMonthCardBody"}>
             <Link
               to={{
                 pathname: "/MyMonth",
@@ -250,7 +254,7 @@ const BackOfficeContent = (props) => {
             </Link> 
             <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
           </MDCard.Body>
-        </MDCard>
+        </MDCard> */}
 
       </MDCard>
     )
@@ -261,16 +265,8 @@ const BackOfficeContent = (props) => {
     return (
       <MDCard>
         <MDCard.Body className={"monthCardBody"}>
-          <Link
-            to={{
-              pathname: "/MyMonth",
-              state: {
-                data: "MÊS"
-              }
-            }}
-          >
-            <SubHeading>Meu mês</SubHeading>
-          </Link> 
+          <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
+          <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
           <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
         </MDCard.Body>
       </MDCard>
@@ -368,6 +364,17 @@ const BackOfficeContent = (props) => {
           <Link to={{
             pathname:"/MyResults",
             state: {
+              percentages: {
+                ok: okPercentage,
+                r: rPercentage,
+                ko: koPercentage,
+              },
+              contracts: {
+                ok: okContracts,
+                r: rContracts,
+                ko: koContracts,
+                all: allContracts
+              },
               data: "RESULTADOS",
             }  
           }}>

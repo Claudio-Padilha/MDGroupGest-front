@@ -7,7 +7,6 @@ import BackOffice from './screens/Home/backOffice';
 import EmployeeType from './screens/EmployeeType/employeeType';
 import ContractList from './screens/ContractList/contractList';
 import MyResults from './screens/MyResults/myResults';
-import MyMonth from './screens/MyMonth/myMonth';
 import MyTeam from './screens/MyTeam/myTeam';
 import EmployeeList from './screens/EmployeeList/employeeList';
 import ContractDetail from './screens/ContractDetail/contractDetail';
@@ -31,7 +30,6 @@ function App() {
     employeeType: "/EmployeeType",
     contractList: "/ContractList",
     myResults: "/MyResults",
-    myMonth: "/MyMonth",
     myTeam: "/MyTeam",
     employeeList: "/EmployeeList",
     contractDetail: "/ContractDetail",
@@ -52,7 +50,6 @@ function App() {
     { path: paths.employeeType, component: EmployeeType },
     { path: paths.contractList, component: ContractList },
     { path: paths.myResults, component: MyResults },
-    { path: paths.myMonth, component: MyMonth },
     { path: paths.myTeam, component: MyTeam },
     { path: paths.employeeList, component: EmployeeList },
     { path: paths.contractDetail, component: ContractDetail },

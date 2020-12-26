@@ -4,8 +4,6 @@ import Tree from 'react-tree-graph';
 
 import { BackIcon } from '../../components/Icon/icons';
 
-import data from './data';
-
 import dataRequests from '../../hooks/requests/dataRequests'
 
 import { MainContainer } from "./styles";
@@ -193,6 +191,7 @@ const MyTeam = () => {
         }
       }
     }
+    localStorage.setItem('teamData', JSON.stringify(data))
     return data;
   }
 

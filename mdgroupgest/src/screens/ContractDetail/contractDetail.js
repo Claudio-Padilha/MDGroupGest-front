@@ -17,9 +17,11 @@ import Slide from '@material-ui/core/Slide';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
+import InputAdornment from '@material-ui/core/InputAdornment';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-
+import AccountCircle from '@material-ui/icons/AccountCircle';
+import Avatar from '@material-ui/core/Avatar';
 
 
 import Swal from 'sweetalert2';
@@ -234,8 +236,18 @@ const handleClose = () => {
   }
 
   const history = useHistory();
+  const [nif, setNif] = useState('');
+  console.log(nif, 'NIF')
 
+  // tentar sem use state, função na mão
+  
   const renderContract = () => {
+    function _setNif (value) {
+      const nif = value;
+      return nif;
+    }
+
+    console.log(_setNif(), 'NIF')
     return (
       <>
         <Dialog style={{padding: '2%'}} fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -258,6 +270,7 @@ const handleClose = () => {
             <DialogContentText style={{marginBottom: '3%', marginTop: '0%'}}>
               {`Olá ${currentUser?.user?.name}, você tem permissões para alterar um contrato. ✅`}
             </DialogContentText>
+            <form noValidate autoComplete="off">
             <Row style={{height: '60vh', width: '100%'}}>
               <Col style={{width: '50%'}}>
                 <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
@@ -267,6 +280,7 @@ const handleClose = () => {
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
+                    
                     <TextField
                       autoFocus
                       margin="dense"
@@ -274,12 +288,13 @@ const handleClose = () => {
                       label="Nome do cliente"
                       placeholder={contract?.client_name}
                       type="text"
+                      onChange={(e) => _setNif(e.target.value)}
                     />
 
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="name"
+                      id="nif"
                       label="NIF / NIPC"
                       placeholder={contract?.client_nif}
                       type="text"
@@ -288,7 +303,7 @@ const handleClose = () => {
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="name"
+                      id="contact"
                       label="Contacto"
                       placeholder={contract?.client_contact}
                       type="text"
@@ -487,11 +502,11 @@ const handleClose = () => {
               </Col>
             </Row>  
             
-            
+            </form>
 
           </DialogContent>
           <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-            <Button action={() => console.log('teste') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+            <Button action={() => console.log('test') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
           </DialogActions>
         </Dialog>
 

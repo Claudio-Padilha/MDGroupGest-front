@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import BackOfficeContent from './backOfficeContent';
 import AdminBackOfficeContent from './adminBackOfficeContent';
 import { MDContainer } from './md';
@@ -11,7 +11,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import useLogin from '../../hooks/login';
 
 import { WelcomeWithLogoContainer, LogoContainer } from "./styles";
-import { AddIcon, OfficeIcon } from '../../components/Icon/icons';
+import {  OfficeIcon } from '../../components/Icon/icons';
 
 export default function BackOfficeHeader(props) {
   const user = useLogin();
