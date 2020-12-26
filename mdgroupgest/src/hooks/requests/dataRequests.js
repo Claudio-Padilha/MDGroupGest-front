@@ -188,5 +188,28 @@ export default {
         resolve(error);
       })
     })
+  },
+
+  getOfficesResultsByDay: (office_id) => {
+
+    return new Promise((resolve) => {
+      var officesResultsByDayRequest = {
+        method: 'GET',
+        url: `http://127.0.0.1:8000/officesResultsByDay/${office_id}`,
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(officesResultsByDayRequest)
+      .then(res => {
+        localStorage.removeItem('officeResultsByDay')
+        localStorage.setItem('officeResultsByDay', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
   }
 }

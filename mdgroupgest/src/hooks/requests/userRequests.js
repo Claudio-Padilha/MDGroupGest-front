@@ -108,6 +108,7 @@ export default {
                 const currentAuthToken = res?.data?.user?.token;
 
                 if (currentAuthToken) {
+                  dataRequests.getOfficesResultsByDay(res?.data?.user?.office)
                   localStorage.setItem('currentUser', JSON.stringify(user));
                   localStorage.setItem('currentToken', currentAuthToken);
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));

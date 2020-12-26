@@ -24,11 +24,19 @@ import {
   MDCol,
   MDButton 
 } from '../../screens/Home/md';
+import dataRequests from "../../hooks/requests/dataRequests";
 
 
 const OfficeMonthResult = (props) => {
 
-  console.log(props, 'props from office result')
+  const user = JSON.parse(localStorage.getItem('currentUser'))
+
+  const ko = props?.location?.state?.contracts?.ko?.length;
+  const ok = props?.location?.state?.contracts?.ok?.length;
+  const pending = props?.location?.state?.contracts?.pending?.length;
+  const all = props?.location?.state?.contracts?.all?.length;
+
+  
 
   const currentMonth = useDate();
 
@@ -36,14 +44,11 @@ const OfficeMonthResult = (props) => {
     window.location.assign("/BackOffice");    
   }
 
-  const ko = props?.location?.state?.contracts?.ko?.length;
-  const ok = props?.location?.state?.contracts?.ok?.length;
-  const pending = props?.location?.state?.contracts?.pending?.length;
-  const all = props?.location?.state?.contracts?.all?.length;
+  const data = props?.location?.state?.contracts?.dataToGraphic
 
-  function _getData() {
-    
-  }
+  console.log()
+
+  console.log("ANTES DA EXECITAR O CHART: ", data)
 
   function _chart(){
     return (
@@ -52,28 +57,7 @@ const OfficeMonthResult = (props) => {
         height={'500px'}
         chartType="Line"
         loader={<div><Body>Carregando gráfico...</Body></div>}
-        data={[
-          [
-            'Dias',
-            `${ok === 1 || ok === 0 ? `(${ok}) Válido` : `(${ok}) Válidos`}`,
-            `${pending === 1 || pending === 0 ? `(${pending}) Pendente` : `(${pending}) Pendentes`}`,
-            `${ko === 1 || ko === 0 ? `(${ko}) Anulado` : `(${ko}) Anulados`}`,
-          ], // 2 posição: ok, 3 posição: r, 4 posição ko
-          [1, 12, 3, 1],
-          [2, 15, 1, 3],
-          [3, 1, 6, 2],
-          [4, 10, 2, 5],
-          [5, 9, 4, 7],
-          [6, 8, 6, 1],
-          [7, 1, 8, 0],
-          [8, 4, 1, 4],
-          [9, 5, 3, 2],
-          [10, 6, 1, 4],
-          [11, 7, 3, 1],
-          [12, 4, 0, 2],
-          [13, 7, 1, 4],
-          [14, 1, 3, 7],
-        ]}
+        data={data}
         options={{
           chart: {
             title: `Produção mês ${currentMonth}: `,

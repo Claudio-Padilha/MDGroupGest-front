@@ -43,6 +43,30 @@ const BackOfficeContent = (props) => {
     return currentUser?.user?.user_type;
   }, [currentUser]);
 
+  let    dataOfficeResult = null
+
+  function _getData(id, ok, ko, pending, all) {
+    var dataToForm = []
+    
+    const dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
+
+    Object.keys(dataToPopulateGraphic).forEach(function(item){
+      dataToForm.push(dataToPopulateGraphic[item])
+     });
+    
+    var ret =[ [
+      'Dias',
+      `${ok === 1 || ok === 0 ? `(${ok}) Válido` : `(${ok}) Válidos`}`,
+      `${pending === 1 || pending === 0 ? `(${pending}) Pendente` : `(${pending}) Pendentes`}`,
+      `${ko === 1 || ko === 0 ? `(${ko}) Anulado` : `(${ko}) Anulados`}`,
+    ], ...dataToForm]
+
+    console.log(ret)
+
+    return ret
+  }
+
+
   var teamLeadersCounter = 0;
   var instructorsCounter = 0;
   var salesPersonsCounter = 0;
@@ -141,6 +165,8 @@ const BackOfficeContent = (props) => {
     // "k" is total contracts qtd
     const a = allContracts?.length;
 
+  dataOfficeResult = _getData(currentUser.user.office, x, y, z, a)
+
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {
       const p = (percent / total) * 100;
@@ -224,7 +250,8 @@ const BackOfficeContent = (props) => {
                     all: allContracts,
                     ok: okContracts,
                     ko: koContracts,
-                    pending: rContracts
+                    pending: rContracts,
+                    dataToGraphic: dataOfficeResult
                   }
                 }
               }}
