@@ -66,9 +66,9 @@ const HomePageButton = styled.div`
 
 const GreenCircle = styled.div`
   display: block;
-  border-radius: 50%;
-  height: 150px;
-  width: 150px;
+  border-radius: 3%;
+  height: 70px;
+  width: 200px;
   margin: 0;
   background: ${CONSTANTS?.colors?.green};
   box-shadow: 0px 1px 6px rgba(0,0,0,0.8);
@@ -76,9 +76,9 @@ const GreenCircle = styled.div`
 
 const YellowCircle = styled.div`
   display: block;
-  border-radius: 50%;
-  height: 150px;
-  width: 150px;
+  border-radius: 3%;
+  height: 70px;
+  width: 200px;
   margin: 0;
   background: ${CONSTANTS?.colors?.brand?.yellow};
   box-shadow: 0px 1px 6px rgba(0,0,0,0.8);
@@ -86,9 +86,9 @@ const YellowCircle = styled.div`
 
 const RedCircle = styled.div`
   display: block;
-  border-radius: 50%;
-  height: 150px;
-  width: 150px;
+  border-radius: 3%;
+  height: 70px;
+  width: 200px;
   margin: 0;
   background: ${CONSTANTS?.colors?.red};
   box-shadow: 0px 1px 6px rgba(0,0,0,0.8);

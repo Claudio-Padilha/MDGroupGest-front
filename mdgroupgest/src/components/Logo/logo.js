@@ -1,12 +1,17 @@
 import React from "react";
 
-import { LogoContainer } from "./styles";
+import { LogoContainer, LogoContainerAnimated } from "./styles";
 
 import MDGroupLogoM from "../../assets/icons/loboMD.png";
 import MDGroupLogoL from "../../assets/icons/loboLG.png";
 
-const LogoMD = ({ action }) => {
+const LogoMD = ({ action, animated }) => {
   return (
+    animated ? 
+    <LogoContainerAnimated onClick={action} >
+      <img src={MDGroupLogoM} alt="MDGroup Logo Animated MD"  />
+    </LogoContainerAnimated>
+    :
     <LogoContainer onClick={action} >
       <img src={MDGroupLogoM} alt="MDGroup Logo MD"  />
     </LogoContainer>

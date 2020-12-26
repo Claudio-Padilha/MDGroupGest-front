@@ -26,7 +26,7 @@ const Login = () => {
     <MainContainer>
       <LoginContainer>
       <Corner />
-      <LogoMD />
+      <LogoMD animated />
         <Form
           top
           bg="primary"
