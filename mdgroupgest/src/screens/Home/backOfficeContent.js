@@ -28,9 +28,13 @@ import {
 import useLogin from '../../hooks/login';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
+import officesRequests from '../../hooks/requests/officesRequests'
 
 const BackOfficeContent = (props) => {
   console.log(props, 'PROPS DE BACK OFFICE')
+  console.log(localStorage, "LOCAL STORAGE ++++++++++++++==")
+
+  
 
   // const currentUser = useLogin();
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -40,16 +44,17 @@ const BackOfficeContent = (props) => {
   const currentUserIsAdmin = currentUser?.user?.is_admin;
   const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
 
+  officesRequests.getOffice(currentUser.user.office)
+
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
   }, [currentUser]);
 
-  let    dataOfficeResult = null
+  let dataOfficeResult = null
+  let dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
 
-  function _getData(id, ok, ko, pending, all) {
-    var dataToForm = []
-    
-    const dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
+  async function _getData(id, ok, ko, pending, all) {
+    var dataToForm = []  
 
     Object.keys(dataToPopulateGraphic).forEach(function(item){
       dataToForm.push(dataToPopulateGraphic[item])
@@ -166,7 +171,7 @@ const BackOfficeContent = (props) => {
     // "k" is total contracts qtd
     const a = allContracts?.length;
 
-  dataOfficeResult = _getData(currentUser.user.office, x, y, z, a)
+  dataOfficeResult = _getData(currentUser.user.office, y, x, z, a)
 
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {

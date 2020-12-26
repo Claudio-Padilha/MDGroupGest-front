@@ -12,6 +12,7 @@ import { MainContainer } from "./styles";
 
 const MyTeam = () => {
 
+  const currentOffice = JSON.parse(localStorage.getItem('currentOffice'));
   const user = JSON.parse(localStorage.getItem('currentUser'))
   const history = useHistory();
 
@@ -47,7 +48,7 @@ const MyTeam = () => {
     const sales_people = employees['sales_person']
 
     var data = {
-      name: 'ESCRITÓRIO LUCAS PADILHA',
+      name: currentOffice.name,
       textProps: {x: -30, y: 25},
       children: []
     }

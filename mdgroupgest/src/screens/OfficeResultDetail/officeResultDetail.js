@@ -14,7 +14,8 @@ import {
   FirstRow,
   SecondRow,
   ContractsInfo,
-  HomePageButton
+  HomePageButton,
+  EmptyContainer
 } from "./styles";
 
 import {
@@ -90,55 +91,34 @@ const OfficeMonthResult = (props) => {
       <BackIcon className={"backIcon"} onClick={_goBack} />
       <OfficeMonthResultContainer>
         <FirstRow>
-          {renderOfficeMonthResult()}
+          {all !== 0 ? renderOfficeMonthResult(): <></>}
           <ContractsInfo>
           {all === 0 ? 
             <> 
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🟢</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{ok} {`${ok === 1 ? "contrato" : "contratos"} ${ok === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-
-              <MDCol><SubHeading>834€</SubHeading></MDCol>
-            </MDRow>
-
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🟡</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{pending} {`${pending === 1 ? "contrato" : "contratos"} ${pending === 1 ? "pendente" : "pendentes"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-              <MDCol><SubHeading>122€</SubHeading></MDCol>
-            </MDRow>
-
-            <MDRow style={{display: 'flex', width: '60%', justifyContent: 'space-between'}}>
-              <MDRow style={{display: 'flex', width: '100%'}}>
-                <MDCol style={{marginRight: '4%'}}><SubHeading>🔴</SubHeading></MDCol>
-
-                <MDCol>
-                  <SmallSubHeading>{ko} {`${ko === 1 ? "contrato" : "contratos"} ${ko === 1 ? "anulado" : "anulados"}`}</SmallSubHeading>
-                </MDCol>
-              </MDRow>
-
-              <MDCol><SubHeading>20€</SubHeading></MDCol>
-
-            </MDRow>
-              <SmallSubHeading>Total: {all} {`${all === 1 ? "contrato" : "contratos"}`}</SmallSubHeading>
+            <EmptyContainer>
+              <SubHeading>Ainda não há contratos...</SubHeading>
+            </EmptyContainer>
             </>
             :
-            <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+            <MDRow style={{display: 'flex', justifyContent: 'space-between'}}>
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+
+              <MDCol>
+              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              </MDCol>
+            </MDRow>
+
           }
           </ContractsInfo>
         </FirstRow>
-
+        
+        { all !== 0 ?
         <SecondRow>
           <HomePageButton>
             <Body>
@@ -148,6 +128,10 @@ const OfficeMonthResult = (props) => {
             </Body>
           </HomePageButton>
         </SecondRow>
+        :
+        <>
+        </>
+        } 
       
       </OfficeMonthResultContainer>
 
