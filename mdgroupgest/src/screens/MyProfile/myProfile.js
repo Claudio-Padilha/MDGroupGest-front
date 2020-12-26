@@ -13,12 +13,11 @@ import employeesRequests from "../../hooks/requests/employeesRequests"
 
 const MyProfile = (props) => {
   console.log(props, 'props')
-  const currentUser = localStorage.getItem('currentUser');
-  const user =  JSON.parse(currentUser);
+  const currentUser = localStorage.getItem('userForPhoto');
+  const user = JSON.parse(currentUser);
   const allImputs = {imgUrl: ''}
   const [imageAsFile, setImageAsFile] = useState('')
   const [imageAsUrl, setImageAsUrl] = useState(allImputs)
-
 
   const history = useHistory();
   const avatarClasses = useStyles()
@@ -78,7 +77,7 @@ const MyProfile = (props) => {
       <BackIcon onClick={_goBack} />
       <Avatar
         alt="Profile Image"
-        src={user.user.avatar}
+        src={user?.user?.avatar}
         className={avatarClasses.large}
       />
       <Body>{userName}</Body>

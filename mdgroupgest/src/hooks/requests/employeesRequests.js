@@ -212,8 +212,8 @@ export default {
 
         console.log(res.data, "RESPONSE FROM ADD PHOTO")
 
-        localStorage.removeItem('currentUser');
-        localStorage.setItem('currentUser', JSON.stringify(res.data))
+        localStorage.removeItem('userForPhoto');
+        localStorage.setItem('userForPhoto', JSON.stringify(res.data))
 
         resolve(res)
       })

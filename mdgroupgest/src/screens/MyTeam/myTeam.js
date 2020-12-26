@@ -56,8 +56,13 @@ const MyTeam = () => {
       data.children.push(
         {
           name: managers[i].user.name,
-          photo: managers[i].user.avatar,
           textProps: {x: -30, y: 25},
+          nodeProps: {
+            href: managers[i].user.avatar ? managers[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+            height: 30,
+            width: 30,
+            nodeRadius: 35,
+          },
           children:[]
         }
       )
@@ -67,7 +72,12 @@ const MyTeam = () => {
           data.children[i].children.push(
             {
               name: team_leaders[j].user.name,
-              photo: team_leaders[j].user.avatar,
+              nodeProps: {
+                href: team_leaders[j].user.avatar ? team_leaders[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                height: 30,
+                width: 30,
+                nodeRadius: 35,
+              },
               textProps: {x: -30, y: 25},
               children:[]
             }
@@ -78,7 +88,12 @@ const MyTeam = () => {
               data.children[i].children[j].children.push(
                 {
                   name: instructors[k].user.name,
-                  photo: instructors[k].user.avatar,
+                  nodeProps: {
+                    href: instructors[k].user.avatar ? instructors[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                    height: 30,
+                    width: 30,
+                    nodeRadius: 35,
+                  },
                   textProps: {x: -30, y: 25},
                   children:[]
                 }
@@ -89,7 +104,12 @@ const MyTeam = () => {
                   data.children[i].children[j].children[k].children.push(
                     {
                       name: sales_people[l].user.name,
-                      photo: sales_people[l].user.avatar,
+                      nodeProps: {
+                        href: sales_people[l].user.avata ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                        height: 30,
+                        width: 30,
+                        nodeRadius: 35,
+                      },
                       textProps: {x: -30, y: 25},
                       children:[]
                     }
@@ -104,7 +124,12 @@ const MyTeam = () => {
               data.children[i].children[j].children.push(
                 {
                   name: sales_people[l].user.name,
-                  photo: sales_people[l].user.avatar,
+                  nodeProps: {
+                    href: sales_people[l].user.avatar ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                    height: 30,
+                    width: 30,
+                    nodeRadius: 35,
+                  },
                   textProps: {x: -30, y: 25},
                   children:[]
                 }
@@ -119,7 +144,12 @@ const MyTeam = () => {
           data.children[i].children.push(
             {
               name: instructors[j].user.name,
-              photo: instructors[j].user.avatar,
+              nodeProps: {
+                href: instructors[j].user.avatar ? instructors[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                height: 30,
+                width: 30,
+                nodeRadius: 35,
+              },
               textProps: {x: -30, y: 25},
               children:[]
             }
@@ -130,7 +160,12 @@ const MyTeam = () => {
               data.children[i].children[j].children.push(
                 {
                   name: sales_people[k].user.name,
-                  photo: sales_people[k].user.avatar,
+                  nodeProps: {
+                    href: sales_people[k].user.avatar ? sales_people[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                    height: 30,
+                    width: 30,
+                    nodeRadius: 35,
+                  },
                   textProps: {x: -30, y: 25},
                   children:[]
                 }
@@ -145,7 +180,12 @@ const MyTeam = () => {
           data.children[i].children.push(
             {
               name: sales_people[j].user.name,
-              photo: sales_people[j].user.avatar,
+              nodeProps: {
+                href: sales_people[j].user.avatar ? sales_people[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                height: 30,
+                width: 30,
+                nodeRadius: 35,
+              },
               textProps: {x: -30, y: 25},
               children:[]
             }
@@ -182,8 +222,8 @@ const MyTeam = () => {
         nodeProps={{
           height: 30,
           width: 30,
-          nodeRadius: 15,
-          href: 'https://i.pinimg.com/originals/58/d8/c1/58d8c1a2363061117c2c00018b04e34c.jpg'
+          nodeRadius: 35,
+          href: 'https://i.pinimg.com/originals/58/d8/c1/58d8c1a2363061117c2c00018b04e34c.jpg',
         }}
         margins={{
           top: 20,

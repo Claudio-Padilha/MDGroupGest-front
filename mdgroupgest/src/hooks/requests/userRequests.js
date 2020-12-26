@@ -109,6 +109,7 @@ export default {
 
                 if (currentAuthToken) {
                   dataRequests.getOfficesResultsByDay(res?.data?.user?.office)
+                  localStorage.setItem('userForPhoto', JSON.stringify(user));
                   localStorage.setItem('currentUser', JSON.stringify(user));
                   localStorage.setItem('currentToken', currentAuthToken);
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));

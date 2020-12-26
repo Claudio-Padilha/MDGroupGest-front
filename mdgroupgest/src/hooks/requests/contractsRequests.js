@@ -58,12 +58,12 @@ export default {
       })
     });
   },
-  updateContract: (contractID) => {
+  updateContract: async (contractID) => {
     dataRequests.getSellState()
 
     const sellStates = JSON.parse(localStorage.getItem('sellStates'))
-    console.log(sellStates, 'TESTE')
-    const sellStateOK = sellStates?.filter(sellState => {
+
+    const sellStateOK = await sellStates?.filter(sellState => {
       return sellState?.name === "ok"
     });
     

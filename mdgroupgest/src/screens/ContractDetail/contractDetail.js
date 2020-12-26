@@ -1,15 +1,39 @@
 import React, { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
+import { Col } from 'react-bootstrap';
+
+
+import { makeStyles } from '@material-ui/core/styles';
+import Dialog from '@material-ui/core/Dialog';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import IconButton from '@material-ui/core/IconButton';
+import Typography from '@material-ui/core/Typography';
+import CloseIcon from '@material-ui/icons/Close';
+import Slide from '@material-ui/core/Slide';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import TextField from '@material-ui/core/TextField';
+
+
+
 import Swal from 'sweetalert2';
 
-import { Heading, Body, SmallSubHeading } from '../../components/Text/text';
+import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
-import { BackIcon } from '../../components/Icon/icons';
+import { BackIcon, EditIcon } from '../../components/Icon/icons';
+import SwitchButton from "../../components/ToggleComponent/toggleButton";
 
 import contractsRequests from "../../hooks/requests/contractsRequests";
 import dataRequests from '../../hooks/requests/dataRequests'
+
+import ContractEdit from '../ContractEdit/contractEdit';
 
 import CONSTANTS from '../../constants';
 import {
@@ -23,11 +47,48 @@ import { List } from "semantic-ui-react";
 
 
 const ContractDetail = (props) => {
+
+ // modal //
+
+ const useStyles = makeStyles((theme) => ({
+  appBar: {
+    position: 'relative',
+    backgroundColor: CONSTANTS?.colors?.lightGrey,
+    height: '100%'
+  },
+  title: {
+    marginLeft: theme.spacing(2),
+    flex: 1,
+  },
+}));
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+
+  return <Slide direction="up" ref={ref} {...props} />
+
+});
+
+const classes = useStyles();
+const [open, setOpen] = useState(false);
+
+const handleClickOpen = () => {
+  setOpen(true);
+};
+
+const handleClose = () => {
+  setOpen(false);
+  window.location.reload();
+};
+
+
+// end modal
+
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
-
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const currentOfficeID = currentUser?.user?.office;
+  
 
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
@@ -163,14 +224,282 @@ const ContractDetail = (props) => {
     )
   }
 
+  function _handleNavigationToEdit() {
+    history.push({
+      pathname: "/ContractEdit",
+      state: {
+        contractToEdit: contract
+      }
+    })
+  }
+
   const history = useHistory();
 
   const renderContract = () => {
     return (
       <>
-        <List.Item className={isDeleting ? "hideContract" : "contract"}>
+        <Dialog style={{padding: '2%'}} fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+          {/* <AppBar className={classes.appBar}>
+            <Toolbar>
+              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+                <CloseIcon />
+              </IconButton>
+            </Toolbar>
 
-          <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
+            <ContractEdit />
+          </AppBar> */}
+          <Toolbar>
+            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+              <CloseIcon />
+            </IconButton>
+          </Toolbar>
+          <DialogTitle id="form-dialog-title" style={{padding: '0', marginLeft: '3%', marginTop: '3%'}}>Editar contrato</DialogTitle>
+          <DialogContent style={{marginLeft: '3%', padding: '0'}}>
+            <DialogContentText style={{marginBottom: '3%', marginTop: '0%'}}>
+              {`Olá ${currentUser?.user?.name}, você tem permissões para alterar um contrato. ✅`}
+            </DialogContentText>
+            <Row style={{height: '60vh', width: '100%'}}>
+              <Col style={{width: '50%'}}>
+                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                  <Col style={{
+                    width: '45%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Nome do cliente"
+                      placeholder={contract?.client_name}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="NIF / NIPC"
+                      placeholder={contract?.client_nif}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Contacto"
+                      placeholder={contract?.client_contact}
+                      type="text"
+                    />
+                  </Col>
+                  <Col style={{
+                    width: '30%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginRight: '15%'
+                  }}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Data de entrega"
+                      placeholder={contract?.delivery_date}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Data de assinatura"
+                      placeholder={contract?.signature_date}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="name"
+                      label="Tipo de pagamento"
+                      placeholder={contract?.payment__name}
+                      type="text"
+                    />
+                  </Col>
+                </Row>
+
+                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '55%',height: '20vh', marginTop: '3%'}}>
+                  <Col style={{
+                    width: '40%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginLeft: '1%',
+                    marginRight: '5%'
+                  }}>
+                    <SwitchButton
+                      key="electronicBill"
+                      name="electronicBill"
+                      subType="twoColumns"
+                      side="left"
+                      initialValue={contract?.electronic_bill}
+                      label="Factura Electrónica"
+                      onChange={() => console.log('test')}
+                    />
+                    <SwitchButton
+                      key="lightPPI"
+                      name="lightPPI"
+                      subType="twoColumns"
+                      side="left"
+                      initialValue={contract?.electricity_ppi}
+                      label="PPI Luz"
+                      onChange={() => console.log('test')}
+                    />
+
+                  </Col>
+
+                  <Col style={{
+                    width: '30%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}>
+       { contract?.gas_ppi && <SwitchButton
+                      key="gasPPI"
+                      name="gasPPI"
+                      subType="twoColumns"
+                      side="left"
+                      initialValue={contract?.gas_ppi}
+                      label="PPI Gás"
+                      onChange={() => console.log('test')}
+                    />}
+                    <SwitchButton
+                      key="PEL"
+                      name="PEL"
+                      subType="twoColumns"
+                      side="left"
+                      initialValue={contract?.pel}
+                      label="PEL"
+                      onChange={() => console.log('test')}
+                    />
+                  </Col>
+                </Row>
+              </Col>
+              <Col style={{width: '50%'}}>
+                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                  <Col style={{
+                    width: '45%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="employeeName"
+                      label="Comercial"
+                      placeholder={contract?.user__name}
+                      type="text"
+                    />
+                  </Col>
+                  <Col style={{
+                    width: '30%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginRight: '15%'
+                  }}>
+                    <SubHeading style={{display: 'flex'}}>Comissão: <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission}€</SubHeading></SubHeading>
+                  </Col>
+                </Row>
+
+                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                  <Col style={{
+                    width: '45%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                  }}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="sellState"
+                      label="Estado da venda"
+                      placeholder={contract?.sell_state__name}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="gasScale"
+                      label="Escalão Gás"
+                      placeholder={contract?.gas_scale__name}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="CUI"
+                      label="CUI"
+                      placeholder={contract?.cui}
+                      type="text"
+                    />
+                  </Col>
+                  <Col style={{
+                    width: '30%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginRight: '15%'
+                  }}>
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="feedbackCall"
+                      label="Feedback Call"
+                      placeholder={contract?.feedback_call}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="power"
+                      label="Potência"
+                      placeholder={contract?.power__name}
+                      type="text"
+                    />
+
+                    <TextField
+                      autoFocus
+                      margin="dense"
+                      id="CPE"
+                      label="CPE"
+                      placeholder={contract?.cpe}
+                      type="text"
+                    />
+                  </Col>
+                </Row>
+              </Col>
+            </Row>  
+            
+            
+
+          </DialogContent>
+          <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
+            <Button action={() => console.log('teste') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+          </DialogActions>
+        </Dialog>
+
+        <List.Item className={isDeleting ? "hideContract" : "contract"}>
+          <Row style={{ width: '35%', display: 'flex', justifyContent: 'space-between'}}>
+            <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
+            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '33%'}}/>
+          </Row> 
           <Row>
             <Body style={
               {
@@ -278,7 +607,7 @@ const ContractDetail = (props) => {
                   </Column>
 
                   <Column>
-                    <SmallSubHeading><b>Comissão:</b></SmallSubHeading>
+                    <SmallSubHeading><b>Comissão: </b></SmallSubHeading>
                     <Body className={"fieldComission"}>{` +${contract?.employee_comission}€`}</Body>
 
                     <SmallSubHeading></SmallSubHeading>

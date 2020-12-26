@@ -19,7 +19,7 @@ import {
 } from './styles';
 
 export default function MenuNavbar(props) {
-  const user = useLogin();
+  const user = JSON.parse(localStorage.getItem('userForPhoto'));
   const userName = user?.user?.name;
   const currentUserIsAdmin = user?.user?.is_admin;
 
@@ -63,7 +63,7 @@ export default function MenuNavbar(props) {
       <ProfileContainer>
         <Avatar
           alt="Profile Image"
-          src={user.user.avatar}
+          src={user?.user?.avatar}
           className={avatarClasses.large}
         />
         <SubHeading isReverseColor={true}>{userName}</SubHeading>
