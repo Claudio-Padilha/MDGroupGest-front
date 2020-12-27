@@ -1,10 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
 import Swal from 'sweetalert2';
 
-import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import { SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
@@ -14,12 +14,16 @@ import contractsRequests from "../../hooks/requests/contractsRequests";
 import {
   MainContainer,
   Row,
+  Col,
   Column,
   LogoContainer,
   EmptyContainer
 } from "./styles";
 
 import { List } from "semantic-ui-react";
+import SearchBar from "../../components/SearchArea/search";
+import CONSTANTS from "../../constants";
+import { IndexSearch } from "../../components/IndexSearch/indexSearch";
 
 const ContractList = (props) => {
 
@@ -35,16 +39,24 @@ const ContractList = (props) => {
     })
   }
   const history = useHistory();
-
-  var localStorage = window.localStorage;
+  const cameFromDetail = props?.location?.state?.cameFromDetail;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   const contracts = useMemo(() => {
-    if (props?.location?.state?.data) {
-      return props?.location?.state?.data
+    if(cameFromDetail) {
+      const contracts = JSON.parse(localStorage.getItem('contracts'))
+      const contractsToReturn = []
+      for(let i = 0; i < contracts?.length; i++) {
+        if (contracts[i]?.user === currentUser?.user?.id) {
+          contractsToReturn.push(contracts[i])
+        }
+      }
+      return contractsToReturn
+      
     } else {
-      return JSON.parse(localStorage.getItem('contracts'))
-    }
-  },[props])
+      return props?.location?.state?.data
+    } 
+  },[cameFromDetail])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
@@ -66,6 +78,9 @@ const ContractList = (props) => {
       // }
     })
   }
+
+  const [display, setDisplay] = useState('flex')
+  const [isSearching, setIsSearching] = useState(false)
 
   if(deletedID) {
     _removeContractFromRAM()
@@ -132,7 +147,7 @@ const ContractList = (props) => {
       )
   }
 
-  const renderContract = (contract, i) => {
+  const renderContract = (contract, i, searched) => {
     var sellState = contract?.sell_state__name
 
     function _contractType () {
@@ -179,15 +194,14 @@ const ContractList = (props) => {
         )
       }
     }
-    console.log(contract?.sell_state__name, 'TESTE')
 
     return (
       <>
-        <List.Item key={contract.id} className={"eachContract"}>
+        <List.Item key={contract.id} className={searched ? "eachContractSearched" :"eachContract"} style={{display: display}}>
           <Column className={"clientInfo"}>
             <Column>
               <Row>
-                <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${i + 1}`}</SubHeading>
+                <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
               { contract?.sell_state__name !== 'ok' &&
                 <Button
                   style={{
@@ -269,18 +283,105 @@ const ContractList = (props) => {
     );
   };
 
+  const [contractsMatched, setContractsMatched] = useState([])
+
+  function _handleSearchName(value) {
+    setContractsMatched(contracts?.filter(contract => contract.user__name.toLowerCase().includes(value)))
+    return contractsMatched, isSearching
+  }
+
+  function _handleSearchPower(value) {
+    setContractsMatched(contracts?.filter(contract => contract?.power__name?.toLowerCase().includes(value)))
+    return contractsMatched
+  }
+
+  function _handleSearchNif(value) {
+    setContractsMatched(contracts?.filter(contract => contract.client_nif.toString().toLowerCase().includes(value)))
+    return contractsMatched
+  }
+
+  function _handleSearchContractType(value) {
+    setContractsMatched(contracts?.filter(contract => contract.contract_type.toString().toLowerCase().includes(value)))
+    return contractsMatched
+  }
+
+  function _handleSearchSellState(value) {
+    setContractsMatched(contracts?.filter(contract => contract.sell_state__name.toString().toLowerCase().includes(value)))
+    return contractsMatched
+  }
+
   return (
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} color={"black"}/>
+      <Row style={{
+        width: '65%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginRight: '10%',
+        marginLeft: '5%'
+      }}>
+        <SubHeading style={{
+          marginBottom: '0%',
+          color: CONSTANTS?.colors?.mediumGrey,
+          textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
+        }}>Podes pesquisar aqui 🔍</SubHeading>
+      </Row>
+      <Row style={{
+        width: '67%',
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginRight: '10%',
+        marginLeft: '7%'
+      }}>
+        <Col>
+          <Body style={{marginBottom: '2%'}}>Comercial</Body>
+          <SearchBar onChange={(e) => {
+            setIsSearching(true)
+            _handleSearchName(e.target.value.toLowerCase())
+          }} onBlur={() => setIsSearching(false)}/>
+        </Col>
+        <Col>
+          <Body style={{marginBottom: '2%'}}>Potência</Body>
+          <SearchBar onChange={(e) => {
+              setIsSearching(true)
+              _handleSearchPower(e.target.value.toLowerCase())
+            }} onBlur={() => setIsSearching(false)}/>
+        </Col>
+        <Col>
+          <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
+          <SearchBar onChange={(e) => {
+              setIsSearching(true)
+              _handleSearchNif(e.target.value.toLowerCase())
+            }} onBlur={() => setIsSearching(false)}/>
+        </Col>
+        <Col>
+          <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
+          <SearchBar onChange={(e) => {
+              setIsSearching(true)
+              _handleSearchContractType(e.target.value.toLowerCase())
+            }} onBlur={() => setIsSearching(false)}/>
+        </Col>  
+        <Col>
+          <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
+          <SearchBar onChange={(e) => {
+              setIsSearching(true)
+              _handleSearchSellState(e.target.value.toLowerCase())
+            }} onBlur={() => setIsSearching(false)}/>
+        </Col>  
+      </Row>
       <List divided verticalAlign="middle" className={"listContainer"}>
       {contracts?.length === 0 && 
         <EmptyContainer>
           <SubHeading>Ainda não há contratos...</SubHeading>
         </EmptyContainer>
       }
-      {contracts && 
+      {isSearching ?
+        contractsMatched && contractsMatched.map(function(contract, index) {
+          return renderContract(contract, index, true)
+        })
+      : contracts && 
         contracts.map(function(contract, index) {
-          return renderContract(contract, index);
+          return renderContract(contract, index, false);
         })
       }        
       </List>

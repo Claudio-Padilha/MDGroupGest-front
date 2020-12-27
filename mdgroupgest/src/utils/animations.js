@@ -10,6 +10,16 @@ export const increaseSize  = keyframes`
   }
 `;
 
+export const increaseSizeVertical  = keyframes`
+  from {
+    height: 10%;
+  }
+
+  to {
+    height: 40%;
+  }
+`;
+
 export const pulse = keyframes`
   0%, 100% {
     transform: scale(1);
