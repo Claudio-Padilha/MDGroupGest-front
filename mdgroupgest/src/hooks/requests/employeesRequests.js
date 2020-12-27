@@ -123,18 +123,20 @@ export default {
       office: data?.office,
       name: formFields?.name,
       email: formFields?.email,
-      employee_type: data?.user_type,
-      employee_id: data?.id,
+      employee_type: formFields?.employeeAbove?.employee_type,
+      employee_id: formFields?.employeeAbove?.id,
       nif: formFields?.nif,
       contact: formFields?.contact,
       address: formFields?.address,
     }
+    var userType = data?.user_type;
+    var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
     return new Promise((resolve, reject) => {
 
       var employeeUpdateRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/${data?.user_type}/`,
+          url: `http://127.0.0.1:8000/${user_type}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },

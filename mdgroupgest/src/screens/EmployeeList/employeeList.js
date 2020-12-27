@@ -67,7 +67,7 @@ const EmployeeList = (props) => {
           title: title,
           userType: userType,
           employeeToAssociate: employeeToAssociate,
-          employeesComingFromList: employees,
+          employeesComingFromList: isFromEdit ? employeesReturningFromEdit : employees,
         }
       })
     }
