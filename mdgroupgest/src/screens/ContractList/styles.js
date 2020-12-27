@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import CONSTANTS from '../../constants';
+import { fadeIn } from "../../utils/animations";
 
 const MainContainer = styled.div`
   display: flex;
@@ -90,6 +91,44 @@ const MainContainer = styled.div`
       justify-content: space-around;
       align-items: center;
     }
+
+    .eachContractSearched {
+      .optionsAboutContract {
+        width: 20%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 25%;
+        margin-top: 5%;
+        .secondaryButton {
+          background-color: ${CONSTANTS.colors.white};
+          span {
+            color: ${CONSTANTS.colors.black};
+          }
+        }
+      }
+      .contractComission {
+        margin-top: 3%;
+      }
+      .clientInfo {
+        width: 30%;
+      }
+      .rowOfClientInfo {
+        width: 100%;
+        .pairOfClientInfo {
+          width: 50%;
+        }
+      }
+      height: 40%;
+      margin-top: 2%;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      display: flex;
+      border: double;
+      box-shadow: 5px 3px 7px rgba(0, 0, 0, 0.8);
+      animation: ${fadeIn} 2s linear;
+    }
   }
 `;
 
@@ -109,6 +148,11 @@ const Column = styled.div`
 const Row = styled.div`
   display: flex;
   flex-direction: row;
+`;
+
+const Col = styled.div`
+display: flex;
+flex-direction: column;
 `;
 
 const HomePageButton = styled.div`
@@ -139,6 +183,7 @@ export {
   MainContainer,
   Column,
   Row,
+  Col,
   LogoContainer,
   EmptyContainer
 };

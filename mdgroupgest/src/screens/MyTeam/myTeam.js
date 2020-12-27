@@ -208,7 +208,7 @@ const MyTeam = () => {
         height={700}
         width={1000}
         animated
-        steps={90}
+        steps={350}
         duration={1500}
         svgProps={{
           className: 'custom',
