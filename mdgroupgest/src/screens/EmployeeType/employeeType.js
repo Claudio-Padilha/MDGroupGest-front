@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
+import CONSTANTS from '../../constants';
 import {
   MainContainer,
   CardsContainer,
@@ -19,7 +20,7 @@ import {
 } from '../../screens/Home/md';
 
 import employeesRequests from "../../hooks/requests/employeesRequests";
-import officesRequests from '../../hooks/requests/officesRequests';
+import officesRequests from "../../hooks/requests/officesRequests"; 
 
 const EmployeeType = (props) => {
   function _goBack() {
@@ -57,7 +58,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Gerente</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -78,7 +79,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Secretária</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretária</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -100,7 +101,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Team Leader</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Team Leader</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -122,7 +123,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Instrutor</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Instrutor</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -144,7 +145,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Comercial</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Comercial</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -154,6 +155,7 @@ const EmployeeType = (props) => {
   return(
     <MainContainer>
       <BackIcon onClick={_goBack} />
+      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de funcionário a ser inserido?</Heading>
       <CardsContainer>
 
         <FirstRow>

@@ -1,6 +1,7 @@
 import React from 'react';
 
 import { MainContainer } from './styles';
+import CONSTANTS from '../../constants';
 import { ReactComponent as CheckCircle } from '../../assets/icons/check-circle-regular.svg';
 import { ReactComponent as Back } from '../../assets/icons/back-arrow.svg';
 import { ReactComponent as Logout } from '../../assets/icons/logout.svg';
@@ -18,7 +19,7 @@ const LogoutIcon = ({...props}) => {
 };
 
 const BackIcon = ({...props}) => {
-  return <Back {...props}/>;
+  return <Back style={{color: CONSTANTS?.colors?.darkGrey}} {...props}/>;
 };
 
 const AddIcon = ({...props}) => {

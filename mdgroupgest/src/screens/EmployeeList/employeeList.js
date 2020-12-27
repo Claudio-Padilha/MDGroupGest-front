@@ -232,7 +232,7 @@ const EmployeeList = (props) => {
 
   return (
     <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} color={"black"} className={"backIcon"}/>
+      <BackIcon onClick={_goBack} className={"backIcon"}/>
       <List divided verticalAlign="middle" className={"listContainer"}>
         {employeesToRender()}
       </List>

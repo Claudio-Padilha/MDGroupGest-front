@@ -129,14 +129,24 @@ const BackOfficeContent = (props) => {
   function _sellStateOfContract() {
 
     for(let i = 0; i < contracts?.length; i++) {
-
-      if(contracts[i]?.sell_state__name === "r" && contracts[i]?.user === currentUser?.user?.id) {
-        rContracts.push(contracts[i]);
-      } else if (contracts[i]?.sell_state__name === "ok" && contracts[i]?.user === currentUser?.user?.id){
-        okContracts.push(contracts[i]);
-      } else if (contracts[i]?.user === currentUser?.user?.id) {
-        koContracts.push(contracts[i]);
+      if (currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary") {
+        if(contracts[i]?.sell_state__name === "r") {
+          rContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ok"){
+          okContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ko") {
+          koContracts.push(contracts[i]);
+        }
+      } else {
+        if(contracts[i]?.sell_state__name === "r" && contracts[i]?.user === currentUser?.user?.id) {
+          rContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ok" && contracts[i]?.user === currentUser?.user?.id){
+          okContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ko" && contracts[i]?.user === currentUser?.user?.id) {
+          koContracts.push(contracts[i]);
+        }
       }
+
     }
 
     allContracts.push(...rContracts, ...okContracts, ...koContracts)
@@ -262,6 +272,7 @@ const BackOfficeContent = (props) => {
           </MDCard.Body>
         </MDCard>
 
+        { userType === "manager" &&
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
             <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
@@ -269,6 +280,17 @@ const BackOfficeContent = (props) => {
             <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
+        }
+
+        { userType === "secretary" &&
+        <MDCard className={"managerMonth"}>
+          <MDCard.Body className={"managerMonthCardBody"}>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}></SubHeading>
+            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
+            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
+          </MDCard.Body>
+        </MDCard>
+        }
 
 
 
@@ -298,7 +320,7 @@ const BackOfficeContent = (props) => {
       <MDCard>
         <MDCard.Body className={"monthCardBody"}>
           <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
-          <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
+          <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-35%'}}>Até agora você já tem:</Body>
           <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
         </MDCard.Body>
       </MDCard>
@@ -379,10 +401,10 @@ const BackOfficeContent = (props) => {
   };
 
   const resultStatus = useMemo(() => {
-    if (okPercentage < 80 && allContracts?.length !== 0) {
-      return "🟡";
-    } else if (okPercentage < 70 && allContracts?.length !== 0) {
+    if (okPercentage < 70 && allContracts?.length !== 0) {
       return "🔴";
+    } else if (okPercentage < 80 && allContracts?.length !== 0) {
+      return "🟡";
     } else if (okPercentage > 70 && allContracts?.length !== 0){
       return "🟢";
     } else {
@@ -408,7 +430,6 @@ const BackOfficeContent = (props) => {
                 ko: koContracts,
                 all: allContracts
               },
-              data: "RESULTADOS",
             }  
           }}>
             <SubHeading>Meus resultados</SubHeading>   
@@ -430,8 +451,8 @@ const BackOfficeContent = (props) => {
       <ContentContainer>
         <TeamContainer>{renderHero()}</TeamContainer>
         <ResultsContainer>
-          {userType === "manager" && renderOfficeMonth()} 
-          {userType !== "manager" && renderMyMonth()}
+          {userType === "manager" || userType === "secretary" && renderOfficeMonth()} 
+          {userType !== "manager" || userType === "secretary" && renderMyMonth()}
           {renderMyContracts()}
           {renderMyResults()}
         </ResultsContainer>
