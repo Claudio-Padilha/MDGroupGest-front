@@ -21,18 +21,28 @@ import employeesRequests from '../../hooks/requests/employeesRequests';
 const EditEmployee = (props) => {
 
   const history = useHistory();
+  console.log(props, 'PROPS DE EDIT')
 
   const employee = props?.location?.state?.employeeData;
-  console.log(employee, 'funcionário a ser editado')
-
+  const officeID = props?.location?.state?.officeID;
+  const officeOBJ = props?.location?.state?.officeOBJ;
+  const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
+  const employeeToAssociate = props?.location?.state?.employeeToAssociate;
+  const employeesReturningFromEdit = props?.location?.state?.employeesComingFromList;
   function _goBack() {
     history.push({
       pathname: "/EmployeeList",
+      state: {
+        employeesReturningFromEdit: employeesReturningFromEdit,
+        isFromEdit: true
+      }
     });    
   }
 
   function _ConfirmEmployeeUpdate(formFields, data) {
-    console.log(formFields?.name, 'TEST')
+    console.log(formFields, 'TEST FORMFIELDS')
+    console.log(data, 'TEST DATA')
+
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -110,18 +120,42 @@ const EditEmployee = (props) => {
     const data = {
       office: employee?.office,
       id: employee?.id,
-      user_type: employee?.user?.user_type
+      user_type: employee?.user?.user_type,
     }
 
     _ConfirmEmployeeUpdate(formFields, data)
   };
+
+  function _employeeToAssociation() {
+    var employees = []
+    console.log(employeeToAssociate, 'TESTE 2')
+
+    if(employeeToAssociate) {
+      Object.values(employeeToAssociate).forEach(function(employee){
+        console.log(employee, 'EMPLOYEE')
+        employees.push({value: { id: employee?.id, employee_type: employee?.user?.user_type}, label: employee?.user?.name })
+      })
+    };
+    return employees
+  }
+
+  console.log(_employeeToAssociation(), 'teste')
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome", place: employee?.user?.name },
     { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF", place: employee?.user?.nif },
     { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone", place: employee?.user?.contact },
     { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail", place: employee?.user?.email },
-    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada", place: employee?.user?.address }
+    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada", place: employee?.user?.address },
+    shouldRenderEmployeeAssociation && { 
+      type: "dropdown",
+      subType: "twoColumns",
+      side: "right",
+      key: "employeeAbove",
+      question: "Funcionário responsável",
+      placeholder: "Escolha o nome",
+      options: _employeeToAssociation() 
+    }
   ];
 
   return (

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
@@ -30,8 +30,14 @@ const EmployeeList = (props) => {
 
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
-
+  const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
+  const title = props?.location?.state?.title;
+  const officeID = props?.location?.state?.officeID;
+  const employeeToAssociate = props?.location?.state?.employeeToAssociate;
+  const isFromEdit = props?.location?.state?.isFromEdit;
+  const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  console.log(isFromEdit, 'TODOS OS FUNCIONÁRIOS DA TYPE TO SEE')
 
   function _goBack() {
     history.push({
@@ -47,9 +53,6 @@ const EmployeeList = (props) => {
   }
 
   const renderEmployee = (employee, i) => {
-    if(!employees) {
-      return null;
-    }
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
@@ -58,7 +61,13 @@ const EmployeeList = (props) => {
       history.push({
         pathname: "/EmployeeEdit",
         state: {
-          employeeData: employee
+          employeeData: employee,
+          officeID: officeID,
+          shouldRenderEmployeeAssociation: shouldRenderEmployeeAssociation,
+          title: title,
+          userType: userType,
+          employeeToAssociate: employeeToAssociate,
+          employeesComingFromList: employees,
         }
       })
     }
@@ -83,7 +92,6 @@ const EmployeeList = (props) => {
           reverseButtons: true
         }).then(async (result) => {
           if (result.isConfirmed) {
-            console.log('esse é o funcionário: ', employee)
             await employeesRequests.deleteEmployee(employee)         
             .then(() => (
               swalWithBootstrapButtons.fire(
@@ -201,25 +209,32 @@ const EmployeeList = (props) => {
     );
   };
 
-  function _renderOrNot() {
-    if(!employees || employees?.length === 0 || employees === undefined || employees === null) {
+  const employeesToRender = () => {
+    if (employeesReturningFromEdit && isFromEdit) {
+      return employeesReturningFromEdit.map((employee, index) => {
+        console.log(employee, 'cada func')
+        return renderEmployee(employee, index)
+      }) 
+    } else if(!employees || employees?.length === 0 || employees === undefined || employees === null && !employeesReturningFromEdit) {
       return (
         <EmptyContainer>
           <SubHeading>Ainda não há funcionários...</SubHeading>
         </EmptyContainer>
       )
-    } else {
+    } else if (!isFromEdit && employees) {
       return employees.map((employee, index) => { 
         return renderEmployee(employee, index)
       }) 
-    };
+    }
   }
+
+  employeesToRender()
 
   return (
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} color={"black"} className={"backIcon"}/>
       <List divided verticalAlign="middle" className={"listContainer"}>
-        {_renderOrNot()}
+        {employeesToRender()}
       </List>
       <LogoContainer>
         <LogoMD action={

@@ -21,6 +21,7 @@ import {
 import request from '../../components/Form/request';
 
 import employeesRequests from "../../hooks/requests/employeesRequests";
+import officesRequests from '../../hooks/requests/officesRequests';
 
 const ChooseEmployeeTypeToSee = (props) => {
   function _goBack() {
@@ -41,6 +42,12 @@ const ChooseEmployeeTypeToSee = (props) => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }
 
+  const currentOfficeObject = useMemo(() => {
+    officesRequests.getOffice(currentOfficeID)
+
+    return JSON.parse(localStorage.getItem('currentOffice'))
+  }, [currentOfficeID])
+
   const renderManagerCard = () => {
     const managers = _allEmployees()?.manager
     return (
@@ -49,7 +56,9 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "manager",
           title: "Gerente",
-          data: managers
+          data: managers,
+          officeID: currentOfficeID,
+          shouldRenderEmployeeAssociation: false
         }  
       }}>
         <MDCard className={"card"}>
@@ -69,52 +78,15 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "secretary",
           title: "Secretária",
-          data: secretaries
+          data: secretaries,
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          shouldRenderEmployeeAssociation: false
         }  
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading>Secretária</SubHeading>
-          </MDCardBody>
-        </MDCard>
-      </Link>
-    );
-  };
-
-  const renderComercialCard = () => {
-    const salesPersons = _allEmployees()?.sales_person
-    return (
-      <Link to={{
-        pathname:"/EmployeeList",
-        state: {
-          userType: "salesPerson",
-          title: "Comercial",
-          data: salesPersons
-        }  
-      }}>
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>Comercial</SubHeading>
-          </MDCardBody>
-        </MDCard>
-      </Link>
-    );
-  };
-
-  const renderInstructorCard = () => {
-    const instructors = _allEmployees()?.instructor
-    return (
-      <Link to={{
-        pathname:"/EmployeeList",
-        state: {
-          userType: "instructor",
-          title: "Instrutor",
-          data: instructors
-        }  
-      }}>
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>Instrutor</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -129,12 +101,62 @@ const ChooseEmployeeTypeToSee = (props) => {
         state: {
           userType: "teamLeader",
           title: "Team Leader",
-          data: teamLeaders
+          data: teamLeaders,
+          employeeToAssociate: _allEmployees()?.manager,
+          shouldRenderEmployeeAssociation: true
         }  
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading>Team Leader</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
+  const renderInstructorCard = () => {
+    const instructors = _allEmployees()?.instructor
+    return (
+      <Link to={{
+        pathname:"/EmployeeList",
+        state: {
+          userType: "instructor",
+          title: "Instrutor",
+          data: instructors,
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          employeeToAssociate: _allEmployees()?.team_leader.concat(_allEmployees()?.manager),
+          shouldRenderEmployeeAssociation: true
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Instrutor</SubHeading>
+          </MDCardBody>
+        </MDCard>
+      </Link>
+    );
+  };
+
+  const renderComercialCard = () => {
+    const salesPersons = _allEmployees()?.sales_person
+    return (
+      <Link to={{
+        pathname:"/EmployeeList",
+        state: {
+          userType: "salesPerson",
+          title: "Comercial",
+          data: salesPersons,
+          officeID: currentOfficeID,
+          officeOBJ: currentOfficeObject,
+          employeeToAssociate: _allEmployees()?.instructor.concat(_allEmployees()?.manager, _allEmployees()?.team_leader),
+          shouldRenderEmployeeAssociation: true
+        }  
+      }}>
+        <MDCard className={"card"}>
+          <MDCardBody>
+            <SubHeading>Comercial</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
