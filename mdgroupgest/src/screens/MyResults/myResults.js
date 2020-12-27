@@ -76,39 +76,39 @@ const MyResults = (props) => {
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>22/12/2020</Body>
+            <Body style={{marginTop: '0'}}>22/12/2020 (12 contratos)</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>13/12/2020</Body>
+            <Body style={{marginTop: '0'}}>13/12/2020 (1 contrato)</Body>
           </Col>
         </Row>
-        <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
+        {/* <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Média de contratos:</SubHeading>
             <Body style={{marginTop: '0'}}>3 por dia</Body>
           </Col>
           <Col style={colStyle}>
-            <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>22/12/2020</Body>
+            <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo (contratos):</SubHeading>
+            <Body style={{marginTop: '0'}}>22/12/2020 (12 contratos)</Body>
           </Col>
           <Col style={colStyle}>
-            <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>13/12/2020</Body>
+            <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo: (faturação)</SubHeading>
+            <Body style={{marginTop: '0'}}>13/12/2020 (1 contrato)</Body>
           </Col>
-        </Row>
+        </Row> */}
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
-            <SubHeading style={{marginBottom: '1%'}}>Média de contratos:</SubHeading>
-            <Body style={{marginTop: '0'}}>3 por dia</Body>
+            <SubHeading style={{marginBottom: '1%'}}>Média de faturação:</SubHeading>
+            <Body style={{marginTop: '0'}}>72€</Body>
           </Col>
           <Col style={colStyle}>
-            <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>22/12/2020</Body>
+            <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo (faturação):</SubHeading>
+            <Body style={{marginTop: '0'}}>22/12/2020 (437€)</Body>
           </Col>
           <Col style={colStyle}>
-            <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>13/12/2020</Body>
+            <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo (faturação):</SubHeading>
+            <Body style={{marginTop: '0'}}>13/12/2020 (23€)</Body>
           </Col>
         </Row>
       </>

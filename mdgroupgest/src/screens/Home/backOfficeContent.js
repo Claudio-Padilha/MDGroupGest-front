@@ -35,6 +35,8 @@ const BackOfficeContent = (props) => {
   const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
   const currentUserIsAdmin = currentUser?.user?.is_admin;
 
+  console.log(mySalary, 'meu salário')
+
   const userType = useMemo(() => {
     return currentUser?.user?.user_type;
   }, [currentUser]);
@@ -114,11 +116,11 @@ const BackOfficeContent = (props) => {
 
     for(let i = 0; i < contracts?.length; i++) {
 
-      if(contracts[i]?.sell_state__name === "r") {
+      if(contracts[i]?.sell_state__name === "r" && contracts[i]?.user === currentUser?.user?.id) {
         rContracts.push(contracts[i]);
-      } else if (contracts[i]?.sell_state__name === "ok"){
+      } else if (contracts[i]?.sell_state__name === "ok" && contracts[i]?.user === currentUser?.user?.id){
         okContracts.push(contracts[i]);
-      } else {
+      } else if (contracts[i]?.user === currentUser?.user?.id) {
         koContracts.push(contracts[i]);
       }
     }
@@ -127,6 +129,8 @@ const BackOfficeContent = (props) => {
 
     return koContracts, okContracts, rContracts, allContracts;
   }
+
+  console.log(currentUser?.user?.id, 'USUÁRIO ATUAL')
 
   _sellStateOfContract()
 
@@ -151,6 +155,8 @@ const BackOfficeContent = (props) => {
     }
   }
 
+  console.log(allContracts, 'TODOS OS CONTRATOS')
+
   const koPercentage = _getPercentage(x, a);
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
@@ -171,7 +177,7 @@ const BackOfficeContent = (props) => {
   }
   
   useEffect(() => {
-      _getOfficeComissions()
+    _getOfficeComissions()
   }, [allContracts])
 
   if(deletedID)
@@ -281,13 +287,13 @@ const BackOfficeContent = (props) => {
             to={{
               pathname: "/ContractList",
               state: {
-                data: contracts,
+                data: allContracts,
               }
             }}
           >
             <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos</SubHeading>
           </Link>
-          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{contracts?.length}</Heading>
+          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{allContracts?.length}</Heading>
         
 
           <MDCol style={{width: '100%', marginLeft: `${contracts?.length === 0 ? '25%' : '40%'}`, marginBottom: '5%'}}>
@@ -332,7 +338,7 @@ const BackOfficeContent = (props) => {
               history.push({
                 pathname: "/ContractList",
                 state: {
-                  data: contracts
+                  data: allContracts
                 }
               })
             }}
