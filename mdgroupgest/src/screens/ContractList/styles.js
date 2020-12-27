@@ -127,7 +127,7 @@ const MainContainer = styled.div`
       display: flex;
       border: double;
       box-shadow: 5px 3px 7px rgba(0, 0, 0, 0.8);
-      animation: ${increaseSizeVertical} 1.5s;
+      animation: ${fadeIn} 3s;
     }
   }
 `;

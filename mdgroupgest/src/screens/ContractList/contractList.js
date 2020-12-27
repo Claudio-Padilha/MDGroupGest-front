@@ -312,7 +312,7 @@ const ContractList = (props) => {
 
   return (
     <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} color={"black"}/>
+      <BackIcon onClick={_goBack} />
       <Row style={{
         width: '65%',
         display: 'flex',

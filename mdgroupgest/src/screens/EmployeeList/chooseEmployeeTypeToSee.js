@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
+import CONSTANTS from '../../constants';
 import {
   CardsContainer,
   FirstRow,
@@ -63,7 +64,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Gerente</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -86,7 +87,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Secretária</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretária</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -108,7 +109,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Team Leader</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Team Leader</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -132,7 +133,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Instrutor</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Instrutor</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -156,7 +157,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Comercial</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Comercial</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -166,6 +167,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   return(
     <MainContainerEType>
       <BackIcon onClick={_goBack} />
+      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de funcionário que queres ver?</Heading>
       <CardsContainer>
 
         <FirstRow>

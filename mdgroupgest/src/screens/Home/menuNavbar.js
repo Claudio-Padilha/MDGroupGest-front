@@ -21,6 +21,8 @@ export default function MenuNavbar(props) {
   const userName = user?.user?.name;
   const currentUserIsAdmin = user?.user?.is_admin;
 
+  console.log(user?.user?.user_type, 'USER TYPE NAVBAR')
+
   console.log(props, 'PROPS DA NAVBAR')
 
   // const currentUserState = useMemo(() => {
@@ -44,6 +46,8 @@ export default function MenuNavbar(props) {
   }
 
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
+  const haveAccessToMenuNavbar = user?.user?.user_type === 'manager' || user?.user?.user_type === "secretary"
+  console.log('TEM ACESSO? ', haveAccessToMenuNavbar)
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -53,8 +57,6 @@ export default function MenuNavbar(props) {
       }
     })
   }
-
-  console.log(window.performance.navigation.type, )
 
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
@@ -69,9 +71,9 @@ export default function MenuNavbar(props) {
       </ProfileContainer>
       <NavbarOptionsContainer>
         <OptionsDiv>
-          {!isAdmin && <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>}
+          {!isAdmin && haveAccessToMenuNavbar && <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>}
           
-          { !isAdmin &&
+          { !isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to={{
                 pathname: "/EmployeeType",
@@ -82,7 +84,7 @@ export default function MenuNavbar(props) {
             </Body>
           }
           
-          { !isAdmin && 
+          { !isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to={{
                 pathname: "/ChooseEmployeeTypeToSee",
@@ -100,13 +102,13 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
-          { isAdmin && 
+          { isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to="/CreateOffice">Inserir Escritório</Link>
             </Body>
           }
 
-          { isAdmin && 
+          { isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true} style={{marginTop: '-10%'}}>
               <Link onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
             </Body>

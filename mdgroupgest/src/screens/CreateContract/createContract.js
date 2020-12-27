@@ -478,7 +478,7 @@ console.log(props, "PROPPPPPS")
 
   return (
     <MainDiv>
-      <BackIcon onClick={_goBack} color={"black"}/>
+      <BackIcon onClick={_goBack} />
       
       <CornerLeft><Corner180 /></CornerLeft>
       <SubHeading>{props?.location?.state?.title}</SubHeading>

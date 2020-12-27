@@ -171,7 +171,7 @@ const renderFields = (field, index, formik) => {
     place: field?.place,
     icon: field?.icon,
     initialValue: field?.initialValue,
-    booleanValue: formik.values[field?.booleanValue]
+    booleanValue: formik.values[field?.booleanValue],
   };  
 
   switch (field?.type) {

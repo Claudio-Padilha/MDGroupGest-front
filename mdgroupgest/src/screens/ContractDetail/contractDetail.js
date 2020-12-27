@@ -679,7 +679,7 @@ const handleClose = () => {
 
   return (
     <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} color={"black"}/>
+      <BackIcon onClick={_goBack} />
         {renderContract()}
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
     </MainContainer>

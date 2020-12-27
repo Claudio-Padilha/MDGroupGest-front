@@ -11,6 +11,7 @@ import {
   GoHomeButton,
   MainContainerEType
 } from "./styles";
+import CONSTANTS from '../../constants';
 
 import {
   MDCard,
@@ -166,7 +167,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Electricidade</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Electricidade</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -191,7 +192,7 @@ const ChooseTypeOfContract = (props) => {
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading style={{marginLeft: '-3%'}}>Electricidade</SubHeading>
-            <SubHeading>Condomínio</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -214,7 +215,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Gás</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gás</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -238,7 +239,7 @@ const ChooseTypeOfContract = (props) => {
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading style={{marginLeft: '35%'}}>Gás</SubHeading>
-            <SubHeading>Condomínio</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -263,7 +264,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading>Dual</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Dual</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -289,7 +290,7 @@ const ChooseTypeOfContract = (props) => {
         <MDCard className={"card"}>
           <MDCardBody>
             <SubHeading style={{marginLeft: '35%'}}>Dual</SubHeading>
-            <SubHeading>Condomínio</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -299,6 +300,7 @@ const ChooseTypeOfContract = (props) => {
   return(
     <MainContainerEType>
       <BackIcon onClick={_goBack} />
+      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de contrato que queres inserir?</Heading>
       <CardsContainer>
 
         <FirstRow>
