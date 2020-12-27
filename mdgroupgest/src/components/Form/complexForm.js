@@ -46,7 +46,7 @@ const CForm = ({
     if(keys) {
       keys.forEach((i) => {
         const formField = formFields[i];
-        initialValues[formField.key] = formField.initialValue;
+        initialValues[formField?.key] = formField?.initialValue;
       });
     }
 
@@ -160,18 +160,18 @@ const CForm = ({
 const renderFields = (field, index, formik) => {
 
   const fieldProps = {
-    key: `${field.key}-${index}`,
-    name: field.key,
-    value: formik.values[field.key],
-    error: formik.errors[field.key],
-    label: field.question,
-    type: field.type,
+    key: `${field?.key}-${index}`,
+    name: field?.key,
+    value: formik.values[field?.key],
+    error: formik.errors[field?.key],
+    label: field?.question,
+    type: field?.type,
     onChange: formik.handleChange,
-    subType: field.subType,
-    place: field.place,
-    icon: field.icon,
-    initialValue: field.initialValue,
-    booleanValue: formik.values[field.booleanValue]
+    subType: field?.subType,
+    place: field?.place,
+    icon: field?.icon,
+    initialValue: field?.initialValue,
+    booleanValue: formik.values[field?.booleanValue]
   };  
 
   switch (field?.type) {
