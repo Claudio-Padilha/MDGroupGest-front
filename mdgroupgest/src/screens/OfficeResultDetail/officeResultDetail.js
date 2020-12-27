@@ -45,11 +45,6 @@ const OfficeMonthResult = (props) => {
     window.location.assign("/BackOffice");    
   }
 
-  console.log(props, "PROPSSSSSSS")
-
-
-  console.log("ANTES DA EXECUTAR O CHART: ", data)
-
   function _chart(){
     return (
       <Chart
@@ -101,15 +96,15 @@ const OfficeMonthResult = (props) => {
             :
             <MDRow style={{display: 'flex', justifyContent: 'space-between'}}>
               <MDCol>
-              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              <SmallSubHeading>{ok !== 0 ? ok : "Ainda não há contratos válidos"} {ok === 1 ? "contrato válido" : ok > 1 ?  "contratos válidos": null}</SmallSubHeading>
               </MDCol>
 
               <MDCol>
-              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              <SmallSubHeading>{pending !== 0 ? pending : "Não há contratos pendentes"} {pending === 1 ? "contrato pendente" : pending > 1 ? "contratos pendentes" : null}</SmallSubHeading>
               </MDCol>
 
               <MDCol>
-              <SmallSubHeading>{all !== 0 ? 'OK' : null} {all !== 0 ? all : null} {`${all === 0 ? "Ainda não há" : all === 1 ? "contrato" : "contratos"} ${all === 0 ? "contratos" : all === 1 ? "válido" : "válidos"}`}</SmallSubHeading>
+              <SmallSubHeading>{ko !== 0 ? ko : "Não há contratos anulados"} {ko === 1 ? "contrato anulado" : ko > 1 ? "contratos anulados" : null}</SmallSubHeading>
               </MDCol>
             </MDRow>
 

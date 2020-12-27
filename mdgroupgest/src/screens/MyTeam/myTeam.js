@@ -10,6 +10,7 @@ import { MainContainer } from "./styles";
 
 const MyTeam = () => {
 
+  const currentOffice = JSON.parse(localStorage.getItem('currentOffice'));
   const user = JSON.parse(localStorage.getItem('currentUser'))
   const history = useHistory();
 
@@ -45,7 +46,7 @@ const MyTeam = () => {
     const sales_people = employees['sales_person']
 
     var data = {
-      name: 'ESCRITÓRIO LUCAS PADILHA',
+      name: currentOffice.name,
       textProps: {x: -30, y: 25},
       children: []
     }
@@ -209,7 +210,7 @@ const MyTeam = () => {
         width={1000}
         animated
         steps={90}
-        duration={1500}
+        duration={100}
         svgProps={{
           className: 'custom',
         }}
@@ -219,10 +220,10 @@ const MyTeam = () => {
         }}
         nodeShape="image"
         nodeProps={{
-          height: 30,
-          width: 30,
+          height: 45,
+          width: 45,
           nodeRadius: 35,
-          href: 'https://i.pinimg.com/originals/58/d8/c1/58d8c1a2363061117c2c00018b04e34c.jpg',
+          href: require('../../assets/icons/loboMD.png'),
         }}
         margins={{
           top: 20,
