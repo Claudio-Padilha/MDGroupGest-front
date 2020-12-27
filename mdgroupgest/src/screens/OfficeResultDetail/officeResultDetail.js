@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import Chart from "react-google-charts";
 
-import {  SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import {  SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import { useDate } from '../../hooks/date';
@@ -28,6 +28,8 @@ import {
 
 
 const OfficeMonthResult = (props) => {
+
+  const valid_contract_value = JSON.parse(localStorage.getItem('myCurrentSalary'));
 
   const data = props?.location?.state?.contracts?.dataToDiagram
   const user = JSON.parse(localStorage.getItem('currentUser'))
@@ -95,16 +97,21 @@ const OfficeMonthResult = (props) => {
             </>
             :
             <MDRow style={{display: 'flex', justifyContent: 'space-between'}}>
-              <MDCol>
-              <SmallSubHeading>{ok !== 0 ? ok : "Ainda não há contratos válidos"} {ok === 1 ? "contrato válido" : ok > 1 ?  "contratos válidos": null}</SmallSubHeading>
+              <MDCol style={{marginRight: '5%'}}>
+              <SmallSubHeading>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok === 1 ? "contrato válido: " : ok > 1 ?  "contratos válidos: ": null}</SmallSubHeading>
+              <Heading >{ok === 0 ? null : ok}</Heading>
+              <h3 >{valid_contract_value + ' €'}</h3>
               </MDCol>
 
               <MDCol>
-              <SmallSubHeading>{pending !== 0 ? pending : "Não há contratos pendentes"} {pending === 1 ? "contrato pendente" : pending > 1 ? "contratos pendentes" : null}</SmallSubHeading>
+            
+              <SmallSubHeading>{pending !== 0 ? pending : "Não há contratos pendentes"} {pending === 1 ? "contrato pendente: " : pending > 1 ? "contratos pendentes: " : null}</SmallSubHeading>
+              <Heading >{pending === 0 ? null : pending}</Heading>
               </MDCol>
 
-              <MDCol>
-              <SmallSubHeading>{ko !== 0 ? ko : "Não há contratos anulados"} {ko === 1 ? "contrato anulado" : ko > 1 ? "contratos anulados" : null}</SmallSubHeading>
+              <MDCol style={{marginLeft: '5%', marginRight: '5%'}}>
+              <SmallSubHeading>{ko !== 0 ? null : "Não há contratos anulados"} {ko === 1 ? "contrato anulado: " : ko > 1 ? "contratos anulados: " : null}</SmallSubHeading>
+              <Heading >{ko === 0 ? null : ko}</Heading>
               </MDCol>
             </MDRow>
 
