@@ -29,6 +29,8 @@ const EditEmployee = (props) => {
   const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
   const employeesReturningFromEdit = props?.location?.state?.employeesComingFromList;
+  const currentAssociateID = employee?.manager;
+
   function _goBack() {
     history.push({
       pathname: "/EmployeeList",
@@ -139,7 +141,13 @@ const EditEmployee = (props) => {
     return employees
   }
 
-  console.log(_employeeToAssociation(), 'teste')
+  const associatePlaceholder = () => {
+    for (let i = 0; i < employeeToAssociate?.length; i++) {
+      if (employeeToAssociate[i]?.id === currentAssociateID) {
+        return employeeToAssociate[i].user?.name
+      } 
+    }
+  }
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome", place: employee?.user?.name },
@@ -153,7 +161,7 @@ const EditEmployee = (props) => {
       side: "right",
       key: "employeeAbove",
       question: "Funcionário responsável",
-      placeholder: "Escolha o nome",
+      placeholder: associatePlaceholder(),
       options: _employeeToAssociation() 
     }
   ];
