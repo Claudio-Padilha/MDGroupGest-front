@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import CONSTANTS from '../../constants';
-import { fadeIn } from "../../utils/animations";
+import { fadeIn, increaseSize, increaseSizeVertical } from "../../utils/animations";
 
 const MainContainer = styled.div`
   display: flex;
@@ -127,7 +127,7 @@ const MainContainer = styled.div`
       display: flex;
       border: double;
       box-shadow: 5px 3px 7px rgba(0, 0, 0, 0.8);
-      animation: ${fadeIn} 2s linear;
+      animation: ${increaseSizeVertical} 1.5s;
     }
   }
 `;

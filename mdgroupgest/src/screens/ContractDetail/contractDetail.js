@@ -138,7 +138,12 @@ const handleClose = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   function _goBack() {
-    window.location.assign("/ContractList");    
+    history.push({
+      pathname: "/ContractList",
+      state: {
+        cameFromDetail: true
+      }
+    })    
   }
 
   function _confirmToDeleteContract() {

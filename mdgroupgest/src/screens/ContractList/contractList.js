@@ -39,12 +39,24 @@ const ContractList = (props) => {
     })
   }
   const history = useHistory();
-
-  var localStorage = window.localStorage;
+  const cameFromDetail = props?.location?.state?.cameFromDetail;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   const contracts = useMemo(() => {
-    return props?.location?.state?.data
-  },[props])
+    if(cameFromDetail) {
+      const contracts = JSON.parse(localStorage.getItem('contracts'))
+      const contractsToReturn = []
+      for(let i = 0; i < contracts?.length; i++) {
+        if (contracts[i]?.user === currentUser?.user?.id) {
+          contractsToReturn.push(contracts[i])
+        }
+      }
+      return contractsToReturn
+      
+    } else {
+      return props?.location?.state?.data
+    } 
+  },[cameFromDetail])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;

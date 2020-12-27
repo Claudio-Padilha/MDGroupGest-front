@@ -314,6 +314,7 @@ const BackOfficeContent = (props) => {
               pathname: "/ContractList",
               state: {
                 data: allContracts,
+                currentUser: currentUser
               }
             }}
           >
