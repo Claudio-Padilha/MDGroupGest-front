@@ -48,7 +48,7 @@ const ContractList = (props) => {
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [2000]);
+    }, [1000]);
   }
 
 

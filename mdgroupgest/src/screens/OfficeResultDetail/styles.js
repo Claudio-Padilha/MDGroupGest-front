@@ -83,7 +83,8 @@ const ContractsInfo = styled.div`
   justify-content: center;
   align-items: flex-start;
   width: 100%;
-  margin-left: 15%;
+  margin-left: 0%;
+  margin-right: 3%;
 `;
 
 const HomePageButton = styled.div`

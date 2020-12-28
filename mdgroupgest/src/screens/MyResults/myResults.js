@@ -55,16 +55,17 @@ const MyResults = (props) => {
   console.log(bestComissionDay, 'BEST COMISSION DAY')
   console.log(worstContractDay, 'worst CONTRACT DAY')
   console.log(worstComissionDay, 'worst COmission DAY')
+  console.log(allContractsQtd, 'QTD')
   function _goBack() {
     window.location.assign("/BackOffice");    
   }
 
   function _colorToRender() {
-    if (okNumber > 80) {
+    if (okNumber >= 80) {
       return <GreenCircle />;
-    } else if (rNumber < 70 && okNumber < 80) {
+    } else if (rNumber <= 70 && okNumber < 80) {
       return <YellowCircle />;
-    } else if (koNumber > 70 || rNumber < 70 && okNumber < 70){
+    } else if (koNumber >= 70 || rNumber < 70 && okNumber <= 70){
       return <RedCircle />;
     } 
   }
@@ -81,15 +82,27 @@ const MyResults = (props) => {
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
           <Col style={colStyle}>
+            <SmallSubHeading style={{
+              marginTop: '10%',
+              color: `${CONSTANTS?.colors?.darkGrey}`,
+            }}>O seu salário até agora está em</SmallSubHeading>
+            <Heading style={{
+              marginTop: '-5%',
+              textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+              color: `${CONSTANTS?.colors?.green}`,
+              fontSize: '56px',
+            }}>{currentSalary}€</Heading>
+          </Col>
+          <Col style={colStyle}>
             {_colorToRender()}
             <Heading style={{
-              marginTop: '-5.5%',
+              marginTop: '-16%',
               textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
               color: `${CONSTANTS?.colors?.white}`,
               fontSize: '28px',
             }}>{okPercentage}</Heading>
             <Body style={{
-              marginTop: '-3%',
+              marginTop: '-9%',
               textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
               color: `${CONSTANTS?.colors?.white}`,
               fontSize: '14px',
@@ -111,7 +124,7 @@ const MyResults = (props) => {
                 width: '100%',
                 justifyContent: 'center'
               }}>
-                <Body style={{marginTop: '1%', marginBottom: '0'}}>Com mais {80 - okNumber}% seu status passará a 🟢</Body>
+                <Body style={{marginTop: '1%', marginBottom: '0'}}>{allContractsQtd !== 0 ? `Com mais ${80 - okNumber}% seu status passará a 🟢` : "Você ainda não tem contratos"}</Body>
               </Row>
             }
             {rNumber > 20 && okNumber < 80 && 
@@ -135,6 +148,7 @@ const MyResults = (props) => {
               </Row>
             }
           </Col>
+          <Col style={colStyle}></Col>
         </Row>
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
@@ -143,11 +157,11 @@ const MyResults = (props) => {
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>{`${bestContractDay?.best_day} (${bestContractDay?.value <= 1 ? `${bestContractDay?.value} contrato` : `${bestContractDay?.value} contratos`})`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>{`${bestContractDay?.best_day} (${bestContractDay?.value <= 1 ? `${bestContractDay?.value} contrato` : `${bestContractDay?.value} contratos`})`}</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>{`${worstContractDay?.worst_day} (${worstContractDay?.value <= 1 ? `${worstContractDay?.value} contrato` : `${worstContractDay?.value} contratos`})`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>{`${worstContractDay?.worst_day} (${worstContractDay?.value <= 1 ? `${worstContractDay?.value} contrato` : `${worstContractDay?.value} contratos`})`}</Body>
           </Col>
         </Row>
         {/* <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -164,18 +178,18 @@ const MyResults = (props) => {
             <Body style={{marginTop: '0'}}>13/12/2020 (1 contrato)</Body>
           </Col>
         </Row> */}
-        <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Row style={{display: 'flex', height: '50%', marginTop: '-10%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Média de faturação:</SubHeading>
             <Body style={{marginTop: '0'}}>{salaryAverageFixedBy2}€ por dia</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo (faturação):</SubHeading>
-            <Body style={{marginTop: '0'}}>22/12/2020 (437€)</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>{`${bestComissionDay?.best_day} (${bestComissionDay?.value}€)`}</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo (faturação):</SubHeading>
-            <Body style={{marginTop: '0'}}>13/12/2020 (23€)</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>{`${worstComissionDay?.worst_day} (${worstComissionDay?.value}€)`}</Body>
           </Col>
         </Row>
       </>
@@ -186,15 +200,10 @@ const MyResults = (props) => {
     <MainContainer>
       <BackIcon onClick={_goBack} />
       <MyMonthContainer>
-        {renderMyProfit()}
-        {/* <HomePageButton>
-          <Body>
-            <Link to={"/BackOffice"}>
-              <MDButton>Cancelar</MDButton>
-            </Link>
-          </Body>
-        </HomePageButton> */}
-    
+        { allContractsQtd !== 0 ?
+          renderMyProfit() :
+          <SubHeading style={{display: 'flex', justifyContent: 'center'}}>Ainda não há contratos...</SubHeading>
+        }  
       </MyMonthContainer>
 
     </MainContainer>

@@ -32,16 +32,22 @@ const ChooseEmployeeTypeToSee = (props) => {
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
   const isFromCreation = props?.location?.state?.cameFromCreation;
   const isFromEdit = props?.location?.state?.cameFromEdit;
+  const employeesAfterUpdate = props?.location?.state?.employeesAfterUpdate;
 
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   function _allEmployees() {
-    if(isFromBackOffice || isFromCreation || isFromEdit) {
-      employeesRequests.getAllEmployees(currentOfficeID)
+    if(isFromBackOffice || isFromCreation) {
+      return employeesRequests.getAllEmployees(currentOfficeID)
+    } else if (isFromEdit) {
+      return employeesAfterUpdate
     }
-    
-    return JSON.parse(localStorage.getItem('allEmployees'))
   }
+  _allEmployees()
+
+  const allEmployees = useMemo(() => {
+    return JSON.parse(localStorage.getItem('allEmployees'))
+  }, [isFromBackOffice, isFromCreation, isFromEdit])
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -50,7 +56,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   }, [currentOfficeID])
 
   const renderManagerCard = () => {
-    const managers = _allEmployees()?.manager
+    const managers = allEmployees?.manager
     return (
       <Link to={{
         pathname:"/EmployeeList",
@@ -72,7 +78,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderSecretaryCard = () => {
-    const secretaries = _allEmployees()?.secretary
+    const secretaries = allEmployees?.secretary
     return (
       <Link to={{
         pathname:"/EmployeeList",
@@ -95,7 +101,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderTeamLeaderCard = () => {
-    const teamLeaders = _allEmployees()?.team_leader
+    const teamLeaders = allEmployees?.team_leader
     return (
       <Link to={{
         pathname:"/EmployeeList",
@@ -103,7 +109,7 @@ const ChooseEmployeeTypeToSee = (props) => {
           userType: "teamLeader",
           title: "Team Leader",
           data: teamLeaders,
-          employeeToAssociate: _allEmployees()?.manager,
+          employeeToAssociate: allEmployees?.manager,
           shouldRenderEmployeeAssociation: true
         }  
       }}>
@@ -117,7 +123,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderInstructorCard = () => {
-    const instructors = _allEmployees()?.instructor
+    const instructors = allEmployees?.instructor
     return (
       <Link to={{
         pathname:"/EmployeeList",
@@ -127,7 +133,7 @@ const ChooseEmployeeTypeToSee = (props) => {
           data: instructors,
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          employeeToAssociate: _allEmployees()?.team_leader.concat(_allEmployees()?.manager),
+          employeeToAssociate: allEmployees?.team_leader.concat(allEmployees?.manager),
           shouldRenderEmployeeAssociation: true
         }  
       }}>
@@ -141,7 +147,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   };
 
   const renderComercialCard = () => {
-    const salesPersons = _allEmployees()?.sales_person
+    const salesPersons = allEmployees?.sales_person
     return (
       <Link to={{
         pathname:"/EmployeeList",
@@ -151,7 +157,7 @@ const ChooseEmployeeTypeToSee = (props) => {
           data: salesPersons,
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
-          employeeToAssociate: _allEmployees()?.instructor.concat(_allEmployees()?.manager, _allEmployees()?.team_leader),
+          employeeToAssociate: allEmployees?.instructor.concat(allEmployees?.manager, allEmployees?.team_leader),
           shouldRenderEmployeeAssociation: true
         }  
       }}>

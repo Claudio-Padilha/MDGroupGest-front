@@ -2,6 +2,7 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 
 import _currentTokenOnRAM from './currentToken';
+import dataRequests from './dataRequests';
 
 export default {
   getAllEmployees: (officeID) => {
@@ -117,6 +118,7 @@ export default {
     });
   },
   updateEmployee: (formFields, data) => {
+    console.log(data, 'DATA')
 
     const userObj = {
       id: data?.id,

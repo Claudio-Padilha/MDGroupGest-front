@@ -180,6 +180,7 @@ export default {
       axios(myTeamRequest)
 
       .then(res => {
+        console.log(res, 'RESPOSTAAAAAA')
         localStorage.removeItem('myTeam')
         localStorage.setItem('myTeam', JSON.stringify(res?.data))
         resolve(res);

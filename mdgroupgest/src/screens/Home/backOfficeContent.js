@@ -39,12 +39,13 @@ const BackOfficeContent = (props) => {
 
   setTimeout(() => {
     setIsLoading(false)
-  }, [1500]);
+  }, [1200]);
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   async function _getOffice() {
     await officesRequests.getOffice(currentOfficeID)
+    await dataRequests.getOfficesResultsByDay(currentOfficeID)
     await dataRequests.getResultsToPresent();
   }
 
@@ -235,7 +236,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
-              dataRequests.getMyTeam(currentOfficeID)
+              // dataRequests.getMyTeam(currentOfficeID)
               history.push("/MyTeam")
             }}
             small={true}

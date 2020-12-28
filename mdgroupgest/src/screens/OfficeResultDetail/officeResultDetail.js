@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Chart from "react-google-charts";
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import {  SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
@@ -39,8 +40,6 @@ const OfficeMonthResult = (props) => {
   const pending = props?.location?.state?.contracts?.pending?.length;
   const all = props?.location?.state?.contracts?.all?.length;
 
-  
-
   const currentMonth = useDate();
 
   function _goBack() {
@@ -53,7 +52,7 @@ const OfficeMonthResult = (props) => {
         width={'600px'}
         height={'500px'}
         chartType="Line"
-        loader={<div><Body>Carregando gráfico...</Body></div>}
+        loader={<div style={{display: 'flex', justifyContent: 'center', marginTop: '30%', marginRight: '10%'}}><CombSpinner size={200} color="#686769" /></div>}
         data={data}
         options={{
           chart: {
@@ -61,9 +60,9 @@ const OfficeMonthResult = (props) => {
             subtitle: 'por estado de contrato',
           },
           series: {
-            0: { color: `${CONSTANTS?.colors?.green}` },
-            1: { color: `${CONSTANTS?.colors?.brand?.yellow}` },
-            2: { color: `${CONSTANTS?.colors?.red}` },
+            0: { color: ok !== 0 ? CONSTANTS?.colors?.green : CONSTANTS?.colors?.white },
+            1: { color: pending !== 0 ? CONSTANTS?.colors?.brand?.yellow : CONSTANTS?.colors?.white },
+            2: { color: ko !== 0 ? CONSTANTS?.colors?.red : CONSTANTS?.colors?.white },
           }
         }}
         rootProps={{ 'data-testid': '3' }}
@@ -96,22 +95,22 @@ const OfficeMonthResult = (props) => {
             </EmptyContainer>
             </>
             :
-            <MDRow style={{display: 'flex', justifyContent: 'space-between'}}>
+            <MDRow style={{display: 'flex', justifyContent: 'space-between', width: '100%', marginLeft: `${pending !== 0 && ko !== 0 ? "" : pending !== 0 || ko !== 0 ? "15%" : "30%"}`}}>
               <MDCol style={{marginRight: '5%'}}>
-              <SmallSubHeading>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok === 1 ? "contrato válido: " : ok > 1 ?  "contratos válidos: ": null}</SmallSubHeading>
-              <Heading >{ok === 0 ? null : ok}</Heading>
-              <h3 >{valid_contract_value + ' €'}</h3>
+              <SmallSubHeading style={{textAlign: 'center'}}>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok !== 0 ? "Contratos válidos: " : null}</SmallSubHeading>
+              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}}>{ok === 0 ? null : ok}</Heading>
+              <SmallSubHeading style={{color: CONSTANTS?.colors?.green, textAlign: 'center', fontSize: '32px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)' }} >{valid_contract_value + ' €'}</SmallSubHeading>
               </MDCol>
 
               <MDCol>
             
-              <SmallSubHeading>{pending !== 0 ? pending : "Não há contratos pendentes"} {pending === 1 ? "contrato pendente: " : pending > 1 ? "contratos pendentes: " : null}</SmallSubHeading>
-              <Heading >{pending === 0 ? null : pending}</Heading>
+              {pending !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{pending !== 0 ? "Contratos pendentes: " : null}</SmallSubHeading>}
+              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{pending === 0 ? null : pending}</Heading>
               </MDCol>
 
               <MDCol style={{marginLeft: '5%', marginRight: '5%'}}>
-              <SmallSubHeading>{ko !== 0 ? null : "Não há contratos anulados"} {ko === 1 ? "contrato anulado: " : ko > 1 ? "contratos anulados: " : null}</SmallSubHeading>
-              <Heading >{ko === 0 ? null : ko}</Heading>
+              {ko !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{ko !== 0 ? null : "Não há contratos anulados"} {ko === 1 ? "contrato anulado: " : ko > 1 ? "contratos anulados: " : null}</SmallSubHeading>}
+              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{ko === 0 ? null : ko}</Heading>
               </MDCol>
             </MDRow>
 

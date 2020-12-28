@@ -17,6 +17,7 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import request from '../../components/Form/request';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import { FormControl } from '@material-ui/core';
 
 const EditEmployee = (props) => {
 
@@ -30,6 +31,7 @@ const EditEmployee = (props) => {
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
   const employeesReturningFromEdit = props?.location?.state?.employeesComingFromList;
   const currentAssociateID = employee?.manager;
+  const currentOfficeID = employee?.office;
 
   function _goBack() {
     history.push({
@@ -84,6 +86,7 @@ const EditEmployee = (props) => {
         // "result.isConfimed significa clicar em "Refazer"
           if (result.isConfirmed) {
             await employeesRequests.updateEmployee(formFields, data)
+            await employeesRequests.getAllEmployees(currentOfficeID)
             try {
               swalWithBootstrapButtons.fire(
                 `${nothingWasChanged ? "" : "Boa!"}`,
@@ -94,7 +97,8 @@ const EditEmployee = (props) => {
                   return history.push({
                     pathname: "/ChooseEmployeeTypeToSee",
                     state: {
-                      cameFromEdit: true
+                      cameFromEdit: true,
+                      employeesAfterUpdate: JSON.parse(localStorage.getItem('allEmployees')),
                     }
                   });
                 }
@@ -120,7 +124,10 @@ const EditEmployee = (props) => {
       )
   }
 
+  console.log(employee, 'MOSTRAR EMPLOYEE')
+
   const handleSubmitForm = formFields => {
+   console.log(formFields, 'FORM FIELDS')
     const data = {
       office: employee?.office,
       id: employee?.id,

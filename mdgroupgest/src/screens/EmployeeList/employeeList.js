@@ -54,6 +54,7 @@ const EmployeeList = (props) => {
 
   const renderEmployee = (employee, i) => {
 
+    console.log(employee, 'EMPLOYEEEEEEEEEEEEEE')
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
 
@@ -210,7 +211,7 @@ const EmployeeList = (props) => {
   };
 
   const employeesToRender = () => {
-    if (employeesReturningFromEdit && isFromEdit) {
+    if (isFromEdit) {
       return employeesReturningFromEdit.map((employee, index) => {
         console.log(employee, 'cada func')
         return renderEmployee(employee, index)

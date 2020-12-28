@@ -6,6 +6,7 @@ import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 import { BackIcon } from '../../components/Icon/icons';
 
 import { MainContainer } from "./styles";
+import dataRequests from '../../hooks/requests/dataRequests';
 
 const MyTeam = () => {
 
@@ -38,9 +39,12 @@ const MyTeam = () => {
     history.push("/BackOffice");
   }
 
+  dataRequests.getMyTeam(currentOffice?.id)
+
   function _getData() {
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
+    console.log(employees, 'TESTE NO REQUEST')
 
     const managers = employees['manager']
     const team_leaders = employees['team_leader']
@@ -135,7 +139,7 @@ const MyTeam = () => {
                   children:[]
                 }
               )
-            }
+            } 
           }
         }
       }
