@@ -42,7 +42,7 @@ const MyTeam = () => {
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
-    console.log("EMPLOYESS: ", employees)
+    console.log(employees, 'EMPLOYEES')
 
     const managers = employees['manager']
     const team_leaders = employees['team_leader']
@@ -197,6 +197,7 @@ const MyTeam = () => {
       }
     }
     localStorage.setItem('teamData', JSON.stringify(data))
+    console.log(data, 'DADOS')
     return data;
   }
 

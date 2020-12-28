@@ -21,7 +21,7 @@ import {
   MDButton 
 } from '../../screens/Home/md';
 import CONSTANTS from "../../constants";
-
+import dataRequests from "../../hooks/requests/dataRequests";
 
 const MyResults = (props) => {
   console.log(props, 'PROPS DE RESULTS')
@@ -34,7 +34,27 @@ const MyResults = (props) => {
   const koPercentage = `${percentageState?.ko}%`;
   const koNumber = parseInt(koPercentage);
 
-  console.log(okPercentage, 'OKOKOKKOKO')
+  const resultsInfo = props?.location?.state?.resultsInfo;
+  const allContractsQtd = props?.location?.state?.contracts?.all?.length;
+  const currentSalary = props?.location?.state?.currentSalary;
+  var bestContractDay = resultsInfo?.best_contract_day;
+  var bestComissionDay = resultsInfo?.best_comission_day;
+  var worstContractDay = resultsInfo?.worst_contract_day;
+  var worstComissionDay = resultsInfo?.worst_comission_day;
+
+  const today = new Date()
+  const todayNumber = today.getDate()
+
+  var contractQtdAverage = allContractsQtd / todayNumber;
+  const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2);
+  
+  var salaryAverage = currentSalary / todayNumber;
+  const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
+
+  console.log(bestContractDay, 'BEST CONTRACT DAY')
+  console.log(bestComissionDay, 'BEST COMISSION DAY')
+  console.log(worstContractDay, 'worst CONTRACT DAY')
+  console.log(worstComissionDay, 'worst COmission DAY')
   function _goBack() {
     window.location.assign("/BackOffice");    
   }
@@ -48,7 +68,6 @@ const MyResults = (props) => {
       return <RedCircle />;
     } 
   }
-
 
   const renderMyProfit = () => {
     const colStyle = {
@@ -75,24 +94,60 @@ const MyResults = (props) => {
               color: `${CONSTANTS?.colors?.white}`,
               fontSize: '14px',
             }}>Contratos OK</Body>
-            {rNumber < 70 && okNumber < 80 && <SmallSubHeading style={{marginTop: '1%'}}>{`${rPercentage} dos contratos estão pendentes. Prestar atenção!`}</SmallSubHeading>}
-            {koNumber > 70 && okNumber < 70 && <SmallSubHeading style={{marginTop: '1%'}}>{`${koPercentage} dos contratos estão anulados, cuidado!`}</SmallSubHeading>}
-            {rNumber < 70 && okNumber < 70 && <SmallSubHeading style={{marginTop: '1%'}}>A taxa de contratos ok está baixa...</SmallSubHeading>}
-          
+            {okNumber < 80 && 
+              <Row style={{
+                display: 'flex',
+                height: '3vh',
+                width: '100%',
+                justifyContent: 'center'
+              }}>
+                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>⬆️</SmallSubHeading>
+              </Row>
+            }
+            {okNumber < 80 && 
+              <Row style={{
+                display: 'flex',
+                height: '3vh',
+                width: '100%',
+                justifyContent: 'center'
+              }}>
+                <Body style={{marginTop: '1%', marginBottom: '0'}}>Com mais {80 - okNumber}% seu status passará a 🟢</Body>
+              </Row>
+            }
+            {rNumber > 20 && okNumber < 80 && 
+              <Row style={{
+                display: 'flex',
+                height: '3vh',
+                width: '100%',
+                justifyContent: 'center'
+              }}>
+                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>Atenção aos pendentes!</SmallSubHeading> <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>Está em {rPercentage} 🟡</Body>
+              </Row>
+            }
+            {koNumber > 10 && okNumber < 70 && 
+              <Row style={{
+                display: 'flex',
+                height: '3vh',
+                width: '100%',
+                justifyContent: 'center'
+              }}>
+                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>Atenção aos anulados!</SmallSubHeading> <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>Está em {koPercentage} 🔴</Body>
+              </Row>
+            }
           </Col>
         </Row>
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Média de contratos:</SubHeading>
-            <Body style={{marginTop: '0'}}>3 por dia</Body>
+            <Body style={{marginTop: '0'}}>{`${contractQtdAverageFixedBy2} contratos por dia ${contractQtdAverageFixedBy2 > 2 ? "✅" : contractQtdAverageFixedBy2 < 0.7 ? "⛔️" : "⚠️"}`}</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>22/12/2020 (12 contratos)</Body>
+            <Body style={{marginTop: '0'}}>{`${bestContractDay?.best_day} (${bestContractDay?.value <= 1 ? `${bestContractDay?.value} contrato` : `${bestContractDay?.value} contratos`})`}</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0'}}>13/12/2020 (1 contrato)</Body>
+            <Body style={{marginTop: '0'}}>{`${worstContractDay?.worst_day} (${worstContractDay?.value <= 1 ? `${worstContractDay?.value} contrato` : `${worstContractDay?.value} contratos`})`}</Body>
           </Col>
         </Row>
         {/* <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -112,7 +167,7 @@ const MyResults = (props) => {
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Média de faturação:</SubHeading>
-            <Body style={{marginTop: '0'}}>72€</Body>
+            <Body style={{marginTop: '0'}}>{salaryAverageFixedBy2}€ por dia</Body>
           </Col>
           <Col style={colStyle}>
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo (faturação):</SubHeading>

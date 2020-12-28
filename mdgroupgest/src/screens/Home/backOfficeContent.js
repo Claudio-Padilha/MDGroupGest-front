@@ -45,6 +45,7 @@ const BackOfficeContent = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   async function _getOffice() {
     await officesRequests.getOffice(currentOfficeID)
+    await dataRequests.getResultsToPresent();
   }
 
   _getOffice()
@@ -53,7 +54,7 @@ const BackOfficeContent = (props) => {
   console.log(currentUser, 'CURRENT USER BAITA TESTE')
 
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
-  console.log(officeResults, 'RESULTADOS ESCRITÓRIOS')
+  const resultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
   const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
 
@@ -234,7 +235,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
-              employeesRequests.getEmployees()
+              dataRequests.getMyTeam(currentOfficeID)
               history.push("/MyTeam")
             }}
             small={true}
@@ -410,6 +411,8 @@ const BackOfficeContent = (props) => {
                 ko: koContracts,
                 all: allContracts
               },
+              resultsInfo: resultsToPresent,
+              currentSalary: mySalary,
             }  
           }}>
             <SubHeading>Meus resultados</SubHeading>   
