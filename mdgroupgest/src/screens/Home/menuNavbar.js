@@ -1,11 +1,13 @@
 import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { MDNavbar } from './md';
 
 import { SubHeading, Body } from '../../components/Text/text';
 import { LogoutIcon } from '../../components/Icon/icons';
+
 import userRequests from '../../hooks/requests/userRequests';
 
 import {
@@ -20,6 +22,12 @@ export default function MenuNavbar(props) {
   const user = JSON.parse(localStorage.getItem('userForPhoto'));
   const userName = user?.user?.name;
   const currentUserIsAdmin = user?.user?.is_admin;
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [1500]);
 
   console.log(user?.user?.user_type, 'USER TYPE NAVBAR')
 
@@ -47,7 +55,6 @@ export default function MenuNavbar(props) {
 
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
   const haveAccessToMenuNavbar = user?.user?.user_type === 'manager' || user?.user?.user_type === "secretary"
-  console.log('TEM ACESSO? ', haveAccessToMenuNavbar)
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -61,11 +68,16 @@ export default function MenuNavbar(props) {
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>
-        <Avatar
-          alt="Profile Image"
-          src={user?.user?.avatar}
-          className={avatarClasses.large}
-        />
+        {isLoading ?
+          <CombSpinner size={100} color="#686769" loading={isLoading} />
+          :
+          <Avatar
+            alt="Profile Image"
+            src={user?.user?.avatar}
+            className={avatarClasses.large}
+          />
+        }
+
         <SubHeading isReverseColor={true}>{userName}</SubHeading>
         <Body isSmall isReverseColor onClick={_handleMyProfileNavigation} className={"myProfileLink"}>Ver perfil</Body>
       </ProfileContainer>

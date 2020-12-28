@@ -191,7 +191,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{marginLeft: '-3%'}}>Electricidade</SubHeading>
+            <SubHeading style={{marginLeft: '-3%', color: CONSTANTS?.colors?.darkGrey}}>Electricidade</SubHeading>
             <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>
@@ -238,7 +238,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{marginLeft: '35%'}}>Gás</SubHeading>
+            <SubHeading style={{marginLeft: '35%', color: CONSTANTS?.colors?.darkGrey}}>Gás</SubHeading>
             <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>
@@ -289,7 +289,7 @@ const ChooseTypeOfContract = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{marginLeft: '35%'}}>Dual</SubHeading>
+            <SubHeading style={{marginLeft: '35%', color: CONSTANTS?.colors?.darkGrey}}>Dual</SubHeading>
             <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Condomínio</SubHeading>
           </MDCardBody>
         </MDCard>

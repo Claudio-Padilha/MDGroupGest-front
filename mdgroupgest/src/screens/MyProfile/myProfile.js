@@ -1,6 +1,7 @@
 import React, {useState}from 'react';
 import { useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { BackIcon } from '../../components/Icon/icons';
 import { Body } from '../../components/Text/text';
@@ -20,7 +21,8 @@ const MyProfile = (props) => {
   const [imageAsUrl, setImageAsUrl] = useState(allImputs)
 
   const history = useHistory();
-  const avatarClasses = useStyles()
+  const avatarClasses = useStyles();
+  const [isLoading, setIsLoading] = useState(false);
 
   const userName = props?.location?.state?.data?.user?.name;
   const email = props?.location?.state?.data?.user?.email;
@@ -32,6 +34,7 @@ const MyProfile = (props) => {
   }
 
   const handleFireBaseUpload = async (e) => {
+    setIsLoading(true);
     e.preventDefault()
     // console.log('start of upload')
 
@@ -62,8 +65,9 @@ const MyProfile = (props) => {
           avatar: fireBaseUrl
         }
         await employeesRequests.addPhoto(data)  
-      
+        
         setImageAsUrl(prevObject => ({...prevObject, imgUrl: fireBaseUrl}))
+        setIsLoading(false)
        })
     })
   }
@@ -73,6 +77,11 @@ const MyProfile = (props) => {
   }
 
   return (
+    isLoading ?
+      <MainContainer>
+        <CombSpinner size={200} color="#686769" loading={isLoading} />
+      </MainContainer>
+    :
     <MainContainer>
       <BackIcon onClick={_goBack} />
       <Avatar

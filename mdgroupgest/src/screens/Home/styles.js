@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import { makeStyles } from '@material-ui/core/styles';
 import CONSTANTS from '../../constants';
+import { fadeIn } from "../../utils/animations";
 
 const MainContainer = styled.div`
   display: flex;
@@ -96,12 +97,21 @@ const TeamAvatarsContainer = styled.div`
   align-items: center;
 `;
 
+const ContentContainerLoader = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 15%;
+  justify-content: flex-start;
+  width: 80%;
+`;
+
 const ContentContainer = styled.div`
   display: flex;
   flex-direction: column;
   margin-left: 15%;
   justify-content: flex-start;
   width: 80%;
+  animation: ${fadeIn} 1s linear;
 `;
 
 const ResultsContainer = styled.div`
@@ -402,6 +412,7 @@ export {
   LogoContainer,
   ProfileContainer,
   ContentContainer,
+  ContentContainerLoader,
   ResultsContainer,
   OfficesContainer,
   TeamAvatarsContainer,

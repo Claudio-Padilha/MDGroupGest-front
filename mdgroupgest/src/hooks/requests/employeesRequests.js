@@ -195,11 +195,21 @@ export default {
   addPhoto: (data) => {
     return new Promise((resolve, reject) => {
 
+      function _userTypeCamelCase() {
+        if(data?.user_type === "team_leader") {
+          return "teamLeader"
+        } else if(data?.user_type === "sales_person") {
+          return "salesPerson"
+        } else {
+          return data?.user?.user_type
+        }
+      }
+
       console.log(data, "DATA INSIDE REQUEST =============================")
 
       var employeeUpdateRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/${data?.user_type}/`,
+          url: `http://127.0.0.1:8000/${_userTypeCamelCase()}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
