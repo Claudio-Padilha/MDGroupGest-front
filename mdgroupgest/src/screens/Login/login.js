@@ -2,6 +2,8 @@ import React from 'react';
 
 import { MainContainer, LoginContainer } from './styles';
 
+import Swal from 'sweetalert2';
+
 import Form from '../../components/Form/normalForm';
 import { LogoMD } from '../../components/Logo/logo';
 import { Corner, Corner180} from '../../components/Corner/corner';

@@ -5,7 +5,7 @@ import _currentTokenOnRAM from './currentToken';
 import dataRequests from '../../hooks/requests/dataRequests';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 
-function _firstTimeOfAnUser() {
+function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({
       title: 'Bem vindo(a), escolha uma password.',
@@ -13,30 +13,25 @@ function _firstTimeOfAnUser() {
       inputAttributes: {
         autocapitalize: 'off'
       },
-      showCancelButton: true,
       confirmButtonText: 'Confirmar',
-      showLoaderOnConfirm: true,
+      allowOutsideClick: false,
       preConfirm: (data) => {
-        return axios.patch("http://127.0.0.1:8000/auth/login/")
-          .then(response => {
-            if (!response.ok) {
-              throw new Error(response.statusText)
-            }
-            return response.json()
-          })
-          .catch(error => {
-            Swal.showValidationMessage(
-              `Request failed: ${error}`
-            )
-          })
-      },
-      allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        _HandleConfirmLoginAlert()
+
+          return axios.post("http://127.0.0.1:8000/auth/definePassword/", {password: data, id: user_id}, {Authorization: 'Token ' + _currentTokenOnRAM()})
+            .then(response => {
+              if (!response.ok) {
+                throw new Error(response.statusText)
+              }
+              return response.json()
+            })
+            .catch(error => {
+              Swal.showValidationMessage(
+                `Request failed: ${error}`
+              )
+            })
+          }
       }
-    })
-  )
+  ))
 }
 
 function _HandleConfirmLoginAlert() {
@@ -97,6 +92,11 @@ export default {
         axios.post("http://127.0.0.1:8000/auth/login/", data)
 
             .then((res) => {
+              if(res?.data?.user?.last_login === null) {
+                _firstTimeOfAnUser(res.data.user.id)
+              } else {
+          
+              
                 resolve(res);
                 console.log(res, 'RESPOSTA DO LOGIN')
                 const user = res?.data;
@@ -130,12 +130,8 @@ export default {
                     axios(contractRequest)
               
                     .then(res => {
-                      if(res?.data?.user?.last_login === null) {
-                        _firstTimeOfAnUser()
-                      } else {
-                        localStorage.setItem('contracts', JSON.stringify(res.data))
-                        _HandleConfirmLoginAlert()
-                      }
+                      localStorage.setItem('contracts', JSON.stringify(res.data))
+                      _HandleConfirmLoginAlert()
                       resolve(res);
                     })
                     .catch(error => {
@@ -144,7 +140,7 @@ export default {
                     })
                   });
                 }
-        
+              }
             })
             .catch(error => {
                 const message = 'Erro do servidor.';
