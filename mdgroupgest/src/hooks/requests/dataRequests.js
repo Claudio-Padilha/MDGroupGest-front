@@ -211,6 +211,29 @@ export default {
         resolve(error);
       })
     })
+  },
+
+  getResultsToPresent: () => {
+
+    return new Promise((resolve) => {
+      var resultsToPresent = {
+        method: 'GET',
+        url: 'http://127.0.0.1:8000/myCurrentResults/',
+        headers: {
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+      };
+
+      axios(resultsToPresent)
+      .then(res => {
+        localStorage.removeItem('resultsToPresent');
+        localStorage.setItem('resultsToPresent', JSON.stringify(res?.data))
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    })
   }
 
 }

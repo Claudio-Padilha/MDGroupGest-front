@@ -95,9 +95,7 @@ export default {
                 await _firstTimeOfAnUser(res.data.user.id)
                 window.location.reload()
                 resolve(res)
-              } else {
-          
-              
+              } else {             
                 resolve(res);
                 console.log(res, 'RESPOSTA DO LOGIN')
                 const user = res?.data;
