@@ -58,9 +58,10 @@ const EditEmployee = (props) => {
     var nif = formFields?.nif?.toString(); 
     var address = formFields?.address; 
     var contact = formFields?.contact?.toString();
-    var email = formFields?.email; 
+    var email = formFields?.email;
+    var employeeAbove = formFields?.employeeAbove;
 
-    const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined
+    const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined
 
       return (
         swalWithBootstrapButtons.fire({
@@ -71,6 +72,7 @@ const EditEmployee = (props) => {
              ${address ? `A nova morada será: <b>${address}</b> <br>` : ``}
              ${email ? `O novo email será: <b>${email}</b> <br>` : ``}
              ${contact ? `O novo contacto será: <b>${contact}</b> <br>` : ``}
+             ${employeeAbove ? `Você mudará o funcionário associado. <br>` : ``}
             `,
         icon: 'warning',
         showCancelButton: !nothingWasChanged,
