@@ -42,8 +42,6 @@ const MyTeam = () => {
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
-    console.log("EMPLOYESS: ", employees)
-
     const managers = employees['manager']
     const team_leaders = employees['team_leader']
     const instructors = employees['instructor']
