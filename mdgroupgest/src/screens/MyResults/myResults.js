@@ -30,7 +30,9 @@ const MyResults = (props) => {
   const okPercentage = `${percentageState?.ok}%`;
   const okNumber = parseInt(okPercentage);
   const rPercentage = `${percentageState?.r}%`;
+  const rNumber = parseInt(rPercentage);
   const koPercentage = `${percentageState?.ko}%`;
+  const koNumber = parseInt(koPercentage);
 
   console.log(okPercentage, 'OKOKOKKOKO')
   function _goBack() {
@@ -40,9 +42,9 @@ const MyResults = (props) => {
   function _colorToRender() {
     if (okNumber > 80) {
       return <GreenCircle />;
-    } else if (okNumber > 70 && okNumber < 80) {
+    } else if (rNumber < 70 && okNumber < 80) {
       return <YellowCircle />;
-    } else if (okNumber < 70){
+    } else if (koNumber > 70 || rNumber < 70 && okNumber < 70){
       return <RedCircle />;
     } 
   }
@@ -62,11 +64,21 @@ const MyResults = (props) => {
           <Col style={colStyle}>
             {_colorToRender()}
             <Heading style={{
-              marginTop: '-4.75%',
+              marginTop: '-5.5%',
               textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
               color: `${CONSTANTS?.colors?.white}`,
               fontSize: '28px',
             }}>{okPercentage}</Heading>
+            <Body style={{
+              marginTop: '-3%',
+              textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+              color: `${CONSTANTS?.colors?.white}`,
+              fontSize: '14px',
+            }}>Contratos OK</Body>
+            {rNumber < 70 && okNumber < 80 && <SmallSubHeading style={{marginTop: '1%'}}>{`${rPercentage} dos contratos estão pendentes. Prestar atenção!`}</SmallSubHeading>}
+            {koNumber > 70 && okNumber < 70 && <SmallSubHeading style={{marginTop: '1%'}}>{`${koPercentage} dos contratos estão anulados, cuidado!`}</SmallSubHeading>}
+            {rNumber < 70 && okNumber < 70 && <SmallSubHeading style={{marginTop: '1%'}}>A taxa de contratos ok está baixa...</SmallSubHeading>}
+          
           </Col>
         </Row>
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>

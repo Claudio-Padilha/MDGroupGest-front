@@ -244,16 +244,23 @@ const CreateContract = (props) => {
                   'error'
                 )
               } else {
-                return swalWithBootstrapButtons.fire(
-                  'Boa!',
-                  'Contrato inserido com sucesso.',
-                  'success'
-                ).then(async (result) => {
-                  if(result) {
+                return swalWithBootstrapButtons.fire({
+                  title: 'Boa!',
+                  html: `Contrato inserido com sucesso. <br>                                               
+                  Queres continuar a inserir?<br> `,
+                  icon: 'success',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sim!',
+                  cancelButtonText: 'Não',
+                  reverseButtons: true
+                }).then(async (result) => {
+                  if(result.isConfirmed) {
                     await contractsRequests.getContracts()
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
-                    return history.push("/ContractList");
+                    return history.push({pathname:"/ChooseTypeOfContract"});
+                  } else {
+                    window.location.assign("/ContractList");
                   }
                 });
               }

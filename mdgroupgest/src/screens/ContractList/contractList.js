@@ -220,11 +220,11 @@ const ContractList = (props) => {
               { contract?.sell_state__name !== 'ok' &&
                 <Button
                   style={{
-                    width: '30%',
+                    width: '40%',
                     backgroundColor: 'green',
                     marginLeft: '10%',
                     marginTop:' -2%',
-                    borderRadius: '10%',
+                    borderRadius: '5%',
                     cursor: 'pointer',
                   }}
                   disabled={false}
@@ -271,8 +271,12 @@ const ContractList = (props) => {
 
           <Column className={"contractComission"}>
             <List.Content>
-              <SmallSubHeading><b>Este contrato vale:</b></SmallSubHeading>
-              <Body className={"employeeComission"}>{` ${contract.employee_comission}€`}</Body>
+            { contract.sell_state__name === "ok" &&
+              <>
+                <SmallSubHeading><b>Este contrato vale:</b></SmallSubHeading>
+                <Body className={"employeeComission"}>{`${contract.employee_comission}€`}</Body>
+              </>
+            }
             </List.Content>
           </Column>
           <Column className={"optionsAboutContract"}>
@@ -283,7 +287,7 @@ const ContractList = (props) => {
                   pathname:"/ContractDetail",
                   state: { 
                     data: contract,
-                    contractNumber: i + 1
+                    contractNumber: contract?.id
                   }
                 })
               }}
