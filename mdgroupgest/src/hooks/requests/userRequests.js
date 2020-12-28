@@ -9,7 +9,7 @@ function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({
       title: 'Bem vindo(a), escolha uma password.',
-      input: 'text',
+      input: 'password',
       inputAttributes: {
         autocapitalize: 'off'
       },
@@ -23,8 +23,9 @@ function _firstTimeOfAnUser(user_id) {
               return true
             })
             .catch(error => {
+              console.log(error, "ERRO DO ALERTA")
               Swal.showValidationMessage(
-                `Request failed: ${error}`
+                `A senha deve ter tamanho mínimo de 6 caracteres, um caracter grande e um caracter especial!`
               )
             })
           }
@@ -89,9 +90,11 @@ export default {
 
         axios.post("http://127.0.0.1:8000/auth/login/", data)
 
-            .then((res) => {
+            .then(async (res) => {
               if(res?.data?.user?.last_login === null) {
-                _firstTimeOfAnUser(res.data.user.id)
+                await _firstTimeOfAnUser(res.data.user.id)
+                window.location.reload()
+                resolve(res)
               } else {
           
               
