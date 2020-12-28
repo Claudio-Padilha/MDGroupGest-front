@@ -58,6 +58,26 @@ const EmployeeList = (props) => {
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
 
+    console.log('TESTE NO USER TYPE', userTypeCapitalized)
+
+    function _userTypeInPortuguese() {
+      switch (userTypeCapitalized) {
+        case "Manager":
+          return "Gerente";
+        case "Secretary":
+          return "Secretária";
+        case "Team_leader":
+          return "Team Leader";
+        case "Instructor":
+          return "Instrutor";
+        case "Sales_person":
+          return "Comercial";
+      
+        default:
+          return;
+      }
+    }
+
     function _handleEditEmployee() {
       history.push({
         pathname: "/EmployeeEdit",
@@ -142,7 +162,7 @@ const EmployeeList = (props) => {
           <Button
             disabled={true}
             small={true}
-            text={userTypeCapitalized}
+            text={_userTypeInPortuguese()}
             className={"userTypeTag"}
           />
           <EditIcon color={"black"} onClick={_handleEditEmployee} style={{display: "flex", width: "20%", height: "50%"}}/>
