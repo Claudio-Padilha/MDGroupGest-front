@@ -26,7 +26,4 @@ const LogoLG = ({ action }) => {
   );
 };
 
-// LogoMD.propTypes = { action: PropTypes.func, isAnimated: PropTypes.func };
-// LogoLG.propTypes = { action: PropTypes.func, isAnimated: PropTypes.func };
-
 export { LogoMD, LogoLG };

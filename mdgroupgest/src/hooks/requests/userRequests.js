@@ -37,7 +37,7 @@ function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
 
-  const hasPermission = currentUser?.user?.user_type === "manager";
+  const hasPermission = currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary" ;
 
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {

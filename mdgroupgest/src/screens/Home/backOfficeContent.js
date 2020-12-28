@@ -1,7 +1,8 @@
-import React, { useMemo, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 import { Avatar } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
 
@@ -15,13 +16,17 @@ import {
 
 import Button from "../../components/Button/button";
 import { Heading, SmallSubHeading, SubHeading, Body } from '../../components/Text/text';
+import { LogoMD } from '../../components/Logo/logo';
 
 import {
   TeamContainer,
   ContentContainer,
+  ContentContainerLoader,
   ResultsContainer,
   TeamAvatarsContainer 
 } from './styles';
+
+import CONSTANTS from '../../constants';
 
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
@@ -29,23 +34,32 @@ import officesRequests from '../../hooks/requests/officesRequests'
 
 const BackOfficeContent = (props) => {
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  officesRequests.getOffice(currentUser.user.office)
+  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
 
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [1500]);
+
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  async function _getOffice() {
+    await officesRequests.getOffice(currentOfficeID)
+  }
+
+  _getOffice()
+
+  console.log(currentOfficeID, 'OFFICE ID BAITA TESTE')
+  console.log(currentUser, 'CURRENT USER BAITA TESTE')
 
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
+  console.log(officeResults, 'RESULTADOS ESCRITÓRIOS')
   const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
   const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
-  const currentUserIsAdmin = currentUser?.user?.is_admin;  
 
+  const currentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'))
 
-
-  console.log(mySalary, 'meu salário')
-
-  const userType = useMemo(() => {
-    return currentUser?.user?.user_type;
-  }, [currentUser]);
+  const userType =  currentUser?.user?.user_type;
 
   let dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
 
@@ -76,6 +90,10 @@ const BackOfficeContent = (props) => {
       totalEmployees.push(employeeType[i])
     }
   })
+
+  const manager = totalEmployees?.filter(employee => employee?.user?.user_type === "manager");
+  const managerObject = manager[0];
+  console.log(managerObject, 'GERENTE')
 
   // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
     for (var i = 0; i < 1; i++) {
@@ -117,8 +135,6 @@ const BackOfficeContent = (props) => {
       }
     }
 
-  const history = useHistory();
-
   var contracts = JSON.parse(localStorage.getItem('contracts'));
 
   const koContracts = [];
@@ -154,8 +170,6 @@ const BackOfficeContent = (props) => {
     return koContracts, okContracts, rContracts, allContracts;
   }
 
-  console.log(currentUser?.user?.id, 'USUÁRIO ATUAL')
-
   _sellStateOfContract()
 
     // "x" is ko contracts qtd
@@ -169,8 +183,6 @@ const BackOfficeContent = (props) => {
 
     // "k" is total contracts qtd
     const a = allContracts?.length;
-
-    console.log(dataToPopulateGraphic, "DATA QUE QUERO VER")
 
     const dataOfficeResult = [ [
       'Dias',
@@ -187,8 +199,6 @@ const BackOfficeContent = (props) => {
       return 0;
     }
   }
-
-  console.log(allContracts, 'TODOS OS CONTRATOS')
 
   const koPercentage = _getPercentage(x, a);
   const okPercentage = _getPercentage(y, a);
@@ -209,11 +219,7 @@ const BackOfficeContent = (props) => {
     dataRequests.getOfficeResults(currentOfficeID)
   }
   
-  useEffect(() => {
-    _getOfficeComissions()
-  }, [allContracts])
-
-  console.log(dataOfficeResult, "ANTES DE MANDAR PELA PROP")
+  _getOfficeComissions()
 
   if(deletedID)
     { _removeContractFromRAM() }
@@ -223,7 +229,7 @@ const BackOfficeContent = (props) => {
     return (
       <MDHero>
         <MDContainer>
-          <SubHeading>Minha equipe</SubHeading>
+          <Heading>{currentOfficeObject?.name}</Heading>
           <Button
             fullWidth={false}
             disabled={false}
@@ -232,7 +238,7 @@ const BackOfficeContent = (props) => {
               history.push("/MyTeam")
             }}
             small={true}
-            text="Wolverines"
+            text="Ver equipa"
           />
         </MDContainer>
         <TeamAvatarsContainer>
@@ -272,59 +278,33 @@ const BackOfficeContent = (props) => {
           </MDCard.Body>
         </MDCard>
 
-        { userType === "manager" &&
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
-            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
-            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
-            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : 'Meu mês'}</SubHeading>
+            { userType === "manager" && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>}
+            <Heading style={userType === "secretary" ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : `${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
-        }
-
-        { userType === "secretary" &&
-        <MDCard className={"managerMonth"}>
-          <MDCard.Body className={"managerMonthCardBody"}>
-            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}></SubHeading>
-            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>
-            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
-          </MDCard.Body>
-        </MDCard>
-        }
-
-
-
-        {/* <MDCard className={"managerMonth"}>
-          <MDCard.Body className={"managerMonthCardBody"}>
-            <Link
-              to={{
-                pathname: "/MyMonth",
-                state: {
-                  data: "MÊS"
-                }
-              }}
-            >
-              <SubHeading>Meus lucros</SubHeading>
-            </Link> 
-            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
-          </MDCard.Body>
-        </MDCard> */}
 
       </MDCard>
     )
   }
 
   const renderMyMonth = () => {
-
-    return (
-      <MDCard>
-        <MDCard.Body className={"monthCardBody"}>
-          <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
-          <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-35%'}}>Até agora você já tem:</Body>
-          <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
-        </MDCard.Body>
-      </MDCard>
-    );
+    if(userType === "manager" || userType === "secretary") {
+      return;
+    }
+    else {
+      return (
+        <MDCard>
+          <MDCard.Body className={"monthCardBody"}>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
+            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-35%'}}>Até agora você já tem:</Body>
+            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
+          </MDCard.Body>
+        </MDCard>
+      );
+    }
   };
 
   const renderMyContracts = () => {
@@ -400,7 +380,7 @@ const BackOfficeContent = (props) => {
     );
   };
 
-  const resultStatus = useMemo(() => {
+  const resultStatus = () => {
     if (okPercentage < 70 && allContracts?.length !== 0) {
       return "🔴";
     } else if (okPercentage < 80 && allContracts?.length !== 0) {
@@ -410,7 +390,7 @@ const BackOfficeContent = (props) => {
     } else {
       return "⚪️"
     }
-  }, [okPercentage])
+  }
 
   const renderMyResults = () => {
     return (
@@ -447,17 +427,37 @@ const BackOfficeContent = (props) => {
     );
   };
 
-  return (
+  console.log(userType, 'TESTE')
+
+  if (isLoading) {
+    return (
+      <ContentContainerLoader style={{
+        height: '60%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}>
+        {/* <GuardSpinner size={80} frontColor={CONSTANTS?.colors?.darkGrey} backColor={CONSTANTS?.colors?.black} loading={isLoading} /> */}
+        {/* <SwishSpinner size={80} frontColor="#686769" backColor="#fff" loading={isLoading} /> */}
+        <CombSpinner size={250} color="#686769" loading={isLoading} />
+      </ContentContainerLoader>
+    )
+  } else {
+    return (
       <ContentContainer>
         <TeamContainer>{renderHero()}</TeamContainer>
         <ResultsContainer>
-          {userType === "manager" || userType === "secretary" && renderOfficeMonth()} 
-          {userType !== "manager" || userType === "secretary" && renderMyMonth()}
+          {userType === "manager" && renderOfficeMonth()} 
+          {userType !== "manager" && userType === "secretary" && renderOfficeMonth()} 
+          {renderMyMonth()}
           {renderMyContracts()}
           {renderMyResults()}
         </ResultsContainer>
       </ContentContainer>
-  );
+    );
+  }
+
+
 };
 
 export default BackOfficeContent;

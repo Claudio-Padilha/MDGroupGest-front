@@ -19,6 +19,7 @@ export default {
 
       .then(res => {
         console.log(res, 'res do contrato')
+        localStorage.removeItem('contracts', JSON.stringify(res.data))
         localStorage.setItem('contracts', JSON.stringify(res.data))
         resolve(res);
       })

@@ -1,10 +1,9 @@
-import React, { useMemo } from "react";
+import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import Tree from 'react-tree-graph';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { BackIcon } from '../../components/Icon/icons';
-
-import dataRequests from '../../hooks/requests/dataRequests'
 
 import { MainContainer } from "./styles";
 
@@ -13,6 +12,11 @@ const MyTeam = () => {
   const currentOffice = JSON.parse(localStorage.getItem('currentOffice'));
   const user = JSON.parse(localStorage.getItem('currentUser'))
   const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [1500]);
 
   // aqui cada clique leva a pagina de detalhe de cada funcionário
   function _handleMainClick (event, nodeKey) {
@@ -198,10 +202,12 @@ const MyTeam = () => {
 
   const dataToProcess = _getData()
 
-
-  console.log(dataToProcess, 'dataToProcess' )
-
   return (
+    isLoading ?
+    <MainContainer className="custom-container">
+      <CombSpinner size={300} color="#686769" loading={isLoading} />
+    </MainContainer>  
+    :
     <MainContainer className="custom-container">
       <BackIcon onClick={_goBack} className={"backIcon"}/>
       <Tree
@@ -210,14 +216,14 @@ const MyTeam = () => {
         width={1000}
         animated
         steps={350}
-        duration={1500}
+        duration={2000}
         svgProps={{
           className: 'custom',
         }}
-        gProps={{
-          onClick: _handleMainClick,
-          onContextMenu: _handleRightClick
-        }}
+        // gProps={{
+        //   onClick: _handleMainClick,
+        //   onContextMenu: _handleRightClick
+        // }}
         nodeShape="image"
         nodeProps={{
           height: 45,

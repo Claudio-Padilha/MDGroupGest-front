@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
 import Swal from 'sweetalert2';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
@@ -42,6 +43,15 @@ const ContractList = (props) => {
   const cameFromDetail = props?.location?.state?.cameFromDetail;
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (isLoading) {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [2000]);
+  }
+
+
   const contracts = useMemo(() => {
     if(cameFromDetail) {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
@@ -56,7 +66,7 @@ const ContractList = (props) => {
     } else {
       return props?.location?.state?.data
     } 
-  },[cameFromDetail])
+  },[cameFromDetail, isLoading])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
@@ -132,10 +142,15 @@ const ContractList = (props) => {
                   'Boa!',
                   'Contrato ativado com sucesso.',
                   'success'
-                )
+                ).then(async result => {
+                  if (result.isConfirmed) {
+                    await contractsRequests.getContracts()
+                    setIsLoading(true)
+                  }
+                })
               }
             })
-        // "!result.isConfimed significa clicar em "'E isso!"
+        // "!result.isConfimed significa clicar em "Refazer!"
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
               'Cancelado',
@@ -311,6 +326,11 @@ const ContractList = (props) => {
   }
 
   return (
+    isLoading ?
+    <MainContainer>
+      <CombSpinner size={200} color="#686769" loading={isLoading} />
+    </MainContainer>
+    :
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} />
       <Row style={{

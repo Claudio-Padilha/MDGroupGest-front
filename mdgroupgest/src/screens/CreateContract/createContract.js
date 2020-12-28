@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import {
   MainDiv,
@@ -20,8 +21,6 @@ import dataRequests from '../../hooks/requests/dataRequests'
 
 const CreateContract = (props) => {
 
-console.log(props, "PROPPPPPS")
-
   const _allEmployeesFromRAM = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [])
@@ -40,6 +39,12 @@ console.log(props, "PROPPPPPS")
 
     return allEmployees
   }
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [1000]);
 
   const powersList = useMemo(() => {
     return props?.location?.state?.power
@@ -476,7 +481,11 @@ console.log(props, "PROPPPPPS")
     }
   }, [typeOfContractFromProps])
 
-  return (
+  return ( isLoading ?
+    <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+      <CombSpinner size={200} color="#686769" loading={isLoading} />
+    </MainDiv>
+    :
     <MainDiv>
       <BackIcon onClick={_goBack} />
       
