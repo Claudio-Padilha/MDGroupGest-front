@@ -53,13 +53,13 @@ const MyTeam = () => {
       children: []
     }
 
-    for (var i = 0; i < managers.length; i++) {     
+    for (var i = 0; i < managers?.length; i++) {     
       data.children.push(
         {
-          name: managers[i].user.name,
+          name: managers[i]?.user.name,
           textProps: {x: -30, y: 25},
           nodeProps: {
-            href: managers[i].user.avatar ? managers[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+            href: managers[i]?.user?.avatar ? managers[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
             height: 30,
             width: 30,
             nodeRadius: 35,
@@ -68,8 +68,8 @@ const MyTeam = () => {
         }
       )
 
-      for (var j = 0; j < team_leaders.length; j++) {
-        if (team_leaders[j].manager === managers[i].id) {
+      for (var j = 0; j < team_leaders?.length; j++) {
+        if (team_leaders[j]?.manager === managers[i]?.id) {
           data.children[i].children.push(
             {
               name: team_leaders[j].user.name,
@@ -102,7 +102,7 @@ const MyTeam = () => {
 
               for (var l = 0; l < sales_people.length; l++){
                 if (sales_people[l].instructor === instructors[k].id) {
-                  data.children[i].children[j].children[k].children.push(
+                  var a = data?.children[i]?.children[j]?.children[k]?.children.push(
                     {
                       name: sales_people[l].user.name,
                       nodeProps: {
