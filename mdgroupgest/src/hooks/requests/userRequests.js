@@ -19,10 +19,8 @@ function _firstTimeOfAnUser(user_id) {
 
           return axios.post("http://127.0.0.1:8000/auth/definePassword/", {password: data, id: user_id}, {Authorization: 'Token ' + _currentTokenOnRAM()})
             .then(response => {
-              if (!response.ok) {
-                throw new Error(response.statusText)
-              }
-              return response.json()
+              alert("Senha atualizada!")
+              return true
             })
             .catch(error => {
               Swal.showValidationMessage(
