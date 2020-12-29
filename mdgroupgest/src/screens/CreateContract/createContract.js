@@ -31,8 +31,9 @@ const CreateContract = (props) => {
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
         employeeType.map(type => {
-          console.log(type, 'TIPO')
-          allEmployees.push({value: type?.user?.id, label: type?.user?.name})
+          if (type?.user?.user_type !== "secretary") {
+            allEmployees.push({value: type?.user?.id, label: type?.user?.name})
+          }
         })
       });
     }
@@ -259,7 +260,7 @@ const CreateContract = (props) => {
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({pathname:"/ChooseTypeOfContract"});
-                  } else {
+                  } else if(!result.isConfirmed) {
                     window.location.assign("/ContractList");
                   }
                 });
@@ -490,7 +491,7 @@ const CreateContract = (props) => {
 
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-      <CombSpinner size={200} color="#686769" loading={isLoading} />
+      <SwishSpinner size={200} color="#686769" loading={isLoading} />
     </MainDiv>
     :
     <MainDiv>

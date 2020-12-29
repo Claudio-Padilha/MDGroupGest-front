@@ -31,6 +31,7 @@ import CONSTANTS from '../../constants';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
 import officesRequests from '../../hooks/requests/officesRequests'
+import contractsRequests from '../../hooks/requests/contractsRequests';
 
 const BackOfficeContent = (props) => {
 
@@ -45,14 +46,12 @@ const BackOfficeContent = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   async function _getOffice() {
     await officesRequests.getOffice(currentOfficeID)
+    await contractsRequests.getContracts(currentOfficeID)
     await dataRequests.getOfficesResultsByDay(currentOfficeID)
     await dataRequests.getResultsToPresent();
   }
 
   _getOffice()
-
-  console.log(currentOfficeID, 'OFFICE ID BAITA TESTE')
-  console.log(currentUser, 'CURRENT USER BAITA TESTE')
 
   const officeResults = JSON.parse(localStorage.getItem('officeResults'));
   const resultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
@@ -95,7 +94,6 @@ const BackOfficeContent = (props) => {
 
   const manager = totalEmployees?.filter(employee => employee?.user?.user_type === "manager");
   const managerObject = manager[0];
-  console.log(managerObject, 'GERENTE')
 
   // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
     for (var i = 0; i < 1; i++) {
@@ -139,14 +137,18 @@ const BackOfficeContent = (props) => {
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
 
+  console.log(contracts, 'CONTRATOOOOOOS')
+
   const koContracts = [];
   const okContracts = [];
   const rContracts = [];
   const allContracts = [];
 
   function _sellStateOfContract() {
+    console.log(currentUser, 'CURRENT USER')
 
     for(let i = 0; i < contracts?.length; i++) {
+      console.log(contracts[i], 'cada contratão')
       if (currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary") {
         if(contracts[i]?.sell_state__name === "r") {
           rContracts.push(contracts[i]);
@@ -206,6 +208,7 @@ const BackOfficeContent = (props) => {
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
 
+  console.log(allContracts, 'TODOS OS CONTRATOS')
   var deletedID = props?.location?.state?.deletedID;
 
   function _removeContractFromRAM() {
@@ -246,7 +249,6 @@ const BackOfficeContent = (props) => {
         <TeamAvatarsContainer>
           <AvatarGroup max={12}>
             {totalEmployees.map(employee => (
-              console.log(employee, 'FUNCIONÀRIO'),
               <Avatar alt="Avatar Funcionário" src={employee?.user?.avatar} />
             ))}
           </AvatarGroup>
@@ -274,7 +276,7 @@ const BackOfficeContent = (props) => {
                 }
               }}
             >
-              <SubHeading>Faturamento</SubHeading>
+              <SubHeading>Faturação</SubHeading>
             </Link> 
             <Heading className={"mySalary"}>{`${officeResults}€`}</Heading>
           </MDCard.Body>
@@ -325,8 +327,7 @@ const BackOfficeContent = (props) => {
             <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos</SubHeading>
           </Link>
           <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{allContracts?.length}</Heading>
-        
-
+      
           <MDCol style={{width: '100%', marginLeft: `${contracts?.length === 0 ? '25%' : '40%'}`, marginBottom: '5%'}}>
             { okContracts?.length !== 0 &&
               <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
@@ -414,9 +415,10 @@ const BackOfficeContent = (props) => {
               },
               resultsInfo: resultsToPresent,
               currentSalary: mySalary,
+              currentFacturing: officeResults,
             }  
           }}>
-            <SubHeading>Meus resultados</SubHeading>   
+            <SubHeading>Resultados</SubHeading>
           </Link>
           <Heading style={{color: "#37981F",marginTop: 30, marginBottom: 0}}>{`${okPercentage}%`}</Heading>
           <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos válidos</Body>
@@ -425,13 +427,11 @@ const BackOfficeContent = (props) => {
           <Heading style={{color: "#FF461E",marginTop: 0, marginBottom: 0}}>{`${koPercentage}%`}</Heading>
           <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos anulados</Body>
 
-          <Body style={{display: 'flex', alignSelf: 'center', alignContent: "flex-start"}}>{resultStatus}</Body>
+          <Body style={{display: 'flex', alignSelf: 'center', alignContent: "flex-start"}}>{resultStatus()}</Body>
         </MDCard.Body>
       </MDCard>
     );
   };
-
-  console.log(userType, 'TESTE')
 
   if (isLoading) {
     return (
@@ -443,7 +443,7 @@ const BackOfficeContent = (props) => {
       }}>
         {/* <GuardSpinner size={80} frontColor={CONSTANTS?.colors?.darkGrey} backColor={CONSTANTS?.colors?.black} loading={isLoading} /> */}
         {/* <SwishSpinner size={80} frontColor="#686769" backColor="#fff" loading={isLoading} /> */}
-        <CombSpinner size={250} color="#686769" loading={isLoading} />
+        <SwishSpinner size={100} color="#686769" loading={isLoading} />
       </ContentContainerLoader>
     )
   } else {

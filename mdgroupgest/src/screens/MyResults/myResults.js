@@ -25,6 +25,10 @@ import dataRequests from "../../hooks/requests/dataRequests";
 
 const MyResults = (props) => {
   console.log(props, 'PROPS DE RESULTS')
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const currentUserType = currentUser?.user?.user_type;
+
+  console.log(currentUser, 'CURRENT USEEEEEEEER')
 
   const percentageState = props?.location?.state?.percentages;
   const okPercentage = `${percentageState?.ok}%`;
@@ -37,6 +41,7 @@ const MyResults = (props) => {
   const resultsInfo = props?.location?.state?.resultsInfo;
   const allContractsQtd = props?.location?.state?.contracts?.all?.length;
   const currentSalary = props?.location?.state?.currentSalary;
+  const currentFacturing = props?.location?.state?.currentFacturing;
   var bestContractDay = resultsInfo?.best_contract_day;
   var bestComissionDay = resultsInfo?.best_comission_day;
   var worstContractDay = resultsInfo?.worst_contract_day;
@@ -81,18 +86,35 @@ const MyResults = (props) => {
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
-          <Col style={colStyle}>
-            <SmallSubHeading style={{
-              marginTop: '10%',
-              color: `${CONSTANTS?.colors?.darkGrey}`,
-            }}>O seu salário até agora está em</SmallSubHeading>
-            <Heading style={{
-              marginTop: '-5%',
-              textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-              color: `${CONSTANTS?.colors?.green}`,
-              fontSize: '56px',
-            }}>{currentSalary}€</Heading>
-          </Col>
+          { currentUserType !== "manager" && currentUserType !== "secretary"  && 
+            <Col style={colStyle}>
+              <SmallSubHeading style={{
+                marginTop: '10%',
+                color: `${CONSTANTS?.colors?.darkGrey}`,
+              }}>O seu salário até agora está em</SmallSubHeading>
+              <Heading style={{
+                marginTop: '-5%',
+                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                color: `${CONSTANTS?.colors?.green}`,
+                fontSize: '56px',
+              }}>{currentSalary}€</Heading>
+            </Col>
+          }
+          
+          { currentUserType === "manager" || currentUserType === "secretary" &&
+            <Col style={colStyle}>
+              <SmallSubHeading style={{
+                marginTop: '10%',
+                color: `${CONSTANTS?.colors?.darkGrey}`,
+              }}>A faturação do escritório até agora é de</SmallSubHeading>
+              <Heading style={{
+                marginTop: '-5%',
+                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                color: `${CONSTANTS?.colors?.green}`,
+                fontSize: '56px',
+              }}>{currentFacturing}€</Heading>
+            </Col>
+          }
           <Col style={colStyle}>
             {_colorToRender()}
             <Heading style={{

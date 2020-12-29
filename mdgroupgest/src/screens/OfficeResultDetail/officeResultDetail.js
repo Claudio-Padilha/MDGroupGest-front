@@ -52,7 +52,7 @@ const OfficeMonthResult = (props) => {
         width={'600px'}
         height={'500px'}
         chartType="Line"
-        loader={<div style={{display: 'flex', justifyContent: 'center', marginTop: '30%', marginRight: '10%'}}><CombSpinner size={200} color="#686769" /></div>}
+        loader={<div style={{display: 'flex', justifyContent: 'center', marginTop: '30%', marginRight: '10%'}}><SwishSpinner size={200} color="#686769" /></div>}
         data={data}
         options={{
           chart: {
@@ -95,7 +95,7 @@ const OfficeMonthResult = (props) => {
             </EmptyContainer>
             </>
             :
-            <MDRow style={{display: 'flex', justifyContent: 'space-between', width: '100%', marginLeft: `${pending !== 0 && ko !== 0 ? "" : pending !== 0 || ko !== 0 ? "15%" : "30%"}`}}>
+            <MDRow style={{display: 'flex',  justifyContent: 'space-around', width: '100%', flexDirection: 'row'}}>
               <MDCol style={{marginRight: '5%'}}>
               <SmallSubHeading style={{textAlign: 'center'}}>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok !== 0 ? "Contratos válidos: " : null}</SmallSubHeading>
               <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}}>{ok === 0 ? null : ok}</Heading>
@@ -109,7 +109,7 @@ const OfficeMonthResult = (props) => {
               </MDCol>
 
               <MDCol style={{marginLeft: '5%', marginRight: '5%'}}>
-              {ko !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{ko !== 0 ? null : "Não há contratos anulados"} {ko === 1 ? "contrato anulado: " : ko > 1 ? "contratos anulados: " : null}</SmallSubHeading>}
+              {ko !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{ko !== 0 ? null : "Não há contratos anulados"} {ko !== 0 ? "Contratos anulados: " : null}</SmallSubHeading>}
               <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{ko === 0 ? null : ko}</Heading>
               </MDCol>
             </MDRow>

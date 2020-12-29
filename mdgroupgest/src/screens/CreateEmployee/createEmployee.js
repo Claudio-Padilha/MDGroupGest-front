@@ -66,6 +66,7 @@ const CreateEmployee = (props) => {
     var address = data?.address; 
     var contact = data?.contact?.toString();
     var email = data?.email;
+    var zipCode = data?.zipCode;
 
     const salesPersonObj = {
       office: officeID,
@@ -78,9 +79,10 @@ const CreateEmployee = (props) => {
         avatar: null,
         password: "Mdgroup2020@",
         user_type: "sales_person",
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
         is_admin: false
       }
     }
@@ -95,9 +97,10 @@ const CreateEmployee = (props) => {
         avatar: null,
         password: "Mdgroup2020@",
         user_type: "instructor",
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
         is_admin: false
       }
     }
@@ -111,9 +114,10 @@ const CreateEmployee = (props) => {
         avatar: null,
         password: "Mdgroup2020@",
         user_type: "team_leader",
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
         is_admin: false
       }
     }
@@ -126,9 +130,10 @@ const CreateEmployee = (props) => {
         avatar: null,
         password: "Mdgroup2020@",
         user_type: "secretary",
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
         is_admin: false
       }
     }
@@ -141,9 +146,10 @@ const CreateEmployee = (props) => {
         avatar: null,
         password: "Mdgroup2020@",
         user_type: "manager",
-        nif: data?.nif,
-        contact: data?.contact,
-        address: data?.address,
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
         is_admin: false
       }
     }
@@ -174,6 +180,7 @@ const CreateEmployee = (props) => {
            <b>Morada:</b> ${address ? address : `❌`} <br>                                    
            <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
            <b>Email:</b> ${email ? email : `❌`} <br>
+           <b>Código Postal:</b> ${zipCode ? zipCode : `❌`} <br>
           `,
         icon: 'warning',
         showCancelButton: true,
@@ -242,10 +249,11 @@ const CreateEmployee = (props) => {
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
-    { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF" },
-    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
-    { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail" },
+    { type: "email", subType: "twoColumns", side: "right", key: "email", question: "E-mail" },
+    { type: "number", subType: "twoColumns", side: "left", key: "nif", question: "NIF" },
+    { type: "number", subType: "twoColumns", side: "right", key: "zipCode", question: "Código-Postal" },
     { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
+    { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
     shouldRenderEmployeeAssociation && { 
       type: "dropdown",
       subType: "twoColumns",

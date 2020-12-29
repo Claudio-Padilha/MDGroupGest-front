@@ -37,11 +37,12 @@ const EmployeeList = (props) => {
   const isFromEdit = props?.location?.state?.isFromEdit;
   const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const dataToGoBack = props?.location?.state?.dataGoingToList;
   console.log(isFromEdit, 'TODOS OS FUNCIONÁRIOS DA TYPE TO SEE')
 
   function _goBack() {
     history.push({
-      pathname: "/ChooseEmployeeTypeToSee"
+      pathname: "/ChooseEmployeeTypeToSee",
     })
   }
 
@@ -57,8 +58,6 @@ const EmployeeList = (props) => {
     console.log(employee, 'EMPLOYEEEEEEEEEEEEEE')
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-
-    console.log('TESTE NO USER TYPE', userTypeCapitalized)
 
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
@@ -158,7 +157,12 @@ const EmployeeList = (props) => {
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
-          <SubHeading>{employee?.user?.name}</SubHeading>
+          { employee?.user?.user_type === "manager" && employee?.user?.user_type !== "secretary" &&
+            <SubHeading style={{marginRight: '-8%'}}>Área do</SubHeading>
+          }
+          { employee?.user?.user_type !== "manager" && employee?.user?.user_type === "secretary" &&
+            <SubHeading style={{marginRight: '-8%'}}>Área da</SubHeading>
+          }
           <Button
             disabled={true}
             small={true}

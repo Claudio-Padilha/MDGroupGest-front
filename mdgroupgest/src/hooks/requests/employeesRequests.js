@@ -67,33 +67,6 @@ export default {
 
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
-    // function _getUserType() {
-    //   if (userType === "sales_person") {
-    //     return "salesPerson"
-    //   } else if (userType === "team_leader") {
-    //     return "teamLeader"
-    //   } else {
-    //     return userType
-    //   }
-    // }
-
-    // const userObj = {
-    //   office: officeID,
-    //   // manager: , TENDO EM CONSIDERAÇÃO AS ASSOCIAÇÕES CORRETAS
-    //   // team_leader: ,
-    //   // instructor: ,
-    //   user: {
-    //     name: data?.name,
-    //     email: data?.email,
-    //     password: "Mdgroup2020@",
-    //     user_type: userTypeBody,
-    //     nif: data?.nif,
-    //     contact: data?.contact,
-    //     address: data?.address,
-    //     is_admin: false
-    //   }
-    // }
-    
     return new Promise((resolve) => {
 
       var employeeRequest = {

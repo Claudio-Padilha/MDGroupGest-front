@@ -35,7 +35,7 @@ const CardsContainer = styled.div`
   }
 `;
 
-const FirstRow = styled.div`
+const FirstRowForAdmin = styled.div`
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -44,6 +44,25 @@ const FirstRow = styled.div`
   a {
     height: 80%;
     width: 25%;
+    text-decoration: none;
+    div {
+      align-self: center;
+    }
+    &:hover {
+      animation: ${pulse} 1s infinite;
+    }
+  }
+`;
+
+const FirstRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  a {
+    height: 80%;
+    width: 42%;
     text-decoration: none;
     div {
       align-self: center;
@@ -86,6 +105,7 @@ export {
   MainContainer,
   CardsContainer,
   FirstRow,
+  FirstRowForAdmin,
   SecondRow,
   HomePageButton
 };

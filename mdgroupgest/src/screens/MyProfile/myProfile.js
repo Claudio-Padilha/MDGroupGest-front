@@ -79,7 +79,7 @@ const MyProfile = (props) => {
   return (
     isLoading ?
       <MainContainer>
-        <CombSpinner size={200} color="#686769" loading={isLoading} />
+        <SwishSpinner size={200} color="#686769" loading={isLoading} />
       </MainContainer>
     :
     <MainContainer>

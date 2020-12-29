@@ -88,9 +88,9 @@ const handleClose = () => {
   const contract = props?.location?.state?.data;
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
+
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const currentOfficeID = currentUser?.user?.office;
-  
+  const currentOfficeID = currentUser?.user?.office;  
 
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
@@ -138,10 +138,13 @@ const handleClose = () => {
   const [isDeleting, setIsDeleting] = useState(false);
 
   function _goBack() {
+    contractsRequests.getContracts(currentOfficeID);
+    const contractsToReturn = JSON.parse(localStorage.getItem('contracts'));
     history.push({
       pathname: "/ContractList",
       state: {
-        cameFromDetail: true
+        cameFromDetail: true,
+        contractsToReturn: contractsToReturn,
       }
     })    
   }
@@ -518,7 +521,7 @@ const handleClose = () => {
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
           <Row style={{ width: '35%', display: 'flex', justifyContent: 'space-between'}}>
             <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
-            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '33%'}}/>
+            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '36%'}}/>
           </Row> 
           <Row>
             <Body style={

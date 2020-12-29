@@ -300,7 +300,7 @@ const ChooseTypeOfContract = (props) => {
   return(
     <MainContainerEType>
       <BackIcon onClick={_goBack} />
-      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de contrato que queres inserir?</Heading>
+      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Que tipo de contrato queres inserir?</Heading>
       <CardsContainer>
 
         <FirstRow>

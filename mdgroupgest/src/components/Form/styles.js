@@ -126,14 +126,14 @@ width: 100%;
   position: absolute;
   top: 41%;
   left: 25%;
-  width: 15%;
+  width: 12%;
 }
 
 .contact {
   position: absolute;
   top: 41%;
-  left: 45%;
-  width: 25%;
+  left: 58%;
+  width: 12%;
 }
 
 .clientNif {
@@ -154,7 +154,14 @@ width: 100%;
   position: absolute;
   top: 56%;
   left: 25%;
-  width: 28%;
+  width: 25%;
+}
+
+.zipCode {
+  position: absolute;
+  top: 41%;
+  left: 41.5%;
+  width: 12%;
 }
 
 .office, .clientContact {

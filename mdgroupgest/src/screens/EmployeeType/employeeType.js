@@ -9,6 +9,7 @@ import {
   MainContainer,
   CardsContainer,
   FirstRow,
+  FirstRowForAdmin,
   SecondRow,
   HomePageButton
 } from "./styles";
@@ -29,6 +30,9 @@ const EmployeeType = (props) => {
 
   const cameFromBackOffice = props?.location?.state?.isFromBackOffice;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const currentUser = props?.location?.state?.user;
+  const isAdmin = currentUser?.user?.is_admin;
+  console.log(currentUser, 'currentUser from employee type')
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -158,11 +162,16 @@ const EmployeeType = (props) => {
       <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de funcionário a ser inserido?</Heading>
       <CardsContainer>
 
-        <FirstRow>
+        {isAdmin && <FirstRowForAdmin>
           {renderManagerCard()}
           {renderSecretaryCard()}
           {renderTeamLeaderCard()}
-        </FirstRow>
+        </FirstRowForAdmin>}
+
+        {!isAdmin && <FirstRow>
+          {renderSecretaryCard()}
+          {renderTeamLeaderCard()}
+        </FirstRow>}
         
         <SecondRow>
           {renderInstructorCard()}

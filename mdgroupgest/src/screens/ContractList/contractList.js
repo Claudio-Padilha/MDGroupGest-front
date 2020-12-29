@@ -42,6 +42,9 @@ const ContractList = (props) => {
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const contractsFromDetail = props?.location?.state?.contractsToReturn;
+
+  console.log(contractsFromDetail, 'CONTRATOS DO DETALHE')
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -53,7 +56,23 @@ const ContractList = (props) => {
 
 
   const contracts = useMemo(() => {
-    if(cameFromDetail) {
+    // if(cameFromDetail) {
+    //   const contracts = JSON.parse(localStorage.getItem('contracts'))
+    //   const contractsToReturn = []
+    //   for(let i = 0; i < contracts?.length; i++) {
+    //     if (contracts[i]?.user === currentUser?.user?.id) {
+    //       contractsToReturn.push(contracts[i])
+    //     }
+    //   }
+    //   return contractsToReturn
+      
+    // } else {
+    //   return props?.location?.state?.data
+    // } 
+
+    if(props?.location?.state?.data) {
+      return props?.location?.state?.data
+    } else {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
       const contractsToReturn = []
       for(let i = 0; i < contracts?.length; i++) {
@@ -61,12 +80,12 @@ const ContractList = (props) => {
           contractsToReturn.push(contracts[i])
         }
       }
-      return contractsToReturn
-      
-    } else {
-      return props?.location?.state?.data
+      return contractsToReturn    
     } 
   },[cameFromDetail, isLoading])
+
+  console.log(contractsFromDetail, 'CONTRATOS DO DETALHE')
+  console.log('VEIO DE DETAIL ? ----> ', cameFromDetail)
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
@@ -212,11 +231,11 @@ const ContractList = (props) => {
 
     return (
       <>
-        <List.Item key={contract.id} className={searched ? "eachContractSearched" :"eachContract"} style={{display: display}}>
+        <List.Item key={contract.id} className={searched ? "eachContractSearched" : "eachContract"} style={{display: display}}>
           <Column className={"clientInfo"}>
             <Column>
               <Row>
-                <SubHeading style={{marginTop: -10, marginBottom: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
+                <SubHeading style={{marginTop: -10, marginBottom: 0, marginLeft: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
               { contract?.sell_state__name !== 'ok' &&
                 <Button
                   style={{
@@ -268,17 +287,23 @@ const ContractList = (props) => {
             </Row>
           </Column>
 
-
-          <Column className={"contractComission"}>
-            <List.Content>
-            { contract.sell_state__name === "ok" &&
-              <>
+          { contract.sell_state__name === "ok" &&
+            <Column className={"contractComission"}>
+              <List.Content>
                 <SmallSubHeading><b>Este contrato vale:</b></SmallSubHeading>
                 <Body className={"employeeComission"}>{`${contract.employee_comission}€`}</Body>
-              </>
-            }
-            </List.Content>
-          </Column>
+              </List.Content>
+            </Column>
+          }
+
+          { contract.sell_state__name !== "ok" &&
+            <Column className={"contractComission"} style={{width: '10%'}}>
+              <List.Content>
+                <SmallSubHeading></SmallSubHeading>
+                <Body className={"employeeComission"}></Body>
+              </List.Content>
+            </Column>
+          }
           <Column className={"optionsAboutContract"}>
             <Button
               disabled={false}
@@ -287,7 +312,8 @@ const ContractList = (props) => {
                   pathname:"/ContractDetail",
                   state: { 
                     data: contract,
-                    contractNumber: contract?.id
+                    contractNumber: contract?.id,
+                    contractsToReturn: contracts,
                   }
                 })
               }}
@@ -332,7 +358,7 @@ const ContractList = (props) => {
   return (
     isLoading ?
     <MainContainer>
-      <CombSpinner size={200} color="#686769" loading={isLoading} />
+      <SwishSpinner size={200} color="#686769" loading={isLoading} />
     </MainContainer>
     :
     <MainContainer id={"mainContainer"}>
@@ -394,16 +420,21 @@ const ContractList = (props) => {
         </Col>  
       </Row>
       <List divided verticalAlign="middle" className={"listContainer"}>
-      {contracts?.length === 0 && 
+      {contracts?.length === 0 && contractsFromDetail?.length === 0 && 
         <EmptyContainer>
           <SubHeading>Ainda não há contratos...</SubHeading>
         </EmptyContainer>
       }
-      {isSearching ?
+      { isSearching ?
         contractsMatched && contractsMatched.map(function(contract, index) {
           return renderContract(contract, index, true)
         })
-      : contracts && 
+      : cameFromDetail ?
+        contractsFromDetail &&
+          contractsFromDetail.map(function(contract, index) {
+            return renderContract(contract, index, false);
+          })
+      : contracts &&
         contracts.map(function(contract, index) {
           return renderContract(contract, index, false);
         })

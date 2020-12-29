@@ -1,7 +1,7 @@
 import React, { useMemo, useCallback } from "react";
 import { Link } from "react-router-dom";
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
+import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import CONSTANTS from '../../constants';
@@ -33,8 +33,9 @@ const ChooseEmployeeTypeToSee = (props) => {
   const isFromCreation = props?.location?.state?.cameFromCreation;
   const isFromEdit = props?.location?.state?.cameFromEdit;
   const employeesAfterUpdate = props?.location?.state?.employeesAfterUpdate;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const currentOfficeID = currentUser?.user?.office;
 
   function _allEmployees() {
     if(isFromBackOffice || isFromCreation) {
@@ -64,13 +65,23 @@ const ChooseEmployeeTypeToSee = (props) => {
           userType: "manager",
           title: "Gerente",
           data: managers,
+          dataGoingToList : currentUser,
           officeID: currentOfficeID,
           shouldRenderEmployeeAssociation: false
         }  
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
+          { currentUser?.user?.user_type === "manager" &&
+            <>
+              <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Minha área</SubHeading>  
+              <Body style={{color: CONSTANTS?.colors?.darkGrey}}>Clique para editar os teus dados</Body>
+            </>
+          }
+
+          { currentUser?.user?.user_type === "secretary" &&
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Gerente </SubHeading>
+          }
           </MDCardBody>
         </MDCard>
       </Link>
@@ -93,7 +104,16 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretária</SubHeading>
+          { currentUser?.user?.user_type === "secretary" &&
+            <>
+              <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Minha área</SubHeading>  
+              <Body style={{color: CONSTANTS?.colors?.darkGrey}}>Clique para editar os teus dados</Body>
+            </>
+          }
+
+          { currentUser?.user?.user_type === "manager" &&
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Secretária </SubHeading>
+          }
           </MDCardBody>
         </MDCard>
       </Link>
@@ -173,7 +193,22 @@ const ChooseEmployeeTypeToSee = (props) => {
   return(
     <MainContainerEType>
       <BackIcon onClick={_goBack} />
-      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de funcionário que queres ver?</Heading>
+      <Heading style={{
+        position: 'absolute',
+        top: '0%',
+        textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
+        color: CONSTANTS?.colors?.darkGrey
+      }}>
+        Olá, {currentUser?.user?.name}!
+      </Heading>
+      <SubHeading style={{
+        position: 'absolute',
+        top: '7%',
+        textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
+        color: CONSTANTS?.colors?.mediumGrey
+      }}>
+        Que tipo de funcionário queres ver?
+      </SubHeading>
       <CardsContainer>
 
         <FirstRow>

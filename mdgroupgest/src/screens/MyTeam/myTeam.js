@@ -208,15 +208,15 @@ const MyTeam = () => {
   return (
     isLoading ?
     <MainContainer className="custom-container">
-      <CombSpinner size={300} color="#686769" loading={isLoading} />
+      <SwishSpinner size={300} color="#686769" loading={isLoading} />
     </MainContainer>  
     :
     <MainContainer className="custom-container">
       <BackIcon onClick={_goBack} className={"backIcon"}/>
       <Tree
         data={dataToProcess}
-        height={700}
-        width={1000}
+        height={900}
+        width={1200}
         animated
         steps={350}
         duration={2000}

@@ -69,7 +69,7 @@ export default function MenuNavbar(props) {
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>
         {isLoading ?
-          <CombSpinner size={100} color="#686769" loading={isLoading} />
+          <SwishSpinner size={30} color="#686769" loading={isLoading} />
           :
           <Avatar
             alt="Profile Image"
@@ -90,7 +90,8 @@ export default function MenuNavbar(props) {
               <Link to={{
                 pathname: "/EmployeeType",
                 state: {
-                  isFromBackOffice: true
+                  isFromBackOffice: true,
+                  user: user
                 }    
               }} >Inserir Funcionário</Link>
             </Body>
@@ -101,7 +102,8 @@ export default function MenuNavbar(props) {
               <Link to={{
                 pathname: "/ChooseEmployeeTypeToSee",
                 state: {
-                  isFromBackOffice: true
+                  isFromBackOffice: true,
+                  user: user
                 }
               }}
               >Ver Funcionários</Link>
