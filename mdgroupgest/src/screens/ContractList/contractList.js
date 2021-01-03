@@ -80,7 +80,7 @@ const ContractList = (props) => {
           contractsToReturn.push(contracts[i])
         }
       }
-      return contractsToReturn    
+      return contractsToReturn.sort((a, b) => a.id - b.id)    
     } 
   },[cameFromDetail, isLoading])
 
