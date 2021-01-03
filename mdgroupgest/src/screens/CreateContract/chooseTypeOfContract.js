@@ -32,23 +32,24 @@ const ChooseTypeOfContract = (props) => {
       }
     })  
   }
-  dataRequests.getGasScale()
-  dataRequests.getPower()
 
-  const _getFeedbackCall = useCallback(() => {
-    dataRequests.getFeedbackCall()
+  function _getFeedbackCall() {
+    console.log("ENTREEI NO FEEDBACKCALL ==================")
     const feedbackCallList = JSON.parse(localStorage.getItem('feedbackCalls'))
 
-    return feedbackCallList?.map(feedbackCall => {
+    var ret = feedbackCallList?.map(feedbackCall => {
       return {
         value: feedbackCall?.id,
         label: feedbackCall?.name
       }
     })
-  }, [])
+    
+    return ret
+  }
+
+  let feedBackCall = _getFeedbackCall()
 
   const _getSellState = useCallback(() => {
-    dataRequests.getSellState()
     const sellStatesList = JSON.parse(localStorage.getItem('sellStates'));
     
     return sellStatesList?.map(sellState => {
@@ -59,8 +60,7 @@ const ChooseTypeOfContract = (props) => {
     })
   },[])
 
-  const _getPayment = useCallback(() => {
-    dataRequests.getPayment()
+  function _getPayment(){
     const paymentsList = JSON.parse(localStorage.getItem('payments'));
     
     return paymentsList?.map(payment => {
@@ -69,7 +69,7 @@ const ChooseTypeOfContract = (props) => {
         label: payment?.name
       }
     })
-  },[])
+  }
 
   const _getGasScale = useCallback((isCondominium) => {
     
@@ -159,7 +159,7 @@ const ChooseTypeOfContract = (props) => {
           title: "Contrato Electricidade",
           typeOfContract: "electricity",
           cameFromChoice: true,
-          feedbackCall: _getFeedbackCall(),
+          feedbackCall: feedBackCall,
           sellState: _getSellState(),
           payment: _getPayment(),
           power: _getPower(false)

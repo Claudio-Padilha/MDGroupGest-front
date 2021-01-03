@@ -35,6 +35,12 @@ import contractsRequests from '../../hooks/requests/contractsRequests';
 
 const BackOfficeContent = (props) => {
 
+  dataRequests.getFeedbackCall()
+  dataRequests.getSellState()
+  dataRequests.getPayment()
+  dataRequests.getGasScale()
+  dataRequests.getPower()
+  
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
 
