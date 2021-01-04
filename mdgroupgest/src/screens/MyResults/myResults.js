@@ -47,8 +47,8 @@ const MyResults = (props) => {
   var worstContractDay = resultsInfo?.worst_contract_day;
   var worstComissionDay = resultsInfo?.worst_comission_day;
 
-  const today = new Date()
-  const todayNumber = today.getDate()
+  const today = new Date();
+  const todayNumber = today.getDate();
 
   var contractQtdAverage = allContractsQtd / todayNumber;
   const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2);
@@ -56,11 +56,6 @@ const MyResults = (props) => {
   var salaryAverage = currentSalary / todayNumber;
   const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
 
-  console.log(bestContractDay, 'BEST CONTRACT DAY')
-  console.log(bestComissionDay, 'BEST COMISSION DAY')
-  console.log(worstContractDay, 'worst CONTRACT DAY')
-  console.log(worstComissionDay, 'worst COmission DAY')
-  console.log(allContractsQtd, 'QTD')
   function _goBack() {
     window.location.assign("/BackOffice");    
   }
@@ -83,9 +78,12 @@ const MyResults = (props) => {
       flexDirection: 'column',
       alignItems: 'center',
     };
+
+    console.log(currentUserType, 'testeeeeeee do user type')
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
+
           { currentUserType !== "manager" && currentUserType !== "secretary"  && 
             <Col style={colStyle}>
               <SmallSubHeading style={{
@@ -101,7 +99,7 @@ const MyResults = (props) => {
             </Col>
           }
           
-          { currentUserType === "manager" || currentUserType === "secretary" &&
+          { currentUserType === "manager" &&
             <Col style={colStyle}>
               <SmallSubHeading style={{
                 marginTop: '10%',
@@ -115,6 +113,22 @@ const MyResults = (props) => {
               }}>{currentFacturing}€</Heading>
             </Col>
           }
+
+          { currentUserType === "secretary" &&
+            <Col style={colStyle}>
+              <SmallSubHeading style={{
+                marginTop: '10%',
+                color: `${CONSTANTS?.colors?.darkGrey}`,
+              }}>A faturação do escritório até agora é de</SmallSubHeading>
+              <Heading style={{
+                marginTop: '-5%',
+                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                color: `${CONSTANTS?.colors?.green}`,
+                fontSize: '56px',
+              }}>{currentFacturing}€</Heading>
+            </Col>
+          }
+
           <Col style={colStyle}>
             {_colorToRender()}
             <Heading style={{

@@ -260,7 +260,7 @@ const ResultsContainer = styled.div`
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    height: 90%;
+    height: 100%;
     a, h2 {
       width: 80%;
       text-align: center;

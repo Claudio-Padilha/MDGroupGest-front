@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 import { Avatar } from '@material-ui/core';
 import { AvatarGroup } from '@material-ui/lab';
+import { useDate } from '../../hooks/date';
 
 import {
   MDCol,
@@ -150,35 +151,43 @@ const BackOfficeContent = (props) => {
   const rContracts = [];
   const allContracts = [];
 
-  function _sellStateOfContract() {
-    console.log(currentUser, 'CURRENT USER')
+  const _getMonthContracts = useMemo(() => {
+    const currentDateJS = new Date();
 
-    for(let i = 0; i < contracts?.length; i++) {
-      console.log(contracts[i], 'cada contratão')
+    const monthContracts = contracts.filter(contract => {
+      var date = new Date(contract.delivery_date);
+      return date.getMonth() === currentDateJS?.getMonth() && date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+    })
+
+    return monthContracts;
+  },[contracts])
+
+  function _sellStateOfContract() {
+
+    for(let i = 0; i < _getMonthContracts?.length; i++) {
       if (currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary") {
-        if(contracts[i]?.sell_state__name === "r") {
-          rContracts.push(contracts[i]);
-        } else if (contracts[i]?.sell_state__name === "ok"){
-          okContracts.push(contracts[i]);
-        } else if (contracts[i]?.sell_state__name === "ko") {
-          koContracts.push(contracts[i]);
+        if(_getMonthContracts[i]?.sell_state__name === "r") {
+          rContracts.push(_getMonthContracts[i]);
+        } else if (_getMonthContracts[i]?.sell_state__name === "ok"){
+          okContracts.push(_getMonthContracts[i]);
+        } else if (_getMonthContracts[i]?.sell_state__name === "ko") {
+          koContracts.push(_getMonthContracts[i]);
         }
       } else {
-        if(contracts[i]?.sell_state__name === "r" && contracts[i]?.user === currentUser?.user?.id) {
-          rContracts.push(contracts[i]);
-        } else if (contracts[i]?.sell_state__name === "ok" && contracts[i]?.user === currentUser?.user?.id){
-          okContracts.push(contracts[i]);
-        } else if (contracts[i]?.sell_state__name === "ko" && contracts[i]?.user === currentUser?.user?.id) {
-          koContracts.push(contracts[i]);
+        if(_getMonthContracts[i]?.sell_state__name === "r" && _getMonthContracts[i]?.user === currentUser?.user?.id) {
+          rContracts.push(_getMonthContracts[i]);
+        } else if (_getMonthContracts[i]?.sell_state__name === "ok" && _getMonthContracts[i]?.user === currentUser?.user?.id){
+          okContracts.push(_getMonthContracts[i]);
+        } else if (_getMonthContracts[i]?.sell_state__name === "ko" && _getMonthContracts[i]?.user === currentUser?.user?.id) {
+          koContracts.push(_getMonthContracts[i]);
         }
       }
-
     }
 
-    allContracts.push(...rContracts, ...okContracts, ...koContracts)
-
-    return koContracts, okContracts, rContracts, allContracts;
+    return koContracts, okContracts, rContracts;
   }
+
+
 
   _sellStateOfContract()
 
@@ -192,7 +201,7 @@ const BackOfficeContent = (props) => {
     const z = rContracts?.length;
 
     // "k" is total contracts qtd
-    const a = allContracts?.length;
+    const a = _getMonthContracts?.length;
 
     const dataOfficeResult = [ [
       'Dias',
@@ -214,7 +223,6 @@ const BackOfficeContent = (props) => {
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
 
-  console.log(allContracts, 'TODOS OS CONTRATOS')
   var deletedID = props?.location?.state?.deletedID;
 
   function _removeContractFromRAM() {
@@ -222,6 +230,8 @@ const BackOfficeContent = (props) => {
       return obj.id === deletedID
     })
   }
+
+  console.log(_getMonthContracts, 'TESTE DO MONTH CONTRACTS')
 
   dataRequests.getMyTeam(currentUser?.user?.office)
 
@@ -273,7 +283,7 @@ const BackOfficeContent = (props) => {
                 pathname: "/OfficeMonthResultDetail",
                 state: {
                   contracts: {
-                    all: allContracts,
+                    all: _getMonthContracts,
                     ok: okContracts,
                     ko: koContracts,
                     pending: rContracts,
@@ -317,6 +327,7 @@ const BackOfficeContent = (props) => {
     }
   };
 
+  const currentMonth = useDate();
   const renderMyContracts = () => {
     return (
       <MDCard isTheMiddleCard>
@@ -325,14 +336,14 @@ const BackOfficeContent = (props) => {
             to={{
               pathname: "/ContractList",
               state: {
-                data: allContracts,
+                data: _getMonthContracts,
                 currentUser: currentUser
               }
             }}
           >
-            <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos</SubHeading>
+            <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos {currentMonth.toUpperCase()}</SubHeading>
           </Link>
-          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{allContracts?.length}</Heading>
+          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{_getMonthContracts?.length}</Heading>
       
           <MDCol style={{width: '100%', marginLeft: `${contracts?.length === 0 ? '25%' : '40%'}`, marginBottom: '5%'}}>
             { okContracts?.length !== 0 &&
@@ -376,25 +387,44 @@ const BackOfficeContent = (props) => {
               history.push({
                 pathname: "/ContractList",
                 state: {
-                  data: allContracts
+                  data: _getMonthContracts,
                 }
               })
             }}
 
             small={true}
-            text="Ver todos"
+            style={{marginTop: '5%'}}
+            text="Ver contratos do mês"
           />
+
+          <Button
+            fullWidth={false}
+            disabled={false}
+            action={() => {
+              history.push({
+                pathname: "/ContractList",
+                state: {
+                  data: contracts,
+                }
+              })
+            }}
+
+            small={true}
+            style={{marginTop: '2%'}}
+            text="Ver todos até agora"
+          />
+
         </MDCard.Body>
       </MDCard>
     );
   };
 
   const resultStatus = () => {
-    if (okPercentage < 70 && allContracts?.length !== 0) {
+    if (okPercentage < 70 && _getMonthContracts?.length !== 0) {
       return "🔴";
-    } else if (okPercentage < 80 && allContracts?.length !== 0) {
+    } else if (okPercentage < 80 && _getMonthContracts?.length !== 0) {
       return "🟡";
-    } else if (okPercentage > 70 && allContracts?.length !== 0){
+    } else if (okPercentage > 70 && _getMonthContracts?.length !== 0){
       return "🟢";
     } else {
       return "⚪️"
@@ -417,7 +447,7 @@ const BackOfficeContent = (props) => {
                 ok: okContracts,
                 r: rContracts,
                 ko: koContracts,
-                all: allContracts
+                all: _getMonthContracts
               },
               resultsInfo: resultsToPresent,
               currentSalary: mySalary,
