@@ -154,13 +154,36 @@ const BackOfficeContent = (props) => {
   const _getMonthContracts = useMemo(() => {
     const currentDateJS = new Date();
 
-    const monthContracts = contracts.filter(contract => {
+    const monthContractsForManagerOrSecretary = contracts.filter(contract => {
       var date = new Date(contract.delivery_date);
-      return date.getMonth() === currentDateJS?.getMonth() && date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+      return (
+        date.getMonth() === currentDateJS?.getMonth() 
+        && 
+        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+      )
     })
 
-    return monthContracts;
+    const monthContractsForEmployee = contracts.filter(contract => {
+      var date = new Date(contract.delivery_date);
+      return (
+        date.getMonth() === currentDateJS?.getMonth() 
+        && 
+        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+        &&
+        contract?.user === currentUser?.id
+      )
+    })
+
+    if(userType === "manager") {
+      return monthContractsForManagerOrSecretary;
+    } else if(userType === "secretary") {
+      return monthContractsForManagerOrSecretary;
+    } else {
+      return monthContractsForEmployee;
+    }
   },[contracts])
+
+  console.log(_getMonthContracts, 'TESTEZAAAAACO')
 
   function _sellStateOfContract() {
 
@@ -394,25 +417,44 @@ const BackOfficeContent = (props) => {
 
             small={true}
             style={{marginTop: '5%'}}
-            text="Ver contratos do mês"
+            text="Contratos do mês"
           />
 
-          <Button
-            fullWidth={false}
-            disabled={false}
-            action={() => {
-              history.push({
-                pathname: "/ContractList",
-                state: {
-                  data: contracts,
-                }
-              })
-            }}
+          { userType === "manager" &&
+            <Button
+              fullWidth={false}
+              disabled={false}
+              action={() => {
+                history.push({
+                  pathname: "/ContractList",
+                  state: {
+                    data: contracts,
+                  }
+                })
+              }}
+              small={true}
+              style={{marginTop: '2%'}}
+              text="Ver todos os contratos"
+            />
+          }
 
-            small={true}
-            style={{marginTop: '2%'}}
-            text="Ver todos até agora"
-          />
+          { userType === "secretary" &&
+            <Button
+              fullWidth={false}
+              disabled={false}
+              action={() => {
+                history.push({
+                  pathname: "/ContractList",
+                  state: {
+                    data: contracts,
+                  }
+                })
+              }}
+              small={true}
+              style={{marginTop: '2%'}}
+              text="Ver todos os contratos"
+            />
+          }
 
         </MDCard.Body>
       </MDCard>

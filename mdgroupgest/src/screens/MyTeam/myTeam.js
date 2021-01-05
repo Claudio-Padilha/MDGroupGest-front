@@ -7,6 +7,7 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import { MainContainer } from "./styles";
 import dataRequests from '../../hooks/requests/dataRequests';
+import { Autocomplete } from "@material-ui/lab";
 
 const MyTeam = () => {
 
@@ -44,7 +45,6 @@ const MyTeam = () => {
   function _getData() {
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
-    console.log(employees, 'TESTE NO REQUEST')
 
     const managers = employees['manager']
     const team_leaders = employees['team_leader']
@@ -67,6 +67,7 @@ const MyTeam = () => {
             height: 30,
             width: 30,
             nodeRadius: 35,
+            cursor: 'auto',
           },
           children:[]
         }
@@ -82,6 +83,7 @@ const MyTeam = () => {
                 height: 30,
                 width: 30,
                 nodeRadius: 35,
+                cursor: 'auto',
               },
               textProps: {x: -30, y: 25},
               children:[]
@@ -98,6 +100,7 @@ const MyTeam = () => {
                     height: 30,
                     width: 30,
                     nodeRadius: 35,
+                    cursor: 'auto',
                   },
                   textProps: {x: -30, y: 25},
                   children:[]
@@ -114,6 +117,7 @@ const MyTeam = () => {
                         height: 30,
                         width: 30,
                         nodeRadius: 35,
+                        cursor: 'auto',
                       },
                       textProps: {x: -30, y: 25},
                       children:[]
@@ -134,6 +138,7 @@ const MyTeam = () => {
                     height: 30,
                     width: 30,
                     nodeRadius: 35,
+                    cursor: 'auto',
                   },
                   textProps: {x: -30, y: 25},
                   children:[]
@@ -154,6 +159,7 @@ const MyTeam = () => {
                 height: 30,
                 width: 30,
                 nodeRadius: 35,
+                cursor: 'auto',
               },
               textProps: {x: -30, y: 25},
               children:[]
@@ -170,6 +176,7 @@ const MyTeam = () => {
                     height: 30,
                     width: 30,
                     nodeRadius: 35,
+                    cursor: 'auto',
                   },
                   textProps: {x: -30, y: 25},
                   children:[]
@@ -190,6 +197,7 @@ const MyTeam = () => {
                 height: 30,
                 width: 30,
                 nodeRadius: 35,
+                cursor: 'auto',
               },
               textProps: {x: -30, y: 25},
               children:[]
@@ -232,6 +240,7 @@ const MyTeam = () => {
           height: 45,
           width: 45,
           nodeRadius: 35,
+          cursor: 'auto',
           href: require('../../assets/icons/loboMD.png'),
         }}
         margins={{

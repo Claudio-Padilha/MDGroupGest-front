@@ -70,8 +70,8 @@ const ContractList = (props) => {
     //   return props?.location?.state?.data
     // } 
 
-    if(props?.location?.state?.data) {
-      return props?.location?.state?.data
+    if(props?.location?.state?.data !== undefined) {
+      return props?.location?.state?.data.sort((a, b) => a.id - b.id)  
     } else {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
       const contractsToReturn = []
@@ -420,7 +420,7 @@ const ContractList = (props) => {
         </Col>  
       </Row>
       <List divided verticalAlign="middle" className={"listContainer"}>
-      {contracts?.length === 0 && contractsFromDetail?.length === 0 && 
+      {contracts?.length === 0 || contractsFromDetail?.length === 0 && 
         <EmptyContainer>
           <SubHeading>Ainda não há contratos...</SubHeading>
         </EmptyContainer>

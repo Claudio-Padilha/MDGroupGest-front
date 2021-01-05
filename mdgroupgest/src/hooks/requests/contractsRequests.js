@@ -3,8 +3,7 @@ import axios from 'axios';
 import dataRequests from './dataRequests';
 
 export default {
-  getContracts: () => {
-      
+  getContracts: () => { 
     return new Promise((resolve, reject) => {
 
       var contractRequest = {
@@ -18,7 +17,6 @@ export default {
       axios(contractRequest)
 
       .then(res => {
-        console.log(res, 'res do contrato')
         localStorage.removeItem('contracts', JSON.stringify(res.data))
         localStorage.setItem('contracts', JSON.stringify(res.data))
         resolve(res);
