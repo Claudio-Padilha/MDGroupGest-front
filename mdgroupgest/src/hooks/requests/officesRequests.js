@@ -20,6 +20,7 @@ export default {
       axios(getOfficesRequest)
 
       .then(res => {
+        localStorage.removeItem('offices');
         localStorage.setItem('offices', JSON.stringify(res.data));
         resolve(res);
       })
@@ -80,6 +81,10 @@ export default {
       axios(officeRequest)
 
       .then(res => {
+        let officesSoFar = JSON.parse(localStorage.getItem('offices'));
+        let currentOffices = {...res, ...officesSoFar}
+        localStorage.removeItem('offices');
+        localStorage.setItem('offices', currentOffices);
         resolve(res);
       })
       .catch(error => {

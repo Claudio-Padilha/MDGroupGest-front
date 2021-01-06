@@ -13,7 +13,6 @@ import {storage} from "../../firebase/firebase"
 import employeesRequests from "../../hooks/requests/employeesRequests"
 
 const MyProfile = (props) => {
-  console.log(props, 'props')
   const currentUser = localStorage.getItem('userForPhoto');
   const user = JSON.parse(currentUser);
   const allImputs = {imgUrl: ''}
@@ -26,7 +25,6 @@ const MyProfile = (props) => {
 
   const userName = props?.location?.state?.data?.user?.name;
   const email = props?.location?.state?.data?.user?.email;
-  console.log(user, 'user')
 
  const handleImageAsFile = (e) => {
     const image = e.target.files[0]
@@ -36,7 +34,6 @@ const MyProfile = (props) => {
   const handleFireBaseUpload = async (e) => {
     setIsLoading(true);
     e.preventDefault()
-    // console.log('start of upload')
 
     if(imageAsFile === '' ) {
       // console.error(`not an image, the image file is a ${typeof(imageAsFile)}`)
@@ -48,12 +45,10 @@ const MyProfile = (props) => {
     uploadTask.on('state_changed', 
     (snapShot) => {
       //takes a snap shot of the process as it is happening
-      // console.log(snapShot)
     }, (err) => {
       //catches the errors
       console.log(err)
     }, () => {
-      console.log('antes')
       // gets the functions from storage refences the image storage in firebase by the children
       // gets the download url then sets the image from firebase as the value for the imgUrl key:
       storage.ref('images').child(imageAsFile.name + user?.user?.id).getDownloadURL()

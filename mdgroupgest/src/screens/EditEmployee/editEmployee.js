@@ -22,7 +22,6 @@ import { FormControl } from '@material-ui/core';
 const EditEmployee = (props) => {
 
   const history = useHistory();
-  console.log(props, 'PROPS DE EDIT')
 
   const employee = props?.location?.state?.employeeData;
   const officeID = props?.location?.state?.officeID;
@@ -44,9 +43,6 @@ const EditEmployee = (props) => {
   }
 
   function _ConfirmEmployeeUpdate(formFields, data) {
-    console.log(formFields, 'TEST FORMFIELDS')
-    console.log(data, 'TEST DATA')
-
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -124,10 +120,7 @@ const EditEmployee = (props) => {
       )
   }
 
-  console.log(employee, 'MOSTRAR EMPLOYEE')
-
   const handleSubmitForm = formFields => {
-   console.log(formFields, 'FORM FIELDS')
     const data = {
       office: employee?.office,
       id: employee?.id,
@@ -139,11 +132,9 @@ const EditEmployee = (props) => {
 
   function _employeeToAssociation() {
     var employees = []
-    console.log(employeeToAssociate, 'TESTE 2')
 
     if(employeeToAssociate) {
       Object.values(employeeToAssociate).forEach(function(employee){
-        console.log(employee, 'EMPLOYEE')
         employees.push({value: { id: employee?.id, employee_type: employee?.user?.user_type}, label: employee?.user?.name })
       })
     };

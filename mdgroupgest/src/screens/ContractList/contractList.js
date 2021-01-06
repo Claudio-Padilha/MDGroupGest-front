@@ -24,7 +24,6 @@ import {
 import { List } from "semantic-ui-react";
 import SearchBar from "../../components/SearchArea/search";
 import CONSTANTS from "../../constants";
-import { IndexSearch } from "../../components/IndexSearch/indexSearch";
 
 const ContractList = (props) => {
 
@@ -44,14 +43,12 @@ const ContractList = (props) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const contractsFromDetail = props?.location?.state?.contractsToReturn;
 
-  console.log(contractsFromDetail, 'CONTRATOS DO DETALHE')
-
   const [isLoading, setIsLoading] = useState(true);
 
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [1000]);
+    }, [500]);
   }
 
 
@@ -71,7 +68,7 @@ const ContractList = (props) => {
     // } 
 
     if(props?.location?.state?.data !== undefined) {
-      return props?.location?.state?.data.sort((a, b) => a.id - b.id)  
+      return props?.location?.state?.data.sort((a, b) => b.id - a.id)  
     } else {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
       const contractsToReturn = []
@@ -80,12 +77,9 @@ const ContractList = (props) => {
           contractsToReturn.push(contracts[i])
         }
       }
-      return contractsToReturn.sort((a, b) => a.id - b.id)    
+      return contractsToReturn.sort((a, b) => b.id - a.id)    
     } 
   },[cameFromDetail, isLoading])
-
-  console.log(contractsFromDetail, 'CONTRATOS DO DETALHE')
-  console.log('VEIO DE DETAIL ? ----> ', cameFromDetail)
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
@@ -320,8 +314,7 @@ const ContractList = (props) => {
               small={true}
               text="Ver detalhes"
             />
-          </Column>
-          
+          </Column>          
         </List.Item>
         <Divider />
       </>
@@ -420,11 +413,6 @@ const ContractList = (props) => {
         </Col>  
       </Row>
       <List divided verticalAlign="middle" className={"listContainer"}>
-      {contracts?.length === 0 || contractsFromDetail?.length === 0 && 
-        <EmptyContainer>
-          <SubHeading>Ainda não há contratos...</SubHeading>
-        </EmptyContainer>
-      }
       { isSearching ?
         contractsMatched && contractsMatched.map(function(contract, index) {
           return renderContract(contract, index, true)

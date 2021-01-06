@@ -24,11 +24,8 @@ import CONSTANTS from "../../constants";
 import dataRequests from "../../hooks/requests/dataRequests";
 
 const MyResults = (props) => {
-  console.log(props, 'PROPS DE RESULTS')
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentUserType = currentUser?.user?.user_type;
-
-  console.log(currentUser, 'CURRENT USEEEEEEEER')
 
   const percentageState = props?.location?.state?.percentages;
   const okPercentage = `${percentageState?.ok}%`;
@@ -78,8 +75,7 @@ const MyResults = (props) => {
       flexDirection: 'column',
       alignItems: 'center',
     };
-
-    console.log(currentUserType, 'testeeeeeee do user type')
+    
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>

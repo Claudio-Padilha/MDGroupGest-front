@@ -30,7 +30,6 @@ const ContractEdit = (props) => {
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
         employeeType.map(type => {
-          console.log(type, 'TIPO')
           allEmployees.push({value: type?.user?.id, label: type?.user?.name})
         })
       });
@@ -42,8 +41,6 @@ const ContractEdit = (props) => {
   const powersList = useMemo(() => {
     return props?.location?.state?.power
   }, [props]) 
-
-  console.log(_allEmployees(), 'todos')
 
   const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
@@ -65,8 +62,6 @@ const ContractEdit = (props) => {
   }
 
   function _ConfirmContractCreation(data) {
-
-    console.log(data, 'teste do data')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -183,8 +178,6 @@ const ContractEdit = (props) => {
       gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
       contract_type: typeOfContractFromProps
     }
-
-    console.log(contractObj, 'OBJETO DO CONTRATO')
 
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {

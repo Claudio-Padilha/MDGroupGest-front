@@ -13,49 +13,50 @@ import { Heading, SubHeading, Body } from '../../components/Text/text';
 import useLogin from '../../hooks/login';
 
 import {
-  ContentContainer,
-  OfficesContainer
+  ContentContainerForAdmin,
+  OfficesContainer,
+  ResultsContainer
 } from './styles';
 
+import officesRequests from '../../hooks/requests/officesRequests'
+
 const AdminBackOfficeContent = (props) => {
-  const history = useHistory();
   const currentUser = useLogin();
   const currentUserIsAdmin = currentUser?.user?.is_admin;
   const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
 
-  const renderOfficeCard = () => {
-    return (
-      <Link to={{
-        pathname:"/CreateContract",
-      }}>
-        <MDCard className={"card"}>
-          <MDCardBody>
-            <SubHeading>Escritório 1</SubHeading>
-            <Button
-              fullWidth={false}
-              disabled={false}
-              action={() => {
-                history.push({
-                  pathname: "/ContractList",
-                })
-              }}
+  async function _getOffices() {
+    await officesRequests.getOffices()
+  }
 
-              small={true}
-              text="Ver escritório"
-            />
-          </MDCardBody>
-        </MDCard>
-      </Link>
+  _getOffices()
+  
+  const offices = useMemo(() => {
+    return JSON.parse(localStorage.getItem('offices'));
+  }, [localStorage])
+
+  console.log(offices, 'OFFICES')
+
+  const renderOfficeCard = (office) => {
+    return (
+      <MDCard className={'cardForOffice'}>
+        <MDCardBody className={'bodyCardForOffice'}>
+          <SubHeading className={'officeName'}>{office?.name}</SubHeading>
+          <Heading className={'officeResult'}>3453€</Heading>
+        </MDCardBody>
+      </MDCard>
     );
   };
 
   return (
     isAdmin ?
-      <ContentContainer>
-        <OfficesContainer>
-          {renderOfficeCard()}
+      <ContentContainerForAdmin>
+        <OfficesContainer className={"TESTEZAAAAACO"}>
+          { offices.map((office) => {
+            return renderOfficeCard(office);
+          })}
         </OfficesContainer>
-      </ContentContainer>
+      </ContentContainerForAdmin>
     :
     <div style={{display: 'flex', justifyContent: 'center'}}>
       <p>Você precisa ser administrador para ver este ecrã.</p>

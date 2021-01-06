@@ -21,8 +21,6 @@ const CreateEmployee = (props) => {
 
   const history = useHistory();
 
-  console.log(props, 'PROPS DA CRIAÇÃO DE EMPLOYEE')
-
   const officeID = props?.location?.state?.officeID;
   const officeOBJ = props?.location?.state?.officeOBJ;
   const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
@@ -43,15 +41,13 @@ const CreateEmployee = (props) => {
 
     if(employeeToAssociate) {
       Object.values(employeeToAssociate).forEach(function(employee){
-        console.log(employee, 'EMPLOYEE')
         employees.push({value: { id: employee?.id, employee_type: employee?.user?.user_type}, label: employee?.user?.name })
       })
     };
     return employees
   }
 
-  function _ConfirmEmployeeCreation(office, data) {
-    console.log(data, 'DADOS')
+  function _ConfirmEmployeeCreation(data) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {

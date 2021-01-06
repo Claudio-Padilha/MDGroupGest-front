@@ -114,6 +114,16 @@ const ContentContainer = styled.div`
   animation: ${fadeIn} 1s linear;
 `;
 
+const ContentContainerForAdmin = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 15%;
+  justify-content: flex-start;
+  width: 80%;
+  height: 70%;
+  animation: ${fadeIn} 1s linear;
+`;
+
 const ResultsContainer = styled.div`
   display: flex;
   flex-direction: row;
@@ -294,27 +304,30 @@ const ResultsContainer = styled.div`
 const OfficesContainer = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  a {
-    text-decoration: none;
+  justify-content: space-around;
+  height: 100%;
+
+  .cardForOffice {
     width: 30%;
-    div > div {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-around;
-    }
-    div > div > h3 {
-      display: flex;
-      align-self: center;
-      justify-content: center;
-      margin-left: 0;
-      margin-top: 5%;
-      margin-bottom: 5%;
-    }
-    div > div > button {
-      align-self: center;
-    }
+    height: 25vh;
+    margin-right: 4%;
+  }
+
+  .bodyCardForOffice {
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+  }
+
+  .officeName {
+    margin-left: 0;
+    color: ${CONSTANTS?.colors?.darkGrey}
+  }
+
+  .officeResult {
+    font-size: 62px;
   }
 `;
 
@@ -413,6 +426,7 @@ export {
   ProfileContainer,
   ContentContainer,
   ContentContainerLoader,
+  ContentContainerForAdmin,
   ResultsContainer,
   OfficesContainer,
   TeamAvatarsContainer,

@@ -19,11 +19,16 @@ function _firstTimeOfAnUser(user_id) {
 
           return axios.post("http://127.0.0.1:8000/auth/definePassword/", {password: data, id: user_id}, {Authorization: 'Token ' + _currentTokenOnRAM()})
             .then(response => {
-              alert("Senha atualizada!")
+              Swal.fire({
+                position: 'top-end',
+                icon: 'success',
+                title: 'Sua senha foi atualizada com sucesso!',
+                showConfirmButton: false,
+                timer: 1500
+              })
               return true
             })
-            .catch(error => {
-              console.log(error, "ERRO DO ALERTA")
+            .catch(() => {
               Swal.showValidationMessage(
                 `A senha deve ter tamanho mínimo de 6 caracteres, um caracter grande e um caracter especial!`
               )

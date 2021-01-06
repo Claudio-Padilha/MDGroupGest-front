@@ -27,11 +27,7 @@ export default function MenuNavbar(props) {
 
   setTimeout(() => {
     setIsLoading(false)
-  }, [1500]);
-
-  console.log(user?.user?.user_type, 'USER TYPE NAVBAR')
-
-  console.log(props, 'PROPS DA NAVBAR')
+  }, [300]);
 
   // const currentUserState = useMemo(() => {
   //   if (currentUserIsAdmin) {

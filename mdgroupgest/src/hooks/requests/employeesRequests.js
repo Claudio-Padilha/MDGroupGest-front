@@ -91,7 +91,6 @@ export default {
     });
   },
   updateEmployee: (formFields, data) => {
-    console.log(data, 'DATA')
 
     const userObj = {
       id: data?.id,
@@ -170,19 +169,14 @@ export default {
   addPhoto: (data) => {
     return new Promise((resolve, reject) => {
 
-      console.log(data, "DATA INSIDE REQUEST")
-
-        let user_type_for_route 
-        if(data?.user_type === "team_leader") {
-          user_type_for_route = "teamLeader"
-        } else if(data?.user_type === "sales_person") {
-          user_type_for_route ="salesPerson"
-        } else {
-          user_type_for_route = data?.user_type
-        }
-      
-
-      console.log(user_type_for_route)
+      let user_type_for_route 
+      if(data?.user_type === "team_leader") {
+        user_type_for_route = "teamLeader"
+      } else if(data?.user_type === "sales_person") {
+        user_type_for_route ="salesPerson"
+      } else {
+        user_type_for_route = data?.user_type
+      }
 
       var employeeUpdateRequest = {
           method: 'PATCH',
@@ -199,9 +193,6 @@ export default {
       axios(employeeUpdateRequest)
 
       .then(res => {
-
-        console.log(res.data, "RESPONSE FROM ADD PHOTO")
-
         localStorage.removeItem('userForPhoto');
         localStorage.setItem('userForPhoto', JSON.stringify(res.data))
 

@@ -14,9 +14,8 @@ function createWindow () {
 
   // and load the index.html of the app.
   win.loadURL(
-        isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
-    )
-
+    isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
+  )
 }
 
 // This method will be called when Electron has finished

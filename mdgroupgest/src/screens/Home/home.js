@@ -5,7 +5,6 @@ import BackOfficeHeader from "./backOfficeHeader";
 import { MainContainer } from "./styles";
 
 const Home = (props) => {
-  console.log(props, 'PROPS DA HOME')
 
   return (
     <MainContainer>

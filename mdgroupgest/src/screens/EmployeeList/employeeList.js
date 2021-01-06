@@ -26,7 +26,6 @@ import { List } from "semantic-ui-react";
 
 const EmployeeList = (props) => {
   const history = useHistory();
-  console.log(props, 'props da employee list')
 
   const employees = props?.location?.state?.data;
   const userType = props?.location?.state?.userType;
@@ -38,7 +37,6 @@ const EmployeeList = (props) => {
   const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const dataToGoBack = props?.location?.state?.dataGoingToList;
-  console.log(isFromEdit, 'TODOS OS FUNCIONÁRIOS DA TYPE TO SEE')
 
   function _goBack() {
     history.push({
@@ -55,7 +53,6 @@ const EmployeeList = (props) => {
 
   const renderEmployee = (employee, i) => {
 
-    console.log(employee, 'EMPLOYEEEEEEEEEEEEEE')
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
 
@@ -237,7 +234,6 @@ const EmployeeList = (props) => {
   const employeesToRender = () => {
     if (isFromEdit) {
       return employeesReturningFromEdit.map((employee, index) => {
-        console.log(employee, 'cada func')
         return renderEmployee(employee, index)
       }) 
     } else if(!employees || employees?.length === 0 || employees === undefined || employees === null && !employeesReturningFromEdit) {

@@ -29,9 +29,8 @@ import {
 
 import CONSTANTS from '../../constants';
 
-import employeesRequests from '../../hooks/requests/employeesRequests';
 import dataRequests from '../../hooks/requests/dataRequests';
-import officesRequests from '../../hooks/requests/officesRequests'
+import officesRequests from '../../hooks/requests/officesRequests';
 import contractsRequests from '../../hooks/requests/contractsRequests';
 
 const BackOfficeContent = (props) => {
@@ -47,7 +46,7 @@ const BackOfficeContent = (props) => {
 
   setTimeout(() => {
     setIsLoading(false)
-  }, [1200]);
+  }, [300]);
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
@@ -144,8 +143,6 @@ const BackOfficeContent = (props) => {
 
   var contracts = JSON.parse(localStorage.getItem('contracts'));
 
-  console.log(contracts, 'CONTRATOOOOOOS')
-
   const koContracts = [];
   const okContracts = [];
   const rContracts = [];
@@ -182,8 +179,6 @@ const BackOfficeContent = (props) => {
       return monthContractsForEmployee;
     }
   },[contracts])
-
-  console.log(_getMonthContracts, 'TESTEZAAAAACO')
 
   function _sellStateOfContract() {
 
@@ -253,8 +248,6 @@ const BackOfficeContent = (props) => {
       return obj.id === deletedID
     })
   }
-
-  console.log(_getMonthContracts, 'TESTE DO MONTH CONTRACTS')
 
   dataRequests.getMyTeam(currentUser?.user?.office)
 

@@ -32,7 +32,6 @@ const EmployeeType = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const currentUser = props?.location?.state?.user;
   const isAdmin = currentUser?.user?.is_admin;
-  console.log(currentUser, 'currentUser from employee type')
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -45,8 +44,6 @@ const EmployeeType = (props) => {
     
     return JSON.parse(localStorage?.getItem('allEmployees'));
   }, [cameFromBackOffice]);
-
-  console.log(allEmployees, 'employees')
 
   const renderManagerCard = () => {
     return (

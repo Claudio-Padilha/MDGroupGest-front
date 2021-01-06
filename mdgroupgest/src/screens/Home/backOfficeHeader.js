@@ -38,8 +38,6 @@ export default function BackOfficeHeader(props) {
     }
   }, [userType])
 
-  console.log(userType, 'USER TYPE IN ENGLISH')
-
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
   
   return (

@@ -34,7 +34,6 @@ const ChooseTypeOfContract = (props) => {
   }
 
   function _getFeedbackCall() {
-    console.log("ENTREEI NO FEEDBACKCALL ==================")
     const feedbackCallList = JSON.parse(localStorage.getItem('feedbackCalls'))
 
     var ret = feedbackCallList?.map(feedbackCall => {
@@ -85,12 +84,6 @@ const ChooseTypeOfContract = (props) => {
         })
       }
     }
-    
-    // gasScalesList.forEach(gasScale => {
-
-    // })
-
-    console.log(filteredGasScale, "FILTERED GAS SCALE")
 
     return filteredGasScale
   },[])
@@ -186,7 +179,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          power: _getPower(true)
+          power: _getPower(false)
         }  
       }}>
         <MDCard className={"card"}>
@@ -232,7 +225,7 @@ const ChooseTypeOfContract = (props) => {
           cameFromChoice: true,
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
-          gasScale: _getGasScale(true),
+          gasScale: _getGasScale(false),
           payment: _getPayment()
         }  
       }}>
@@ -282,8 +275,8 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: _getFeedbackCall(),
           sellState: _getSellState(),
           payment: _getPayment(),
-          gasScale: _getGasScale(true),
-          power: _getPower(true),
+          gasScale: _getGasScale(false),
+          power: _getPower(false),
           employees: allEmployees
         }  
       }}>

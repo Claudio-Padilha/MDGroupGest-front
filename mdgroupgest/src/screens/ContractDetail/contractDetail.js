@@ -90,7 +90,7 @@ const handleClose = () => {
   const contractID = props?.location?.state?.data?.id;
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const currentOfficeID = currentUser?.user?.office;  
+  const currentOfficeID = currentUser?.user?.office;
 
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
@@ -112,7 +112,7 @@ const handleClose = () => {
     }
   }, [contract])
 
-  console.log(contract, 'CONTRATO')
+  console.log(contractType === "Dual Condomínio")
 
   const state = useMemo(() => {
     if(contract?.sell_state__name === "ok") {
@@ -136,6 +136,16 @@ const handleClose = () => {
   }, [contract])
 
   const [isDeleting, setIsDeleting] = useState(false);
+
+  const typeContainsElectricity = (contractType === "Dual" || 
+                                 contractType === "Electricidade" || 
+                                 contractType === "Dual Condomínio" || 
+                                 contractType === "Electricidade Condomínio");
+
+const typeContainsGas = (contractType === "Dual" || 
+                                 contractType === "Gás" || 
+                                 contractType === "Dual Condomínio" || 
+                                 contractType === "Gás Condomínio");
 
   function _goBack() {
     contractsRequests.getContracts(currentOfficeID);
@@ -245,7 +255,6 @@ const handleClose = () => {
 
   const history = useHistory();
   const [nif, setNif] = useState('');
-  console.log(nif, 'NIF')
 
   // tentar sem use state, função na mão
   
@@ -256,6 +265,9 @@ const handleClose = () => {
     }
 
     console.log(_setNif(), 'NIF')
+    console.log(contract, 'CONTRATOOO')
+    console.log(contractType, 'TYPE')
+    console.log(contractType === "Electricidade", '<---- TESTE')
     return (
       <>
         <Dialog style={{padding: '2%'}} fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
@@ -605,16 +617,29 @@ const handleClose = () => {
                     <SmallSubHeading><b>Fatura Electrónica:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.electronic_bill ? "🟢" : "🔴"}`}</Body>
 
-                    <SmallSubHeading><b>PPI Luz:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.electricity_ppi ? "🟢" : "🔴"}`}</Body>
+                  {(typeContainsElectricity) &&
+                    <>
+                      <SmallSubHeading><b>PPI Luz:</b></SmallSubHeading>
+                      <Body className={"field"}>{` ${contract?.electricity_ppi ? "🟢" : "🔴"}`}</Body>
+                    </>
+                  }
                   </Column>
 
-                  <Column>
-                    <SmallSubHeading><b>PPI Gás:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.gas_ppi ? "🟢" : "🔴"}`}</Body>
+                  <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start', marginTop: '3%'} : {}}>
+                  {(typeContainsGas) &&
+                    <>
+                      <SmallSubHeading><b>PPI Gás:</b></SmallSubHeading>
+                      <Body className={"field"}>{` ${contract?.gas_ppi ? "🟢" : "🔴"}`}</Body>
+                    </>
+                  }
 
-                    <SmallSubHeading><b>PEL:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.pel ? "🟢" : "🔴"}`}</Body>
+
+                  {(typeContainsElectricity) &&
+                    <>
+                      <SmallSubHeading><b>PEL:</b></SmallSubHeading>
+                      <Body className={"field"}>{` ${contract?.pel ? "🟢" : "🔴"}`}</Body>
+                    </>
+                  }
                   </Column>
                 </Row>
               </Column>
@@ -639,26 +664,46 @@ const handleClose = () => {
                 </Row>
 
                 <Row className={"secondRowInsideFirstColumn"}>  
-                  <Column>
+                  <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start'} : {}}>
                     <SmallSubHeading><b>Estado da venda:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.sell_state__name}`}</Body>
 
-                    <SmallSubHeading><b>Escalão Gás:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.gas_scale__name}`}</Body>
+                    {(typeContainsGas) && 
+                      <>
+                        <SmallSubHeading><b>Escalão Gás:</b></SmallSubHeading>
+                        <Body className={"field"}>{` ${contract?.gas_scale__name}`}</Body>
+                      </>
+                    }
 
-                    <SmallSubHeading><b>CUI:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.cui}`}</Body>
+
+                    {(typeContainsGas) && 
+                      <>
+                        <SmallSubHeading><b>CUI:</b></SmallSubHeading>
+                        <Body className={"field"}>{` ${contract?.cui}`}</Body>  
+                      </>
+                    }
+
                   </Column>
 
-                  <Column>
+                  <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start'} : {}}>
                     <SmallSubHeading><b>Feedback Call:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.feedback_call}`}</Body>
 
-                    <SmallSubHeading><b>Potência:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.power__name}`}</Body>
+                    {(typeContainsElectricity) && 
+                      <>
+                        <SmallSubHeading><b>Potência:</b></SmallSubHeading>
+                        <Body className={"field"}>{` ${contract?.power__name}`}</Body>                     
+                      </>
+                    }
 
-                    <SmallSubHeading><b>CPE:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.cpe}`}</Body>
+
+                    {(typeContainsElectricity) && 
+                      <>
+                        <SmallSubHeading><b>CPE:</b></SmallSubHeading>
+                        <Body className={"field"}>{` ${contract?.cpe}`}</Body>                      
+                      </>
+                    }
+
                   </Column>
                 </Row>
               </Column>

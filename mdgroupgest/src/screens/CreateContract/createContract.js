@@ -51,8 +51,6 @@ const CreateContract = (props) => {
     return props?.location?.state?.power
   }, [props]) 
 
-  console.log(_allEmployees(), 'todos')
-
   const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
@@ -73,8 +71,6 @@ const CreateContract = (props) => {
   }
 
   function _ConfirmContractCreation(data) {
-
-    console.log(data, 'teste do data')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -158,7 +154,6 @@ const CreateContract = (props) => {
     <b>PPI Gás:</b> ${gasPPIDUAL ? "Sim" : `Não`} <br>
     <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
     <b>CUI:</b> ${CUIDUAL ? CUIDUAL : `❌`} <br>
-    <b>CUI:</b> ${CUIForGas ? CUIForGas : `❌`} <br>
     <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
     <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
@@ -177,10 +172,10 @@ const CreateContract = (props) => {
       client_nif: clientNif,
       client_contact: clientContact,
       electronic_bill: electronicBill ? electronicBill : false,
-      cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL?.toString() : CPEForElectricity?.toString(),
+      cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
       electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
       mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
-      cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL?.toString() : CUIForGas?.toString(),
+      cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
       gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
       pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
       observations: observations,
@@ -191,8 +186,6 @@ const CreateContract = (props) => {
       gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
       contract_type: typeOfContractFromProps
     }
-
-    console.log(contractObj, 'OBJETO DO CONTRATO')
 
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {
@@ -294,7 +287,7 @@ const CreateContract = (props) => {
     { type: "toggle", subType: "twoColumns", side: "left", key: "PELForElectricity", question: "PEL", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPIForElectricity", question: "PPI Luz", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "left", key: "CPEForElectricity", question: "CPE"},
+    { type: "text", subType: "twoColumns", side: "left", key: "CPEForElectricity", question: "CPE"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
@@ -352,7 +345,7 @@ const CreateContract = (props) => {
     { type: "toggle", subType: "twoColumns", side: "left", key: "MGIForGas", question: "MGI", booleanValue: false}, // MGI
     { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPIForGas", question: "PPI Gas", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBill", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "right", key: "CUIForGas", question: "CUI"},
+    { type: "text", subType: "twoColumns", side: "right", key: "CUIForGas", question: "CUI"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },
@@ -412,8 +405,8 @@ const CreateContract = (props) => {
     { type: "toggle", subType: "twoColumns", side: "left", key: "lightPPIDUAL", question: "PPI Luz", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "gasPPIDUAL", question: "PPI Gas", booleanValue: false},
     { type: "toggle", subType: "twoColumns", side: "right", key: "electronicBillDUAL", question: "Factura Electrónica", booleanValue: false},
-    { type: "number", subType: "twoColumns", side: "right", key: "CUIDUAL", question: "CUI"},
-    { type: "number", subType: "twoColumns", side: "left", key: "CPEDUAL", question: "CPE"},
+    { type: "text", subType: "twoColumns", side: "right", key: "CUIDUAL", question: "CUI"},
+    { type: "text", subType: "twoColumns", side: "left", key: "CPEDUAL", question: "CPE"},
     { type: "dateField", subType: "twoColumns", side: "left", key: "deliveryDate", question: "Data de Entrega", date: null },
     { type: "dateField", subType: "twoColumns", side: "left", key: "signatureDate", question: "Data de assinatura", date: null },
     { type: "text-area", subType: "twoColumns", side: "left", key: "observations", question: "Observações" },

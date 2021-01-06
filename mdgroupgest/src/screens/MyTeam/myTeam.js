@@ -207,7 +207,6 @@ const MyTeam = () => {
       }
     }
     localStorage.setItem('teamData', JSON.stringify(data))
-    console.log(data, 'DADOS')
     return data;
   }
 
