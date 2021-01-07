@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
+import * as Yup from 'yup';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -17,6 +18,7 @@ import Select from "../../components/Select/select";
 import Button from "../../components/Button/button";
 import SwitchButton from "../ToggleComponent/toggleButton";
 import { Heading, SubHeading } from "../Text/text";
+import validate from './validation';
 
 import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
 
@@ -53,6 +55,13 @@ const CForm = ({
     return initialValues;
   }
 
+  const validationSchema = Yup.object().shape({
+    name: Yup.string(),
+    officeName: Yup.string(),
+    officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    email: Yup.string().email('Invalid email').required('Required'),
+  });
+
   return (
     <>
       <WidthMessageContainer>
@@ -64,6 +73,7 @@ const CForm = ({
         <Formik 
           initialValues={ getInitialValues() }
           onSubmit={onSubmit}
+          validationSchema={validationSchema}
         >
           {
             props => (
@@ -181,7 +191,10 @@ const renderFields = (field, index, formik) => {
     case "password":
       return (
         <Form.Group as={Col} className={field?.key}>
-          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
+          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place} isValid={!validate?.errors?.email}/>
+          <Form.Control.Feedback type="invalid" tooltip>
+            {validate?.errors?.firstName}
+          </Form.Control.Feedback>
         </Form.Group>
       );
     case "text-area":
