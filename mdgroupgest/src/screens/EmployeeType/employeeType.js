@@ -32,6 +32,7 @@ const EmployeeType = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const currentUser = props?.location?.state?.user;
   const isAdmin = currentUser?.user?.is_admin;
+  const fromEmployeeCreation = props?.location?.state?.fromEmployeeCreation;
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -165,7 +166,13 @@ const EmployeeType = (props) => {
           {renderTeamLeaderCard()}
         </FirstRowForAdmin>}
 
-        {!isAdmin && <FirstRow>
+        {fromEmployeeCreation && <FirstRowForAdmin>
+          {renderManagerCard()}
+          {renderSecretaryCard()}
+          {renderTeamLeaderCard()}
+        </FirstRowForAdmin>}
+
+        {!isAdmin && !fromEmployeeCreation && <FirstRow>
           {renderSecretaryCard()}
           {renderTeamLeaderCard()}
         </FirstRow>}

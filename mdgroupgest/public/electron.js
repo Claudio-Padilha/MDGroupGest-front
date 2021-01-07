@@ -12,6 +12,23 @@ function createWindow () {
     }
   })
 
+//   var menu = Menu.buildFromTemplate([
+//     {
+//       label: 'MDGroupGest',
+//       submenu: [
+//           {label:'MDGroupGest Versão 1.1'},
+//           {label:'Proprietário: Miguel Pedro'},
+//           {
+//             label: 'Sair',
+//             click(){
+//               app.quit();  
+//           }
+//         }
+//       ]
+//     }
+// ])
+// Menu.setApplicationMenu(menu); 
+
   // and load the index.html of the app.
   win.loadURL(
     isDev ? "http://localhost:3000" : `file://${path.join(__dirname, "../build/index.html")}`
