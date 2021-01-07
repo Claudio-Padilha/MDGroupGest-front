@@ -28,7 +28,7 @@ const EditEmployee = (props) => {
   const officeOBJ = props?.location?.state?.officeOBJ;
   const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
-  const employeesReturningFromEdit = props?.location?.state?.employeesComingFromList;
+  const employeesComingFromList = props?.location?.state?.employeesComingFromList;
   const currentAssociateID = employee?.manager;
   const currentOfficeID = employee?.office;
 
@@ -36,7 +36,7 @@ const EditEmployee = (props) => {
     history.push({
       pathname: "/EmployeeList",
       state: {
-        employeesReturningFromEdit: employeesReturningFromEdit,
+        employeesReturningFromEdit: employeesComingFromList,
         isFromEdit: true
       }
     });    
@@ -88,15 +88,11 @@ const EditEmployee = (props) => {
                 `${nothingWasChanged ? "" : "Boa!"}`,
                 `${nothingWasChanged ? "Os dados permanecem os mesmos." : "Dados alterados com sucesso."}`,
                 'success'
-              ).then((result) => {
+              ).then(async (result) => {
                 if(result) {
-                  return history.push({
-                    pathname: "/ChooseEmployeeTypeToSee",
-                    state: {
-                      cameFromEdit: true,
-                      employeesAfterUpdate: JSON.parse(localStorage.getItem('allEmployees')),
-                    }
-                  });
+                  await employeesRequests.getAllEmployees(currentOfficeID)
+                  const employeesAfterUpdate = JSON.parse(localStorage.getItem('allEmployees'))
+                  return history.push({pathname: "/BackOffice"});
                 }
               });
 
