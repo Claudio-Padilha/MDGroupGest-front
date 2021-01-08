@@ -143,9 +143,9 @@ const handleClose = () => {
                                  contractType === "Electricidade Condomínio");
 
 const typeContainsGas = (contractType === "Dual" || 
-                                 contractType === "Gás" || 
-                                 contractType === "Dual Condomínio" || 
-                                 contractType === "Gás Condomínio");
+                          contractType === "Gás" || 
+                          contractType === "Dual Condomínio" || 
+                          contractType === "Gás Condomínio");
 
   function _goBack() {
     contractsRequests.getContracts(currentOfficeID);
@@ -521,12 +521,12 @@ const typeContainsGas = (contractType === "Dual" ||
                 </Row>
               </Col>
             </Row>  
-            
             </form>
 
           </DialogContent>
+
           <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-            <Button action={() => console.log('test') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+            <Button action={(values) => console.log(values, 'TESTE MÀXIMO') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
           </DialogActions>
         </Dialog>
 
