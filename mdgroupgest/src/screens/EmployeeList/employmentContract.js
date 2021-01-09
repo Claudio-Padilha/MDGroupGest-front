@@ -10,12 +10,7 @@ const ContractDocumentPDF = ({employeeName, employeeNif, employeeAddress}) => (
         2020
       </Text>
       <Text style={styles.title}>CONTRATO DE PRESTAÇÃO DE SERVIÇOS</Text>
-      {/* <Text style={styles.author}>Miguel de Cervantes</Text> */}
-
-      {/* <Text style={styles.subtitle}>
-        Capítulo I: Que trata de la condición y ejercicio del famoso hidalgo D.
-        Quijote de la Mancha
-      </Text> */}
+     
       <Text style={styles.text}>
         FENIXTHOUSAND SOLUTIONS LDA., sociedade com sede na Rua Ricardo Reis, nº 2, 6º esq, 2675-237 Odivelas, 
         com o NIPC 514216131, matriculada na Conservatória do Registo Comercial de Lisboa, sob o mesmo número, 

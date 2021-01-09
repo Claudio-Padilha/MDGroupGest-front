@@ -4,6 +4,7 @@ import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
 import Swal from 'sweetalert2';
 import { PDFDownloadLink } from '@react-pdf/renderer';
+import { jsPDF } from "jspdf";
 
 import { SubHeading, Body, SmallBody, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
@@ -131,24 +132,57 @@ const EmployeeList = (props) => {
       )
     }
 
-    function _handlePDFButton() {
-      return (
-        <div>
-          <PDFDownloadLink
-            document={
-              <ContractDocumentPDF
-                employeeName={employee?.user?.name}
-                employeeNif={employee?.user?.nif}
-                employeeAddress={employee?.user?.address}
-              />
-            }
-            fileName={`contrato${employee?.user?.name}.pdf`}
-            style={{textDecoration: "none", padding: 5, textShadow: "1px 1px 3px rgba(255, 255, 255, 0.3)", color: "#fff"}}
-          >
-            Gerar contrato
-          </PDFDownloadLink>
-        </div>
-      )
+    function _handlePDFButton(name, nif, address) {
+
+      console.log("ADDRESS ==========", address)
+
+      const doc = new jsPDF();
+      doc.text("2021",5,10);
+      doc.text("CONTRATO DE PRESTAÇÃO DE SERVIÇOS",45,30);
+      doc.text("FENIXTHOUSAND SOLUTIONS LDA., sociedade com sede na Rua", 10, 45)
+      doc.text("Ricardo Reis, nº 2, 6º esq, 2675-237 Odivelas, com o NIPC 514216131,", 10, 55)
+      doc.text("matriculada na Conservatória do Registo Comercial de Lisboa,  sob  o", 10, 65)
+      doc.text("mesmo número, neste ato representada na forma de seus atos constitutivos,", 10, 75)
+      doc.text("adiante designada 'Fenixthousand Solutions, Lda.' ou 'Contratante'; e", 10, 85)
+      doc.text(name +",", 10, 95)
+      doc.text("portador(a) do Cartão de Cidadão com o número de identificação civil NR ,", 10, 105)
+      doc.text("emitido por República Portuguesa e válido até (VALIDADE), número de", 10, 115)
+      doc.text("identificação fiscal " + nif + ", com residência habitual na", 10, 125)
+      doc.text("put dinamyc address", 10, 135)// doc.text(address +",", 10, 135)
+      doc.text("adiante designado como 'Contratado';", 10, 145)
+      doc.text("Sendo Contratante e Contratado, em conjunto, doravante denominados", 10, 155)
+      doc.text("simplesmente 'Partes';", 10, 165)
+      doc.text("Considerando que:", 10, 177)
+      doc.text("i) a Contratante tem por objeto social o exercício da atividade", 10, 187)
+      doc.text("de venda de mercadorias;", 14, 197)
+      doc.text("(ii) A Contratante tem interesse em contratar os serviços do", 10, 207)
+      doc.text("Contratado e que este aceita prestar, em regime de exclusividade,", 14, 217)
+      doc.text("os seus serviços profissionais no sentido de colaborar para o de-", 14, 227)
+      doc.text("senvolvimento da atividade da Fenixthousand Solutions, Lda.", 14, 237)
+      doc.text("Resolvem as Partes, de comum acordo, celebrar o presente Contrato de", 10, 249)
+      doc.text("Prestação de Serviços ('Contrato'), o qual se regerá de acordo com os", 10, 259)
+      doc.text("seguintes termos e condições:", 10, 269)
+      doc.addPage()
+      doc.text("Cláusula Primeira - Objeto", 10, 15)
+      doc.text("1.      O presente Contrato tem por objeto a prestação de serviços pelo", 10, 27)
+      doc.text("Contratado à Contratante, em regime de exclusividade, nomeadamente, (i) o", 10, 37)
+      doc.text("desenvolvimento de tarefas necessárias à preparação e ao cumprimento dos", 10, 47)
+      doc.text("contratos de venda de mercadorias e de angariação de novos clientes e", 10, 57)
+      doc.text("serviços; e (ii) a prestação de serviços de divulgação comercial; tudo de", 10, 67)
+      doc.text("1.2     A Contratante e o Contratado acordam que, pelo facto de serem", 10, 77)
+      doc.text("entidades juridicamente autónomas e não existir qualquer relação de trabalho", 10, 87)
+      doc.text("que não seja a de prestação de serviços, o Contratado é o único e exclusivo", 10, 97)
+      doc.text("responsável pelos pagamentos e contribuições relativas a impostos, segurança", 10, 107)
+      doc.text("social, seguros de acidentes de trabalho ou outras importâncias devidas e", 10, 117)
+      doc.text("inerentes a sua atividade de profissional liberal (ou empresário em nome", 10, 127)
+      doc.text("individual), salvo disposições legais em contrário.", 10, 137)
+      doc.text("Cláusula Segunda - Local", 10, 149)
+      doc.text("O Contratado desenvolverá seus serviços em território português, sendo", 10, 159)
+      doc.text("da essência deste Contrato a necessidade de deslocamento em viagens", 10, 169)
+      doc.text("para o desenvolvimento pleno dos Serviços. Tais viagens  correrão,", 10, 179)
+      doc.text(" exclusivamente, às expensas do Contratado.", 10, 189)
+     
+      doc.save(name + ".pdf");
     };
 
     return (
@@ -218,7 +252,7 @@ const EmployeeList = (props) => {
             />
             <Button
               disabled={false}
-              action={_handlePDFButton}
+              action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee)}}
               small={true}
               text="Gerar contrato"
               className={"primaryButton"}
