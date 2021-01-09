@@ -51,22 +51,7 @@ const ContractList = (props) => {
     }, [500]);
   }
 
-
   const contracts = useMemo(() => {
-    // if(cameFromDetail) {
-    //   const contracts = JSON.parse(localStorage.getItem('contracts'))
-    //   const contractsToReturn = []
-    //   for(let i = 0; i < contracts?.length; i++) {
-    //     if (contracts[i]?.user === currentUser?.user?.id) {
-    //       contractsToReturn.push(contracts[i])
-    //     }
-    //   }
-    //   return contractsToReturn
-      
-    // } else {
-    //   return props?.location?.state?.data
-    // } 
-
     if(props?.location?.state?.data !== undefined) {
       return props?.location?.state?.data.sort((a, b) => b.id - a.id)  
     } else {
@@ -83,7 +68,7 @@ const ContractList = (props) => {
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
-
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   const okContractID = contracts;
 
@@ -134,7 +119,8 @@ const ContractList = (props) => {
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
             await contractsRequests.updateContract(contract?.id)
-            .then(res => {
+            .then(async (res) => {
+              await contractsRequests.getContracts(currentOfficeID)
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
 
@@ -157,8 +143,8 @@ const ContractList = (props) => {
                   'success'
                 ).then(async result => {
                   if (result.isConfirmed) {
-                    await contractsRequests.getContracts()
                     setIsLoading(true)
+                    history.push({pathname: "/BackOffice"})
                   }
                 })
               }

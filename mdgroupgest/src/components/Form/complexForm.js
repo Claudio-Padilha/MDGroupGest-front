@@ -17,6 +17,7 @@ import Select from "../../components/Select/select";
 import Button from "../../components/Button/button";
 import SwitchButton from "../ToggleComponent/toggleButton";
 import { Heading, SubHeading } from "../Text/text";
+import validate from './validation';
 
 import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
 
@@ -50,8 +51,20 @@ const CForm = ({
       });
     }
 
+    console.log(initialValues, 'TESTE DO INITIAL')
+
     return initialValues;
   }
+
+  // const Yup = require('yup')
+
+  // const validationSchema = Yup.object().shape({
+  //   name: Yup.string(),
+  //   officeName: Yup.string().required(),
+  //   officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   email: Yup.string().email('Invalid email').required('Required'),
+  // });
 
   return (
     <>
@@ -64,6 +77,7 @@ const CForm = ({
         <Formik 
           initialValues={ getInitialValues() }
           onSubmit={onSubmit}
+          // validationSchema={validationSchema}
         >
           {
             props => (
@@ -181,7 +195,7 @@ const renderFields = (field, index, formik) => {
     case "password":
       return (
         <Form.Group as={Col} className={field?.key}>
-          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
+          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place} isValid={!validate?.errors?.email}/>
         </Form.Group>
       );
     case "text-area":

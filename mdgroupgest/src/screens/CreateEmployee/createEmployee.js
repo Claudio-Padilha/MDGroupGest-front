@@ -235,12 +235,13 @@ const CreateEmployee = (props) => {
   }
 
   const handleSubmitForm = (formFields) => {
+    console.log(formFields, 'FORMFIELDS')
 
     const userType = props.location.state.userType;
 
     localStorage.setItem('currentUserType', userType)
 
-    _ConfirmEmployeeCreation(officeID, formFields)
+    _ConfirmEmployeeCreation(formFields)
   };
 
   const FIELDS = [

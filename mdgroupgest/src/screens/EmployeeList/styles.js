@@ -41,6 +41,7 @@ const MainContainer = styled.div`
       width: 20%;
       height: 60%;
       margin-left: 10%;
+      cursor: auto;
     }
   }
 

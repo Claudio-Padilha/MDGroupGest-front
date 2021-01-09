@@ -38,6 +38,7 @@ const CreateOffice = () => {
     var nipc = data?.officeNIPC?.toString(); 
     var address = data?.officeAddress; 
     var email = data?.officeEmail;
+    var officeZipCode = data?.officeZipCode;
 
     return (
       swalWithBootstrapButtons.fire({
@@ -46,6 +47,7 @@ const CreateOffice = () => {
         `Nome: ${name ? name : `❌`},
           NIPC: ${nipc ? nipc : `❌`}.                                               
           Morada: ${address ? address : `❌`},                                                               
+          Código Postal: ${officeZipCode ? officeZipCode : `❌`},                                                               
           Email: ${email ? email : `❌`},
         `,
       icon: 'warning',
@@ -92,11 +94,11 @@ const CreateOffice = () => {
   const handleSubmitForm = formFields => { _ConfirmOfficeCreation(formFields) }
 
   const FIELDS = [
-    { type: "text", key: "officeName", question: "Nome do escritório" },
-    { type: "number", key: "officeNIPC", question: "NIPC do escritório"},
-    { type: "text", key: "officeAddress", question: "Morada do escritório"},
-    { type: "text", key: "officeZipCode", question: "Código-postal"},
-    { type: "text", key: "officeEmail", question: "Email do escritório"}
+    { type: "text", key: "officeName", question: "Nome do escritório" , initialValue: ''},
+    { type: "number", key: "officeNIPC", question: "NIPC do escritório", initialValue: ''},
+    { type: "text", key: "officeAddress", question: "Morada do escritório", initialValue: ''},
+    { type: "number", key: "officeZipCode", question: "Código-postal", initialValue: ''},
+    { type: "text", key: "officeEmail", question: "Email do escritório", initialValue: ''}
   ];
   
   return (

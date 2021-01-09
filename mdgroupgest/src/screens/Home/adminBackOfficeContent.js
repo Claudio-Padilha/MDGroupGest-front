@@ -52,7 +52,7 @@ const AdminBackOfficeContent = (props) => {
     isAdmin ?
       <ContentContainerForAdmin>
         <OfficesContainer className={"TESTEZAAAAACO"}>
-          { offices.map((office) => {
+          { offices?.map((office) => {
             return renderOfficeCard(office);
           })}
         </OfficesContainer>
