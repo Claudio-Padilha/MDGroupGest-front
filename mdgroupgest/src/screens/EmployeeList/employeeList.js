@@ -134,10 +134,9 @@ const EmployeeList = (props) => {
 
     function _handlePDFButton(name, nif, address) {
 
-      console.log("ADDRESS ==========", address)
+      const today = new Date()
 
       const doc = new jsPDF();
-      doc.text("2021",5,10);
       doc.text("CONTRATO DE PRESTAÇÃO DE SERVIÇOS",45,30);
       doc.text("FENIXTHOUSAND SOLUTIONS LDA., sociedade com sede na Rua", 10, 45)
       doc.text("Ricardo Reis, nº 2, 6º esq, 2675-237 Odivelas, com o NIPC 514216131,", 10, 55)
@@ -148,7 +147,7 @@ const EmployeeList = (props) => {
       doc.text("portador(a) do Cartão de Cidadão com o número de identificação civil NR ,", 10, 105)
       doc.text("emitido por República Portuguesa e válido até (VALIDADE), número de", 10, 115)
       doc.text("identificação fiscal " + nif + ", com residência habitual na", 10, 125)
-      doc.text("put dinamyc address", 10, 135)// doc.text(address +",", 10, 135)
+      doc.text(address +",", 10, 135)
       doc.text("adiante designado como 'Contratado';", 10, 145)
       doc.text("Sendo Contratante e Contratado, em conjunto, doravante denominados", 10, 155)
       doc.text("simplesmente 'Partes';", 10, 165)
@@ -181,6 +180,11 @@ const EmployeeList = (props) => {
       doc.text("da essência deste Contrato a necessidade de deslocamento em viagens", 10, 169)
       doc.text("para o desenvolvimento pleno dos Serviços. Tais viagens  correrão,", 10, 179)
       doc.text(" exclusivamente, às expensas do Contratado.", 10, 189)
+      doc.line(10, 229, 80, 229)
+      doc.line(120, 229, 190, 229)
+      doc.text("Contratante", 20, 239)
+      doc.text("Contratado", 130, 239)
+      doc.text("Lisboa, " + String(today.getDate()) + "/" + String((today.getMonth() + 1) > 9 ? today.getMonth() + 1 : "0") + String(today.getMonth() + 1) + "/" + String(today.getFullYear()), 140, 279)
      
       doc.save(name + ".pdf");
     };
@@ -252,7 +256,7 @@ const EmployeeList = (props) => {
             />
             <Button
               disabled={false}
-              action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee)}}
+              action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee.user.address)}}
               small={true}
               text="Gerar contrato"
               className={"primaryButton"}
