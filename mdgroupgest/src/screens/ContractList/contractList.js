@@ -41,8 +41,10 @@ const ContractList = (props) => {
   }
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
+  const cameFromDelete = props?.location?.state?.fromDelete;
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const contractsFromDetail = props?.location?.state?.contractsToReturn;
+  const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete;
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -55,6 +57,9 @@ const ContractList = (props) => {
   const contracts = useMemo(() => {
     if(props?.location?.state?.data !== undefined) {
       return props?.location?.state?.data.sort((a, b) => b.id - a.id)  
+    } else if (cameFromDelete) {
+      _removeContractFromRAM()
+      return contractsFromDelete.sort((a, b) => b.id - a.id)
     } else if (cameFromDetail){
       return contractsFromDetail.sort((a, b) => b.id - a.id)
     } else {
@@ -67,17 +72,20 @@ const ContractList = (props) => {
       }
       return contractsToReturn.sort((a, b) => b.id - a.id)    
     } 
-  },[cameFromDetail, isLoading])
+  },[cameFromDelete, cameFromDetail, isLoading])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
   function _removeContractFromRAM() {
-    _.remove(contracts, function(obj) {
+    _.remove(contractsFromDelete, function(obj) {
       return obj.id === deletedID
     })
+    console.log(contractsFromDelete, 'CONTRATOS DE DELETES')
+    return contractsFromDelete;
   }
+
 
   function _handleEditEmployee() {      // CHANGE THIS TO HANDLE CONTRACT UPDATE
     history.push({

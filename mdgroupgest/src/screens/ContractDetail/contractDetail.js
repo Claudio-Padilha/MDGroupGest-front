@@ -191,6 +191,8 @@ const typeContainsGas = (contractType === "Dual" ||
   }
 
   function _confirmToDeleteContract() {
+    contractsRequests.getContracts(currentOfficeID);
+    const contractsToReturn = JSON.parse(localStorage.getItem('contracts'));
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -199,7 +201,6 @@ const typeContainsGas = (contractType === "Dual" ||
       buttonsStyling: true
     })
     setIsDeleting(true);
-    setOpen(true);
     
     return (
       swalWithBootstrapButtons.fire({
@@ -225,7 +226,8 @@ const typeContainsGas = (contractType === "Dual" ||
                 pathname: "/ContractList",
                 state: {
                   fromDelete: true,
-                  deletedID: contractID
+                  deletedID: contractID,
+                  contractsToReturnFromDelete: contractsToReturn,
                 }
               }))
             )
