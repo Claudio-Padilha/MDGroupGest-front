@@ -119,7 +119,7 @@ const EditEmployee = (props) => {
   const handleSubmitForm = formFields => {
     const data = {
       office: employee?.office,
-      id: employee?.id,
+      id: employee?.user?.id,
       user_type: employee?.user?.user_type,
     }
 

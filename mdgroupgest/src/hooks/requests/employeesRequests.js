@@ -3,6 +3,7 @@ import Swal from 'sweetalert2';
 
 import _currentTokenOnRAM from './currentToken';
 import dataRequests from './dataRequests';
+import { FormField } from 'semantic-ui-react';
 
 export default {
   getAllEmployees: (officeID) => {
@@ -91,12 +92,16 @@ export default {
       })
     });
   },
-  updateEmployee: (data) => {
+  updateEmployee: (formdFields, data) => {
 
-    
+    const dataToSend = {
+      ...formdFields,
+      ...data
+    }
+
     var userType = data?.user_type;
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
-    
+    console.log(user_type, 'USER TYPE DO UPDATE')
     return new Promise((resolve, reject) => {
 
       var employeeUpdateRequest = {
@@ -106,7 +111,7 @@ export default {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
-          data: data,
+          data: dataToSend,
           dataType: "json",
           contentType: "application/json"
         };
