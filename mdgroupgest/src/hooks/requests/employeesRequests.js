@@ -86,6 +86,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
+        console.log("ERROR =========== ", error)
         resolve(error);
       })
     });

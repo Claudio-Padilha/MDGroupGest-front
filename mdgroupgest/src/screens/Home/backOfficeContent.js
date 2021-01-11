@@ -40,6 +40,7 @@ const BackOfficeContent = (props) => {
   dataRequests.getPayment()
   dataRequests.getGasScale()
   dataRequests.getPower()
+  dataRequests.getResultsToPresent();
   
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
@@ -54,7 +55,6 @@ const BackOfficeContent = (props) => {
     await officesRequests.getOffice(currentOfficeID)
     await contractsRequests.getContracts(currentOfficeID)
     await dataRequests.getOfficesResultsByDay(currentOfficeID)
-    await dataRequests.getResultsToPresent();
   }
 
   _getOffice()
