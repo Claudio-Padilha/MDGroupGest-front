@@ -57,16 +57,7 @@ export default {
       })
     });
   },
-  updateContract: async (contractID) => {
-    dataRequests.getSellState()
-
-    const sellStates = JSON.parse(localStorage.getItem('sellStates'))
-
-    const sellStateOK = await sellStates?.filter(sellState => {
-      return sellState?.name === "ok"
-    });
-    
-    const sellStateID = sellStateOK[0]?.id;
+  updateContract: async (data) => { 
 
     return new Promise((resolve, reject) => {
 
@@ -76,7 +67,7 @@ export default {
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
-          data: { id: contractID, sell_state: sellStateID },
+          data: data,
           json: true,
           dataType: "json",
           contentType: "application/json"

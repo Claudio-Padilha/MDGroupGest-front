@@ -90,19 +90,9 @@ export default {
       })
     });
   },
-  updateEmployee: (formFields, data) => {
+  updateEmployee: (data) => {
 
-    const userObj = {
-      id: data?.id,
-      office: data?.office,
-      name: formFields?.name,
-      email: formFields?.email,
-      employee_type: formFields?.employeeAbove?.employee_type,
-      employee_id: formFields?.employeeAbove?.id,
-      nif: formFields?.nif,
-      contact: formFields?.contact,
-      address: formFields?.address,
-    }
+    
     var userType = data?.user_type;
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
@@ -115,7 +105,7 @@ export default {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
           json: true,
-          data: userObj,
+          data: data,
           dataType: "json",
           contentType: "application/json"
         };

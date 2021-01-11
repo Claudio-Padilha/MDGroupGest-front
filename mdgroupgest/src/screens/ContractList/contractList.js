@@ -118,7 +118,7 @@ const ContractList = (props) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            await contractsRequests.updateContract(contract?.id)
+            await contractsRequests.updateContract({id: contract?.id, sell_state: "ok"})
             .then(async (res) => {
               await contractsRequests.getContracts(currentOfficeID)
               const clientSideError = res?.message?.match(/400/g);

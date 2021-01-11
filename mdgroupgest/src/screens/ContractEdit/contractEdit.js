@@ -211,7 +211,7 @@ const ContractEdit = (props) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
-            await contractsRequests.createContract(contractObj)
+            await contractsRequests.updateContract(contractObj)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);

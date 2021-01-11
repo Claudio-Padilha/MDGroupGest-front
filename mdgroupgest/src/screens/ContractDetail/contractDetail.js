@@ -46,6 +46,8 @@ import {
 } from "./styles";
 
 import { List } from "semantic-ui-react";
+import { Field } from "formik";
+import employeesRequests from "../../hooks/requests/employeesRequests";
 
 
 const ContractDetail = (props) => {
@@ -86,6 +88,7 @@ const handleClose = () => {
 // end modal
 
   const contract = props?.location?.state?.data;
+  console.log(contract, "CONTRATO =============")
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
 
@@ -123,6 +126,29 @@ const handleClose = () => {
       return "🔴";
     }
   }, [contract])
+
+  function updateContract (event) {
+    event.preventDefault()
+    let contractData = {
+      id: contract.id,
+    }
+
+    if (document.getElementById("name").value !== "") {
+      contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
+    }else if (document.getElementById("nif").value !== "") {
+      contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
+    }else if (document.getElementById("contact").value !== "") {
+      contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
+    }else if (document.getElementById("delivery_date").value !== "") {
+      contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
+    }else if (document.getElementById("signature_date").value !== "") {
+      contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
+    }
+
+    contractsRequests.updateContract(contractData)
+    console.log("CONTRACT ===============", contractData)
+    
+  }
 
 
   const stateMessage = useMemo(() => {
@@ -308,7 +334,6 @@ const typeContainsGas = (contractType === "Dual" ||
                       label="Nome do cliente"
                       placeholder={contract?.client_name}
                       type="text"
-                      onChange={(e) => _setNif(e.target.value)}
                     />
 
                     <TextField
@@ -339,7 +364,7 @@ const typeContainsGas = (contractType === "Dual" ||
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="name"
+                      id="delivery_date"
                       label="Data de entrega"
                       placeholder={contract?.delivery_date}
                       type="text"
@@ -348,7 +373,7 @@ const typeContainsGas = (contractType === "Dual" ||
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="name"
+                      id="signature_date"
                       label="Data de assinatura"
                       placeholder={contract?.signature_date}
                       type="text"
@@ -430,14 +455,6 @@ const typeContainsGas = (contractType === "Dual" ||
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="employeeName"
-                      label="Comercial"
-                      placeholder={contract?.user__name}
-                      type="text"
-                    />
                   </Col>
                   <Col style={{
                     width: '30%',
@@ -521,13 +538,13 @@ const typeContainsGas = (contractType === "Dual" ||
                 </Row>
               </Col>
             </Row>  
+
+            <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
+            <Button action={updateContract} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+          </DialogActions>
             </form>
 
           </DialogContent>
-
-          <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-            <Button action={(values) => console.log(values, 'TESTE MÀXIMO') } text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
-          </DialogActions>
         </Dialog>
 
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
