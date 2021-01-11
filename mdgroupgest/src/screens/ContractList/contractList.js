@@ -24,6 +24,7 @@ import {
 import { List } from "semantic-ui-react";
 import SearchBar from "../../components/SearchArea/search";
 import CONSTANTS from "../../constants";
+import { findDOMNode } from "react-dom";
 
 const ContractList = (props) => {
 
@@ -54,6 +55,8 @@ const ContractList = (props) => {
   const contracts = useMemo(() => {
     if(props?.location?.state?.data !== undefined) {
       return props?.location?.state?.data.sort((a, b) => b.id - a.id)  
+    } else if (cameFromDetail){
+      return contractsFromDetail.sort((a, b) => b.id - a.id)
     } else {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
       const contractsToReturn = []
@@ -69,8 +72,6 @@ const ContractList = (props) => {
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
-
-  const okContractID = contracts;
 
   function _removeContractFromRAM() {
     _.remove(contracts, function(obj) {
@@ -93,8 +94,15 @@ const ContractList = (props) => {
   if(deletedID) {
     _removeContractFromRAM()
   }
-
+  console.log(localStorage, 'LOCAL STORAGE')
   function _ConfirmContractActivation(contract, i) {
+    const sellStateID = () => {
+      const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));
+      const sellStateMatched = sellStatesOnRAM.find(sellState => { return sellState?.name === 'ok' })
+      return sellStateMatched
+    }
+
+    const sellStateIDTOActivate = sellStateID()?.id;
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -118,7 +126,7 @@ const ContractList = (props) => {
 
         // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
-            await contractsRequests.updateContract({id: contract?.id, sell_state: "ok"})
+            await contractsRequests.updateContract({id: contract?.id, sell_state: sellStateIDTOActivate})
             .then(async (res) => {
               await contractsRequests.getContracts(currentOfficeID)
               const clientSideError = res?.message?.match(/400/g);
@@ -163,6 +171,8 @@ const ContractList = (props) => {
 
   const renderContract = (contract, i, searched) => {
     var sellState = contract?.sell_state__name
+
+    console.log(contracts, 'CONTRATOOOES')
 
     function _contractType () {
       switch (contract?.contract_type) {

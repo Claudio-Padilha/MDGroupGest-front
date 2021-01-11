@@ -57,12 +57,16 @@ const MyResults = (props) => {
     window.location.assign("/BackOffice");    
   }
 
+  console.log(okNumber, 'OK')
+  console.log(koNumber, 'KO')
+  console.log(rNumber, 'R')
+
   function _colorToRender() {
     if (okNumber >= 80) {
       return <GreenCircle />;
-    } else if (rNumber <= 70 && okNumber < 80) {
+    } else if (koNumber <= 30 && rNumber <= 70 && okNumber < 80) {
       return <YellowCircle />;
-    } else if (koNumber >= 70 || rNumber < 70 && okNumber <= 70){
+    } else if (koNumber >= 30 && rNumber < 70 && okNumber <=70){
       return <RedCircle />;
     } 
   }
