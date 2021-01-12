@@ -17,7 +17,6 @@ import Select from "../../components/Select/select";
 import Button from "../../components/Button/button";
 import SwitchButton from "../ToggleComponent/toggleButton";
 import { Heading, SubHeading } from "../Text/text";
-import validate from './validation';
 
 import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
 
@@ -188,6 +187,7 @@ const renderFields = (field, index, formik) => {
     booleanValue: formik.values[field?.booleanValue],
   };  
 
+
   switch (field?.type) {
     case "text":
     case "email":
@@ -195,7 +195,7 @@ const renderFields = (field, index, formik) => {
     case "password":
       return (
         <Form.Group as={Col} className={field?.key}>
-          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place} isValid={!validate?.errors?.email}/>
+          <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
         </Form.Group>
       );
     case "text-area":
