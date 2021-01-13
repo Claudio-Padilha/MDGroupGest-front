@@ -77,6 +77,14 @@ const ContractDetail = (props) => {
   },
 }));
 
+const [isLoading, setIsLoading] = useState(true);
+
+if (isLoading) {
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [500]);
+}
+
 const Transition = React.forwardRef(function Transition(props, ref) {
 
   return <Slide direction="up" ref={ref} {...props} />
@@ -99,7 +107,6 @@ const handleClose = () => {
 // end modal
 
   const contract = props?.location?.state?.data;
-  console.log(contract, "CONTRATO =============")
   const contractNumber = props?.location?.state?.contractNumber;
   const contractID = props?.location?.state?.data?.id;
 
@@ -157,8 +164,6 @@ const handleClose = () => {
     }
 
     contractsRequests.updateContract(contractData)
-    console.log("CONTRACT ===============", contractData)
-    
   }
 
 
@@ -197,6 +202,8 @@ const typeContainsGas = (contractType === "Dual" ||
   }
 
   function _confirmToDeleteContract() {
+    contractsRequests.getContracts(currentOfficeID);
+    const contractsToReturn = JSON.parse(localStorage.getItem('contracts'));
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -230,7 +237,8 @@ const typeContainsGas = (contractType === "Dual" ||
                 pathname: "/ContractList",
                 state: {
                   fromDelete: true,
-                  deletedID: contractID
+                  deletedID: contractID,
+                  contractsToReturnFromDelete: contractsToReturn,
                 }
               }))
             )
@@ -294,6 +302,84 @@ const typeContainsGas = (contractType === "Dual" ||
   const [nif, setNif] = useState('');
 
   // tentar sem use state, função na mão
+  function _ConfirmContractActivation(contract) {
+    const sellStateID = () => {
+      const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));
+      const sellStateMatched = sellStatesOnRAM.find(sellState => { return sellState?.name === 'ok' })
+      return sellStateMatched
+    }
+
+    console.log(sellStateID(), 'TESTEZAÇO')
+
+    const sellStateIDTOActivate = sellStateID()?.id;
+
+    console.log(sellStateIDTOActivate, 'ID')
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
+
+      return (
+        swalWithBootstrapButtons.fire({
+        title: 'Tem certeza?',
+        html: 
+          `Não é possível desativar um contrato.<br>`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Cancelar',
+        reverseButtons: true
+      }).then(async (result) => {
+
+        // "result.isConfimed significa clicar em "É isto"
+          if (result.isConfirmed) {
+            await contractsRequests.updateContract({id: contract?.id, sell_state: sellStateIDTOActivate})
+            .then(async (res) => {
+              await contractsRequests.getContracts(currentOfficeID)
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
+
+              if(clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Algo correu mal... tente de novo.',
+                  'error'
+                )
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                swalWithBootstrapButtons.fire(
+                  'Boa!',
+                  'Contrato ativado com sucesso.',
+                  'success'
+                ).then(async result => {
+                  if (result.isConfirmed) {
+                    setIsLoading(true)
+                    history.push({pathname: "/BackOffice"})
+                  }
+                })
+              }
+            })
+        // "!result.isConfimed significa clicar em "Refazer!"
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
+  }
+
   
   const renderContract = () => {
     function _setNif (value) {
@@ -467,14 +553,22 @@ const typeContainsGas = (contractType === "Dual" ||
                     flexDirection: 'column',
                   }}>
                   </Col>
+
                   <Col style={{
                     width: '30%',
                     justifyContent: 'space-around',
                     display: 'flex',
-                    flexDirection: 'column',
+                    flexDirection: 'column', 
                     marginRight: '15%'
                   }}>
-                    <SubHeading style={{display: 'flex'}}>Comissão: <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission}€</SubHeading></SubHeading>
+                    <SubHeading style={{display: 'flex'}}>Comissão: 
+                    { contract?.sell_state__name !== 'ok' &&
+                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>
+                    }
+                    { contract?.sell_state__name === 'ok' &&
+                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission}€</SubHeading>
+                    }
+                    </SubHeading>
                   </Col>
                 </Row>
 
@@ -704,7 +798,7 @@ const typeContainsGas = (contractType === "Dual" ||
 
                   <Column>
                     <SmallSubHeading><b>Comissão: </b></SmallSubHeading>
-                    <Body className={"fieldComission"}>{` +${contract?.employee_comission}€`}</Body>
+                    <Body className={"fieldComission"}>{ contract?.sell_state__name !== 'ok' ? '0€' : ` +${contract?.employee_comission}€`}</Body>
 
                     <SmallSubHeading></SmallSubHeading>
                     <Body className={"field"}></Body>

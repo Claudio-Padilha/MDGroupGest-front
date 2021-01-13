@@ -64,7 +64,7 @@ export default {
       address: data?.officeAddress,
     }
     
-    return new Promise((resolve, reject) => {
+    return new Promise((resolve) => {
 
       var officeRequest = {
           method: 'POST',
@@ -88,8 +88,7 @@ export default {
         resolve(res);
       })
       .catch(error => {
-          const message = 'Erro do servidor';
-          reject(message);
+        resolve(error);
       })
     });
   },

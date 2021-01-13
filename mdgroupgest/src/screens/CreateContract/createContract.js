@@ -80,6 +80,29 @@ const CreateContract = (props) => {
       buttonsStyling: true
     })
 
+    function _formatDate(date) {
+      if (date !== undefined && date !== "") {
+        var myDate = new Date(date);
+        var month = [
+          " de Janeiro de ",
+          " de Fevereiro de ",
+          " de Março de ",
+          " de Abril de ",
+          " de Maio de ",
+          " de Junho de ",
+          " de Julho de ",
+          " de Agosto de ",
+          " de Setembro de ",
+          " de Outubro de ",
+          " de Novembro de ",
+          " de Dezembro de ",
+        ][myDate.getMonth()];
+        var str = myDate.getDate() + "" + month + "" + myDate.getFullYear();
+        return str;
+      }
+      return "";
+    }
+
     var user = data?.employeeName;
     var clientName = data?.clientName ;
     var clientNif = data?.clientNif;
@@ -108,6 +131,9 @@ const CreateContract = (props) => {
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
 
+    const deliveryDateFormated = _formatDate(deliveryDate);
+    const signatureDateFormated = _formatDate(signatureDate);
+
     var deliveryDateBeforeJSON = deliveryDate?.toJSON();
     var deliveryWorkedDate = deliveryDateBeforeJSON?.substring(0, 10);
 
@@ -122,8 +148,8 @@ const CreateContract = (props) => {
     <b>PPI Luz:</b> ${lightPPIForElectricity ? "Sim" : `Não`} <br>
     <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
     <b>CPE:</b> ${CPEForElectricity ? CPEForElectricity : `❌`} <br>
-    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
-    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDateFormated ? deliveryDateFormated : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDateFormated ? signatureDateFormated : `❌`} <br>
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
     <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
@@ -137,8 +163,8 @@ const CreateContract = (props) => {
     <b>PPI Gás:</b> ${gasPPIForGas ? "Sim" : `Não`} <br>
     <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
     <b>CUI:</b> ${CUIForGas ? CUIForGas : `❌`} <br>
-    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
-    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDateFormated ? deliveryDateFormated : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDateFormated ? signatureDateFormated : `❌`} <br>
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
     <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
@@ -154,8 +180,8 @@ const CreateContract = (props) => {
     <b>PPI Gás:</b> ${gasPPIDUAL ? "Sim" : `Não`} <br>
     <b>Factura Electrónica:</b> ${electronicBill ? "Sim" : `Não`} <br>
     <b>CUI:</b> ${CUIDUAL ? CUIDUAL : `❌`} <br>
-    <b>Data de Entrega:</b> ${deliveryDate ? deliveryDate : `❌`} <br>
-    <b>Data de Assinatura:</b> ${signatureDate ? signatureDate : `❌`} <br>
+    <b>Data de Entrega:</b> ${deliveryDateFormated ? deliveryDateFormated : `❌`} <br>
+    <b>Data de Assinatura:</b> ${signatureDateFormated ? signatureDateFormated : `❌`} <br>
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
     <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
