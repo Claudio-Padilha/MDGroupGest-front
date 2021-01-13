@@ -1,8 +1,8 @@
 import React, { useState, useMemo } from "react";
 import { useHistory } from "react-router-dom";
 import { Col } from 'react-bootstrap';
-
-
+import InputLabel from '@material-ui/core/InputLabel';
+import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -48,11 +48,22 @@ import {
 import { List } from "semantic-ui-react";
 import { Field } from "formik";
 import employeesRequests from "../../hooks/requests/employeesRequests";
+import { MenuItem } from "@material-ui/core";
 
 
 const ContractDetail = (props) => {
 
- // modal //
+ // Select Variables
+
+ const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
+  optionsSellState.forEach(el => el['value'] = el.id)
+  const optionsGasScale = JSON.parse(localStorage.getItem('gasScales'))
+  optionsGasScale.forEach(el => el['value'] = el.id)
+  const optionsFeedbackCall = JSON.parse(localStorage.getItem('feedbackCalls'))
+  optionsFeedbackCall.forEach(el => el['value'] = el.id)
+  const optionsPower = JSON.parse(localStorage.getItem('powerList'))
+  optionsPower.forEach(el => el['value'] = el.id)
+
 
  const useStyles = makeStyles((theme) => ({
   appBar: {
@@ -474,23 +485,33 @@ const typeContainsGas = (contractType === "Dual" ||
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="sellState"
-                      label="Estado da venda"
-                      placeholder={contract?.sell_state__name}
-                      type="text"
-                    />
+                    <InputLabel htmlFor="select-sell-state">Estado da Venda</InputLabel>
+                    <Select
+                      inputProps={{
+                        name: 'sell-state',
+                        id: 'select-sell-state',
+                      }}
+                    >
+                      {optionsSellState !== null ? optionsSellState.map(sellState => (
+                        <MenuItem value={sellState.value}>
+                          {sellState.name}
+                        </MenuItem>
+                      )) : []}
+                    </Select>
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="gasScale"
-                      label="Escalão Gás"
-                      placeholder={contract?.gas_scale__name}
-                      type="text"
-                    />
+                    <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
+                    <Select
+                      inputProps={{
+                        name: 'gas-scale',
+                        id: 'select-gas-scale',
+                      }}
+                    >
+                      {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
+                        <MenuItem value={gasScale.value}>
+                          {gasScale.name}
+                        </MenuItem>
+                      )) : []}
+                    </Select>
 
                     <TextField
                       autoFocus
@@ -508,23 +529,33 @@ const typeContainsGas = (contractType === "Dual" ||
                     flexDirection: 'column',
                     marginRight: '15%'
                   }}>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="feedbackCall"
-                      label="Feedback Call"
-                      placeholder={contract?.feedback_call}
-                      type="text"
-                    />
+                    <InputLabel htmlFor="select-gas-scale">Feedback Call</InputLabel>
+                    <Select
+                      inputProps={{
+                        name: 'feedback-call',
+                        id: 'select-feedback-call',
+                      }}
+                    >
+                      {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(FeedbackCall => (
+                        <MenuItem value={FeedbackCall.value}>
+                          {FeedbackCall.name}
+                        </MenuItem>
+                      )) : []}
+                    </Select>
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="power"
-                      label="Potência"
-                      placeholder={contract?.power__name}
-                      type="text"
-                    />
+                    <InputLabel htmlFor="select-power">Potência</InputLabel>
+                    <Select
+                      inputProps={{
+                        name: 'power',
+                        id: 'select-power',
+                      }}
+                    >
+                      {optionsPower !== null ? optionsPower.map(Power => (
+                        <MenuItem value={Power.value}>
+                          {Power.name}
+                        </MenuItem>
+                      )) : []}
+                    </Select>
 
                     <TextField
                       autoFocus

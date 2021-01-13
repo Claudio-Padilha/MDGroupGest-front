@@ -223,6 +223,7 @@ const CreateContract = (props) => {
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
+              dataRequests.getResultsToPresent();
 
               if (clientSideError) {
                 return swalWithBootstrapButtons.fire(
