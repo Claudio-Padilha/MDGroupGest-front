@@ -184,7 +184,7 @@ const typeContainsGas = (contractType === "Dual" ||
     history.push({
       pathname: "/ContractList",
       state: {
-        cameFromDetail: true,
+        cameFromDetai: true,
         contractsToReturn: contractsToReturn,
       }
     })    

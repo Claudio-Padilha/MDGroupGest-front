@@ -15,6 +15,7 @@ import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
+import { _executeValidationsIfHas } from '../../hooks/validation';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 
 const CreateEmployee = (props) => {
@@ -47,7 +48,7 @@ const CreateEmployee = (props) => {
     return employees
   }
 
-  function _ConfirmEmployeeCreation(data) {
+  async function _ConfirmEmployeeCreation(data) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -63,6 +64,37 @@ const CreateEmployee = (props) => {
     var contact = data?.contact?.toString();
     var email = data?.email;
     var zipCode = data?.zipCode;
+
+    // Vai genericamente
+    var nipc = '';
+    var contact = '';
+    var clientName='';
+    var clientNif='';
+    var clientContact='';
+    var CUIDUAL='';
+    var CUIForGas='';
+    var CPEDUAL='';
+    var CPEForElectricity='';
+    var observations='';
+    
+    await _executeValidationsIfHas(
+      name,
+      nif,
+      nipc,
+      address,
+      contact,
+      email,
+      zipCode,
+      clientName,
+      clientNif,
+      clientContact,
+      CUIDUAL,
+      CUIForGas,
+      CPEDUAL,
+      CPEForElectricity,
+      observations
+    )
+    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
     const salesPersonObj = {
       office: officeID,
@@ -166,72 +198,74 @@ const CreateEmployee = (props) => {
           return;
       }
     }
+      if(!formWasValidated) {
+        return (
+          swalWithBootstrapButtons.fire({
+          title: 'Confirme os dados do funcionário:',
+          html: 
+            `<b>Nome:</b> ${name ? name : `❌`} <br>
+             <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
+             <b>Morada:</b> ${address ? address : `❌`} <br>                                    
+             <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
+             <b>Email:</b> ${email ? email : `❌`} <br>
+             <b>Código Postal:</b> ${zipCode ? zipCode : `❌`} <br>
+            `,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'É isso!',
+          cancelButtonText: 'Refazer',
+          reverseButtons: true
+        }).then(async (result) => {
+  
+          // "result.isConfimed significa clicar em "É isto"
+            if (result.isConfirmed) {
+              await employeesRequests.createEmployee(userTypeToInsert, _userObjBasedOnType())
+              .then(res => {
+                const clientSideError = res?.message?.match(/400/g);
+                const serverSideError = res?.message?.match(/500/g);
+  
+                if(clientSideError) {
+                  return swalWithBootstrapButtons.fire(
+                    'Erro',
+                    'Funcionário não inserido, tente de novo. (Verifique os campos)',
+                    'error'
+                  )
+                } else if (serverSideError) {
+                  return swalWithBootstrapButtons.fire(
+                    'Erro',
+                    'Erro no servidor. Tente novamente mais tarde.',
+                    'error'
+                  )
+                } else {
+                  swalWithBootstrapButtons.fire(
+                    'Boa!',
+                    'Funcionário inserido com sucesso.',
+                    'success'
+                  ).then(async (result) => {
+                    if(result) {
+                      await employeesRequests.getAllEmployees(officeID);
+                      return history.push({
+                        pathname:"/ChooseEmployeeTypeToSee",
+                        state: {
+                          cameFromCreation: true
+                        }
+                      });
+                    }
+                  });
+                }
+              })
+          // "!result.isConfimed significa clicar em "'E isso!"
+            } else if (!result.isConfirmed) {
+              swalWithBootstrapButtons.fire(
+                'Cancelado',
+                'Corrija o que estava errado...',
+                'info'
+              )
+            }
+          })
+        )
+      } else { localStorage.removeItem('formWasValidated') }
 
-      return (
-        swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados do funcionário:',
-        html: 
-          `<b>Nome:</b> ${name ? name : `❌`} <br>
-           <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
-           <b>Morada:</b> ${address ? address : `❌`} <br>                                    
-           <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
-           <b>Email:</b> ${email ? email : `❌`} <br>
-           <b>Código Postal:</b> ${zipCode ? zipCode : `❌`} <br>
-          `,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'É isso!',
-        cancelButtonText: 'Refazer',
-        reverseButtons: true
-      }).then(async (result) => {
-
-        // "result.isConfimed significa clicar em "É isto"
-          if (result.isConfirmed) {
-            await employeesRequests.createEmployee(userTypeToInsert, _userObjBasedOnType())
-            .then(res => {
-              const clientSideError = res?.message?.match(/400/g);
-              const serverSideError = res?.message?.match(/500/g);
-
-              if(clientSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Funcionário não inserido, tente de novo. (Verifique os campos)',
-                  'error'
-                )
-              } else if (serverSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Erro no servidor. Tente novamente mais tarde.',
-                  'error'
-                )
-              } else {
-                swalWithBootstrapButtons.fire(
-                  'Boa!',
-                  'Funcionário inserido com sucesso.',
-                  'success'
-                ).then(async (result) => {
-                  if(result) {
-                    await employeesRequests.getAllEmployees(officeID);
-                    return history.push({
-                      pathname:"/ChooseEmployeeTypeToSee",
-                      state: {
-                        cameFromCreation: true
-                      }
-                    });
-                  }
-                });
-              }
-            })
-        // "!result.isConfimed significa clicar em "'E isso!"
-          } else if (!result.isConfirmed) {
-            swalWithBootstrapButtons.fire(
-              'Cancelado',
-              'Corrija o que estava errado...',
-              'info'
-            )
-          }
-        })
-      )
   }
 
   const handleSubmitForm = (formFields) => {
@@ -248,7 +282,7 @@ const CreateEmployee = (props) => {
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
     { type: "email", subType: "twoColumns", side: "right", key: "email", question: "E-mail" },
     { type: "number", subType: "twoColumns", side: "left", key: "nif", question: "NIF" },
-    { type: "number", subType: "twoColumns", side: "right", key: "zipCode", question: "Código-Postal" },
+    { type: "text", subType: "twoColumns", side: "right", key: "zipCode", question: "Código-Postal" },
     { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone" },
     { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada" },
     shouldRenderEmployeeAssociation && { 

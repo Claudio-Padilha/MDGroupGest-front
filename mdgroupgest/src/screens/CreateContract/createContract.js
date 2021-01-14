@@ -16,6 +16,7 @@ import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
+import { _executeValidationsIfHas } from '../../hooks/validation';
 import contractsRequests from '../../hooks/requests/contractsRequests';
 import dataRequests from '../../hooks/requests/dataRequests'
 
@@ -70,7 +71,7 @@ const CreateContract = (props) => {
       window.location.assign("/BackOffice") 
   }
 
-  function _ConfirmContractCreation(data) {
+  async function _ConfirmContractCreation(data) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -131,6 +132,14 @@ const CreateContract = (props) => {
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
 
+    var name = '';
+    var nif = '';
+    var nipc = '';
+    var address = '';
+    var contact = '';
+    var email = '';
+    var zipCode = '';
+
     const deliveryDateFormated = _formatDate(deliveryDate);
     const signatureDateFormated = _formatDate(signatureDate);
 
@@ -139,6 +148,25 @@ const CreateContract = (props) => {
 
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
+
+    await _executeValidationsIfHas(
+      name,
+      nif,
+      nipc,
+      address,
+      contact,
+      email,
+      zipCode,
+      clientName,
+      clientNif,
+      clientContact,
+      CUIDUAL,
+      CUIForGas,
+      CPEDUAL,
+      CPEForElectricity,
+      observations
+    )
+    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
