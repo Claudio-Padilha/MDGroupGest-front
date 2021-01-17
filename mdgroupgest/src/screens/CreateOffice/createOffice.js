@@ -3,6 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 import officesRequests from '../../hooks/requests/officesRequests';
+import { _executeValidationsIfHas } from '../../hooks/validation';
 
 import {
   MainDiv,
@@ -24,46 +25,7 @@ const CreateOffice = () => {
     window.location.assign("/BackOffice");    
   }
 
-  function _nipcValidation(nipc) {
-    if(nipc?.length <= 9) {
-      return null;
-    }
-    return 'O limite de caracteres no NIPC é de 9.';
-  }
-
-  function _addressValidation(address) {
-    if(address?.length <= 120) {
-      return null;
-    }
-    return 'O limite de caracteres na morada é de 120.'
-  }
-
-  function _nameValidation(name) {
-    if(name?.length <= 80) {
-      return null;
-    }
-    return 'O limite de caracteres no nome é de 80.'
-  }
-
-  function _emailValidation(email) {
-    if (
-      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
-    ) {
-      return null;
-    }
-    return 'Por favor, insira um e-mail válido.';
-  };
-
-  function _zipCodeValidation(zipCode) {
-    if (
-      /(^\d{4}$)|(^\d{4}-\d{3}$)/.test(zipCode)
-    ) {
-        return null;
-      }
-    return `O formato correto para o código postal é: <br> "1234-123". <br> ${zipCode?.length === 0 ? 'Precisamos de um valor' : `Você digitou ${zipCode}`}.`
-  }
-
-  function _ConfirmOfficeCreation(data) {
+  async function _ConfirmOfficeCreation(data) {
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -77,117 +39,109 @@ const CreateOffice = () => {
     var nipc = data?.officeNIPC?.toString(); 
     var address = data?.officeAddress; 
     var email = data?.officeEmail;
-    var officeZipCode = data?.officeZipCode;
+    var zipCode = data?.officeZipCode;
 
-    function _hasValidations() {
+    // Vai genericamente
+    var nif ='';
+    var contact ='';
+    var clientName='';
+    var clientNif='';
+    var clientContact='';
+    var CUIDUAL='';
+    var CUIForGas='';
+    var CPEDUAL='';
+    var CPEForElectricity='';
+    var observations='';
+
+    await _executeValidationsIfHas(
+      name,
+      nif,
+      nipc,
+      address,
+      contact,
+      email,
+      zipCode,
+      clientName,
+      clientNif,
+      clientContact,
+      CUIDUAL,
+      CUIForGas,
+      CPEDUAL,
+      CPEForElectricity,
+      observations
+    )
+    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
+
+    if (!formWasValidated) {
       return (
-        _nameValidation(name) !== null ||
-        _nipcValidation(nipc) !== null ||
-        _addressValidation(address) !== null ||
-        _emailValidation(email) !== null ||
-        _zipCodeValidation(officeZipCode) !== null
-      )
-    }
-
-    function _executeAllValidations() {
-      return (
-        swalWithBootstrapButtons.fire(
-          {
-            title: 'Atente-se às validações',
-            html: `
-              ${_nameValidation(name) ? _nameValidation(name) : ''} <br>
-              ${_nipcValidation(nipc) ? _nipcValidation(nipc) : ''} <br>                                            
-              ${_addressValidation(address) ? _addressValidation(address) : ''} <br>                             
-              ${_emailValidation(email) ? _emailValidation(email) : ''} <br>
-              ${_zipCodeValidation(officeZipCode) ? _zipCodeValidation(officeZipCode) : ''} <br>
-            `,
-            icon: 'info'
-          }
-        )
-      )
-    }
-
-    if(_hasValidations()) {
-      return _executeAllValidations()
-    }
-
-    return (
-      swalWithBootstrapButtons.fire({
-      title: 'Confirme os dados do escritório:',
-      text: 
-        `Nome: ${name ? name : `❌`},
-          NIPC: ${nipc ? nipc : `❌`}.                                               
-          Morada: ${address ? address : `❌`},                                                               
-          Código Postal: ${officeZipCode ? officeZipCode : `❌`},                                                               
-          Email: ${email ? email : `❌`},
-        `,
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'É isso!',
-      cancelButtonText: 'Refazer',
-      reverseButtons: true
-    }).then((result) => {
-
-      // "result.isConfimed significa clicar em "Refazer"
-        if (result.isConfirmed) {
-          try {
-            officesRequests.createOffice(data).then((res) => {
-              const clientSideError = res?.message?.match(/400/g);
-              const serverSideError = res?.message?.match(/500/g);
-
-              if(clientSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Escritório não inserido, tente de novo. (Verifique os campos)',
-                  'error'
-                )
-              } else if (serverSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Erro no servidor. Tente novamente mais tarde.',
-                  'error'
-                )
-              } else {
-                swalWithBootstrapButtons.fire(
-                  'Boa!',
-                  'Escritório inserido com sucesso.',
-                  'success'
-                ).then((result) => {
-                  if(result) {
-                    return history.push("/BackOffice");
-                  }
-                });
-              }
-
-            })
-            // swalWithBootstrapButtons.fire(
-            //   'Boa!',
-            //   'Escritório inserido com sucesso.',
-            //   'success'
-            // ).then((result) => {
-            //   if(result) {
-            //     return history.push("/BackOffice");
-            //   }
-            // });
-            
-          } catch (error) {
+        swalWithBootstrapButtons.fire({
+        title: 'Confirme os dados do escritório:',
+        text: 
+          `Nome: ${name ? name : `❌`},
+            NIPC: ${nipc ? nipc : `❌`}.                                               
+            Morada: ${address ? address : `❌`},                                                               
+            Código Postal: ${zipCode ? zipCode : `❌`},                                                               
+            Email: ${email ? email : `❌`},
+          `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Refazer',
+        reverseButtons: true
+        }).then((result) => {
+  
+        // "result.isConfimed significa clicar em "Refazer"
+          if (result.isConfirmed) {
+            try {
+              officesRequests.createOffice(data).then((res) => {
+                const clientSideError = res?.message?.match(/400/g);
+                const serverSideError = res?.message?.match(/500/g);
+  
+                if(clientSideError) {
+                  return swalWithBootstrapButtons.fire(
+                    'Erro',
+                    'Escritório não inserido, tente de novo. (Verifique os campos)',
+                    'error'
+                  )
+                } else if (serverSideError) {
+                  return swalWithBootstrapButtons.fire(
+                    'Erro',
+                    'Erro no servidor. Tente novamente mais tarde.',
+                    'error'
+                  )
+                } else {
+                  swalWithBootstrapButtons.fire(
+                    'Boa!',
+                    'Escritório inserido com sucesso.',
+                    'success'
+                  ).then((result) => {
+                    if(result) {
+                      return history.push("/BackOffice");
+                    }
+                  });
+                }
+  
+              })
+              
+            } catch (error) {
+              swalWithBootstrapButtons.fire(
+                'Erro',
+                `${error}`,
+                'error'
+              )
+            }
+  
+        // "!result.isConfimed significa clicar em "'E isso!"
+          } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
-              'Erro',
-              `${error}`,
-              'error'
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
             )
           }
-
-      // "!result.isConfimed significa clicar em "'E isso!"
-        } else if (!result.isConfirmed) {
-          swalWithBootstrapButtons.fire(
-            'Cancelado',
-            'Corrija o que estava errado...',
-            'info'
-          )
-        }
-      })
-    )
+        })
+      )
+    } else { localStorage.removeItem('formWasValidated') }
   }
 
   const handleSubmitForm = formFields => { _ConfirmOfficeCreation(formFields) }
