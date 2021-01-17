@@ -18,7 +18,7 @@ export default {
 
       .then(res => {
         localStorage.removeItem('contracts', JSON.stringify(res.data))
-        localStorage.setItem('contracts', JSON.stringify(res.data))
+        localStorage.setItem('contracts', JSON.stringify(res.data.sort((a, b) => b.id - a.id)))
         resolve(res);
       })
       .catch(error => {

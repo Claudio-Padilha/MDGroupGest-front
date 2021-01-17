@@ -41,10 +41,12 @@ const ContractList = (props) => {
   }
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
+  const cameFromUpdate = props?.location?.state?.cameFromUpdate
   const cameFromDelete = props?.location?.state?.fromDelete;
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const contractsFromDetail = props?.location?.state?.contractsToReturn;
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete;
+  const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -62,7 +64,9 @@ const ContractList = (props) => {
       return contractsFromDelete.sort((a, b) => b.id - a.id)
     } else if (cameFromDetail){
       return contractsFromDetail.sort((a, b) => b.id - a.id)
-    } else {
+    } else if(cameFromUpdate) {
+      return contractsFromUpdate.sort((a, b) => b.id - a.id)
+    }else {
       const contracts = JSON.parse(localStorage.getItem('contracts'))
       const contractsToReturn = []
       for(let i = 0; i < contracts?.length; i++) {

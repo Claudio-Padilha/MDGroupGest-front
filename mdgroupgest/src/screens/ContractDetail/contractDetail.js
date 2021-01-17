@@ -55,7 +55,7 @@ const ContractDetail = (props) => {
 
  // Select Variables
 
- const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
+  const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
   optionsSellState.forEach(el => el['value'] = el.id)
   const optionsGasScale = JSON.parse(localStorage.getItem('gasScales'))
   optionsGasScale.forEach(el => el['value'] = el.id)
@@ -113,6 +113,8 @@ const handleClose = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = currentUser?.user?.office;
 
+  
+
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
       case "dual":
@@ -146,24 +148,59 @@ const handleClose = () => {
   }, [contract])
 
   function updateContract (event) {
+    console.log("ENTREI")
     event.preventDefault()
     let contractData = {
       id: contract.id,
     }
 
-    if (document.getElementById("name").value !== "") {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
+
+    if (document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
-    }else if (document.getElementById("nif").value !== "") {
+    }
+    if (document.getElementById("nif").value !== "") {
       contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
-    }else if (document.getElementById("contact").value !== "") {
+    }
+    if (document.getElementById("contact").value !== "") {
       contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
-    }else if (document.getElementById("delivery_date").value !== "") {
+    }
+    if (document.getElementById("delivery_date").value !== "") {
       contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
-    }else if (document.getElementById("signature_date").value !== "") {
+    }
+    if (document.getElementById("signature_date").value !== "") {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
     }
+    // if (document.getElementById("select-sell-state").value !== "") {
+    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
+    // }
+    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
+      contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
+    }
+    if (document.getElementById("select-feedback-call").value !== "") {
+      contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
+    }
+    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
+      contractData = {...contractData, ...{power: document.getElementById("select-power").value}}
+    }
 
-    contractsRequests.updateContract(contractData)
+    
+
+    var result = window.confirm("Deseja realmente atualizar o contrato?")
+    if (result){
+      contractsRequests.updateContract(contractData).then(() => {
+        contractsRequests.getContracts().then(
+          alert("Contrato atualizado com sucesso!")
+        )
+        window.location.assign('/BackOffice')
+      })
+    }
   }
 
 
@@ -579,50 +616,35 @@ const typeContainsGas = (contractType === "Dual" ||
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
-                    <InputLabel htmlFor="select-sell-state">Estado da Venda</InputLabel>
+                    
+                    {
+                    typeContainsElectricity &&
+                    <>
+                    <InputLabel htmlFor="select-power">Potência</InputLabel>
                     <Select
                       inputProps={{
-                        name: 'sell-state',
-                        id: 'select-sell-state',
+                        name: 'power',
+                        id: 'select-power',
                       }}
                     >
-                      {optionsSellState !== null ? optionsSellState.map(sellState => (
-                        <MenuItem value={sellState.value}>
-                          {sellState.name}
+                      {optionsPower !== null ? optionsPower.map(Power => (
+                        <MenuItem value={Power.value}>
+                          {Power.name}
                         </MenuItem>
                       )) : []}
-                    </Select>
-
-                    <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
-                    <Select
-                      inputProps={{
-                        name: 'gas-scale',
-                        id: 'select-gas-scale',
-                      }}
-                    >
-                      {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
-                        <MenuItem value={gasScale.value}>
-                          {gasScale.name}
-                        </MenuItem>
-                      )) : []}
-                    </Select>
-
+                    </Select> </>
+                    }
+                    {
+                    typeContainsElectricity &&
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="CUI"
-                      label="CUI"
-                      placeholder={contract?.cui}
+                      id="CPE"
+                      label="CPE"
+                      placeholder={contract?.cpe}
                       type="text"
                     />
-                  </Col>
-                  <Col style={{
-                    width: '30%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginRight: '15%'
-                  }}>
+                    }
                     <InputLabel htmlFor="select-gas-scale">Feedback Call</InputLabel>
                     <Select
                       inputProps={{
@@ -637,28 +659,43 @@ const typeContainsGas = (contractType === "Dual" ||
                       )) : []}
                     </Select>
 
-                    <InputLabel htmlFor="select-power">Potência</InputLabel>
+                  </Col>
+                  <Col style={{
+                    width: '30%',
+                    justifyContent: 'space-around',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    marginRight: '15%'
+                  }}>
+                    {
+                    typeContainsGas &&
+                    <>
+                    <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
                     <Select
                       inputProps={{
-                        name: 'power',
-                        id: 'select-power',
+                        name: 'gas-scale',
+                        id: 'select-gas-scale',
                       }}
                     >
-                      {optionsPower !== null ? optionsPower.map(Power => (
-                        <MenuItem value={Power.value}>
-                          {Power.name}
+                      {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
+                        <MenuItem value={gasScale.value}>
+                          {gasScale.name}
                         </MenuItem>
                       )) : []}
-                    </Select>
-
+                    </Select> </>
+                    }
+                    {
+                    typeContainsGas &&
                     <TextField
                       autoFocus
                       margin="dense"
-                      id="CPE"
-                      label="CPE"
-                      placeholder={contract?.cpe}
+                      id="CUI"
+                      label="CUI"
+                      placeholder={contract?.cui}
                       type="text"
                     />
+                    }
+
                   </Col>
                 </Row>
               </Col>
