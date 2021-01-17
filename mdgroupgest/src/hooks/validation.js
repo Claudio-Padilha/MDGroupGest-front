@@ -48,7 +48,7 @@ function _CUIValidation(CUIForGas) {
   if(CUIForGas?.length <= 9) {
     return null;
   }
-  return 'MEXER NO CUI'
+  return 'MEXER NO CUI NÃO ESQUECER'
 }
 
 // REGEX PARA CUI
@@ -56,7 +56,7 @@ function _CUIDUALValidation(CUIDUAL) {
   if(CUIDUAL?.length <= 9) {
     return null;
   }
-  return 'MEXER NO CUI'
+  return 'MEXER NO CUI NÃO ESQUECER'
 }
 
 // REGEX PARA CPE
@@ -64,7 +64,7 @@ function _CPEValidation(CPEForElectricity) {
   if(CPEForElectricity?.length <= 9) {
     return null;
   }
-  return 'MEXER NO CPE'
+  return 'MEXER NO CPE NÃO ESQUECER'
 }
 
 // REGEX PARA CPE
@@ -72,7 +72,7 @@ function _CPEDUALValidation(CPEDUAL) {
   if(CPEDUAL?.length <= 9) {
     return null;
   }
-  return 'MEXER NO CPE'
+  return 'MEXER NO CPE NÃO ESQUECER'
 }
 
 function _observationsValidation(observations) {
