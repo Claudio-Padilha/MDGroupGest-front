@@ -4,13 +4,16 @@ import Swal from 'sweetalert2';
 import _currentTokenOnRAM from './currentToken';
 import dataRequests from './dataRequests';
 import { FormField } from 'semantic-ui-react';
+import useVPSURL from './endpoint';
+
+const mdgroupURL = useVPSURL();
 
 export default {
   getAllEmployees: (officeID) => {
     return new Promise((resolve, reject) => {
       var getAllEmployeesRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/employees/${officeID}`,
+        url: `${mdgroupURL}employees/${officeID}`,
         headers: { 
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -40,7 +43,7 @@ export default {
 
       var getEmployeesRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/${employeeType}/`,
+        url: `${mdgroupURL}${employeeType}/`,
         headers: { 
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -72,7 +75,7 @@ export default {
 
       var employeeRequest = {
           method: 'POST',
-          url: `http://127.0.0.1:8000/${user_type}/`,
+          url: `${mdgroupURL}${user_type}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -106,7 +109,7 @@ export default {
 
       var employeeUpdateRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/${user_type}/`,
+          url: `${mdgroupURL}${user_type}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -141,7 +144,7 @@ export default {
       
       var employeeDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1:8000/${_userTypeCamelCase()}/`,
+        url: `${mdgroupURL}${_userTypeCamelCase()}/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -176,7 +179,7 @@ export default {
 
       var employeeUpdateRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/${user_type_for_route}/`,
+          url: `${mdgroupURL}${user_type_for_route}/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },

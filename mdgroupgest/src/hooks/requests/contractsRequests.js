@@ -1,6 +1,9 @@
 import _currentTokenOnRAM from './currentToken';
 import axios from 'axios';
 import dataRequests from './dataRequests';
+import useVPSURL from './endpoint';
+
+const mdgroupURL = useVPSURL();
 
 export default {
   getContracts: () => { 
@@ -8,7 +11,7 @@ export default {
 
       var contractRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/contracts/`,
+          url: `${mdgroupURL}contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -33,7 +36,7 @@ export default {
 
       var contractRequest = {
           method: 'POST',
-          url: `http://127.0.0.1:8000/contracts/`,
+          url: `${mdgroupURL}contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -63,7 +66,7 @@ export default {
 
       var contractRequest = {
           method: 'PATCH',
-          url: `http://127.0.0.1:8000/contracts/`,
+          url: `${mdgroupURL}contracts/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -94,7 +97,7 @@ export default {
       
       var contractDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1:8000/contracts/`,
+        url: `${mdgroupURL}contracts/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -109,7 +112,7 @@ export default {
 
           var contractRequest = {
               method: 'GET',
-              url: `http://127.0.0.1:8000/contracts/`,
+              url: `${mdgroupURL}contracts/`,
               headers: {
                   'Authorization': 'Token ' + _currentTokenOnRAM(),
               },

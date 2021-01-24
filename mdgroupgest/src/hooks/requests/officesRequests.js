@@ -1,5 +1,8 @@
 import axios from 'axios'
 import _currentTokenOnRAM from './currentToken';
+import useVPSURL from './endpoint';
+
+const mdgroupURL = useVPSURL();
 
 export default {
   getOffices: () => {
@@ -8,7 +11,7 @@ export default {
 
       var getOfficesRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/office/`,
+        url: `${mdgroupURL}office/`,
         headers: {
             'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -35,7 +38,7 @@ export default {
 
       var getOfficeRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/office/${officeID}`,
+        url: `${mdgroupURL}office/${officeID}`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -68,7 +71,7 @@ export default {
 
       var officeRequest = {
           method: 'POST',
-          url: `http://127.0.0.1:8000/office/`,
+          url: `${mdgroupURL}office/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -131,7 +134,7 @@ export default {
       
       var officeDeleteRequest = {
         method: 'DELETE',
-        url: `http://127.0.0.1/office/`, // id provavelmente
+        url: `${mdgroupURL}office/`, // id provavelmente
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },

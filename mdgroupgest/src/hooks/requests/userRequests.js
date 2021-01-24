@@ -4,6 +4,9 @@ import Swal from 'sweetalert2';
 import _currentTokenOnRAM from './currentToken';
 import dataRequests from '../../hooks/requests/dataRequests';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import useVPSURL from './endpoint';
+
+const mdgroupURL = useVPSURL();
 
 function _firstTimeOfAnUser(user_id) {
   return (
@@ -93,7 +96,7 @@ export default {
       
     return new Promise((resolve, reject) => {
 
-        axios.post("http://127.0.0.1:8000/auth/login/", data)
+        axios.post(`${mdgroupURL}auth/login/`, data)
 
             .then(async (res) => {
               if(res?.data?.user?.last_login === null) {
@@ -125,7 +128,7 @@ export default {
 
                     var contractRequest = {
                         method: 'GET',
-                        url: `http://127.0.0.1:8000/monthContracts/${officeID}`,
+                        url: `${mdgroupURL}monthContracts/${officeID}`,
                         headers: {
                             'Authorization': 'Token ' + _currentTokenOnRAM(),
                         },
@@ -157,7 +160,7 @@ export default {
 
         var authOptions = {
             method: 'POST',
-            url: 'http://127.0.0.1:8000/auth/token/logout',
+            url: `${mdgroupURL}auth/token/logout`,
             headers: {
                 'Authorization': 'Token ' + _currentTokenOnRAM(),
                 'Content-Type': 'application/x-www-form-urlencoded'
