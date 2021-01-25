@@ -3,7 +3,7 @@ import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
 import {
   MuiPickersUtilsProvider,
-  KeyboardDatePicker,
+  KeyboardDatePicker
 } from '@material-ui/pickers';
 
 import { ErrorText, Body } from '../Text/text';
@@ -21,8 +21,11 @@ const TextWithCalendar = ({label, error, onChange, type}) => {
   return (
     <InputContainer error={error}>
     {label && <Body>{label}</Body>}
+
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <KeyboardDatePicker
+          DateTimeFormat={ Intl.DateTimeFormat }
+          locale='pt-BR'
           margin="normal"
           id="date-picker-dialog"
           format="MM/dd/yyyy"
@@ -34,8 +37,10 @@ const TextWithCalendar = ({label, error, onChange, type}) => {
           }}
         />
       </MuiPickersUtilsProvider>
+
     {error && <ErrorText>{error}</ErrorText>}
     </InputContainer>
+
   );
 }
 

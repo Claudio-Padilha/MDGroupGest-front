@@ -4,6 +4,7 @@ import { Formik } from 'formik';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
+import ptLocale from "date-fns/locale/pt";
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
@@ -228,7 +229,7 @@ const renderFields = (field, index, formik) => {
       return (
         <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
           {field.question && <Body>{field.question}</Body>}
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils} locale={ptLocale}>
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"

@@ -318,7 +318,7 @@ const BackOfficeContent = (props) => {
           <MDCard.Body className={"managerMonthCardBody"}>
             <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : 'Meu mês'}</SubHeading>
             { userType === "manager" && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>}
-            <Heading style={userType === "secretary" ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : `${mySalary}€`}</Heading>
+            <Heading style={userType === "secretary" ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : `${mySalary ? mySalary : 0}€`}</Heading>
           </MDCard.Body>
         </MDCard>
 

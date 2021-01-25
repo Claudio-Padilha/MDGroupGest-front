@@ -31,7 +31,8 @@ function _firstTimeOfAnUser(user_id) {
               })
               return true
             })
-            .catch(() => {
+            .catch((error) => {
+              console.log(error, 'ERRO')
               Swal.showValidationMessage(
                 `A senha deve ter tamanho mínimo de 6 caracteres, um caracter grande e um caracter especial!`
               )
