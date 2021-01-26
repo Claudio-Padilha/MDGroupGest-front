@@ -5,7 +5,7 @@
   "author": "Claudio Padilha e Lucas Padilha",
   "main": "public/electron.js",
   "build": {
-    "appId": "mdgroupgest.manager",
+    "appId": "mdgroupgest.manager"
   },
   "homepage": "./",
   "dependencies": {
@@ -22,6 +22,7 @@
     "cross-env": "^7.0.2",
     "date-fns": "^2.0.0-beta.5",
     "electron-is-dev": "^1.2.0",
+    "electron-packager": "^15.2.0",
     "firebase": "^8.2.1",
     "formik": "^2.2.6",
     "jspdf": "^2.2.0",
@@ -47,7 +48,7 @@
     "react-test": "react-scripts test",
     "react-eject": "react-scripts eject",
     "electron-build": "electron-builder",
-    "build": "npm run react-build && npm run electron-build",
+    "build": "electron-packager . MDGroupGest && cp Icon.icns MDGroupGest-darwin-x64/MDGroupGest.app/Contents/Resources/electron.icns",
     "start": "concurrently \"cross-env BROWSER=none npm run react-start\" \"wait-on http://localhost:3000 && electron .\""
   },
   "eslintConfig": {
