@@ -119,8 +119,8 @@ const CreateContract = (props) => {
     var electronicBill = data?.electronicBill;
     var CUIForGas = data?.CUIForGas;
     var CUIDUAL = data?.CUIDUAL;
-    var CPEForElectricity = data?.CPEForElectricity;
-    var CPEDUAL = data?.CPEDUAL;
+    var CPEForElectricity = data?.CPEForElectricity || null;
+    var CPEDUAL = data?.CPEDUAL || null;
     var deliveryDate = data?.deliveryDate;
     var signatureDate = data?.signatureDate;
     var observations = data?.observations;
@@ -260,6 +260,7 @@ const CreateContract = (props) => {
       }
     }
 
+    if(!formWasValidated){
       return (
         swalWithBootstrapButtons.fire({
         title: 'Confirme os dados inseridos: ',
@@ -269,7 +270,7 @@ const CreateContract = (props) => {
         confirmButtonText: 'É isso!',
         cancelButtonText: 'Refazer',
         reverseButtons: true
-      }).then(async (result) => {
+        }).then(async (result) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
@@ -330,6 +331,7 @@ const CreateContract = (props) => {
           }
         })
       )
+    }
   }
 
   const ELECTRICITYFIELDS = [

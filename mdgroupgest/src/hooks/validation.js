@@ -1,117 +1,143 @@
 import Swal from 'sweetalert2';
 
 function _nifValidation(nif) {
-  if(nif?.length <= 9) {
-    return null;
+  if(nif) {
+    if(nif?.length <= 9) {
+      return null;
+    }
+    return 'O limite de caracteres no NIF é de 9.';
   }
-  return 'O limite de caracteres no NIF é de 9.';
 }
 
 function _clientNifValidation(clientNif) {
-  if(clientNif?.length <= 9) {
-    return null;
+  if(clientNif) {
+    if(clientNif?.length <= 9) {
+      return null;
+    }
+    return 'O limite de caracteres no NIF/NIPC é de 9.';
   }
-  return 'O limite de caracteres no NIF/NIPC é de 9.';
 }
 
 function _nipcValidation(nipc) {
-  if(nipc?.length <= 9) {
-    return null;
+  if(nipc) {
+    if(nipc?.length <= 9) {
+      return null;
+    }
+    return 'O limite de caracteres no NIPC é de 9.';
   }
-  return 'O limite de caracteres no NIPC é de 9.';
 }
 
 
 function _addressValidation(address) {
-  if(address?.length <= 120) {
-    return null;
+  if(address) {
+    if(address?.length <= 120) {
+      return null;
+    }
+    return 'O limite de caracteres na morada é de 120.'
   }
-  return 'O limite de caracteres na morada é de 120.'
 }
 
 function _contactValidation(contact) {
-  if(contact?.length <= 9) {
-    return null;
+  if(contact) {
+    if(contact?.length <= 9) {
+      return null;
+    }
+    return 'O limite de caracteres no contacto é de 9.'
   }
-  return 'O limite de caracteres no contacto é de 9.'
 }
 
 function _clientContactValidation(clientContact) {
-  if(clientContact?.length <= 9) {
-    return null;
+  if(clientContact) {
+    if(clientContact?.length <= 9) {
+      return null;
+    }
+    return 'O limite de caracteres no contacto é de 9.'
   }
-  return 'O limite de caracteres no contacto é de 9.'
 }
 
-// REGEX PARA CUI
 function _CUIValidation(CUIForGas) {
-  if(CUIForGas?.length <= 9) {
-    return null;
+  if(CUIForGas) { // PT1600009108360231LP   
+    if(/^([A-Z][^0-9]{1})(?=.*[0-9])[A-Z0-9]*$/.test(CUIForGas) && CUIForGas?.length === 20) {
+      return null;
+    }
+    return 'O formato do CUI é esse: "PT1600009108360231LP"'
   }
-  return 'MEXER NO CUI'
 }
 
-// REGEX PARA CUI
 function _CUIDUALValidation(CUIDUAL) {
-  if(CUIDUAL?.length <= 9) {
-    return null;
+  if(CUIDUAL){ // PT1600009108360231LP
+    if(/^([A-Z][^0-9]{1})(?=.*[0-9])[A-Z0-9]*$/.test(CUIDUAL) && CUIDUAL?.length === 20) {
+      return null;
+    }
+    return 'O formato do CUI é esse: "PT1600009108360231LP"'
   }
-  return 'MEXER NO CUI'
 }
 
-// REGEX PARA CPE
 function _CPEValidation(CPEForElectricity) {
-  if(CPEForElectricity?.length <= 9) {
-    return null;
+  if(CPEForElectricity) { // PT0002001237158098YK
+    if(/^([A-Z][^0-9]{1})(?=.*[0-9])[A-Z0-9]*$/.test(CPEForElectricity) && CPEForElectricity?.length === 20) {
+      return null;
+    }
+    return 'O formato do CPE é esse: "PT0002001237158098YK"'
   }
-  return 'MEXER NO CPE'
 }
 
-// REGEX PARA CPE
 function _CPEDUALValidation(CPEDUAL) {
-  if(CPEDUAL?.length <= 9) {
-    return null;
+  if(CPEDUAL) { // PT0002001237158098YK
+    if(/^([A-Z][^0-9]{1})(?=.*[0-9])[A-Z0-9]*$/.test(CPEDUAL) && CPEDUAL?.length === 20) {
+      return null;
+    }
+    return 'O formato do CPE é esse: "PT0002001237158098YK"'
   }
-  return 'MEXER NO CPE'
 }
 
 function _observationsValidation(observations) {
-  if(observations?.length <= 500) {
-    return null;
+  if(observations) {
+    if(observations?.length <= 500) {
+      return null;
+    }
+    return 'O limite de caracteres no nome é de 500.'
   }
-  return 'O limite de caracteres no nome é de 500.'
 }
 
 function _nameValidation(name) {
-  if(name?.length <= 80) {
-    return null;
+  if(name) {
+    if(name?.length <= 80) {
+      return null;
+    }
+    return 'O limite de caracteres no nome é de 80.'
   }
-  return 'O limite de caracteres no nome é de 80.'
 }
 
 function _clientNameValidation(clientName) {
-  if(clientName?.length <= 80) {
-    return null;
+  if(clientName) {
+    if(clientName?.length <= 80) {
+      return null;
+    }
+    return 'O limite de caracteres no nome é de 80.'
   }
-  return 'O limite de caracteres no nome é de 80.'
 }
 
 function _emailValidation(email) {
-  if (
-    /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
-  ) {
-    return null;
+  if(email) {
+    if (
+      /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/.test(email)
+    ) {
+      return null;
+    }
+    return 'Por favor, insira um e-mail válido.';
   }
-  return 'Por favor, insira um e-mail válido.';
 };
 
 function _zipCodeValidation(zipCode) {
-  if (
-    /(^\d{4}$)|(^\d{4}-\d{3}$)/.test(zipCode)
-  ) {
-      return null;
-    }
-  return `O formato correto para o código postal é: <br> "1234-123". <br> ${zipCode?.length === 0 ? 'Precisamos de um valor' : `Você digitou ${zipCode}`}.`
+  if(zipCode) {
+    if (
+      /(^\d{4}$)|(^\d{4}-\d{3}$)/.test(zipCode)
+    ) {
+        return null;
+      }
+    return `O formato correto para o código postal é: <br> "1234-123". <br> ${zipCode?.length === 0 ? 'Precisamos de um valor' : `Você digitou ${zipCode}`}.`
+  }
 }
 
 function _hasValidations(
@@ -175,32 +201,71 @@ function _executeAllValidations(
     buttonsStyling: true
   })
 
-  return (
-    localStorage.setItem('formWasValidated', true),
-    swalWithBootstrapButtons.fire(
-      {
-        title: 'Atente-se às validações',
-        html: `
-          ${_nameValidation(name) ? _nameValidation(name) : ''} <br>
-          ${_nifValidation(nif) ? _nifValidation(nif) : ''} <br>
-          ${_nipcValidation(nipc) ? _nipcValidation(nipc) : ''} <br>                                            
-          ${_addressValidation(address) ? _addressValidation(address) : ''} <br>                             
-          ${_contactValidation(contact) ? _contactValidation(contact) : ''} <br>                             
-          ${_emailValidation(email) ? _emailValidation(email) : ''} <br>
-          ${_zipCodeValidation(zipCode) ? _zipCodeValidation(zipCode) : ''} <br>
-          ${_clientNameValidation(clientName) ? _clientNameValidation(clientName) : ''} <br>
-          ${_clientNifValidation(clientNif) ? _clientNifValidation(clientNif) : ''} <br>
-          ${_clientContactValidation(clientContact) ? _clientContactValidation(clientContact) : ''} <br>
-          ${_CUIDUALValidation(CUIDUAL) ? _CUIDUALValidation(CUIDUAL) : ''} <br>
-          ${_CUIValidation(CUIForGas) ? _CUIValidation(CUIForGas) : ''} <br>
-          ${_CPEDUALValidation(CPEDUAL) ? _CPEDUALValidation(CPEDUAL) : ''} <br>
-          ${_CPEValidation(CPEForElectricity) ? _CPEValidation(CPEForElectricity) : ''} <br>
-          ${_observationsValidation(observations) ? _observationsValidation(observations) : ''} <br>
-        `,
-        icon: 'info'
-      }
+  const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
+
+  if(name ||
+    nif ||
+    nipc ||
+    address ||
+    contact ||
+    email ||
+    zipCode ||
+    clientName ||
+    clientNif ||
+    clientContact ||
+    CUIDUAL ||
+    CUIForGas ||
+    CPEDUAL ||
+    CPEForElectricity ||
+    observations){
+    return (
+      _hasValidations(
+        name,
+        nif,
+        nipc,
+        address,
+        contact,
+        email,
+        zipCode,
+        clientName,
+        clientNif,
+        clientContact,
+        CUIDUAL,
+        CUIForGas,
+        CPEDUAL,
+        CPEForElectricity,
+        observations
+      ) &&
+      swalWithBootstrapButtons.fire(
+        {
+          title: 'Atente-se às validações',
+          html: `
+            ${_nameValidation(name) ? `${_nameValidation(name)} <br>` : ''}
+            ${_nifValidation(nif) ? `${_nifValidation(nif)} <br>` : ''}
+            ${_nipcValidation(nipc) ? `${_nipcValidation(nipc)} <br>` : ''}                                            
+            ${_addressValidation(address) ? `${_addressValidation(address)} <br>` : ''}                             
+            ${_contactValidation(contact) ? `${_contactValidation(contact)} <br>` : ''}                             
+            ${_emailValidation(email) ? `${_emailValidation(email)} <br>` : ''}
+            ${_zipCodeValidation(zipCode) ? `${_zipCodeValidation(zipCode)} <br>` : ''}
+            ${_clientNameValidation(clientName) ? `${_clientNameValidation(clientName)} <br>` : ''}
+            ${_clientNifValidation(clientNif) ? `${_clientNifValidation(clientNif)} <br>` : ''}
+            ${_clientContactValidation(clientContact) ? `${_clientContactValidation(clientContact)} <br>` : ''}
+            ${_CUIDUALValidation(CUIDUAL) ? `${_CUIDUALValidation(CUIDUAL)} <br>` : ''}
+            ${_CUIValidation(CUIForGas) ? `${_CUIValidation(CUIForGas)} <br>` : ''}
+            ${_CPEDUALValidation(CPEDUAL) ? `${_CPEDUALValidation(CPEDUAL)} <br>` : ''}
+            ${_CPEValidation(CPEForElectricity) ? `${_CPEValidation(CPEForElectricity)} <br>` : ''}
+            ${_observationsValidation(observations) ? `${_observationsValidation(observations)} <br>` : ''}
+          `,
+          icon: 'info'
+        }
+      ).then((res) => {
+        if(res?.isConfirmed) {
+          localStorage.removeItem('formWasValidated')
+          localStorage.setItem('formWasValidated', true)
+        }
+      })
     )
-  )
+  }
 }
 
 export function _executeValidationsIfHas(
