@@ -18,27 +18,26 @@ import EditEmployee from './screens/EditEmployee/editEmployee';
 import ContractEdit from './screens/ContractEdit/contractEdit';
 
 import Router from './router';
-import history from './utils/history';
 
 function App() {
   const paths = {
     login: "/",
-    createOffice: "#/CreateOffice",
-    createContract: "#/CreateContract",
-    createEmployee: "#/CreateEmployee",
-    backOffice: "#/BackOffice",
-    employeeType: "#/EmployeeType",
-    contractList: "#/ContractList",
-    myResults: "#/MyResults",
-    myTeam: "#/MyTeam",
-    employeeList: "#/EmployeeList",
-    contractDetail: "#/ContractDetail",
-    chooseEmployeeTypeToSee: "#/ChooseEmployeeTypeToSee",
-    chooseTypeOfContract: "#/ChooseTypeOfContract",
-    myProfile: "#/MyProfile",
-    officeResultDetail: "#/OfficeMonthResultDetail",
-    editEmployee: "#/EmployeeEdit",
-    contractEdit: "#ContractEdit",
+    createOffice: "/CreateOffice",
+    createContract: "/CreateContract",
+    createEmployee: "/CreateEmployee",
+    backOffice: "/BackOffice",
+    employeeType: "/EmployeeType",
+    contractList: "/ContractList",
+    myResults: "/MyResults",
+    myTeam: "/MyTeam",
+    employeeList: "/EmployeeList",
+    contractDetail: "/ContractDetail",
+    chooseEmployeeTypeToSee: "/ChooseEmployeeTypeToSee",
+    chooseTypeOfContract: "/ChooseTypeOfContract",
+    myProfile: "/MyProfile",
+    officeResultDetail: "/OfficeMonthResultDetail",
+    editEmployee: "/EmployeeEdit",
+    contractEdit: "/ContractEdit",
   };
   
   const routes = [
@@ -62,7 +61,7 @@ function App() {
   ];
 
   return (
-    <Router routes={routes} history={history} />
+    <Router routes={routes} />
   );
 }
 

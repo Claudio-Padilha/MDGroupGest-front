@@ -2,6 +2,9 @@ import axios from 'axios'
 import Swal from 'sweetalert2';
 
 import _currentTokenOnRAM from './currentToken';
+import useVPSURL from './defaultVpsURL';
+
+const url = useVPSURL();
 
 export default {
   getFeedbackCall: () => {
@@ -10,7 +13,7 @@ export default {
 
       var feedbackCallRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/feedBackCall/`,
+          url: `${url}feedBackCall/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -33,7 +36,7 @@ export default {
 
       var sellStateRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/sellState/`,
+          url: `${url}sellState/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -56,7 +59,7 @@ export default {
 
       var paymentsRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/payment/`,
+          url: `${url}payment/`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -79,7 +82,7 @@ export default {
 
       var gasScaleRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/gasScale/`,
+          url: `${url}gasScale/`,
           headers: {
             'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -102,7 +105,7 @@ export default {
 
       var gasPowerRequest = {
           method: 'GET',
-          url: `http://127.0.0.1:8000/power/`,
+          url: `${url}power/`,
           headers: {
             'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -124,7 +127,7 @@ export default {
       
       var officeResultsRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/officeGrossBilling/${officeID}`,
+        url: `${url}officeGrossBilling/${officeID}`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -147,7 +150,7 @@ export default {
 
       var mySalaryRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/myCurrentSalary/`,
+        url: `${url}myCurrentSalary/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -171,7 +174,7 @@ export default {
 
       var myTeamRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/employees/${office_id}`,
+        url: `${url}employees/${office_id}`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -195,7 +198,7 @@ export default {
     return new Promise((resolve) => {
       var officesResultsByDayRequest = {
         method: 'GET',
-        url: `http://127.0.0.1:8000/officesResultsByDay/${office_id}`,
+        url: `${url}officesResultsByDay/${office_id}`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
@@ -218,7 +221,7 @@ export default {
     return new Promise((resolve) => {
       var resultsToPresent = {
         method: 'GET',
-        url: 'http://127.0.0.1:8000/myCurrentResults/',
+        url: `${url}myCurrentResults/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },
