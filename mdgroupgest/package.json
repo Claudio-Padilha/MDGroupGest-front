@@ -5,7 +5,23 @@
   "author": "Claudio Padilha e Lucas Padilha",
   "main": "public/electron.js",
   "build": {
-    "appId": "mdgroupgest.manager"
+    "appId": "mdgroupgest.manager",
+    "directories": {
+      "buildResources": "build"
+    },
+    "files": [
+      "build/**/*"
+    ],
+    "win": {
+      "asar": false,
+      "target": "nsis",
+      "icon": "icon.ico"
+    },
+    "nsis": {
+      "installerIcon": "icon.ico",
+      "installerHeaderIcon": "icon.ico",
+      "deleteAppDataOnUninstall": true
+    }
   },
   "homepage": "./",
   "dependencies": {
