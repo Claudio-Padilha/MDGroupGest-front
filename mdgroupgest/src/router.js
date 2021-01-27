@@ -1,14 +1,17 @@
 import React from 'react';
 
-import { BrowserRouter, Switch, Route, HashRouter } from "react-router-dom";
+import { Switch, Route, HashRouter } from "react-router-dom";
 
 const Router = ({ routes }) => {
   return (
     <HashRouter>
         <Switch>
           {routes.map((route) => {
+            console.log(route, 'ROUTE')
             return (
-              <Route exact path={route.path} component={route.component} />
+              <div>
+                <Route exact path={route.path} component={route.component} />
+              </div>     
             );
           })}
         </Switch>

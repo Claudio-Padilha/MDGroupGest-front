@@ -1,9 +1,16 @@
 import axios from 'axios';
 import Swal from 'sweetalert2';
+import React from 'react';
 
 import _currentTokenOnRAM from './currentToken';
 import dataRequests from '../../hooks/requests/dataRequests';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import useVPSURL from './defaultVpsURL';
+import { Redirect } from 'react-router-dom';
+
+const url = useVPSURL();
+
+console.log(url, 'URL')
 
 function _firstTimeOfAnUser(user_id) {
   return (
@@ -17,7 +24,9 @@ function _firstTimeOfAnUser(user_id) {
       allowOutsideClick: false,
       preConfirm: (data) => {
 
-          return axios.post("http://127.0.0.1:8000/auth/definePassword/", {password: data, id: user_id}, {Authorization: 'Token ' + _currentTokenOnRAM()})
+          return axios.post(`${url}auth/definePassword/`, 
+          { password: data, id: user_id }, 
+          { Authorization: 'Token ' + _currentTokenOnRAM()})
             .then(response => {
               Swal.fire({
                 position: 'top-end',
@@ -67,16 +76,18 @@ function _HandleConfirmLoginAlert() {
         await employeesRequests.getAllEmployees(currentUser?.user?.office)
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
-          window.location.assign("/ChooseTypeOfContract");
+          window.location.assign('#/ChooseTypeOfContract');
         // "!result.isConfirmed" significa que foi clicado o botão direito do alerta (Ir para dashboard)  
         } else if (!result.isConfirmed) {
-          window.location.assign("/BackOffice")
+          window.location.assign('#/BackOffice');
         } else {
           console.log('nothing was choosed')
         }
       })
     ) 
 }
+
+console.log(window, 'WINDOW')
 
 function _HandleDeniedLogin() {
   return (
@@ -93,7 +104,7 @@ export default {
       
     return new Promise((resolve, reject) => {
 
-        axios.post("http://127.0.0.1:8000/auth/login/", data)
+        axios.post(`${url}auth/login/`, data)
 
             .then(async (res) => {
               if(res?.data?.user?.last_login === null) {
@@ -125,7 +136,7 @@ export default {
 
                     var contractRequest = {
                         method: 'GET',
-                        url: `http://127.0.0.1:8000/monthContracts/${officeID}`,
+                        url: `${url}monthContracts/${officeID}`,
                         headers: {
                             'Authorization': 'Token ' + _currentTokenOnRAM(),
                         },
@@ -157,7 +168,7 @@ export default {
 
         var authOptions = {
             method: 'POST',
-            url: 'http://127.0.0.1:8000/auth/token/logout',
+            url: `${url}auth/token/logout`,
             headers: {
                 'Authorization': 'Token ' + _currentTokenOnRAM(),
                 'Content-Type': 'application/x-www-form-urlencoded'
