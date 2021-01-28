@@ -67,8 +67,8 @@ const CreateContract = (props) => {
 
   function _goBack() {
     cameFromChoice ? 
-      window.location.assign("/ChooseTypeOfContract") :
-      window.location.assign("/BackOffice") 
+      window.location.replace('#/ChooseTypeOfContract') :
+      window.location.replace('#/BackOffice'); 
   }
 
   async function _ConfirmContractCreation(data) {

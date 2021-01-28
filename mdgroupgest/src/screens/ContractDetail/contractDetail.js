@@ -198,7 +198,7 @@ const handleClose = () => {
         contractsRequests.getContracts().then(
           alert("Contrato atualizado com sucesso!")
         )
-        window.location.assign('/BackOffice')
+        window.location.replace('#/BackOffice');
       })
     }
   }

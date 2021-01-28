@@ -22,7 +22,7 @@ const CreateOffice = () => {
   const history = useHistory();
 
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    window.location.replace('#/BackOffice');    
   }
 
   async function _ConfirmOfficeCreation(data) {

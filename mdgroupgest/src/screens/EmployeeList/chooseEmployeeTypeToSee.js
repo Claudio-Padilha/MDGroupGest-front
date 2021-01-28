@@ -26,7 +26,7 @@ import officesRequests from '../../hooks/requests/officesRequests';
 
 const ChooseEmployeeTypeToSee = (props) => {
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    window.location.replace('#/BackOffice');    
   }
 
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;

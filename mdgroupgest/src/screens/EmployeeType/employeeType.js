@@ -25,7 +25,7 @@ import officesRequests from "../../hooks/requests/officesRequests";
 
 const EmployeeType = (props) => {
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    window.location.replace('#/BackOffice');    
   }
 
   const cameFromBackOffice = props?.location?.state?.isFromBackOffice;
