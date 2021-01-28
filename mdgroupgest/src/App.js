@@ -18,7 +18,6 @@ import EditEmployee from './screens/EditEmployee/editEmployee';
 import ContractEdit from './screens/ContractEdit/contractEdit';
 
 import Router from './router';
-import history from './utils/history';
 
 function App() {
   const paths = {
@@ -38,7 +37,7 @@ function App() {
     myProfile: "/MyProfile",
     officeResultDetail: "/OfficeMonthResultDetail",
     editEmployee: "/EmployeeEdit",
-    contractEdit: "ContractEdit",
+    contractEdit: "/ContractEdit",
   };
   
   const routes = [
@@ -62,7 +61,7 @@ function App() {
   ];
 
   return (
-    <Router routes={routes} history={history} />
+    <Router routes={routes} />
   );
 }
 

@@ -76,18 +76,20 @@ function _HandleConfirmLoginAlert() {
         await employeesRequests.getAllEmployees(currentUser?.user?.office)
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
-          window.location.assign('#/ChooseTypeOfContract');
-        // "!result.isConfirmed" significa que foi clicado o botão direito do alerta (Ir para dashboard)  
+          // window.location.assign('/ChooseTypeOfContract');
+          window.location.replace('#/ChooseTypeOfContract')
+          //window.location.href('/ChooseTypeOfContract');
+          //return <Redirect to={"/ChooseTypeOfContract"} />
         } else if (!result.isConfirmed) {
-          window.location.assign('#/BackOffice');
+          window.location.replace('#/BackOffice');
+          // return <Redirect to={"/BackOffice"} />
+          // window.location.assign('/BackOffice');
         } else {
           console.log('nothing was choosed')
         }
       })
     ) 
 }
-
-console.log(window, 'WINDOW')
 
 function _HandleDeniedLogin() {
   return (
