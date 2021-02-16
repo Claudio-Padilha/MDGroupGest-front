@@ -54,7 +54,7 @@ const MyResults = (props) => {
   const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
 
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    window.location.replace('#/BackOffice');    
   }
 
   console.log(okNumber, 'OK')

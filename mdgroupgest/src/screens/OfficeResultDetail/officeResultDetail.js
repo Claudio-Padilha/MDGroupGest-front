@@ -43,7 +43,7 @@ const OfficeMonthResult = (props) => {
   const currentMonth = useDate();
 
   function _goBack() {
-    window.location.assign("/BackOffice");    
+    window.location.replace('#/BackOffice');    
   }
 
   function _chart(){
