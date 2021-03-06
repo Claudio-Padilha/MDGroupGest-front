@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Swal from 'sweetalert2';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
-import { SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
+import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
@@ -17,8 +17,7 @@ import {
   Row,
   Col,
   Column,
-  LogoContainer,
-  EmptyContainer
+  LogoContainer
 } from "./styles";
 
 import { List } from "semantic-ui-react";
@@ -86,7 +85,7 @@ const ContractList = (props) => {
     _.remove(contractsFromDelete, function(obj) {
       return obj.id === deletedID
     })
-    console.log(contractsFromDelete, 'CONTRATOS DE DELETES')
+
     return contractsFromDelete;
   }
 
@@ -106,7 +105,7 @@ const ContractList = (props) => {
   if(deletedID) {
     _removeContractFromRAM()
   }
-  console.log(localStorage, 'LOCAL STORAGE')
+
   function _ConfirmContractActivation(contract, i) {
     const sellStateID = () => {
       const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));
@@ -183,8 +182,6 @@ const ContractList = (props) => {
 
   const renderContract = (contract, i, searched) => {
     var sellState = contract?.sell_state__name
-
-    console.log(contracts, 'CONTRATOOOES')
 
     function _contractType () {
       switch (contract?.contract_type) {
@@ -425,7 +422,9 @@ const ContractList = (props) => {
         contractsMatched && contractsMatched.map(function(contract, index) {
           return renderContract(contract, index, true)
         })
-      : cameFromDetail ?
+      : contracts?.length === 0 ?
+        <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
+       cameFromDetail ?
         contractsFromDetail &&
           contractsFromDetail.map(function(contract, index) {
             return renderContract(contract, index, false);

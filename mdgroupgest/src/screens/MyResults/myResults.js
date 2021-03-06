@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { Col, Row } from 'react-bootstrap';
 
 import {  Heading, SubHeading, SmallSubHeading, Body } from '../../components/Text/text';
@@ -10,18 +9,10 @@ import {
   MyMonthContainer,
   GreenCircle,
   YellowCircle,
-  RedCircle,
-  SecondRow,
-  HomePageButton
+  RedCircle
 } from "./styles";
 
-import {
-  MDCard,
-  MDCardBody,
-  MDButton 
-} from '../../screens/Home/md';
 import CONSTANTS from "../../constants";
-import dataRequests from "../../hooks/requests/dataRequests";
 
 const MyResults = (props) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -56,10 +47,6 @@ const MyResults = (props) => {
   function _goBack() {
     window.location.replace('#/BackOffice');    
   }
-
-  console.log(okNumber, 'OK')
-  console.log(koNumber, 'KO')
-  console.log(rNumber, 'R')
 
   function _colorToRender() {
     if (okNumber >= 80) {

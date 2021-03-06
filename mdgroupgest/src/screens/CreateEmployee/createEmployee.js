@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
@@ -67,7 +67,6 @@ const CreateEmployee = (props) => {
 
     // Vai genericamente
     var nipc = '';
-    var contact = '';
     var clientName='';
     var clientNif='';
     var clientContact='';
@@ -269,8 +268,6 @@ const CreateEmployee = (props) => {
   }
 
   const handleSubmitForm = (formFields) => {
-    console.log(formFields, 'FORMFIELDS')
-
     const userType = props.location.state.userType;
 
     localStorage.setItem('currentUserType', userType)

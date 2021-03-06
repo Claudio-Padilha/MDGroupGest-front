@@ -19,7 +19,7 @@ const TextInput = ({
     { name: "eye-off", type: "password" },
     { name: "eye-on", type: "text" }
   ];
-  const [displayedIcon, setDisplayedIcon] = useState(defaultIcons[0].name);
+  // const [displayedIcon, setDisplayedIcon] = useState(defaultIcons[0].name);
   const [inputType, setInputType] = useState(type || "text");
 
   // const handleIconChange = () => {

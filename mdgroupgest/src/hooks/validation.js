@@ -201,7 +201,7 @@ function _executeAllValidations(
     buttonsStyling: true
   })
 
-  const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
+  // const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
   if(name ||
     nif ||

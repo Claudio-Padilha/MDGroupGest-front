@@ -104,7 +104,7 @@ export default {
 
     var userType = data?.user_type;
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
-    console.log(user_type, 'USER TYPE DO UPDATE')
+    
     return new Promise((resolve, reject) => {
 
       var employeeUpdateRequest = {

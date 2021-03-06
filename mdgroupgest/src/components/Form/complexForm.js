@@ -50,8 +50,6 @@ const CForm = ({
       });
     }
 
-    console.log(initialValues, 'TESTE DO INITIAL')
-
     return initialValues;
   }
 

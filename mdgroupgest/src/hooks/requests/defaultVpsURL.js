@@ -1,6 +1,5 @@
 const useVPSURL = () => {
   const url = 'http://mdgroupgest.pt/api/';
-
   return url;
 }
 

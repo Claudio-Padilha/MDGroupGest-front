@@ -248,7 +248,7 @@ const BackOfficeContent = (props) => {
       return obj.id === deletedID
     })
   }
-
+  
   dataRequests.getMyTeam(currentUser?.user?.office)
 
   function _getOfficeComissions() {
@@ -317,7 +317,7 @@ const BackOfficeContent = (props) => {
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
             <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : 'Meu mês'}</SubHeading>
-            { userType === "manager" && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-3%'}}>Até agora você já tem:</Body>}
+            { userType === "manager" && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '5%'}}>Até agora você já tem:</Body>}
             <Heading style={userType === "secretary" ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : `${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
@@ -357,42 +357,40 @@ const BackOfficeContent = (props) => {
               }
             }}
           >
-            <SubHeading style={{marginBottom: 0, marginTop: 30}}>Contratos {currentMonth.toUpperCase()}</SubHeading>
+            <SubHeading style={{marginBottom: 0, marginTop: '10%'}}>Contratos</SubHeading>
           </Link>
-          <Heading style={{marginTop: 0, marginBottom: 0, textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)"}}>{_getMonthContracts?.length}</Heading>
-      
-          <MDCol style={{width: '100%', marginLeft: `${contracts?.length === 0 ? '25%' : '40%'}`, marginBottom: '5%'}}>
-            { okContracts?.length !== 0 &&
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
-                <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
+
+            <div style={{display: 'flex', flexDirection: 'row', marginTop: '-10%', marginBottom: '-10%', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
+              <SubHeading style={{marginLeft: '0', marginRight: '50%'}}>{currentMonth.toUpperCase()}</SubHeading>
+              <Heading style={{ textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)", marginLeft: '0', marginRight: '0'}}>{_getMonthContracts?.length}</Heading>
+            </div>
+          <MDCol style={{justifyContent: 'center', width: '100%' , marginBottom: '5%'}}>
+            { okContracts?.length === 0 &&
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>
                 <MDCol>
                   <Body>
                     {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"}`} 
                   </Body>
                 </MDCol>
+                <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
               </MDRow>
             }
 
-            { rContracts?.length !== 0 &&
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
-                <MDCol style={{marginRight: '5%'}}><Body>🟡</Body></MDCol>
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>      
                 <MDCol>
                   <Body>{rContracts?.length} {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar`}</Body>
                 </MDCol>
+                <MDCol style={{marginRight: '5%'}}><Body>🟡</Body></MDCol>
               </MDRow>
-            }
 
-            { koContracts?.length !== 0  &&
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'flex-start'}}>
-                <MDCol style={{marginRight: '5%'}}><Body>🔴</Body></MDCol>
+              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
                 <MDCol>
                   <Body>
                     {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"}`}
                   </Body>
                 </MDCol>
+                <MDCol style={{marginRight: '5%'}}><Body>🔴</Body></MDCol>
               </MDRow>
-            }
-            { contracts?.length === 0 && <Body>Você não tem contratos ainda.</Body>}
             
           </MDCol>
 
@@ -409,10 +407,10 @@ const BackOfficeContent = (props) => {
             }}
 
             small={true}
-            style={{marginTop: '5%'}}
+            style={{marginTop: '1%', display: 'flex', alignSelf: 'center', width: '100%'}}
             text="Contratos do mês"
           />
-
+          
           { userType === "manager" &&
             <Button
               fullWidth={false}
@@ -426,7 +424,7 @@ const BackOfficeContent = (props) => {
                 })
               }}
               small={true}
-              style={{marginTop: '2%'}}
+              style={{marginTop: '5%', width: '100%'}}
               text="Ver todos os contratos"
             />
           }
@@ -489,7 +487,7 @@ const BackOfficeContent = (props) => {
               currentFacturing: officeResults,
             }  
           }}>
-            <SubHeading>Resultados</SubHeading>
+            <SubHeading style={{marginTop: '0%'}}>Resultados</SubHeading>
           </Link>
           <Heading style={{color: "#37981F",marginTop: 30, marginBottom: 0}}>{`${okPercentage}%`}</Heading>
           <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos válidos</Body>

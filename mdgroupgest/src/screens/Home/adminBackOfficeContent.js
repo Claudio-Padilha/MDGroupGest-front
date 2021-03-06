@@ -35,8 +35,6 @@ const AdminBackOfficeContent = (props) => {
     return JSON.parse(localStorage.getItem('offices'));
   }, [localStorage])
 
-  console.log(offices, 'OFFICES')
-
   const renderOfficeCard = (office) => {
     return (
       <MDCard className={'cardForOffice'}>
