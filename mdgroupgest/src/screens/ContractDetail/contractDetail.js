@@ -52,12 +52,26 @@ import { Field } from "formik";
 import employeesRequests from "../../hooks/requests/employeesRequests";
 import { MenuItem } from "@material-ui/core";
 
-
 const ContractDetail = (props) => {
 
  // Select Variables
+  const [isLoading, setIsLoading] = useState(true);
+  const [maintainState, setMaintainState] = useState(false);
+
+  if (isLoading) {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [500]);
+  }
 
   const { wasRefreshed } = useRefresh()
+
+  useEffect(() => {
+    if(!wasRefreshed && !maintainState) {
+      window.location.reload()
+    }    
+  }, [wasRefreshed])
+
 
   const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
   optionsSellState.forEach(el => el['value'] = el.id)
@@ -121,14 +135,6 @@ const ContractDetail = (props) => {
     },
   }));
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  if (isLoading) {
-    setTimeout(() => {
-      setIsLoading(false)
-    }, [500]);
-  }
-
   const Transition = React.forwardRef(function Transition(props, ref) {
     return <Slide direction="up" ref={ref} {...props} />
   });
@@ -141,8 +147,8 @@ const ContractDetail = (props) => {
   };
 
   const handleClose = () => {
+    setMaintainState(true)
     setOpen(false);
-    window.location.reload();
   };
 
 
@@ -224,6 +230,17 @@ const ContractDetail = (props) => {
     }
     if (document.getElementById("signature_date").value !== "") {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
+    }
+
+    contractData = {
+      ...contractData,
+      ...{ 
+        electronic_bill: document.getElementById('electronic_bill').checked,
+        electricity_ppi: document.getElementById('electricity_ppi').checked,
+        gas_ppi: document.getElementById('gas_ppi').checked,
+        pel: document.getElementById('pel').checked,
+        mgi: document.getElementById('mgi').checked
+      }
     }
     // if (document.getElementById("select-sell-state").value !== "") {
     //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
@@ -378,7 +395,6 @@ const ContractDetail = (props) => {
   const history = useHistory();
   const [nif, setNif] = useState('');
 
-  // tentar sem use state, função na mão
   function _ConfirmContractActivation(contract) {
     const sellStateID = () => {
       const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));
@@ -454,8 +470,34 @@ const ContractDetail = (props) => {
   }
 
   console.log(contract, 'CONTRACT')
-  
+  const [gasPPI, setGasPPI] = useState(contract?.gas_ppi)
+  const [electricityPPI, setElectricityPPI] = useState(contract?.electricity_ppi)
+  const [pel, setPel] = useState(contract?.pel)
+  const [mgi, setMgi] = useState(contract?.mgi)
+  const [electronicBill, setElectronicBill] = useState(contract?.electronic_bill)
+  const [isEditing, setIsEditing] = useState(false)
+ 
+
+  console.log(pel, 'TESTE BOOL')
+
   const renderContract = () => {
+    
+    function _handleChecked(value, type) {
+      setIsEditing(true)
+      switch (type) {
+        case 'gasPPI':
+          setGasPPI(!value)
+        case 'electricityPPI':
+          setElectricityPPI(!value) 
+        case 'pel':
+          setPel(!value)
+        case 'mgi':
+          setMgi(!value)
+        case 'electronicBill':
+          setElectronicBill(!value)
+      }
+    }
+
     function _setNif (value) {
       const nif = value;
       return nif;
@@ -463,7 +505,7 @@ const ContractDetail = (props) => {
     
     return (
       <>
-        <Dialog style={{padding: '2%'}} fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+        <Dialog style={{padding: '2%'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
           {/* <AppBar className={classes.appBar}>
             <Toolbar>
               <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -478,266 +520,274 @@ const ContractDetail = (props) => {
               <CloseIcon />
             </IconButton>
           </Toolbar>
+
           <DialogTitle id="form-dialog-title" style={{padding: '0', marginLeft: '3%', marginTop: '3%'}}>Editar contrato</DialogTitle>
+          
           <DialogContent style={{marginLeft: '3%', padding: '0'}}>
+
             <DialogContentText style={{marginBottom: '3%', marginTop: '0%'}}>
               {`Olá ${currentUser?.user?.name}, você tem permissões para alterar um contrato. ✅`}
             </DialogContentText>
+
             <form noValidate autoComplete="off">
-            <Row style={{height: '60vh', width: '100%'}}>
-              <Col style={{width: '50%'}}>
-                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                  <Col style={{
-                    width: '45%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}>
-                    
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Nome do cliente"
-                      placeholder={contract?.client_name || ''}
-                      type="text"
-                    />
+              <Row style={{height: '60vh', width: '100%'}}>
+                <Col style={{width: '50%'}}>
+                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                    <Col style={{
+                      width: '45%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                      
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Nome do cliente"
+                        placeholder={contract?.client_name || ''}
+                        type="text"
+                      />
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="nif"
-                      label="NIF / NIPC"
-                      placeholder={contract?.client_nif || ''}
-                      type="text"
-                    />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="nif"
+                        label="NIF / NIPC"
+                        placeholder={contract?.client_nif || ''}
+                        type="text"
+                      />
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="contact"
-                      label="Contacto"
-                      placeholder={contract?.client_contact || ''}
-                      type="text"
-                    />
-                  </Col>
-                  <Col style={{
-                    width: '30%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginRight: '15%'
-                  }}>
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="delivery_date"
-                      label="Data de entrega"
-                      placeholder={contract?.delivery_date || ''}
-                      type="text"
-                    />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="contact"
+                        label="Contacto"
+                        placeholder={contract?.client_contact || ''}
+                        type="text"
+                      />
+                    </Col>
+                    <Col style={{
+                      width: '30%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      marginRight: '15%'
+                    }}>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="delivery_date"
+                        label="Data de entrega"
+                        placeholder={contract?.delivery_date || ''}
+                        type="text"
+                      />
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="signature_date"
-                      label="Data de assinatura"
-                      placeholder={contract?.signature_date || ''}
-                      type="text"
-                    />
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="signature_date"
+                        label="Data de assinatura"
+                        placeholder={contract?.signature_date || ''}
+                        type="text"
+                      />
 
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="name"
-                      label="Tipo de pagamento"
-                      placeholder={contract?.payment__name || ''}
-                      type="text"
-                    />
-                  </Col>
-                </Row>
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="name"
+                        label="Tipo de pagamento"
+                        placeholder={contract?.payment__name || ''}
+                        type="text"
+                      />
+                    </Col>
+                  </Row>
 
-                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '55%',height: '20vh', marginTop: '3%'}}>
-                  <Col style={{
-                    width: '40%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginLeft: '1%',
-                    marginRight: '5%'
-                  }}>
-                    <SwitchButton
-                      key="electronicBill"
-                      name="electronicBill"
-                      subType="twoColumns"
-                      side="left"
-                      initialValue={contract?.electronic_bill || ''}
-                      label="Factura Electrónica"
-                      onChange={() => console.log('test')}
-                    />
-                    <SwitchButton
-                      key="lightPPI"
-                      name="lightPPI"
-                      subType="twoColumns"
-                      side="left"
-                      initialValue={contract?.electricity_ppi || ''}
-                      label="PPI Luz"
-                      onChange={() => console.log('test')}
-                    />
+                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '55%',height: '20vh', marginTop: '3%'}}>
+                    <Col style={{
+                      width: '40%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      marginLeft: '1%',
+                      marginRight: '5%'
+                    }}>
+                      <SwitchButton
+                        key="electronicBill"
+                        name="electronicBill"
+                        subType="twoColumns"
+                        side="left"
+                        initialValue={electronicBill}
+                        label="Factura Electrónica"
+                        value={electronicBill}
+                        id="electronic_bill"
+                      />
+                      <SwitchButton
+                        key="lightPPI"
+                        name="lightPPI"
+                        subType="twoColumns"
+                        side="left"
+                        initialValue={electricityPPI}
+                        label="PPI Luz"
+                        value={electricityPPI}
+                        id="electricity_ppi"
+                      />
 
-                  </Col>
+                    </Col>
 
-                  <Col style={{
-                    width: '30%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}>
-                    { contract?.gas_ppi && <SwitchButton
-                      key="gasPPI"
-                      name="gasPPI"
-                      subType="twoColumns"
-                      side="left"
-                      initialValue={contract?.gas_ppi || ''}
-                      label="PPI Gás"
-                      onChange={() => console.log('test')}
-                    />}
-                    <SwitchButton
-                      key="PEL"
-                      name="PEL"
-                      subType="twoColumns"
-                      side="left"
-                      initialValue={contract?.pel || ''}
-                      label="PEL"
-                      onChange={() => console.log('test')}
-                    />
-                  </Col>
-                </Row>
-              </Col>
-              <Col style={{width: '50%'}}>
-                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                  <Col style={{
-                    width: '45%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}>
-                  </Col>
+                    <Col style={{
+                      width: '30%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                      { contract?.gas_ppi && <SwitchButton
+                        key="gasPPI"
+                        name="gasPPI"
+                        subType="twoColumns"
+                        side="left"
+                        initialValue={gasPPI}
+                        label="PPI Gás"
+                        value={gasPPI}
+                        id="gas_ppi"
+                      />}
+                      <SwitchButton
+                        key="PEL"
+                        name="PEL"
+                        subType="twoColumns"
+                        side="left"
+                        initialValue={pel}
+                        label="PEL"
+                        value={pel}
+                        id="pel"
+                      />
+                    </Col>
+                  </Row>
+                </Col>
+                <Col style={{width: '50%'}}>
+                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                    <Col style={{
+                      width: '45%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                    </Col>
 
-                  <Col style={{
-                    width: '30%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column', 
-                    marginRight: '15%'
-                  }}>
-                    <SubHeading style={{display: 'flex'}}>Comissão: 
-                    { contract?.sell_state__name !== 'ok' &&
-                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>
-                    }
-                    { contract?.sell_state__name === 'ok' &&
-                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission || ''}€</SubHeading>
-                    }
-                    </SubHeading>
-                  </Col>
-                </Row>
+                    <Col style={{
+                      width: '30%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column', 
+                      marginRight: '15%'
+                    }}>
+                      <SubHeading style={{display: 'flex'}}>Comissão: 
+                      { contract?.sell_state__name !== 'ok' &&
+                        <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>
+                      }
+                      { contract?.sell_state__name === 'ok' &&
+                        <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission || ''}€</SubHeading>
+                      }
+                      </SubHeading>
+                    </Col>
+                  </Row>
 
-                <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                  <Col style={{
-                    width: '45%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                  }}>
-                    
-                    {
-                    typeContainsElectricity &&
-                    <>
-                    <InputLabel htmlFor="select-power">Potência</InputLabel>
-                    <Select
-                      inputProps={{
-                        name: 'power',
-                        id: 'select-power',
-                      }}
-                    >
-                      {optionsPower !== null ? optionsPower.map(power => (
-                        <MenuItem value={power.value}>
-                          {power.name}
-                        </MenuItem>
-                      )) : []}
-                    </Select> </>
-                    }
-                    {
-                    typeContainsElectricity &&
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="CPE"
-                      label="CPE"
-                      placeholder={contract?.cpe || ''}
-                      type="text"
-                    />
-                    }
-                    <InputLabel htmlFor="select-gas-scale">Feedback Call</InputLabel>
-                    <Select
-                      inputProps={{
-                        name: 'feedback-call',
-                        id: 'select-feedback-call',
-                      }}
-                    >
-                      {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(feedbackCall => (
-                        <MenuItem value={feedbackCall.value}>
-                          {feedbackCall.name}
-                        </MenuItem>
-                      )) : []}
-                    </Select>
+                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
+                    <Col style={{
+                      width: '45%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                    }}>
+                      
+                      {
+                      typeContainsElectricity &&
+                      <>
+                      <InputLabel htmlFor="select-power">Potência</InputLabel>
+                      <Select
+                        inputProps={{
+                          name: 'power',
+                          id: 'select-power',
+                        }}
+                      >
+                        {optionsPower !== null ? optionsPower.map(power => (
+                          <MenuItem value={power.value}>
+                            {power.name}
+                          </MenuItem>
+                        )) : []}
+                      </Select> </>
+                      }
+                      {
+                      typeContainsElectricity &&
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="CPE"
+                        label="CPE"
+                        placeholder={contract?.cpe || ''}
+                        type="text"
+                      />
+                      }
+                      <InputLabel htmlFor="select-gas-scale">Feedback Call</InputLabel>
+                      <Select
+                        inputProps={{
+                          name: 'feedback-call',
+                          id: 'select-feedback-call',
+                        }}
+                      >
+                        {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(feedbackCall => (
+                          <MenuItem value={feedbackCall.value}>
+                            {feedbackCall.name}
+                          </MenuItem>
+                        )) : []}
+                      </Select>
 
-                  </Col>
-                  <Col style={{
-                    width: '30%',
-                    justifyContent: 'space-around',
-                    display: 'flex',
-                    flexDirection: 'column',
-                    marginRight: '15%'
-                  }}>
-                    {
-                    typeContainsGas &&
-                    <>
-                    <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
-                    <Select
-                      inputProps={{
-                        name: 'gas-scale',
-                        id: 'select-gas-scale',
-                      }}
-                    >
-                      {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
-                        <MenuItem value={gasScale.value}>
-                          {gasScale.name}
-                        </MenuItem>
-                      )) : []}
-                    </Select> </>
-                    }
-                    {
-                    typeContainsGas &&
-                    <TextField
-                      autoFocus
-                      margin="dense"
-                      id="CUI"
-                      label="CUI"
-                      placeholder={contract?.cui || ''}
-                      type="text"
-                    />
-                    }
+                    </Col>
+                    <Col style={{
+                      width: '30%',
+                      justifyContent: 'space-around',
+                      display: 'flex',
+                      flexDirection: 'column',
+                      marginRight: '15%'
+                    }}>
+                      {
+                      typeContainsGas &&
+                      <>
+                      <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
+                      <Select
+                        inputProps={{
+                          name: 'gas-scale',
+                          id: 'select-gas-scale',
+                        }}
+                      >
+                        {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
+                          <MenuItem value={gasScale.value}>
+                            {gasScale.name}
+                          </MenuItem>
+                        )) : []}
+                      </Select> </>
+                      }
+                      {
+                      typeContainsGas &&
+                      <TextField
+                        autoFocus
+                        margin="dense"
+                        id="CUI"
+                        label="CUI"
+                        placeholder={contract?.cui || ''}
+                        type="text"
+                      />
+                      }
 
-                  </Col>
-                </Row>
-              </Col>
-            </Row>  
+                    </Col>
+                  </Row>
+                </Col>
+              </Row>  
 
-            <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-            <Button action={updateContract} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
-          </DialogActions>
-            </form>
+              <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
+              <Button action={updateContract} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+            </DialogActions>
+          </form>
 
           </DialogContent>
         </Dialog>
@@ -745,7 +795,7 @@ const ContractDetail = (props) => {
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
           <Row style={{ width: '35%', display: 'flex', justifyContent: 'space-between'}}>
             <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
-            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '36%'}}/>
+            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '38%'}}/>
           </Row> 
           <Row>
             <Body style={
