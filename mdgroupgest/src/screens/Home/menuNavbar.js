@@ -52,7 +52,7 @@ export default function MenuNavbar(props) {
   }
 
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
-  const haveAccessToMenuNavbar = user?.user?.user_type === 'manager' || user?.user?.user_type === "secretary"
+  const haveAccessToMenuNavbar = user?.user?.user_type === 'manager' || user?.user?.user_type === "secretary" || user?.user?.user_type === "admin" || user?.user?.user_type === "ceo"
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -119,7 +119,7 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
-          { isAdmin && haveAccessToMenuNavbar &&
+          { user.user.user_type === "ceo" && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to="/CreateOffice">Inserir Escritório</Link>
             </Body>
