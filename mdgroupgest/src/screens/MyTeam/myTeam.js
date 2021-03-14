@@ -47,9 +47,21 @@ const MyTeam = () => {
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
     const managers = employees['manager']
-    const team_leaders = employees['team_leader']
-    const instructors = employees['instructor']
     const sales_people = employees['sales_person']
+    const copy_sales_people = employees['sales_person']
+
+    const team_leaders = []
+    const instructors = []
+
+    copy_sales_people.forEach(person => {
+      if (person.is_team_leader){
+        team_leaders.push(person)
+        sales_people.slice(sales_people.indexOf(person), 1)
+      }else if(person.is_instructor){
+        instructors.push(person)
+        sales_people.slice(sales_people.indexOf(person), 1)
+      }
+    });
 
     var data = {
       name: currentOffice.name,
