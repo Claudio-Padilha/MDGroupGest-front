@@ -29,7 +29,8 @@ const CardsContainer = styled.div`
   flex-direction: column;
   justify-content: space-around;
   width: 80%;
-  height: 65vh;
+  margin-top: 20vh;
+  height: 75vh;
   button:hover {
     cursor: pointer
   }
@@ -61,8 +62,8 @@ const FirstRow = styled.div`
   width: 100%;
   height: 100%;
   a {
-    height: 80%;
-    width: 42%;
+    height: ${ props => props?.admin ? '70%' : '80%'};
+    width: ${ props => props?.ceo || props?.admin ? '45%' : '42%'};
     text-decoration: none;
     div {
       align-self: center;
@@ -80,8 +81,9 @@ const SecondRow = styled.div`
   width: 100%;
   height: 100%;
   a {
-    height: 80%;
-    width: 25%;
+    margin-right: ${ props => props?.admin ? '16vw' : '0'};
+    height: ${ props => props?.admin ? '70%' : '80%'};
+    width: ${ props => props?.ceo || props?.admin ? '45%' : '25%'};
     text-decoration: none;
     div {
       align-self: center;
@@ -96,6 +98,7 @@ const HomePageButton = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  align-self: center;
   align-items: center;
   width: 25%;
   height: 73%;

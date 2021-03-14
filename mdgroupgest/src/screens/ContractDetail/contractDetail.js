@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useReducer, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col } from 'react-bootstrap';
 import InputLabel from '@material-ui/core/InputLabel';
@@ -22,7 +22,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import Avatar from '@material-ui/core/Avatar';
-
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import Swal from 'sweetalert2';
 
@@ -45,6 +45,8 @@ import {
   LogoContainer
 } from "./styles";
 
+import { useRefresh } from '../../hooks/window/refresh'
+
 import { List } from "semantic-ui-react";
 import { Field } from "formik";
 import employeesRequests from "../../hooks/requests/employeesRequests";
@@ -55,6 +57,8 @@ const ContractDetail = (props) => {
 
  // Select Variables
 
+  const { wasRefreshed } = useRefresh()
+
   const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
   optionsSellState.forEach(el => el['value'] = el.id)
   const optionsGasScale = JSON.parse(localStorage.getItem('gasScales'))
@@ -64,51 +68,100 @@ const ContractDetail = (props) => {
   const optionsPower = JSON.parse(localStorage.getItem('powerList'))
   optionsPower.forEach(el => el['value'] = el.id)
 
+  const propsState = props?.location?.state;
+  const cameFromList = propsState?.cameFromList
 
- const useStyles = makeStyles((theme) => ({
-  appBar: {
-    position: 'relative',
-    backgroundColor: CONSTANTS?.colors?.lightGrey,
-    height: '100%'
-  },
-  title: {
-    marginLeft: theme.spacing(2),
-    flex: 1,
-  },
-}));
+  const initialState = {
+    contractNumber: propsState?.contractNumber,
+    contractsToReturn: propsState?.contractsToReturn,
+    currentContract: propsState?.data
+  }
 
-const [isLoading, setIsLoading] = useState(true);
+  if(cameFromList) {
+    localStorage.setItem('contractDetailScreenState', JSON.stringify(initialState))
+  }
+  
+  const reducer = (firstState, action) => {
+    let reducerState = {}
 
-if (isLoading) {
-  setTimeout(() => {
-    setIsLoading(false)
-  }, [500]);
-}
+    const stateOnRAM = JSON.parse(localStorage.getItem('contractDetailScreenState'))
 
-const Transition = React.forwardRef(function Transition(props, ref) {
+    switch(action) {
+      case 'MAINTAIN_SCREEN_STATE':
+        reducerState = stateOnRAM;
+    }
 
-  return <Slide direction="up" ref={ref} {...props} />
+    localStorage.removeItem('contractDetailScreenState')
+    localStorage.setItem('contractDetailScreenState', JSON.stringify(reducerState))
 
-});
+    return reducerState;
+  }
 
-const classes = useStyles();
-const [open, setOpen] = useState(false);
+  const [stateOfCurrentContract, dispatch] = useReducer(reducer, initialState)
 
-const handleClickOpen = () => {
-  setOpen(true);
-};
+  useEffect(() => {
+    if(cameFromList) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if (wasRefreshed) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else {
+      return stateOfCurrentContract
+    }
+  }, [wasRefreshed, cameFromList]);
 
-const handleClose = () => {
-  setOpen(false);
-  window.location.reload();
-};
+  const useStyles = makeStyles((theme) => ({
+    appBar: {
+      position: 'relative',
+      backgroundColor: CONSTANTS?.colors?.lightGrey,
+      height: '100%'
+    },
+    title: {
+      marginLeft: theme.spacing(2),
+      flex: 1,
+    },
+  }));
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (isLoading) {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [500]);
+  }
+
+  const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />
+  });
+
+  const classes = useStyles();
+  const [open, setOpen] = useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+    window.location.reload();
+  };
 
 
 // end modal
+  const contract = useMemo(() => {
+    return stateOfCurrentContract?.currentContract
+  }, [stateOfCurrentContract]);
 
-  const contract = props?.location?.state?.data;
-  const contractNumber = props?.location?.state?.contractNumber;
-  const contractID = props?.location?.state?.data?.id;
+  const contractNumber = useMemo(() => {
+    return stateOfCurrentContract?.contractNumber;
+  }, [stateOfCurrentContract]);
+  
+  const contractID = useMemo(() => {
+    return stateOfCurrentContract?.currentContract?.id;
+  }, [stateOfCurrentContract]);
+
+  const contractsToReturn = useMemo(() => {
+    return stateOfCurrentContract?.contractsToReturn
+  }, [stateOfCurrentContract])
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = currentUser?.user?.office;
@@ -183,9 +236,7 @@ const handleClose = () => {
     }
     if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
       contractData = {...contractData, ...{power: document.getElementById("select-power").value}}
-    }
-
-    
+    } 
 
     var result = window.confirm("Deseja realmente atualizar o contrato?")
     if (result){
@@ -197,7 +248,6 @@ const handleClose = () => {
       })
     }
   }
-
 
   const stateMessage = useMemo(() => {
     if(contract?.sell_state__name === "ok") {
@@ -216,26 +266,22 @@ const handleClose = () => {
                                  contractType === "Dual Condomínio" || 
                                  contractType === "Electricidade Condomínio");
 
-const typeContainsGas = (contractType === "Dual" || 
+  const typeContainsGas = (contractType === "Dual" || 
                           contractType === "Gás" || 
                           contractType === "Dual Condomínio" || 
                           contractType === "Gás Condomínio");
 
-  function _goBack() {
-    contractsRequests.getContracts(currentOfficeID);
-    const contractsToReturn = JSON.parse(localStorage.getItem('contracts'));
+  async function _goBack() {
     history.push({
       pathname: "/ContractList",
       state: {
-        cameFromDetai: true,
-        contractsToReturn: contractsToReturn,
+        cameFromDetail: true,
+        contractsToReturn,
       }
     })    
   }
 
   function _confirmToDeleteContract() {
-    contractsRequests.getContracts(currentOfficeID);
-    const contractsToReturn = JSON.parse(localStorage.getItem('contracts'));
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -407,6 +453,7 @@ const typeContainsGas = (contractType === "Dual" ||
       )
   }
 
+  console.log(contract, 'CONTRACT')
   
   const renderContract = () => {
     function _setNif (value) {
@@ -452,7 +499,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="name"
                       label="Nome do cliente"
-                      placeholder={contract?.client_name}
+                      placeholder={contract?.client_name || ''}
                       type="text"
                     />
 
@@ -461,7 +508,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="nif"
                       label="NIF / NIPC"
-                      placeholder={contract?.client_nif}
+                      placeholder={contract?.client_nif || ''}
                       type="text"
                     />
 
@@ -470,7 +517,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="contact"
                       label="Contacto"
-                      placeholder={contract?.client_contact}
+                      placeholder={contract?.client_contact || ''}
                       type="text"
                     />
                   </Col>
@@ -486,7 +533,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="delivery_date"
                       label="Data de entrega"
-                      placeholder={contract?.delivery_date}
+                      placeholder={contract?.delivery_date || ''}
                       type="text"
                     />
 
@@ -495,7 +542,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="signature_date"
                       label="Data de assinatura"
-                      placeholder={contract?.signature_date}
+                      placeholder={contract?.signature_date || ''}
                       type="text"
                     />
 
@@ -504,7 +551,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="name"
                       label="Tipo de pagamento"
-                      placeholder={contract?.payment__name}
+                      placeholder={contract?.payment__name || ''}
                       type="text"
                     />
                   </Col>
@@ -524,7 +571,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       name="electronicBill"
                       subType="twoColumns"
                       side="left"
-                      initialValue={contract?.electronic_bill}
+                      initialValue={contract?.electronic_bill || ''}
                       label="Factura Electrónica"
                       onChange={() => console.log('test')}
                     />
@@ -533,7 +580,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       name="lightPPI"
                       subType="twoColumns"
                       side="left"
-                      initialValue={contract?.electricity_ppi}
+                      initialValue={contract?.electricity_ppi || ''}
                       label="PPI Luz"
                       onChange={() => console.log('test')}
                     />
@@ -546,12 +593,12 @@ const typeContainsGas = (contractType === "Dual" ||
                     display: 'flex',
                     flexDirection: 'column',
                   }}>
-       { contract?.gas_ppi && <SwitchButton
+                    { contract?.gas_ppi && <SwitchButton
                       key="gasPPI"
                       name="gasPPI"
                       subType="twoColumns"
                       side="left"
-                      initialValue={contract?.gas_ppi}
+                      initialValue={contract?.gas_ppi || ''}
                       label="PPI Gás"
                       onChange={() => console.log('test')}
                     />}
@@ -560,7 +607,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       name="PEL"
                       subType="twoColumns"
                       side="left"
-                      initialValue={contract?.pel}
+                      initialValue={contract?.pel || ''}
                       label="PEL"
                       onChange={() => console.log('test')}
                     />
@@ -589,7 +636,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>
                     }
                     { contract?.sell_state__name === 'ok' &&
-                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission}€</SubHeading>
+                      <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission || ''}€</SubHeading>
                     }
                     </SubHeading>
                   </Col>
@@ -613,9 +660,9 @@ const typeContainsGas = (contractType === "Dual" ||
                         id: 'select-power',
                       }}
                     >
-                      {optionsPower !== null ? optionsPower.map(Power => (
-                        <MenuItem value={Power.value}>
-                          {Power.name}
+                      {optionsPower !== null ? optionsPower.map(power => (
+                        <MenuItem value={power.value}>
+                          {power.name}
                         </MenuItem>
                       )) : []}
                     </Select> </>
@@ -627,7 +674,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="CPE"
                       label="CPE"
-                      placeholder={contract?.cpe}
+                      placeholder={contract?.cpe || ''}
                       type="text"
                     />
                     }
@@ -638,9 +685,9 @@ const typeContainsGas = (contractType === "Dual" ||
                         id: 'select-feedback-call',
                       }}
                     >
-                      {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(FeedbackCall => (
-                        <MenuItem value={FeedbackCall.value}>
-                          {FeedbackCall.name}
+                      {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(feedbackCall => (
+                        <MenuItem value={feedbackCall.value}>
+                          {feedbackCall.name}
                         </MenuItem>
                       )) : []}
                     </Select>
@@ -677,7 +724,7 @@ const typeContainsGas = (contractType === "Dual" ||
                       margin="dense"
                       id="CUI"
                       label="CUI"
-                      placeholder={contract?.cui}
+                      placeholder={contract?.cui || ''}
                       type="text"
                     />
                     }
@@ -756,24 +803,24 @@ const typeContainsGas = (contractType === "Dual" ||
                 <Row className={"firstRowInsideFirstColumn"}>  
                   <Column>
                     <SmallSubHeading><b>Cliente:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.client_name}`}</Body>
+                    <Body className={"field"}>{` ${contract?.client_name || ''} `}</Body>
 
                     <SmallSubHeading><b>NIF / NIPC:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.client_nif}`}</Body>
+                    <Body className={"field"}>{` ${contract?.client_nif || ''}`}</Body>
 
                     <SmallSubHeading><b>Contacto:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.client_contact}`}</Body>
+                    <Body className={"field"}>{` ${contract?.client_contact || ''}`}</Body>
                   </Column>
 
                   <Column>
                     <SmallSubHeading><b>Data de entrega:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.delivery_date}`}</Body>
+                    <Body className={"field"}>{` ${contract?.delivery_date || ''}`}</Body>
 
                     <SmallSubHeading><b>Data de assinatura:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.signature_date}`}</Body>
+                    <Body className={"field"}>{` ${contract?.signature_date || ''}`}</Body>
 
                     <SmallSubHeading><b>Tipo de pagamento:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.payment__name}`}</Body>
+                    <Body className={"field"}>{` ${contract?.payment__name || ''}`}</Body>
                   </Column>
                 </Row>
 
@@ -813,7 +860,7 @@ const typeContainsGas = (contractType === "Dual" ||
                 <Row className={"firstRowInsideFirstColumn"}>  
                   <Column>
                     <SmallSubHeading><b>Comercial:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.user__name}`}</Body>
+                    <Body className={"field"}>{` ${contract?.user__name || ''}`}</Body>
 
                     <SmallSubHeading></SmallSubHeading>
                     <Body className={"field"}></Body>
@@ -831,12 +878,12 @@ const typeContainsGas = (contractType === "Dual" ||
                 <Row className={"secondRowInsideFirstColumn"}>  
                   <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start'} : {}}>
                     <SmallSubHeading><b>Estado da venda:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.sell_state__name}`}</Body>
+                    <Body className={"field"}>{` ${contract?.sell_state__name || ''}`}</Body>
 
                     {(typeContainsGas) && 
                       <>
                         <SmallSubHeading><b>Escalão Gás:</b></SmallSubHeading>
-                        <Body className={"field"}>{` ${contract?.gas_scale__name}`}</Body>
+                        <Body className={"field"}>{` ${contract?.gas_scale__name || ''}`}</Body>
                       </>
                     }
 
@@ -844,7 +891,7 @@ const typeContainsGas = (contractType === "Dual" ||
                     {(typeContainsGas) && 
                       <>
                         <SmallSubHeading><b>CUI:</b></SmallSubHeading>
-                        <Body className={"field"}>{` ${contract?.cui}`}</Body>  
+                        <Body className={"field"}>{` ${contract?.cui || ''}`}</Body>  
                       </>
                     }
 
@@ -852,12 +899,12 @@ const typeContainsGas = (contractType === "Dual" ||
 
                   <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start'} : {}}>
                     <SmallSubHeading><b>Feedback Call:</b></SmallSubHeading>
-                    <Body className={"field"}>{` ${contract?.feedback_call}`}</Body>
+                    <Body className={"field"}>{` ${contract?.feedback_call || ''}`}</Body>
 
                     {(typeContainsElectricity) && 
                       <>
                         <SmallSubHeading><b>Potência:</b></SmallSubHeading>
-                        <Body className={"field"}>{` ${contract?.power__name}`}</Body>                     
+                        <Body className={"field"}>{` ${contract?.power__name || ''}`}</Body>                     
                       </>
                     }
 
@@ -865,7 +912,7 @@ const typeContainsGas = (contractType === "Dual" ||
                     {(typeContainsElectricity) && 
                       <>
                         <SmallSubHeading><b>CPE:</b></SmallSubHeading>
-                        <Body className={"field"}>{` ${contract?.cpe}`}</Body>                      
+                        <Body className={"field"}>{` ${contract?.cpe || ''}`}</Body>                      
                       </>
                     }
 
@@ -893,7 +940,13 @@ const typeContainsGas = (contractType === "Dual" ||
   return (
     <MainContainer id={"mainContainer"}>
       <BackIcon onClick={_goBack} />
-        {renderContract()}
+        {
+          isLoading ?
+          <MainContainer>
+            <SwishSpinner size={200} color="#686769" loading={isLoading} />
+          </MainContainer> : 
+          renderContract()
+        }
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
     </MainContainer>
   )

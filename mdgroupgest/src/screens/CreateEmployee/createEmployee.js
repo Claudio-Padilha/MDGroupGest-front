@@ -27,8 +27,12 @@ const CreateEmployee = (props) => {
   const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
   const userTypeToInsert = props?.location?.state?.userType;
+  const title = props?.location?.state?.title
+  const shouldGoToBackOffice = props?.location?.state?.shouldGoToBackOffice;
 
   function _goBack() {
+    shouldGoToBackOffice ?
+    history.push("/BackOffice") :
     history.push({
       pathname: "/EmployeeType",
       state: {
@@ -76,30 +80,28 @@ const CreateEmployee = (props) => {
     var CPEForElectricity='';
     var observations='';
     
-    await _executeValidationsIfHas(
-      name,
-      nif,
-      nipc,
-      address,
-      contact,
-      email,
-      zipCode,
-      clientName,
-      clientNif,
-      clientContact,
-      CUIDUAL,
-      CUIForGas,
-      CPEDUAL,
-      CPEForElectricity,
-      observations
-    )
+    // await _executeValidationsIfHas(
+    //   name,
+    //   nif,
+    //   nipc,
+    //   address,
+    //   contact,
+    //   email,
+    //   zipCode,
+    //   clientName,
+    //   clientNif,
+    //   clientContact,
+    //   CUIDUAL,
+    //   CUIForGas,
+    //   CPEDUAL,
+    //   CPEForElectricity,
+    //   observations
+    // )
     const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
     const salesPersonObj = {
-      office: officeID,
       manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
-      team_leader: employeeTypeOfList === "team_leader" ? data?.employeeAbove?.id : null,
-      instructor: employeeTypeOfList === "instructor" ? data?.employeeAbove?.id : null,
+      office: officeID,
       user: {
         name: name,
         email: email,
@@ -110,7 +112,7 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
       }
     }
 
@@ -197,73 +199,71 @@ const CreateEmployee = (props) => {
           return;
       }
     }
-      if(!formWasValidated) {
-        return (
-          swalWithBootstrapButtons.fire({
-          title: 'Confirme os dados do funcionário:',
-          html: 
-            `<b>Nome:</b> ${name ? name : `❌`} <br>
-             <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
-             <b>Morada:</b> ${address ? address : `❌`} <br>                                    
-             <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
-             <b>Email:</b> ${email ? email : `❌`} <br>
-             <b>Código Postal:</b> ${zipCode ? zipCode : `❌`} <br>
-            `,
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'É isso!',
-          cancelButtonText: 'Refazer',
-          reverseButtons: true
-        }).then(async (result) => {
-  
-          // "result.isConfimed significa clicar em "É isto"
-            if (result.isConfirmed) {
-              await employeesRequests.createEmployee(userTypeToInsert, _userObjBasedOnType())
-              .then(res => {
-                const clientSideError = res?.message?.match(/400/g);
-                const serverSideError = res?.message?.match(/500/g);
-  
-                if(clientSideError) {
-                  return swalWithBootstrapButtons.fire(
-                    'Erro',
-                    'Funcionário não inserido, tente de novo. (Verifique os campos)',
-                    'error'
-                  )
-                } else if (serverSideError) {
-                  return swalWithBootstrapButtons.fire(
-                    'Erro',
-                    'Erro no servidor. Tente novamente mais tarde.',
-                    'error'
-                  )
-                } else {
-                  swalWithBootstrapButtons.fire(
-                    'Boa!',
-                    'Funcionário inserido com sucesso.',
-                    'success'
-                  ).then(async (result) => {
-                    if(result) {
-                      await employeesRequests.getAllEmployees(officeID);
-                      return history.push({
-                        pathname:"/ChooseEmployeeTypeToSee",
-                        state: {
-                          cameFromCreation: true
-                        }
-                      });
-                    }
-                  });
-                }
-              })
-          // "!result.isConfimed significa clicar em "'E isso!"
-            } else if (!result.isConfirmed) {
-              swalWithBootstrapButtons.fire(
-                'Cancelado',
-                'Corrija o que estava errado...',
-                'info'
-              )
-            }
-          })
-        )
-      } else { localStorage.removeItem('formWasValidated') }
+      return (
+        swalWithBootstrapButtons.fire({
+        title: 'Confirme os dados do funcionário:',
+        html: 
+          `<b>Nome:</b> ${name ? name : `❌`} <br>
+            <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
+            <b>Morada:</b> ${address ? address : `❌`} <br>                                    
+            <b>Contato:</b> ${contact ? contact : `❌`} <br>                             
+            <b>Email:</b> ${email ? email : `❌`} <br>
+            <b>Código Postal:</b> ${zipCode ? zipCode : `❌`} <br>
+          `,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Refazer',
+        reverseButtons: true
+      }).then(async (result) => {
+
+        // "result.isConfimed significa clicar em "É isto"
+          if (result.isConfirmed) {
+            await employeesRequests.createEmployee(userTypeToInsert, _userObjBasedOnType())
+            .then(res => {
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
+
+              if(clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Funcionário não inserido, tente de novo. (Verifique os campos)',
+                  'error'
+                )
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                swalWithBootstrapButtons.fire(
+                  'Boa!',
+                  'Funcionário inserido com sucesso.',
+                  'success'
+                ).then(async (result) => {
+                  if(result) {
+                    await employeesRequests.getAllEmployees(officeID);
+                    return history.push({
+                      pathname:"/ChooseEmployeeTypeToSee",
+                      state: {
+                        cameFromCreation: true
+                      }
+                    });
+                  }
+                });
+              }
+            })
+        // "!result.isConfimed significa clicar em "'E isso!"
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
 
   }
 
@@ -297,7 +297,7 @@ const CreateEmployee = (props) => {
       <MainDiv>
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
-        <SubHeading>{props.location.state.title}</SubHeading>
+        <SubHeading>{title}</SubHeading>
         <SmallSubHeading className={"officeName"}>{officeOBJ?.name}</SmallSubHeading>
         <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
         <CForm 

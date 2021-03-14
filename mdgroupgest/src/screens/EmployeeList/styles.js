@@ -176,7 +176,7 @@ const FirstRow = styled.div`
   height: 100%;
   a {
     height: 80%;
-    width: 25%;
+    width: ${props => props.ceo ? '22%' : props?.administrator ? '31%' : '25%'};
     text-decoration: none;
     div {
       align-self: center;
@@ -195,8 +195,9 @@ const SecondRow = styled.div`
   height: 100%;
   a {
     height: 80%;
-    width: 25%;
+    width: ${props => props.ceo ? '22%' : props?.administrator ? '22%' : '25%'};
     text-decoration: none;
+    margin-left: ${props => props.ceo ? '1%' : props?.administrator ? '0%' : '0%'};
     div {
       align-self: center;
     }
