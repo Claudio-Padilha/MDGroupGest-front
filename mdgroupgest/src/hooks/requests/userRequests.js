@@ -10,8 +10,6 @@ import { Redirect } from 'react-router-dom';
 
 const url = useVPSURL();
 
-console.log(url, 'URL')
-
 function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({
@@ -127,7 +125,6 @@ export default {
                 resolve(res)
               } else {             
                 resolve(res);
-                console.log(res, 'RESPOSTA DO LOGIN')
                 const user = res?.data;
 
                 if (user[0] === "invalid credentials") {

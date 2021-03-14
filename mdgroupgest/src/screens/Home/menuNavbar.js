@@ -1,7 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import { Avatar } from '@material-ui/core';
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import { SwishSpinner } from "react-spinners-kit";
 
 import { MDNavbar } from './md';
 
@@ -9,6 +9,8 @@ import { SubHeading, Body } from '../../components/Text/text';
 import { LogoutIcon } from '../../components/Icon/icons';
 
 import userRequests from '../../hooks/requests/userRequests';
+
+import CONSTANTS from '../../constants';
 
 import {
   ProfileContainer,
@@ -107,8 +109,13 @@ export default function MenuNavbar(props) {
           }
 
           { !isAdmin && currentUserIsAdmin && 
-            <Body isReverseColor={true}>
-              <Link onClick={() => _setToAdmin(isAdmin)}>Versão Admin</Link>
+            <Body isReverseColor={true} style={{marginTop: '30%'}}>
+              <Link style={{
+                backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
+                boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
+                fontSize: 12,
+                padding: 10
+              }} onClick={() => _setToAdmin(isAdmin)}>Versão Administrador</Link>
             </Body>
           }
 
@@ -119,8 +126,13 @@ export default function MenuNavbar(props) {
           }
 
           { isAdmin && haveAccessToMenuNavbar &&
-            <Body isReverseColor={true} style={{marginTop: '-10%'}}>
-              <Link onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
+            <Body isReverseColor={true} style={{marginTop: '69%'}}>
+              <Link style={{
+                backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
+                boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
+                fontSize: 12,
+                padding: 10
+              }} onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
             </Body>
           }
         </OptionsDiv>

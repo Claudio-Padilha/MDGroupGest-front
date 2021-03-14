@@ -9,23 +9,19 @@ import {
   CornerRight
 } from './styles';
 
-import { SubHeading, Body } from '../../components/Text/text';
+import { SubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
-import request from '../../components/Form/request';
 import employeesRequests from '../../hooks/requests/employeesRequests';
-import { FormControl } from '@material-ui/core';
 
 const EditEmployee = (props) => {
 
   const history = useHistory();
 
   const employee = props?.location?.state?.employeeData;
-  const officeID = props?.location?.state?.officeID;
-  const officeOBJ = props?.location?.state?.officeOBJ;
   const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
   const employeesComingFromList = props?.location?.state?.employeesComingFromList;
@@ -91,7 +87,6 @@ const EditEmployee = (props) => {
               ).then(async (result) => {
                 if(result) {
                   await employeesRequests.getAllEmployees(currentOfficeID)
-                  const employeesAfterUpdate = JSON.parse(localStorage.getItem('allEmployees'))
                   return history.push({pathname: "/BackOffice"});
                 }
               });

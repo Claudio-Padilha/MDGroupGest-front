@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
@@ -26,6 +26,8 @@ const CreateContract = (props) => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [])
 
+  const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
+
   function _allEmployees() {
     var allEmployees = []
 
@@ -52,7 +54,7 @@ const CreateContract = (props) => {
     return props?.location?.state?.power
   }, [props]) 
 
-  const typeOfContractFromProps = props?.location?.state?.typeOfContract;
+  // const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
   const feedbackCalls = props?.location?.state?.feedbackCall;
@@ -540,10 +542,9 @@ const CreateContract = (props) => {
       case "condominium_dual":
         return DUALFIELDS;
     
-      default:
-        break;
+
     }
-  }, [typeOfContractFromProps])
+  }, [typeOfContractFromProps, window])
 
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

@@ -20,7 +20,7 @@ const Login = () => {
     try {
       userRequests.login(formFields)
     } catch (error) {
-      console.log('VOCE NÃO FOI BEM SUCEDIDO')
+      console.log(`Houve um erro: ${error?.message}`)
     }
   };
 

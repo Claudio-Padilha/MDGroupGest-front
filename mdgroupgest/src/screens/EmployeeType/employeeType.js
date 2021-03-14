@@ -52,7 +52,7 @@ const EmployeeType = (props) => {
         pathname:"/CreateEmployee",
         state: {
           userType: "manager",
-          title: "Criar Gerente",
+          title: "Criar CEO",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
           shouldRenderEmployeeAssociation: false
@@ -60,7 +60,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>CEO</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -73,7 +73,7 @@ const EmployeeType = (props) => {
         pathname:"/CreateEmployee",
         state: {
           userType: "secretary",
-          title: "Criar Secretária",
+          title: "Criar Administrador(a)",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
           shouldRenderEmployeeAssociation: false
@@ -81,7 +81,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretária</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Administrador(a)</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -94,7 +94,7 @@ const EmployeeType = (props) => {
         pathname:"/CreateEmployee",
         state: {
           userType: "team_leader",
-          title: "Criar Team Leader",
+          title: "Criar Gerente",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
           employeeToAssociate: allEmployees?.manager,
@@ -103,7 +103,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Team Leader</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -116,7 +116,7 @@ const EmployeeType = (props) => {
         pathname:"/CreateEmployee",
         state: {
           userType: "instructor",
-          title: "Criar Instrutor",
+          title: "Criar Secretário(a)",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
           employeeToAssociate: allEmployees?.team_leader.concat(allEmployees?.manager),
@@ -125,7 +125,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Instrutor</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretário(a)</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -138,7 +138,7 @@ const EmployeeType = (props) => {
         pathname:"/CreateEmployee",
         state: {
           userType: "sales_person",
-          title: "Criar Comercial",
+          title: "Criar Funcionário(a)",
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
           employeeToAssociate: allEmployees?.instructor.concat(allEmployees?.manager, allEmployees?.team_leader),
@@ -147,7 +147,7 @@ const EmployeeType = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Comercial</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Funcionário(a)</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>

@@ -150,15 +150,6 @@ const Row = styled.div`
   flex-direction: row;
 `;
 
-const HomePageButton = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: 25%;
-  height: 73%;
-`;
-
 const LogoContainer = styled.span`
   flex: 1;
   position: absolute;

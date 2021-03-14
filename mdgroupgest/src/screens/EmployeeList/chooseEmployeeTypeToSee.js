@@ -1,7 +1,7 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo } from "react";
 import { Link } from "react-router-dom";
 
-import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import CONSTANTS from '../../constants';
@@ -18,8 +18,6 @@ import {
   MDCardBody,
   MDButton 
 } from '../../screens/Home/md';
-
-import request from '../../components/Form/request';
 
 import employeesRequests from "../../hooks/requests/employeesRequests";
 import officesRequests from '../../hooks/requests/officesRequests';
@@ -63,7 +61,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         pathname:"/EmployeeList",
         state: {
           userType: "manager",
-          title: "Gerente",
+          title: "CEO",
           data: managers,
           dataGoingToList : currentUser,
           officeID: currentOfficeID,
@@ -80,7 +78,7 @@ const ChooseEmployeeTypeToSee = (props) => {
           }
 
           { currentUser?.user?.user_type === "secretary" &&
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Gerente </SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Gerente</SubHeading>
           }
           </MDCardBody>
         </MDCard>
@@ -95,7 +93,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         pathname:"/EmployeeList",
         state: {
           userType: "secretary",
-          title: "Secretária",
+          title: "Adminstrador(a)",
           data: secretaries,
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
@@ -112,7 +110,7 @@ const ChooseEmployeeTypeToSee = (props) => {
           }
 
           { currentUser?.user?.user_type === "manager" &&
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Secretária </SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Administrador(a) </SubHeading>
           }
           </MDCardBody>
         </MDCard>
@@ -127,7 +125,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         pathname:"/EmployeeList",
         state: {
           userType: "teamLeader",
-          title: "Team Leader",
+          title: "Gerente",
           data: teamLeaders,
           employeeToAssociate: allEmployees?.manager,
           shouldRenderEmployeeAssociation: true
@@ -135,7 +133,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Team Leader</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -149,7 +147,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         pathname:"/EmployeeList",
         state: {
           userType: "instructor",
-          title: "Instrutor",
+          title: "Secretário(a)",
           data: instructors,
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
@@ -159,7 +157,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Instrutor</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Secretário(a)</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>
@@ -173,7 +171,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         pathname:"/EmployeeList",
         state: {
           userType: "salesPerson",
-          title: "Comercial",
+          title: "Funcionário(a)",
           data: salesPersons,
           officeID: currentOfficeID,
           officeOBJ: currentOfficeObject,
@@ -183,7 +181,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         <MDCard className={"card"}>
           <MDCardBody>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Comercial</SubHeading>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Funcionário(a)</SubHeading>
           </MDCardBody>
         </MDCard>
       </Link>

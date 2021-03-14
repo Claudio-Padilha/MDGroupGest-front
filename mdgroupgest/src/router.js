@@ -6,9 +6,9 @@ const Router = ({ routes }) => {
   return (
     <HashRouter>
       <Switch>
-        {routes.map((route) => {
+        {routes.map((route, i) => {
           return (
-            <Route exact path={route.path} component={route.component} />
+            <Route key={i} exact path={route.path} component={route.component} />
           );
         })}
       </Switch>

@@ -113,8 +113,6 @@ const handleClose = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentOfficeID = currentUser?.user?.office;
 
-  
-
   const contractType = useMemo(() => {
     switch (contract?.contract_type) {
       case "dual":
@@ -135,8 +133,6 @@ const handleClose = () => {
     }
   }, [contract])
 
-  console.log(contractType === "Dual Condomínio")
-
   const state = useMemo(() => {
     if(contract?.sell_state__name === "ok") {
       return "🟢";
@@ -148,7 +144,6 @@ const handleClose = () => {
   }, [contract])
 
   function updateContract (event) {
-    console.log("ENTREI")
     event.preventDefault()
     let contractData = {
       id: contract.id,
@@ -317,7 +312,6 @@ const typeContainsGas = (contractType === "Dual" ||
         reverseButtons: true
       }).then((result) => {
         if (result.isConfirmed) {
-          console.log('test from ok')
         } else if (
           /* Read more about handling dismissals below */
           result.dismiss === Swal.DismissReason.cancel
@@ -346,11 +340,7 @@ const typeContainsGas = (contractType === "Dual" ||
       return sellStateMatched
     }
 
-    console.log(sellStateID(), 'TESTEZAÇO')
-
     const sellStateIDTOActivate = sellStateID()?.id;
-
-    console.log(sellStateIDTOActivate, 'ID')
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -423,11 +413,7 @@ const typeContainsGas = (contractType === "Dual" ||
       const nif = value;
       return nif;
     }
-
-    console.log(_setNif(), 'NIF')
-    console.log(contract, 'CONTRATOOO')
-    console.log(contractType, 'TYPE')
-    console.log(contractType === "Electricidade", '<---- TESTE')
+    
     return (
       <>
         <Dialog style={{padding: '2%'}} fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
