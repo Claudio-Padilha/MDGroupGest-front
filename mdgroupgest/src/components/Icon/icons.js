@@ -9,6 +9,17 @@ import { ReactComponent as Add } from '../../assets/icons/plus-solid.svg';
 import { ReactComponent as Office } from '../../assets/icons/plus-solid.svg';
 import { ReactComponent as SeeMore } from '../../assets/icons/seeMore.svg';
 import { ReactComponent as Edit } from '../../assets/icons/edit.svg';
+import { ReactComponent as ShowPass } from '../../assets/icons/show-pass.svg';
+import { ReactComponent as HidePass } from '../../assets/icons/hide-pass.svg';
+
+const passwordIconStyle = {
+  width: '4vw',
+  height: '2.5vh',
+  position: 'absolute',
+  bottom: '40%',
+  cursor: 'pointer',
+  right: '38.5%'
+}
 
 const CheckCircleIcon = ({...props}) => {
   return <CheckCircle {...props}/>;
@@ -38,6 +49,13 @@ const EditIcon = ({...props}) => {
   return <Edit {...props} />;
 }
 
+const ShowPassIcon = ({...props}) => {
+  return <ShowPass {...props} style={passwordIconStyle} />;
+}
+
+const HidePassIcon = ({...props}) => {
+  return <HidePass {...props} style={passwordIconStyle} />;
+}
 
 export {
   CheckCircleIcon,
@@ -46,5 +64,7 @@ export {
   AddIcon,
   EditIcon,
   OfficeIcon,
-  SeeMoreIcon
+  SeeMoreIcon,
+  ShowPassIcon,
+  HidePassIcon
 };

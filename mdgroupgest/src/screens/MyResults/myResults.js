@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useReducer, useEffect, useState } from "react";
 import { Col, Row } from 'react-bootstrap';
 
 import {  Heading, SubHeading, SmallSubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
+
+import { useRefresh } from '../../hooks/window/refresh'
+import { useAuth } from '../../hooks/employees/auth'
 
 import {
   MainContainer,
@@ -15,6 +18,9 @@ import {
 import CONSTANTS from "../../constants";
 
 const MyResults = (props) => {
+  
+  const { wasRefreshed } = useRefresh()
+
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentUserType = currentUser?.user?.user_type;
 
@@ -38,22 +44,79 @@ const MyResults = (props) => {
   const today = new Date();
   const todayNumber = today.getDate();
 
+  const {
+    isCEO,
+    isRegularManager,
+    isAdministrator,
+    isRegularSecretary
+  } = useAuth()
+
   var contractQtdAverage = allContractsQtd / todayNumber;
   const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2);
   
   var salaryAverage = currentSalary / todayNumber;
   const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
 
+  const initialState = { 
+    results: resultsInfo,
+    allContractsQtd,
+    currentSalary,
+    currentFacturing,
+    currentUser,
+    percentageState: props?.location?.state?.percentages,
+    okPercentage: `${percentageState?.ok}%`,
+    okNumber: parseInt(okPercentage),
+    rPercentage: `${percentageState?.r}%`,
+    rNumber: parseInt(rPercentage),
+    koPercentage: `${percentageState?.ko}%`,
+    koNumber: parseInt(koPercentage),
+    contractQtdAverage: contractQtdAverageFixedBy2,
+    salaryAverageFixedBy2
+  }
+
+  if(!wasRefreshed) {
+    localStorage.setItem('myResultsScreenState', JSON.stringify(initialState))
+  }
+  
+
+  const reducer = (firstState, action) => {
+    let reducerState = {}
+
+    const stateOnRAM = JSON.parse(localStorage.getItem('myResultsScreenState'))
+
+    if (wasRefreshed) {
+      switch (action) {
+        case 'MAINTAIN_SCREEN_STATE':
+          reducerState = stateOnRAM;
+      }
+      return reducerState
+    }
+
+    localStorage.removeItem('myResultsScreenState')
+    localStorage.setItem('myResultsScreenState', JSON.stringify(reducerState))
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    if(wasRefreshed) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else {
+      return state
+    }
+  }, [wasRefreshed])
+
   function _goBack() {
+    localStorage.removeItem('myResultsScreenState')
     window.location.replace('#/BackOffice');    
   }
 
   function _colorToRender() {
-    if (okNumber >= 80) {
+    if (state?.okNumber >= 80) {
       return <GreenCircle />;
-    } else if (koNumber <= 30 && rNumber <= 70 && okNumber < 80) {
+    } else if (state?.koNumber <= 30 && state?.rNumber <= 70 && state?.okNumber < 80) {
       return <YellowCircle />;
-    } else if (koNumber >= 30 && rNumber < 70 && okNumber <=70){
+    } else if (state?.koNumber >= 30 && state?.rNumber < 70 && state?.okNumber <=70){
       return <RedCircle />;
     } 
   }
@@ -71,37 +134,56 @@ const MyResults = (props) => {
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
 
-          { currentUserType !== "manager" && currentUserType !== "secretary"  && 
+          { !isRegularManager && !isRegularSecretary && 
             <Col style={colStyle}>
-              <SmallSubHeading style={{
-                marginTop: '10%',
-                color: `${CONSTANTS?.colors?.darkGrey}`,
-              }}>O seu salário até agora está em</SmallSubHeading>
-              <Heading style={{
-                marginTop: '-5%',
-                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-                color: `${CONSTANTS?.colors?.green}`,
-                fontSize: '56px',
-              }}>{currentSalary}€</Heading>
+
+              <SmallSubHeading style={
+                {
+                  marginTop: '10%',
+                  color: `${CONSTANTS?.colors?.darkGrey}`,
+                }
+              }>
+                O seu salário até agora está em
+              </SmallSubHeading>
+              <Heading style={
+                {
+                  marginTop: '-5%',
+                  textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                  color: `${CONSTANTS?.colors?.green}`,
+                  fontSize: '56px',
+                }
+              }>
+                {state?.currentSalary}€
+              </Heading>
             </Col>
           }
           
-          { currentUserType === "manager" &&
+          { isRegularManager &&
             <Col style={colStyle}>
-              <SmallSubHeading style={{
-                marginTop: '10%',
-                color: `${CONSTANTS?.colors?.darkGrey}`,
-              }}>A faturação do escritório até agora é de</SmallSubHeading>
-              <Heading style={{
-                marginTop: '-5%',
-                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-                color: `${CONSTANTS?.colors?.green}`,
-                fontSize: '56px',
-              }}>{currentFacturing}€</Heading>
+
+              <SmallSubHeading style={
+                {
+                  marginTop: '10%',
+                  color: `${CONSTANTS?.colors?.darkGrey}`,
+                }
+              }>
+                A faturação do escritório até agora é de
+              </SmallSubHeading>
+              <Heading style={
+                {
+                  marginTop: '-5%',
+                  textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                  color: `${CONSTANTS?.colors?.green}`,
+                  fontSize: '56px',
+                }
+              }>
+                {state?.currentFacturing}€
+              </Heading>
+
             </Col>
           }
 
-          { currentUserType === "secretary" &&
+          { isRegularSecretary &&
             <Col style={colStyle}>
               <SmallSubHeading style={{
                 marginTop: '10%',
@@ -112,80 +194,129 @@ const MyResults = (props) => {
                 textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
                 color: `${CONSTANTS?.colors?.green}`,
                 fontSize: '56px',
-              }}>{currentFacturing}€</Heading>
+              }}>{state?.currentFacturing}€</Heading>
             </Col>
           }
 
           <Col style={colStyle}>
             {_colorToRender()}
-            <Heading style={{
-              marginTop: '-16%',
-              textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-              color: `${CONSTANTS?.colors?.white}`,
-              fontSize: '28px',
-            }}>{okPercentage}</Heading>
-            <Body style={{
-              marginTop: '-9%',
-              textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-              color: `${CONSTANTS?.colors?.white}`,
-              fontSize: '14px',
-            }}>Contratos OK</Body>
-            {okNumber < 80 && 
-              <Row style={{
-                display: 'flex',
-                height: '3vh',
-                width: '100%',
-                justifyContent: 'center'
-              }}>
+            <Heading style={
+              {
+                marginTop: '-17%',
+                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                color: `${CONSTANTS?.colors?.white}`,
+                fontSize: '28px',
+              }
+            }>
+              {state?.okPercentage}
+            </Heading>
+
+            <Body style={
+              {
+                marginTop: '-10%',
+                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                color: `${CONSTANTS?.colors?.white}`,
+                fontSize: '14px',
+              }
+            }>
+              dos contratos OK
+            </Body>
+
+            { state?.okNumber < 80 && 
+              <Row style={
+                {
+                  display: 'flex',
+                  height: '3vh',
+                  width: '100%',
+                  justifyContent: 'center'
+                }
+              }>
                 <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>⬆️</SmallSubHeading>
               </Row>
             }
-            {okNumber < 80 && 
+            { state?.okNumber < 80 && 
               <Row style={{
                 display: 'flex',
                 height: '3vh',
                 width: '100%',
                 justifyContent: 'center'
               }}>
-                <Body style={{marginTop: '1%', marginBottom: '0'}}>{allContractsQtd !== 0 ? `Com mais ${80 - okNumber}% seu status passará a 🟢` : "Você ainda não tem contratos"}</Body>
+
+                <Body style={{marginTop: '1%', marginBottom: '0'}}>
+                  {state?.allContractsQtd !== 0 ? `Com mais ${80 - state?.okNumber}% seu status passará a 🟢` : "Você ainda não tem contratos"}
+                </Body>
+
               </Row>
             }
-            {rNumber > 20 && okNumber < 80 && 
-              <Row style={{
-                display: 'flex',
-                height: '3vh',
-                width: '100%',
-                justifyContent: 'center'
-              }}>
-                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>Atenção aos pendentes!</SmallSubHeading> <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>Está em {rPercentage} 🟡</Body>
+            { state?.rNumber > 20 && state?.okNumber < 80 && 
+              <Row style={
+                {
+                  display: 'flex',
+                  height: '3vh',
+                  width: '100%',
+                  justifyContent: 'center'
+                }
+              }>
+
+                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>
+                  Atenção aos pendentes!
+                </SmallSubHeading>
+                <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>
+                  Está em {state?.rPercentage} 🟡
+                </Body>
+
               </Row>
             }
-            {koNumber > 10 && okNumber < 70 && 
-              <Row style={{
-                display: 'flex',
-                height: '3vh',
-                width: '100%',
-                justifyContent: 'center'
-              }}>
-                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>Atenção aos anulados!</SmallSubHeading> <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>Está em {koPercentage} 🔴</Body>
+            { state?.koNumber > 10 && state?.okNumber < 70 && 
+              <Row style={
+                {
+                  display: 'flex',
+                  height: '3vh',
+                  width: '100%',
+                  justifyContent: 'center'
+                }
+              }>
+                <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>
+                  Atenção aos anulados!
+                </SmallSubHeading>
+                <Body style={{marginTop: '1%', marginBottom: '0', marginLeft: '2%'}}>
+                  Está em {state?.koPercentage} 🔴
+                </Body>
+
               </Row>
             }
           </Col>
           <Col style={colStyle}></Col>
         </Row>
+
         <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Média de contratos:</SubHeading>
-            <Body style={{marginTop: '0'}}>{`${contractQtdAverageFixedBy2} contratos por dia ${contractQtdAverageFixedBy2 > 2 ? "✅" : contractQtdAverageFixedBy2 < 0.7 ? "⛔️" : "⚠️"}`}</Body>
+            <Body style={{marginTop: '0'}}>
+              {`${state?.contractQtdAverage} contratos por dia ${state?.contractQtdAverage > 2 ? "✅" : state?.contractQtdAverage < 0.7 ? "⛔️" : "⚠️"}`}
+            </Body>
+
           </Col>
+
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo:</SubHeading>
-            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>{`${bestContractDay?.best_day} (${bestContractDay?.value <= 1 ? `${bestContractDay?.value} contrato` : `${bestContractDay?.value} contratos`})`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>
+              {`${state?.results?.best_contract_day?.best_day} (${state?.results?.best_contract_day?.value <= 1 ? `${state?.results?.best_contract_day?.value} contrato` : `${state?.results?.best_contract_day?.value} contratos`})`}
+            </Body>
+
           </Col>
+
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo:</SubHeading>
-            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>{`${worstContractDay?.worst_day} (${worstContractDay?.value <= 1 ? `${worstContractDay?.value} contrato` : `${worstContractDay?.value} contratos`})`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>
+              {`${state?.results?.worst_contract_day?.worst_day} (${state?.results?.worst_contract_day?.value <= 1 ? `${state?.results?.worst_contract_day?.value} contrato` : `${state?.results?.worst_contract_day?.value} contratos`})`}
+            </Body>
+          
           </Col>
+
         </Row>
         {/* <Row style={{display: 'flex', height: '50%', justifyContent: 'space-between', alignItems: 'center'}}>
           <Col style={colStyle}>
@@ -201,19 +332,43 @@ const MyResults = (props) => {
             <Body style={{marginTop: '0'}}>13/12/2020 (1 contrato)</Body>
           </Col>
         </Row> */}
-        <Row style={{display: 'flex', height: '50%', marginTop: '-10%', justifyContent: 'space-between', alignItems: 'center'}}>
+        <Row style={
+          {
+            display: 'flex',
+            height: '50%',
+            marginTop: '-10%',
+            justifyContent: 'space-between',
+            alignItems: 'center'
+          }
+        }>
+
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Média de faturação:</SubHeading>
-            <Body style={{marginTop: '0'}}>{salaryAverageFixedBy2}€ por dia</Body>
+            <Body style={{marginTop: '0'}}>
+              {state?.salaryAverageFixedBy2}€ por dia
+            </Body>
+
           </Col>
+
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Dia mais produtivo (faturação):</SubHeading>
-            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>{`${bestComissionDay?.best_day} (${bestComissionDay?.value}€)`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.green}}>
+              {`${state?.results?.best_comission_day?.best_day} (${state?.results?.best_comission_day?.value}€)`}
+            </Body>
+
           </Col>
+
           <Col style={colStyle}>
+
             <SubHeading style={{marginBottom: '1%'}}>Dia menos produtivo (faturação):</SubHeading>
-            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>{`${worstComissionDay?.worst_day} (${worstComissionDay?.value}€)`}</Body>
+            <Body style={{marginTop: '0', color: CONSTANTS?.colors?.red}}>
+              {`${state?.results?.worst_comission_day?.worst_day} (${state?.results?.worst_comission_day?.value}€)`}
+            </Body>
+
           </Col>
+
         </Row>
       </>
     )
@@ -223,7 +378,7 @@ const MyResults = (props) => {
     <MainContainer>
       <BackIcon onClick={_goBack} />
       <MyMonthContainer>
-        { allContractsQtd !== 0 ?
+        { state?.allContractsQtd !== 0 ?
           renderMyProfit() :
           <SubHeading style={{display: 'flex', justifyContent: 'center'}}>Ainda não há contratos...</SubHeading>
         }  

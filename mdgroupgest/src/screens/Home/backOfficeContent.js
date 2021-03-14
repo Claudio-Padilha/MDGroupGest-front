@@ -326,6 +326,8 @@ const BackOfficeContent = (props) => {
     )
   }
 
+  console.log(localStorage, 'STORAGE')
+
   const renderMyMonth = () => {
     if(userType === "manager" || userType === "secretary") {
       return;
@@ -365,7 +367,7 @@ const BackOfficeContent = (props) => {
               <Heading style={{ textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)", marginLeft: '0', marginRight: '0'}}>{_getMonthContracts?.length}</Heading>
             </div>
           <MDCol style={{justifyContent: 'center', width: '100%' , marginBottom: '5%'}}>
-            { okContracts?.length === 0 &&
+            { okContracts?.length !== 0 &&
               <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>
                 <MDCol>
                   <Body>

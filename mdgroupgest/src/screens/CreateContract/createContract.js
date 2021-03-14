@@ -151,24 +151,24 @@ const CreateContract = (props) => {
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
 
-    await _executeValidationsIfHas(
-      name,
-      nif,
-      nipc,
-      address,
-      contact,
-      email,
-      zipCode,
-      clientName,
-      clientNif,
-      clientContact,
-      CUIDUAL,
-      CUIForGas,
-      CPEDUAL,
-      CPEForElectricity,
-      observations
-    )
-    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
+    // await _executeValidationsIfHas(
+    //   name,
+    //   nif,
+    //   nipc,
+    //   address,
+    //   contact,
+    //   email,
+    //   zipCode,
+    //   clientName,
+    //   clientNif,
+    //   clientContact,
+    //   CUIDUAL,
+    //   CUIForGas,
+    //   CPEDUAL,
+    //   CPEForElectricity,
+    //   observations
+    // )
+    // const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -262,7 +262,7 @@ const CreateContract = (props) => {
       }
     }
 
-    if(!formWasValidated){
+    if(true){
       return (
         swalWithBootstrapButtons.fire({
         title: 'Confirme os dados inseridos: ',
@@ -557,7 +557,8 @@ const CreateContract = (props) => {
       <CornerLeft><Corner180 /></CornerLeft>
       <SubHeading>{props?.location?.state?.title}</SubHeading>
       <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
-        <CForm 
+        <CForm
+          key={DYNAMICFORMFIELDS?.key}
           onSubmit={handleSubmitForm}
           formFields={DYNAMICFORMFIELDS}
           top

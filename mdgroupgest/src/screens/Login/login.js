@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { MainContainer, LoginContainer } from './styles';
 
@@ -11,9 +11,15 @@ import userRequests from '../../hooks/requests/userRequests';
  
 const Login = () => {
 
+  const [isForPassword, setIsForPassword] = useState(false)
+
+  setTimeout(() => {
+    setIsForPassword(true)
+  }, 1000);
+
   const FIELDS = [
     { type: "email", key: "email", question: "Email" },
-    { type: "password", key: "password", question: "Senha" },
+    { type: "password", key: "password", question: "Senha", isForPassword: isForPassword },
   ];
 
   const handleSubmitForm = (formFields) => {

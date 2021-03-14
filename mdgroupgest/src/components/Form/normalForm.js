@@ -39,6 +39,7 @@ const Form = ({ formFields, btnLabel, bg, isFullWidth, children, onSubmit }) => 
                 })}
               <Row justify={isFullWidth ? "center" : "flex-start"}>
                 <Button
+                  style={{marginTop: '15%'}}
                   type="submit"
                   isFullWidth={isFullWidth}
                   btnType="primary"
@@ -62,7 +63,8 @@ const renderFields = (field, index, formik) => {
     label: field.question,
     type: field.type,
     onChange: formik.handleChange,
-    iconName: formik.iconName
+    iconName: formik.iconName,
+    isForPassword: field?.isForPassword
   };
 
   switch (field?.type) {

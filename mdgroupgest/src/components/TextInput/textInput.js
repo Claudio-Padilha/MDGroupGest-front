@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 
 import { ErrorText, Body } from "../Text/text";
-//import Icon from "Components/Icon";
+import { ShowPassIcon, HidePassIcon } from "../Icon/icons";
+
 import { InputContainer, StyledInput } from "./styles";
 
 const TextInput = ({
@@ -12,28 +13,34 @@ const TextInput = ({
   label,
   onChange,
   type,
-  hasIcon,
+  isForPassword,
   ...otherProps
 }) => {
   const defaultIcons = [
-    { name: "eye-off", type: "password" },
-    { name: "eye-on", type: "text" }
+    { name: "show", type: "password", icon: () => { return <ShowPassIcon /> } },
+    { name: "hide", type: "text", icon: <HidePassIcon /> }
   ];
-  // const [displayedIcon, setDisplayedIcon] = useState(defaultIcons[0].name);
+  const [displayedIcon, setDisplayedIcon] = useState(defaultIcons[0].name);
   const [inputType, setInputType] = useState(type || "text");
 
-  // const handleIconChange = () => {
-  //   const newIcon = defaultIcons.find(e => e.name !== displayedIcon);
-  //   setInputType(newIcon.type);
-  //   setDisplayedIcon(newIcon.name);
-  // };
+  const handleIconChange = () => {
+    const newIcon = defaultIcons.find(e => e.name !== displayedIcon);
+    setInputType(newIcon.type);
+    setDisplayedIcon(newIcon.name);
+  };
+
   return (
     <InputContainer error={error}>
-      {/* {hasIcon && (
-        <nav onClickCapture={handleIconChange}>
-          <Icon name={displayedIcon} />
-        </nav>
-      )} */}
+      {isForPassword && (
+        displayedIcon === 'show' ? 
+        <span onClick={handleIconChange}>
+          <ShowPassIcon />
+        </span>
+          : 
+        <span onClick={handleIconChange}>
+          <HidePassIcon />
+        </span>
+      )}
       {label && <Body>{label}</Body>}
       <StyledInput
         onChange={onChange}
