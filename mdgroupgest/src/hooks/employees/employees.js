@@ -32,39 +32,22 @@ export const useEmployees = () => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [localStorage])
 
-  const manager = useMemo(() => {
-    const managers = allEmployees?.manager
-    let ceo = []
-    let regularManager = []
-
-    for (let i = 0; i < managers?.length; i++) {
-      if (managers[i]?.user?.is_admin) {
-        ceo.push(managers[i])
-      } else {
-        regularManager.push(managers[i])
-      }
-    }
-
-    return { ceo, regularManager }
+  const ceo = useMemo(() => {
+    return allEmployees?.ceo
   }, [allEmployees])
 
-  console.log(allEmployees, 'TODOS')
+  const administrator = useMemo(() => {
+    return allEmployees?.admin
+  }, [allEmployees])
 
-  const secretarie = useMemo(() => {
-    const secretaries = allEmployees?.secretary
-    let regularSecretary = []
-    let administrator = []
+  const regularManager = useMemo(() => {
+    const managers = allEmployees?.manager
 
-    for (let i = 0; i < secretaries?.length; i++) {
-      console.log(secretaries[i]?.user?.is_admin, 'TESTE')
-      if (secretaries[i]?.user?.is_admin) {
-        administrator.push(secretaries[i])
-      } else {
-        regularSecretary.push(secretaries[i])
-      }
-    }
+    return managers
+  }, [allEmployees])
 
-    return { administrator, regularSecretary }
+  const regularSecretary = useMemo(() => {
+    return allEmployees?.secretary
   }, [allEmployees])
 
   const salesPerson = useMemo(() => {
@@ -87,10 +70,6 @@ export const useEmployees = () => {
     return { comercial, instructor, teamLeader }
   }, [allEmployees])
 
-  const ceo = manager?.ceo
-  const regularManager = manager?.regularManager
-  const administrator = secretarie?.administrator
-  const regularSecretary = secretarie?.regularSecretary
   const teamLeaders = salesPerson?.teamLeader
   const instructors = salesPerson?.instructor
   const comercials = salesPerson?.comercial

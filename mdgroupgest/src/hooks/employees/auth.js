@@ -5,10 +5,10 @@ export const useAuth = () => {
     return JSON.parse(localStorage.getItem('currentUser'))
   }, [localStorage])
 
-  const isCEO = currentUser?.user?.user_type === "manager" && currentUser?.user?.is_admin
-  const isRegularManager = currentUser?.user?.user_type === "manager" && !currentUser?.user?.is_admin
-  const isAdministrator = currentUser?.user?.user_type === "secretary" && currentUser?.user?.is_admin
-  const isRegularSecretary = currentUser?.user?.user_type === "secreaty" && !currentUser?.user?.is_admin
+  const isCEO = currentUser?.user?.user_type === "ceo"
+  const isAdministrator = currentUser?.user?.user_type === "admin"
+  const isRegularManager = currentUser?.user?.user_type === "manager"
+  const isRegularSecretary = currentUser?.user?.user_type === "secretary"
 
   return {
     isCEO,

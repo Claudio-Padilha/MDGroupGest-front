@@ -55,6 +55,8 @@ const EditEmployee = (props) => {
     var email = formFields?.email;
     var employeeAbove = formFields?.employeeAbove;
 
+    console.log(employeeAbove, 'ABOVE')
+
     const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined
 
       return (
@@ -115,7 +117,9 @@ const EditEmployee = (props) => {
     const data = {
       office: employee?.office,
       id: employee?.user?.id,
+      employee_id: formFields?.employeeAbove?.id,
       user_type: employee?.user?.user_type,
+      employee_type: formFields?.employeeAbove?.employee_type,
     }
 
     _ConfirmEmployeeUpdate(formFields, data)

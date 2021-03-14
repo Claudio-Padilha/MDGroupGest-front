@@ -32,6 +32,7 @@ import CONSTANTS from '../../constants';
 import dataRequests from '../../hooks/requests/dataRequests';
 import officesRequests from '../../hooks/requests/officesRequests';
 import contractsRequests from '../../hooks/requests/contractsRequests';
+import { useEmployees } from '../../hooks/employees/employees';
 
 const BackOfficeContent = (props) => {
 
@@ -67,6 +68,21 @@ const BackOfficeContent = (props) => {
   const currentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'))
 
   const userType =  currentUser?.user?.user_type;
+
+  const {
+    ceo, 
+    regularManager,
+    administrator,
+    regularSecretary,
+    comercials
+  } = useEmployees()
+
+  console.log(ceo, 'CEO')
+  console.log(currentUser, 'USER ATUAL')
+  console.log(regularManager, 'Gerentes')
+  console.log(administrator, 'Administrador')
+  console.log(regularSecretary, 'Secretária')
+  console.log(comercials, 'Comerciais')
 
   let dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
 

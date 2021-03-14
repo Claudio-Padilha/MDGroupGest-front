@@ -45,7 +45,7 @@ import {
   LogoContainer
 } from "./styles";
 
-import { useRefresh } from '../../hooks/window/refresh'
+import { useRefresh } from '../../hooks/window/refresh';
 
 import { List } from "semantic-ui-react";
 import { Field } from "formik";
