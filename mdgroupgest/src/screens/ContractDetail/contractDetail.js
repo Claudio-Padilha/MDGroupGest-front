@@ -235,11 +235,11 @@ const ContractDetail = (props) => {
     contractData = {
       ...contractData,
       ...{ 
-        electronic_bill: document.getElementById('electronic_bill').checked,
-        electricity_ppi: document.getElementById('electricity_ppi').checked,
-        gas_ppi: document.getElementById('gas_ppi').checked,
-        pel: document.getElementById('pel').checked,
-        mgi: document.getElementById('mgi').checked
+        electronic_bill: document.getElementById('electronic_bill') !== null ? document.getElementById('electronic_bill').checked : null,
+        electricity_ppi: document.getElementById('electricity_ppi') !== null ? document.getElementById('electricity_ppi').checked : null,
+        gas_ppi: document.getElementById('gas_ppi') ? document.getElementById('gas_ppi').checked : null,
+        pel: document.getElementById('pel') ? document.getElementById('pel').checked : null,
+        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null
       }
     }
     // if (document.getElementById("select-sell-state").value !== "") {
