@@ -9,11 +9,13 @@ export const useAuth = () => {
   const isAdministrator = currentUser?.user?.user_type === "admin"
   const isRegularManager = currentUser?.user?.user_type === "manager"
   const isRegularSecretary = currentUser?.user?.user_type === "secretary"
+  const isSalesPerson = currentUser?.user?.user_type === "sales_person"
 
   return {
     isCEO,
     isRegularManager,
     isAdministrator,
-    isRegularSecretary
+    isRegularSecretary,
+    isSalesPerson
   }
 }

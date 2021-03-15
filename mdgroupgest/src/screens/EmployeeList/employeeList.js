@@ -247,20 +247,33 @@ const EmployeeList = (props) => {
           </Column>
 
           <Column className={"optionsAboutEmployee"}>
-            <Button
-              disabled={false}
-              action={_confirmToDeleteEmployee}
-              small={true}
-              text="Excluir"
-              className={"secondaryButton"}
-            />
-            <Button
-              disabled={false}
-              action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee.user.address)}}
-              small={true}
-              text="Gerar contrato"
-              className={"primaryButton"}
-            />
+            <Column className={"promotionContainer"}>
+              <Button
+                disabled={false}
+                action={_confirmToDeleteEmployee}
+                small={false}
+                text="Promover a instrutor"
+                className={"promotionButton"}
+              />
+            </Column>
+
+            <Column className={"deleteOrGenerateContract"}>
+              <Button
+                disabled={false}
+                action={_confirmToDeleteEmployee}
+                small={true}
+                text="Excluir"
+                className={"secondaryButton"}
+              />
+              <Button
+                disabled={false}
+                action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee.user.address)}}
+                small={true}
+                text="Gerar contrato"
+                className={"primaryButton"}
+              />
+            </Column>
+
           </Column>
           
         </List.Item>

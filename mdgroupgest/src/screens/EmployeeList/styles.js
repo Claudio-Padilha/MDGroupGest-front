@@ -64,18 +64,45 @@ const MainContainer = styled.div`
     }
 
     .eachEmployee {
+
+
       .optionsAboutEmployee {
         margin-right: 10%;
         width: 100%;
         display: flex;
         justify-content: space-between;
         align-items: center;
-        height: 50%;
-        margin-top: 1%;
+        height: 100%;
+        margin-top: -5%;
+
+        .deleteOrGenerateContract {
+          width: 100%;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          height: 40%;
+        }
+
+        .promotionContainer {
+          display: flex;
+          align-items: center;
+          width: 90%;
+          height: 60%;
+          margin-top: -10%;
+        }
+
         .secondaryButton {
           background-color: ${CONSTANTS.colors.white};
           span {
             color: ${CONSTANTS.colors.black};
+          }
+        }
+        .promotionButton {
+          height: 5vh;
+          width: 80%;
+          background-color: ${CONSTANTS.colors.green};
+          span {
+            color: ${CONSTANTS.colors.white}
           }
         }
       }
