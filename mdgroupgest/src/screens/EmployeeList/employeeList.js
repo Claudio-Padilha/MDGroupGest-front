@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useReducer, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
@@ -42,11 +42,50 @@ const EmployeeList = (props) => {
 
   const { wasRefreshed } = useRefresh()
 
-  // const initialState = {
-  //   employees: 
-  // }
+  const initialState = {
+    employees: employees,
+    userType: userType,
+    shouldRenderEmployeeAssociation: shouldRenderEmployeeAssociation,
+    title: title,
+    officeID: officeID,
+    employeeToAssociate: employeeToAssociate,
+    isFromEdit: isFromEdit,
+    employeesReturningFromEdit: employeesReturningFromEdit,
+  }
+
+  if(!wasRefreshed) {
+    localStorage.setItem('employeeListScreenState', JSON.stringify(initialState))
+  }
+
+  const reducer = (firstState, action) => {
+    let reducerState = {}
+    const stateOnRAM = JSON.parse(localStorage.getItem('employeeListScreenState'))
+    console.log(stateOnRAM, 'ON MEMÓRIA RAM')
+    switch (action) {
+      case 'MAINTAIN_SCREEN_STATE':
+        reducerState = stateOnRAM;
+    }
+    
+    localStorage.removeItem('employeeListScreenState')
+    localStorage.setItem('employeeListScreenState', JSON.stringify(reducerState))
+
+    return reducerState
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    if(wasRefreshed) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else {
+      return state
+    }
+  }, [wasRefreshed])
+
+  console.log(state, 'STATE NO EMPLOYEE LIST')
 
   function _goBack() {
+    localStorage.removeItem('employeeListScreenState')
     history.push({
       pathname: "/ChooseEmployeeTypeToSee",
     })
@@ -93,10 +132,10 @@ const EmployeeList = (props) => {
           employeeData: employee,
           officeID: officeID,
           shouldRenderEmployeeAssociation: shouldRenderEmployeeAssociation,
-          title: title,
+          title: state?.title,
           userType: userType,
-          employeeToAssociate: employeeToAssociate,
-          employeesComingFromList: isFromEdit ? employeesReturningFromEdit : employees,
+          employeeToAssociate: state?.employeeToAssociate,
+          employeesComingFromList: state?.isFromEdit ? state?.employeesReturningFromEdit : state?.employees,
         }
       })
     }
@@ -293,19 +332,22 @@ const EmployeeList = (props) => {
     );
   };
 
+  const employeesFromEdit = state?.employeesReturningFromEdit;
+  const employeesToLoop = state?.employees
+
   const employeesToRender = () => {
-    if (isFromEdit) {
-      return employeesReturningFromEdit.map((employee, index) => {
+    if (state?.isFromEdit) {
+      return employeesFromEdit.map((employee, index) => {
         return renderEmployee(employee, index)
       }) 
-    } else if(!employees || employees?.length === 0 || employees === undefined || employees === null && !employeesReturningFromEdit) {
+    } else if(!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null && !state?.employeesReturningFromEdit) {
       return (
         <EmptyContainer>
           <SubHeading>Ainda não há funcionários...</SubHeading>
         </EmptyContainer>
       )
-    } else if (!isFromEdit && employees) {
-      return employees.map((employee, index) => { 
+    } else if (!state?.isFromEdit && state?.employees) {
+      return employeesToLoop.map((employee, index) => { 
         return renderEmployee(employee, index)
       }) 
     }
