@@ -10,7 +10,7 @@ import {
 import Button from "../../components/Button/button";
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 
-import useLogin from '../../hooks/login';
+import { useAuth } from '../../hooks/employees/auth';
 
 import {
   ContentContainerForAdmin,
@@ -21,9 +21,8 @@ import {
 import officesRequests from '../../hooks/requests/officesRequests'
 
 const AdminBackOfficeContent = (props) => {
-  const currentUser = useLogin();
-  const currentUserIsAdmin = currentUser?.user?.is_admin;
-  const [isAdmin, setIsAdmin] = useState(currentUserIsAdmin);
+
+  const { isCEO } = useAuth();
 
   async function _getOffices() {
     await officesRequests.getOffices()
@@ -47,7 +46,7 @@ const AdminBackOfficeContent = (props) => {
   };
 
   return (
-    isAdmin ?
+    isCEO ?
       <ContentContainerForAdmin>
         <OfficesContainer className={"TESTEZAAAAACO"}>
           { offices?.map((office) => {

@@ -1,5 +1,5 @@
 import React, { useMemo, useCallback } from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
@@ -25,8 +25,15 @@ import employeesRequests from "../../hooks/requests/employeesRequests";
 import officesRequests from '../../hooks/requests/officesRequests';
 
 const ChooseEmployeeTypeToSee = (props) => {
+  const history = useHistory()
+  
   function _goBack() {
-    window.location.replace('#/BackOffice');    
+    history.push({
+      pathname: '/BackOffice',
+      state: {
+        fromEmployeeType: true
+      }
+    })
   }
 
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
@@ -90,13 +97,43 @@ const ChooseEmployeeTypeToSee = (props) => {
           </>
         }
 
-        { currentUser?.user?.user_type === "secretary" && // administrator
+        { isAdministrator && // administrator
           <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>CEO</SubHeading>
         }
         </MDCardBody>
       </MDCard>
     </Link>
   )
+
+  const renderAdminCard = () => (
+    <Link to={{
+      pathname:"/EmployeeList",
+      state: {
+        userType: "secretary", // is_admin
+        title: "Administrador(a)",
+        data: administrator,
+        officeID: currentOfficeID,
+        officeOBJ: currentOfficeObject,
+        shouldRenderEmployeeAssociation: false
+      }  
+    }}>
+      <MDCard className={"card"}>
+        <MDCardBody>
+        { isAdministrator && // is_admin
+          <>
+            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Minha área</SubHeading>  
+            <Body style={{color: CONSTANTS?.colors?.darkGrey}}>Clique para editar os teus dados</Body>
+          </>
+        }
+
+        { isCEO && // ceo
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Administrador(a) </SubHeading>
+        }
+        </MDCardBody>
+      </MDCard>
+    </Link>
+  );
+
 
   const renderManagerCard = () => (
     <Link to={{
@@ -119,37 +156,8 @@ const ChooseEmployeeTypeToSee = (props) => {
           </>
         }
 
-        { currentUser?.user?.user_type === "secretary" || isCEO &&
+        { (isRegularSecretary || isCEO || isAdministrator) &&
           <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Gerente</SubHeading>
-        }
-        </MDCardBody>
-      </MDCard>
-    </Link>
-  );
-
-  const renderAdminCard = () => (
-    <Link to={{
-      pathname:"/EmployeeList",
-      state: {
-        userType: "secretary", // is_admin
-        title: "Administrador(a)",
-        data: administrator,
-        officeID: currentOfficeID,
-        officeOBJ: currentOfficeObject,
-        shouldRenderEmployeeAssociation: false
-      }  
-    }}>
-      <MDCard className={"card"}>
-        <MDCardBody>
-        { currentUser?.user?.user_type === "secretary" && // is_admin
-          <>
-            <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Minha área</SubHeading>  
-            <Body style={{color: CONSTANTS?.colors?.darkGrey}}>Clique para editar os teus dados</Body>
-          </>
-        }
-
-        { currentUser?.user?.user_type === "manager" && // ceo
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Administrador(a) </SubHeading>
         }
         </MDCardBody>
       </MDCard>
@@ -170,15 +178,15 @@ const ChooseEmployeeTypeToSee = (props) => {
     }}>
       <MDCard className={"card"}>
         <MDCardBody>
-        { currentUser?.user?.user_type === "secretary" &&
+        { isRegularSecretary &&
           <>
             <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Minha área</SubHeading>  
             <Body style={{color: CONSTANTS?.colors?.darkGrey}}>Clique para editar os teus dados</Body>
           </>
         }
 
-        { currentUser?.user?.user_type === "manager" &&
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Secretário(a) </SubHeading>
+        { (isCEO || isRegularManager || isAdministrator) &&
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Secretário(a)</SubHeading>
         }
         </MDCardBody>
       </MDCard>
@@ -249,15 +257,15 @@ const ChooseEmployeeTypeToSee = (props) => {
   const ceoView = () => (
     <CardsContainer>
 
-      <FirstRow ceo >
+      <FirstRow ceo>
         {renderCEOCard()}
         {renderAdminCard()}
         {renderManagerCard()}
-        {renderTeamLeaderCard()}
+        {renderSecretaryCard()}
       </FirstRow>
       
-      <SecondRow ceo >
-        {renderSecretaryCard()}
+      <SecondRow ceo>
+        {renderTeamLeaderCard()} 
         {renderInstructorCard()}
         {renderComercialCard()}
         

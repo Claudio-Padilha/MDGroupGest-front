@@ -170,7 +170,7 @@ const EmployeeType = (props) => {
         title: "Criar Funcionário(a)",
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        employeeToAssociate: allEmployees?.manager,
+        employeeToAssociate: regularManager?.concat(teamLeaders, instructors),
         shouldRenderEmployeeAssociation: true
       }  
     }}>

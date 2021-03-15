@@ -6,12 +6,12 @@ import useVPSURL from './defaultVpsURL';
 const url = useVPSURL();
 
 export default {
-  getContracts: () => { 
+  getContracts: (officeId) => { 
     return new Promise((resolve, reject) => {
 
       var contractRequest = {
           method: 'GET',
-          url: `${url}contracts/`,
+          url: `${url}monthContracts/${officeId}`,
           headers: {
               'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
@@ -19,9 +19,10 @@ export default {
       
       axios(contractRequest)
 
-      .then(res => {
+      .then(async res => {
+        console.log(res, 'RESPOSTA')
         localStorage.removeItem('contracts', JSON.stringify(res.data))
-        localStorage.setItem('contracts', JSON.stringify(res.data.sort((a, b) => b.id - a.id)))
+        localStorage.setItem('contracts', JSON.stringify(await res.data.sort((a, b) => b.id - a.id)))
         resolve(res);
       })
       .catch(error => {

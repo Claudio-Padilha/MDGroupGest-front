@@ -55,8 +55,6 @@ const EditEmployee = (props) => {
     var email = formFields?.email;
     var employeeAbove = formFields?.employeeAbove;
 
-    console.log(employeeAbove, 'ABOVE')
-
     const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined
 
       return (

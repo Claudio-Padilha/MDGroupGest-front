@@ -28,8 +28,9 @@ import CONSTANTS from "../../constants";
 import { findDOMNode } from "react-dom";
 
 const ContractList = (props) => {
-
-  contractsRequests.getContracts()
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  
+  contractsRequests.getContracts(currentOfficeID)
 
   const { wasRefreshed } = useRefresh()
 
@@ -48,16 +49,24 @@ const ContractList = (props) => {
       }
     })
   }
+
+  const { isCEO, isAdministrator, isRegularManager, isRegularSecretary } = useAuth()
+
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
   const cameFromUpdate = props?.location?.state?.cameFromUpdate
   const cameFromDelete = props?.location?.state?.fromDelete;
+  const cameFromBackoffice = props?.location?.state?.cameFromBackoffice;
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+  const contractsFromBackoffice = props?.location?.state?.data;
   const contractsFromDetail = props?.location?.state?.contractsToReturn;
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete;
   const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate;
-  console.log(cameFromDetail, 'FROM DETAIL?')
+
   const [isLoading, setIsLoading] = useState(true);
+
+  console.log(contractsFromBackoffice, 'PROPS')
 
   if (isLoading) {
     setTimeout(() => {
@@ -65,30 +74,10 @@ const ContractList = (props) => {
     }, [500]);
   }
 
-  const contracts = useMemo(() => {
-    if(props?.location?.state?.data !== undefined) {
-      return props?.location?.state?.data?.sort((a, b) => b.id - a.id)  
-    } else if (cameFromDelete) {
-      _removeContractFromRAM()
-      return contractsFromDelete?.sort((a, b) => b.id - a.id)
-    } else if (cameFromDetail){
-      return contractsFromDetail?.sort((a, b) => b.id - a.id)
-    } else if(cameFromUpdate) {
-      return contractsFromUpdate?.sort((a, b) => b.id - a.id)
-    } else {
-      const contracts = JSON.parse(localStorage.getItem('contracts'))
-      const contractsToReturn = []
-      for(let i = 0; i < contracts?.length; i++) {
-        if (contracts[i]?.user === currentUser?.user?.id) {
-          contractsToReturn.push(contracts[i])
-        }
-      }
-      return contractsToReturn?.sort((a, b) => b.id - a.id)    
-    } 
-  },[cameFromDelete, cameFromDetail, isLoading])
+
 
   const initialState = {
-    contracts,
+    contracts: contractsFromBackoffice,
     contractsFromDetail,
     contractsFromDelete,
     contractsFromUpdate
@@ -98,7 +87,6 @@ const ContractList = (props) => {
     localStorage.setItem('contractListScreenState', JSON.stringify(initialState))
   }
   
-
   const reducer = (firstState, action) => {
     let reducerState = {}
 
@@ -129,13 +117,10 @@ const ContractList = (props) => {
     } else {
       return state?.contracts
     }
-  }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete])
+  }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
-
-  const [stateOfContracts, setStateOfContracts] = useState(state?.contracts);
 
   function _removeContractFromRAM() {
     _.remove(contractsFromDelete, function(obj) {
@@ -161,6 +146,33 @@ const ContractList = (props) => {
   if(deletedID) {
     _removeContractFromRAM()
   }
+  
+  const [activeContract, setActiveContract] = useState(false)
+
+  const contracts = useMemo(() => {
+    console.log('entrei no use memo')
+    if (contractsFromBackoffice) {
+      return contractsFromBackoffice?.sort((a, b) => b.id - a.id)  
+    } else if (cameFromDelete) {
+      _removeContractFromRAM()
+      return contractsFromDelete?.sort((a, b) => b.id - a.id)
+    } else if (cameFromDetail){
+      return contractsFromDetail?.sort((a, b) => b.id - a.id)
+    } else if (cameFromUpdate) {
+      return contractsFromUpdate?.sort((a, b) => b.id - a.id)
+    } else {
+      const contracts = JSON.parse(localStorage.getItem('contracts'));
+      let contractsToReturn = []
+      for(let i = 0; i < contracts?.length; i++) {
+        if (contracts[i]?.user__id === currentUser?.user?.id || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
+          contractsToReturn.push(contracts[i])
+        }
+      }
+      return contractsToReturn?.sort((a, b) => b.id - a.id)    
+    } 
+  },[wasRefreshed, cameFromDelete, cameFromDetail, cameFromBackoffice, isLoading])
+
+  console.log(contracts, 'CONTRATOS')
 
   function _ConfirmContractActivation(contract, i) {
     const sellStateID = () => {
@@ -212,14 +224,15 @@ const ContractList = (props) => {
                   'error'
                 )
               } else {
+                setActiveContract(true)
                 swalWithBootstrapButtons.fire(
                   'Boa!',
                   'Contrato ativado com sucesso.',
                   'success'
-                ).then(async result => {
+                ).then(result => {
                   if (result.isConfirmed) {
-                    setIsLoading(true)
-                    history.push({pathname: "/BackOffice"})
+                    setIsLoading(false)
+                    window.location.reload()
                   }
                 })
               }
@@ -236,12 +249,7 @@ const ContractList = (props) => {
       )
   }
 
-  console.log(contracts, 'CONTRACTS')
-
-  console.log(state, 'STATE')
-
   const renderContract = (contract, i, searched) => {
-    console.log(contract, 'CONTRACT')
     var sellState = contract?.sell_state__name
 
     function _contractType () {
@@ -295,14 +303,15 @@ const ContractList = (props) => {
           <Column className={"clientInfo"}>
             <Column>
               <Row>
-                <SubHeading style={{marginTop: -10, marginBottom: 0, marginLeft: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
+                <SubHeading style={{width: '80%', marginTop: -10, marginBottom: 0, marginLeft: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
               { contract?.sell_state__name !== 'ok' &&
                 <Button
                   style={{
-                    width: '40%',
+                    width: '60%',
+                    height: '30%',
                     backgroundColor: 'green',
-                    marginLeft: '10%',
-                    marginTop:' -2%',
+                    marginLeft: '3%',
+                    marginTop:' -2.5%',
                     borderRadius: '5%',
                     cursor: 'pointer',
                   }}
@@ -368,13 +377,12 @@ const ContractList = (props) => {
             <Button
               disabled={false}
               action={() => {
-                setStateOfContracts(stateOfContracts)
                 history.push({
                   pathname:"/ContractDetail",
                   state: { 
                     data: contract,
                     contractNumber: contract?.id,
-                    contractsToReturn: stateOfContracts,
+                    contractsToReturn: contracts,
                     cameFromList: true
                   }
                 })
@@ -392,33 +400,31 @@ const ContractList = (props) => {
   const [contractsMatched, setContractsMatched] = useState([])
 
   function _handleSearchName(value) {
-    setContractsMatched(stateOfContracts?.filter(contract => contract.user__name.toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract.user__name.toLowerCase().includes(value)))
     return contractsMatched, isSearching
   }
 
   function _handleSearchPower(value) {
-    setContractsMatched(stateOfContracts?.filter(contract => contract?.power__name?.toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract?.power__name?.toLowerCase().includes(value)))
     return contractsMatched
   }
 
   function _handleSearchNif(value) {
-    setContractsMatched(stateOfContracts?.filter(contract => contract.client_nif.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract.client_nif.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 
   function _handleSearchContractType(value) {
-    setContractsMatched(stateOfContracts?.filter(contract => contract.contract_type.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract.contract_type.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 
   function _handleSearchSellState(value) {
-    setContractsMatched(stateOfContracts?.filter(contract => contract.sell_state__name.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract.sell_state__name.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 
   const stateOfContractsFromDetail = state?.contractsFromDetail
-
-  console.log(stateOfContractsFromDetail, 'TESTE MAXIMO')
 
   return (
     isLoading ?
@@ -489,15 +495,15 @@ const ContractList = (props) => {
         contractsMatched && contractsMatched.map(function(contract, index) {
           return renderContract(contract, index, true)
         })
-      : stateOfContracts?.length === 0 ?
+      : contracts?.length === 0 ?
         <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
        cameFromDetail ?
         stateOfContractsFromDetail &&
         stateOfContractsFromDetail.map(function(contract, index) {
             return renderContract(contract, index, false);
           })
-      : stateOfContracts &&
-        stateOfContracts.map(function(contract, index) {
+      : contracts &&
+        contracts.map(function(contract, index) {
           return renderContract(contract, index, false);
         })
       }        

@@ -236,7 +236,7 @@ const ContractEdit = (props) => {
                   'success'
                 ).then(async (result) => {
                   if(result) {
-                    await contractsRequests.getContracts()
+                    await contractsRequests.getContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push("/ContractList");

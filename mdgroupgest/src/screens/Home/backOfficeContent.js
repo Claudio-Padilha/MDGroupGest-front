@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useReducer, useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
 
@@ -33,40 +33,112 @@ import dataRequests from '../../hooks/requests/dataRequests';
 import officesRequests from '../../hooks/requests/officesRequests';
 import contractsRequests from '../../hooks/requests/contractsRequests';
 import { useEmployees } from '../../hooks/employees/employees';
+import { useRefresh } from '../../hooks/window/refresh';
+import { useStartApp } from '../../hooks/backoffice/startApp';
+import { useAuth } from '../../hooks/employees/auth';
 
 const BackOfficeContent = (props) => {
-
-  dataRequests.getFeedbackCall()
-  dataRequests.getSellState()
-  dataRequests.getPayment()
-  dataRequests.getGasScale()
-  dataRequests.getPower()
-  dataRequests.getResultsToPresent();
   
   const history = useHistory();
   const [isLoading, setIsLoading] = useState(true);
+
+  const start = useStartApp()
+
+  const fromContractsList = props?.location?.state?.fromContractsList;
+  const fromMyResults = props?.location?.state?.fromMyResults;
+  const fromEmployeeType = props?.location?.state?.fromEmployeeType;
+
+  const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
+  const ramResultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
+  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
+  const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'));
+  const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'));
+  const ramContracts = JSON.parse(localStorage.getItem('contracts'));
+  const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'));
 
   setTimeout(() => {
     setIsLoading(false)
   }, [300]);
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  useEffect(() => {
+    if(fromContractsList || fromMyResults) {
+      window.location.reload()
+    }
+  }, [fromContractsList, fromMyResults])
+
+  const { wasRefreshed } = useRefresh()
+
   async function _getOffice() {
-    await officesRequests.getOffice(currentOfficeID)
-    await contractsRequests.getContracts(currentOfficeID)
-    await dataRequests.getOfficesResultsByDay(currentOfficeID)
+    await officesRequests.getOffice(ramCurrentOfficeID)
+    await contractsRequests.getContracts(ramCurrentOfficeID)
+    await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
   }
 
   _getOffice()
 
-  const officeResults = JSON.parse(localStorage.getItem('officeResults'));
-  const resultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
-  const mySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
-  const myTeam = JSON.parse(localStorage.getItem('allEmployees'));
+  const initialState = {
+    ramCurrentUser,
+    ramCurrentOfficeID,
+    ramOfficeResults,
+    ramResultsToPresent,
+    ramMySalary,
+    ramMyTeam,
+    ramCurrentOfficeObject,
+    ramContracts,
+    ramDataToPopulateGraphic
+  }
 
-  const currentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'))
+  if(!wasRefreshed || fromContractsList || initialState !== undefined || fromMyResults) {
+    localStorage.setItem('backofficeScreenState', JSON.stringify(initialState))
+  }
 
+  const reducer = (firstState, action) => {
+    let reducerState = {}
+
+    const stateOnRAM = JSON.parse(localStorage.getItem('backofficeScreenState'))
+
+    switch(action) {
+      case 'MAINTAIN_SCREEN_STATE':
+        reducerState = stateOnRAM
+
+      return reducerState
+    }
+
+    localStorage.removeItem('backofficeScreenState')
+    localStorage.setItem('backofficeScreenState', JSON.stringify(reducerState))
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+  console.log(localStorage, 'STORE NO BACKOFFIce')
+
+  useEffect(() => {
+    if(fromContractsList) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if (fromMyResults) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if(fromEmployeeType) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if(wasRefreshed) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if(initialState) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else {
+      return state
+    }
+  }, [start])
+
+  const currentUser = state?.ramCurrentUser;
+  const currentOfficeID = state?.ramCurrentOfficeID;
+  const officeResults = state?.ramOfficeResults;
+  const resultsToPresent = state?.ramResultsToPresent;
+  const mySalary = state?.ramMySalary;
+  const myTeam = state?.ramMyTeam;
+  const currentOfficeObject = state?.ramCurrentOfficeObject;
+  const contracts = state?.ramContracts;
+  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic;
+  console.log(contracts, 'CONTRATOS')
   const userType =  currentUser?.user?.user_type;
 
   const {
@@ -77,6 +149,13 @@ const BackOfficeContent = (props) => {
     comercials
   } = useEmployees()
 
+  const { 
+    isCEO,
+    isAdministrator,
+    isRegularManager,
+    isRegularSecretary
+  } = useAuth()
+
   console.log(ceo, 'CEO')
   console.log(currentUser, 'USER ATUAL')
   console.log(regularManager, 'Gerentes')
@@ -84,7 +163,7 @@ const BackOfficeContent = (props) => {
   console.log(regularSecretary, 'Secretária')
   console.log(comercials, 'Comerciais')
 
-  let dataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
+  
 
   const dataToForm = []
 
@@ -157,8 +236,6 @@ const BackOfficeContent = (props) => {
       }
     }
 
-  var contracts = JSON.parse(localStorage.getItem('contracts'));
-
   const koContracts = [];
   const okContracts = [];
   const rContracts = [];
@@ -187,7 +264,7 @@ const BackOfficeContent = (props) => {
       )
     })
 
-    if(userType === "manager") {
+    if(isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
       return monthContractsForManagerOrSecretary;
     } else if(userType === "secretary") {
       return monthContractsForManagerOrSecretary;
@@ -196,10 +273,12 @@ const BackOfficeContent = (props) => {
     }
   },[contracts])
 
+  
+
   function _sellStateOfContract() {
 
     for(let i = 0; i < _getMonthContracts?.length; i++) {
-      if (currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary") {
+      if (isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
         if(_getMonthContracts[i]?.sell_state__name === "r") {
           rContracts.push(_getMonthContracts[i]);
         } else if (_getMonthContracts[i]?.sell_state__name === "ok"){
@@ -282,7 +361,7 @@ const BackOfficeContent = (props) => {
     return (
       <MDHero>
         <MDContainer>
-          <Heading>{currentOfficeObject?.name}</Heading>
+          <Heading>{currentOfficeObject?.name || ramCurrentOfficeObject?.name}</Heading>
           <Button
             fullWidth={false}
             disabled={false}
@@ -342,10 +421,8 @@ const BackOfficeContent = (props) => {
     )
   }
 
-  console.log(localStorage, 'STORAGE')
-
   const renderMyMonth = () => {
-    if(userType === "manager" || userType === "secretary") {
+    if(isRegularManager || isRegularSecretary) {
       return;
     }
     else {
@@ -361,19 +438,31 @@ const BackOfficeContent = (props) => {
     }
   };
 
+  const handleContractListNavigation = () => {
+    history.push({
+      pathname: '/ContractList',
+      state: {
+        currentUser: currentUser,
+        cameFromBackoffice: true,
+        data:  _getMonthContracts,
+      }
+    })
+  }
   const currentMonth = useDate();
   const renderMyContracts = () => {
     return (
       <MDCard isTheMiddleCard>
         <MDCard.Body className={"contractsCardBody"}>
           <Link
-            to={{
-              pathname: "/ContractList",
-              state: {
-                data: _getMonthContracts,
-                currentUser: currentUser
-              }
-            }}
+            onClick={handleContractListNavigation}
+            // to={{
+            //   pathname: "/ContractList",
+            //   state: {
+            //     currentUser: currentUser,
+            //     cameFromBackoffice: true,
+            //     data: { contracts: _getMonthContracts},
+            //   }
+            // }}
           >
             <SubHeading style={{marginBottom: 0, marginTop: '10%'}}>Contratos</SubHeading>
           </Link>
@@ -383,7 +472,7 @@ const BackOfficeContent = (props) => {
               <Heading style={{ textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)", marginLeft: '0', marginRight: '0'}}>{_getMonthContracts?.length}</Heading>
             </div>
           <MDCol style={{justifyContent: 'center', width: '100%' , marginBottom: '5%'}}>
-            { okContracts?.length !== 0 &&
+
               <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>
                 <MDCol>
                   <Body>
@@ -392,7 +481,7 @@ const BackOfficeContent = (props) => {
                 </MDCol>
                 <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
               </MDRow>
-            }
+
 
               <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>      
                 <MDCol>
@@ -429,7 +518,7 @@ const BackOfficeContent = (props) => {
             text="Contratos do mês"
           />
           
-          { userType === "manager" &&
+          { (isCEO || isAdministrator || isRegularManager || isRegularSecretary) &&
             <Button
               fullWidth={false}
               disabled={false}
@@ -443,24 +532,6 @@ const BackOfficeContent = (props) => {
               }}
               small={true}
               style={{marginTop: '5%', width: '100%'}}
-              text="Ver todos os contratos"
-            />
-          }
-
-          { userType === "secretary" &&
-            <Button
-              fullWidth={false}
-              disabled={false}
-              action={() => {
-                history.push({
-                  pathname: "/ContractList",
-                  state: {
-                    data: contracts,
-                  }
-                })
-              }}
-              small={true}
-              style={{marginTop: '2%'}}
               text="Ver todos os contratos"
             />
           }

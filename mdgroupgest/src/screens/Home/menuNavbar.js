@@ -9,6 +9,8 @@ import { SubHeading, Body } from '../../components/Text/text';
 import { LogoutIcon } from '../../components/Icon/icons';
 
 import userRequests from '../../hooks/requests/userRequests';
+import { useAuth } from '../../hooks/employees/auth'
+import { usePhoto } from '../../hooks/userProfile/photo';
 
 import CONSTANTS from '../../constants';
 
@@ -21,11 +23,13 @@ import {
 } from './styles';
 
 export default function MenuNavbar(props) {
-  const user = JSON.parse(localStorage.getItem('userForPhoto'));
-  const userName = user?.user?.name;
-  const currentUserIsAdmin = user?.user?.is_admin;
+  const userForPhoto = usePhoto();
+  const userName = userForPhoto?.user?.name;
+  const currentUserIsAdmin = userForPhoto?.user?.is_admin;
 
   const [isLoading, setIsLoading] = useState(true);
+
+  const { isCEO, isAdministrator, isRegularManager, isRegularSecretary } = useAuth()
 
   setTimeout(() => {
     setIsLoading(false)
@@ -52,13 +56,13 @@ export default function MenuNavbar(props) {
   }
 
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
-  const haveAccessToMenuNavbar = user?.user?.user_type === 'manager' || user?.user?.user_type === "secretary" || user?.user?.user_type === "admin" || user?.user?.user_type === "ceo"
+  const haveAccessToMenuNavbar = isCEO || isAdministrator || isRegularManager || isRegularSecretary
 
   function _handleMyProfileNavigation() {
     history.push({
       pathname: "/MyProfile",
       state: {
-        data: user
+        data: userForPhoto
       }
     })
   }
@@ -71,7 +75,7 @@ export default function MenuNavbar(props) {
           :
           <Avatar
             alt="Profile Image"
-            src={user?.user?.avatar}
+            src={userForPhoto?.user?.avatar}
             className={avatarClasses.large}
           />
         }
@@ -89,7 +93,7 @@ export default function MenuNavbar(props) {
                 pathname: "/EmployeeType",
                 state: {
                   isFromBackOffice: true,
-                  user: user
+                  user: userForPhoto
                 }    
               }} >Inserir Funcionário</Link>
             </Body>
@@ -101,36 +105,36 @@ export default function MenuNavbar(props) {
                 pathname: "/ChooseEmployeeTypeToSee",
                 state: {
                   isFromBackOffice: true,
-                  user: user
+                  user: userForPhoto
                 }
               }}
               >Ver Funcionários</Link>
             </Body>
           }
 
-          { !isAdmin && currentUserIsAdmin && 
+          { !isAdmin && (isCEO || isAdministrator)  && 
             <Body isReverseColor={true} style={{marginTop: '30%'}}>
               <Link style={{
                 backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
                 boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
-                fontSize: 12,
+                fontSize: 16,
                 padding: 10
-              }} onClick={() => _setToAdmin(isAdmin)}>Versão Administrador</Link>
+              }} onClick={() => _setToAdmin(isAdmin)}>Versão CEO</Link>
             </Body>
           }
 
-          { user.user.user_type === "ceo" && haveAccessToMenuNavbar &&
+          { isCEO && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to="/CreateOffice">Inserir Escritório</Link>
             </Body>
           }
 
           { isAdmin && haveAccessToMenuNavbar &&
-            <Body isReverseColor={true} style={{marginTop: '69%'}}>
+            <Body isReverseColor={true} style={{marginTop: '55%'}}>
               <Link style={{
                 backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
                 boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
-                fontSize: 12,
+                fontSize: 16,
                 padding: 10
               }} onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
             </Body>

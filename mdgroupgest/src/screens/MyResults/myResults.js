@@ -1,5 +1,6 @@
 import React, { useReducer, useEffect, useState } from "react";
 import { Col, Row } from 'react-bootstrap';
+import { useHistory } from 'react-router-dom';
 
 import {  Heading, SubHeading, SmallSubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
@@ -19,10 +20,11 @@ import CONSTANTS from "../../constants";
 
 const MyResults = (props) => {
   
-  const { wasRefreshed } = useRefresh()
+  const { wasRefreshed } = useRefresh();
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const currentUserType = currentUser?.user?.user_type;
+  const history = useHistory()
 
   const percentageState = props?.location?.state?.percentages;
   const okPercentage = `${percentageState?.ok}%`;
@@ -36,10 +38,6 @@ const MyResults = (props) => {
   const allContractsQtd = props?.location?.state?.contracts?.all?.length;
   const currentSalary = props?.location?.state?.currentSalary;
   const currentFacturing = props?.location?.state?.currentFacturing;
-  var bestContractDay = resultsInfo?.best_contract_day;
-  var bestComissionDay = resultsInfo?.best_comission_day;
-  var worstContractDay = resultsInfo?.worst_contract_day;
-  var worstComissionDay = resultsInfo?.worst_comission_day;
 
   const today = new Date();
   const todayNumber = today.getDate();
@@ -107,8 +105,14 @@ const MyResults = (props) => {
   }, [wasRefreshed])
 
   function _goBack() {
-    localStorage.removeItem('myResultsScreenState')
-    window.location.replace('#/BackOffice');    
+    localStorage.removeItem('myResultsScreenState');
+
+    history.push({
+      pathname: "/BackOffice",
+      state: {
+        fromMyResults: true
+      }
+    })
   }
 
   function _colorToRender() {

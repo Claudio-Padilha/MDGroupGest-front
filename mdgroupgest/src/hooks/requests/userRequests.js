@@ -50,8 +50,16 @@ function _firstTimeOfAnUser(user_id) {
 function _HandleConfirmLoginAlert() {
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
+  const userTypeForPermission = currentUser?.user?.user_type;
 
-  const hasPermission = currentUser?.user?.user_type === "manager" || currentUser?.user?.user_type === "secretary" ;
+  localStorage.setItem('start', true)
+
+  const hasPermission = (
+    userTypeForPermission === "ceo" ||
+    userTypeForPermission === "admin" ||
+    userTypeForPermission === "manager" || 
+    userTypeForPermission === "secretary"
+  );
 
   const swalWithBootstrapButtons = Swal.mixin({
     customClass: {

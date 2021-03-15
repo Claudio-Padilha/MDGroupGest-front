@@ -14,6 +14,7 @@ import { BackIcon, EditIcon } from '../../components/Icon/icons';
 import ContractDocumentPDF from './employmentContract';
 
 import employeesRequests from "../../hooks/requests/employeesRequests";
+import { useRefresh } from '../../hooks/window/refresh';
 
 import {
   MainContainer,
@@ -39,6 +40,12 @@ const EmployeeList = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const dataToGoBack = props?.location?.state?.dataGoingToList;
 
+  const { wasRefreshed } = useRefresh()
+
+  // const initialState = {
+  //   employees: 
+  // }
+
   function _goBack() {
     history.push({
       pathname: "/ChooseEmployeeTypeToSee",
@@ -59,6 +66,10 @@ const EmployeeList = (props) => {
 
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
+        case "Ceo":
+          return "CEO";
+        case "Admin":
+          return "Administrador(a)"
         case "Manager":
           return "Gerente";
         case "Secretary":

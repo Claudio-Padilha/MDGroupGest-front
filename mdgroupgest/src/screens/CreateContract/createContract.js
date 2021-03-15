@@ -44,16 +44,6 @@ const CreateContract = (props) => {
     return allEmployees
   }
 
-  const [isLoading, setIsLoading] = useState(true);
-
-  setTimeout(() => {
-    setIsLoading(false)
-  }, [1000]);
-
-  const powersList = useMemo(() => {
-    return props?.location?.state?.power
-  }, [props]) 
-
   // const typeOfContractFromProps = props?.location?.state?.typeOfContract;
 
   const cameFromChoice = props?.location?.state?.cameFromChoice;
@@ -61,6 +51,62 @@ const CreateContract = (props) => {
   const sellStates = props?.location?.state?.sellState;
   const paymentMethods = props?.location?.state?.payment;
   const gasScales = props?.location?.state?.gasScale;
+  const powersList = props?.location?.state?.power;
+ 
+
+  function _getFeedbackCalls() {
+    let feedbackCallsArr = []
+    for(let i = 0; i < feedbackCalls?.length; i++) {
+      feedbackCallsArr.push({value: feedbackCalls[i]?.id, label: feedbackCalls[i]?.name })
+    }
+
+    return feedbackCallsArr
+  }
+
+  function _getSellStates() {
+    let sellStatesArr = []
+    for(let i = 0; i < sellStates?.length; i++) {
+      sellStatesArr.push({value: sellStates[i]?.id, label: sellStates[i]?.name })
+    }
+
+    return sellStatesArr
+  }
+
+  function _getPaymentMethods() {
+    let paymentMethodsArr = []
+    for(let i = 0; i < paymentMethods?.length; i++) {
+      paymentMethodsArr.push({value: paymentMethods[i]?.id, label: paymentMethods[i]?.name })
+    }
+
+    return paymentMethodsArr
+  }
+
+  function _getGasScales() {
+    let gasScalesArr = []
+    for(let i = 0; i < gasScales?.length; i++) {
+      gasScalesArr.push({value: gasScales[i]?.id, label: gasScales[i]?.name })
+    }
+
+    return gasScalesArr
+  }
+
+  function _getPowersList() {
+    let powersListArr = []
+    for(let i = 0; i < powersList?.length; i++) {
+      powersListArr.push({value: powersList[i]?.id, label: powersList[i]?.name})
+    }
+  }
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  setTimeout(() => {
+    setIsLoading(false)
+  }, [1000]);
+
+  console.log(feedbackCalls, 'PROPS EM CRIAR CONTRATO')
+  console.log(sellStates, 'PROPS EM CRIAR CONTRATO')
+  console.log(paymentMethods, 'PROPS EM CRIAR CONTRATO')
+  console.log(gasScales, 'PROPS EM CRIAR CONTRATO')
 
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
@@ -307,12 +353,12 @@ const CreateContract = (props) => {
                   reverseButtons: true
                 }).then(async (result) => {
                   if(result.isConfirmed) {
-                    await contractsRequests.getContracts()
+                    await contractsRequests.getContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({pathname:"/ChooseTypeOfContract"});
                   } else if(!result.isConfirmed) {
-                    await contractsRequests.getContracts()
+                    await contractsRequests.getContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({
@@ -363,7 +409,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "feedbackCall",
       question: "Feedback de Chamada",
-      options: feedbackCalls
+      options: _getFeedbackCalls()
     },
     {
       type: "dropdown",
@@ -372,7 +418,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "sellState",
       question: "Estado da venda",
-      options: sellStates
+      options: _getSellStates()
     },
     {
       type: "dropdown",
@@ -381,7 +427,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "paymentMethods",
       question: "Método de Pagamento",
-      options: paymentMethods
+      options:  _getPaymentMethods()
     },      
     {
       type: "dropdown",
@@ -390,7 +436,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "powerForElectricity",
       question: "Potência contratada",
-      options: powersList,
+      options: _getGasScales(),
     },
   ];
 
@@ -421,7 +467,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "feedbackCall",
       question: "Feedback de Chamada",
-      options: feedbackCalls
+      options: _getFeedbackCalls()
     },
     {
       type: "dropdown",
@@ -430,7 +476,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "sellState",
       question: "Estado da venda",
-      options: sellStates
+      options: _getSellStates()
     },
     {
       type: "dropdown",
@@ -439,7 +485,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "paymentMethods",
       question: "Método de Pagamento",
-      options: paymentMethods
+      options: _getPaymentMethods()
     },     
     {
       type: "dropdown",
@@ -448,7 +494,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "gasScaleForGas",
       question: "Escalão Gás",
-      options: gasScales
+      options: _getGasScales()
     },   
   ];
 
@@ -482,7 +528,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "feedbackCall",
       question: "Feedback de Chamada",
-      options: feedbackCalls
+      options: _getFeedbackCalls()
     },
     {
       type: "dropdown",
@@ -491,7 +537,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "sellState",
       question: "Estado da venda",
-      options: sellStates
+      options: _getSellStates()
     },
 
     {
@@ -501,7 +547,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "paymentMethods",
       question: "Método de Pagamento",
-      options: paymentMethods
+      options: _getPaymentMethods()
     },   
     
     {
@@ -511,7 +557,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "powerDUAL",
       question: "Potência contratada",
-      options: powersList,
+      options: _getPowersList(),
     },   
     
     {
@@ -521,7 +567,7 @@ const CreateContract = (props) => {
       side: "right",
       key: "gasScaleDUAL",
       question: "Escalão Gás",
-      options: gasScales
+      options: _getGasScales()
     },   
   ];
 

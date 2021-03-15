@@ -258,7 +258,7 @@ const ContractDetail = (props) => {
     var result = window.confirm("Deseja realmente atualizar o contrato?")
     if (result){
       contractsRequests.updateContract(contractData).then(() => {
-        contractsRequests.getContracts().then(
+        contractsRequests.getContracts(currentOfficeID).then(
           alert("Contrato atualizado com sucesso!")
         )
         window.location.replace('#/BackOffice');
@@ -323,7 +323,7 @@ const ContractDetail = (props) => {
           .then(async () => {
             await dataRequests.getOfficeResults(currentOfficeID)
             await dataRequests.getMySalary()
-            contractsRequests.getContracts().then(
+            contractsRequests.getContracts(currentOfficeID).then(
               swalWithBootstrapButtons.fire(
                 'Contrato Apagado!',
                 'A operação foi concluída com sucesso.',

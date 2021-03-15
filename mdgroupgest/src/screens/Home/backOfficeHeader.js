@@ -20,15 +20,19 @@ export default function BackOfficeHeader(props) {
 
   const userTypeInPortuguese = useMemo(() => {
     switch (userType) {
-      case "manager": // CEO 
+      case "ceo":
+        return "CEO";
+      case "admin":
+        return "Administrador(a)"
+      case "manager": 
         return "Gerente"
-      case "secretary": // Admin 
-        return "Secretária"
-      case "team_leader": // Manager
+      case "secretary":
+        return "Secretário(a)"
+      case "team_leader": 
         return "Team Leader"
-      case "instructor": // Secretary
+      case "instructor":
         return "Instrutor"
-      case "sales_person": // Sales Employee
+      case "sales_person":
         return "Comercial"
     
       default:
