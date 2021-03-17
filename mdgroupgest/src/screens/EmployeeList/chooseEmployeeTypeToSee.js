@@ -1,5 +1,6 @@
-import React, { useMemo, useCallback } from "react";
+import React, { useMemo, useCallback, useReducer, useEffect, useState } from "react";
 import { Link, useHistory } from "react-router-dom";
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
@@ -19,8 +20,9 @@ import {
   MDButton 
 } from '../../screens/Home/md';
 
-import { useEmployees, useEmployeesActions } from '../../hooks/employees/employees'
-import { useAuth } from '../../hooks/employees/auth'
+import { useEmployees, useEmployeesActions } from '../../hooks/employees/employees';
+import { useAuth } from '../../hooks/employees/auth';
+import { useRefresh } from '../../hooks/window/refresh';
 import employeesRequests from "../../hooks/requests/employeesRequests";
 import officesRequests from '../../hooks/requests/officesRequests';
 
@@ -28,6 +30,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   const history = useHistory()
   
   function _goBack() {
+    localStorage.removeItem('chooseEmployeeTypeScreenState')
     history.push({
       pathname: '/BackOffice',
       state: {
@@ -36,6 +39,17 @@ const ChooseEmployeeTypeToSee = (props) => {
     })
   }
 
+  const { wasRefreshed } = useRefresh()
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (isLoading) {
+    setTimeout(() => {
+      setIsLoading(false)
+    }, [500]);
+  }
+
+  const isFromList = props?.location?.state?.cameFromList;
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
   const isFromCreation = props?.location?.state?.cameFromCreation;
   const isFromEdit = props?.location?.state?.cameFromEdit;
@@ -44,8 +58,16 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const currentOfficeID = currentUser?.user?.office;
 
+  const currentOfficeObject = useMemo(() => {
+    officesRequests.getOffice(currentOfficeID)
+
+    return JSON.parse(localStorage.getItem('currentOffice'))
+  }, [currentOfficeID])
+
+  console.log(isFromList, 'VEIO DA LISTA?')
+
   function _allEmployees() {
-    if(isFromBackOffice || isFromCreation) {
+    if(isFromBackOffice || isFromCreation || isFromList) {
       return employeesRequests.getAllEmployees(currentOfficeID)
     } else if (isFromEdit) {
       return employeesAfterUpdate
@@ -53,7 +75,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   }
   _allEmployees()
 
-  const { ceo, regularManager, administrator, regularSecretary, teamLeaders, instructors, comercials } = useEmployees()
+  const { ceo, administrator, regularManager, regularSecretary, teamLeaders, instructors, comercials } = useEmployees()
   const { isCEO, isRegularManager, isAdministrator, isRegularSecretary } = useAuth()
 
   const allEmployees = useMemo(() => {
@@ -69,12 +91,55 @@ const ChooseEmployeeTypeToSee = (props) => {
   console.log(instructors, 'Instrutores')
   console.log(comercials, 'Comerciais')
 
+  let initialState = {
+    ceo,
+    administrator,
+    regularManager, 
+    regularSecretary,
+    teamLeaders,
+    instructors,
+    comercials,
+    currentOffice: currentOfficeObject
+  }
 
-  const currentOfficeObject = useMemo(() => {
-    officesRequests.getOffice(currentOfficeID)
+  
+  useEffect(() => {
+    if(isFromList) {
+      initialState = props?.location?.state?.dataToGoBack
+      window.location.reload()
+    }
+  }, [isFromList])
 
-    return JSON.parse(localStorage.getItem('currentOffice'))
-  }, [currentOfficeID])
+  if(!wasRefreshed) {
+    localStorage.setItem('chooseEmployeeTypeScreenState', JSON.stringify(initialState))
+  }
+
+  const reducer = (firstState, action) => {
+    let reducerState = {}
+    const stateOnRAM = JSON.parse(localStorage.getItem('chooseEmployeeTypeScreenState'))
+
+    switch (action) {
+      case 'MAINTAIN_SCREEN_STATE':
+        reducerState = stateOnRAM;
+    }
+
+    localStorage.removeItem('chooseEmployeeTypeScreenState')
+    localStorage.setItem('chooseEmployeeTypeScreenState', JSON.stringify(reducerState))
+
+    return reducerState
+  }
+
+  const [state, dispatch] = useReducer(reducer, initialState)
+
+  useEffect(() => {
+    if(wasRefreshed) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
+    } else {
+      return state
+    }
+  }, [wasRefreshed])
+
+  console.log(state, 'ESTADO')
 
   const renderCEOCard = () => ( 
     <Link to={{
@@ -82,10 +147,11 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "manager",
         title: "CEO",
-        data: ceo,
-        dataGoingToList : currentUser,
+        data: state?.ceo,
+        dataGoingToList: state,
         officeID: currentOfficeID,
-        shouldRenderEmployeeAssociation: false
+        shouldRenderEmployeeAssociation: false,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -111,10 +177,11 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "secretary", // is_admin
         title: "Administrador(a)",
-        data: administrator,
+        data: state?.administrator,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        shouldRenderEmployeeAssociation: false
+        shouldRenderEmployeeAssociation: false,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -134,17 +201,17 @@ const ChooseEmployeeTypeToSee = (props) => {
     </Link>
   );
 
-
   const renderManagerCard = () => (
     <Link to={{
       pathname:"/EmployeeList",
       state: {
         userType: "manager",
         title: "Gerente",
-        data: regularManager,
+        data: state?.regularManager,
         dataGoingToList : currentUser,
         officeID: currentOfficeID,
-        shouldRenderEmployeeAssociation: false
+        shouldRenderEmployeeAssociation: false,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -170,10 +237,11 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "secretary", 
         title: "Secretário(a)",
-        data: regularSecretary,
+        data: state?.regularSecretary,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        shouldRenderEmployeeAssociation: false
+        shouldRenderEmployeeAssociation: false,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -199,9 +267,10 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "teamLeader",
         title: "Team Leader",
-        data: teamLeaders,
+        data: state?.teamLeaders,
         employeeToAssociate: regularManager || ceo,
-        shouldRenderEmployeeAssociation: true
+        shouldRenderEmployeeAssociation: true,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -218,11 +287,12 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "instructor",
         title: "Instrutor(a)",
-        data: instructors,
+        data: state?.instructors,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         employeeToAssociate: teamLeaders.concat(regularManager).concat(ceo),
-        shouldRenderEmployeeAssociation: true
+        shouldRenderEmployeeAssociation: true,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -239,11 +309,12 @@ const ChooseEmployeeTypeToSee = (props) => {
       state: {
         userType: "salesPerson",
         title: "Comercial",
-        data: comercials,
+        data: state?.comercials,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         employeeToAssociate: instructors.concat(allEmployees?.manager),
-        shouldRenderEmployeeAssociation: true
+        shouldRenderEmployeeAssociation: true,
+        isFromEmployeeTypeSelection: true
       }  
     }}>
       <MDCard className={"card"}>
@@ -347,12 +418,9 @@ const ChooseEmployeeTypeToSee = (props) => {
     },
     [currentUser],
   )
-
   
- 
-  return(
-    <MainContainerEType>
-      <BackIcon onClick={_goBack} />
+  const contentOfThisPage = () => (
+    <>
       <Heading style={{
         position: 'absolute',
         top: '0%',
@@ -361,6 +429,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         Olá, {currentUser?.user?.name}!
       </Heading>
+
       <SubHeading style={{
         position: 'absolute',
         top: '7%',
@@ -369,8 +438,19 @@ const ChooseEmployeeTypeToSee = (props) => {
       }}>
         Que tipo de funcionário queres ver?
       </SubHeading>
-
+    
       { handleUserView(currentUser) }
+    </>
+  )  
+  
+  const loadingContainer = () => (
+    <SwishSpinner size={200} color="#686769" loading={isLoading} />
+  )
+ 
+  return(
+    <MainContainerEType>
+      <BackIcon onClick={_goBack} />
+      { isLoading ? loadingContainer() : contentOfThisPage() }
     </MainContainerEType>
   );
 };

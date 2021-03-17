@@ -86,7 +86,7 @@ const MainContainer = styled.div`
         .promotionContainer {
           display: flex;
           align-items: center;
-          width: 90%;
+          width: 100%;
           height: 60%;
           margin-top: -10%;
         }
@@ -188,6 +188,7 @@ const CardsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+  margin-top: 10vh;
   width: 80%;
   height: 65vh;
   button:hover {

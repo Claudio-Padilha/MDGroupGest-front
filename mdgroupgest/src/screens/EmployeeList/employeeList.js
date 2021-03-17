@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useCallback } from "react";
 import { useHistory } from "react-router-dom";
 import Divider from '@material-ui/core/Divider';
 import _ from 'lodash';
@@ -25,6 +25,7 @@ import {
 } from "./styles";
 
 import { List } from "semantic-ui-react";
+import { useTheme } from "@material-ui/core";
 
 const EmployeeList = (props) => {
   const history = useHistory();
@@ -39,6 +40,7 @@ const EmployeeList = (props) => {
   const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const dataToGoBack = props?.location?.state?.dataGoingToList;
+  const isFromEmployeeTypeSelection = props?.location?.state?.isFromEmployeeTypeSelection;
 
   const { wasRefreshed } = useRefresh()
 
@@ -60,7 +62,7 @@ const EmployeeList = (props) => {
   const reducer = (firstState, action) => {
     let reducerState = {}
     const stateOnRAM = JSON.parse(localStorage.getItem('employeeListScreenState'))
-    console.log(stateOnRAM, 'ON MEMÓRIA RAM')
+    
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM;
@@ -75,6 +77,12 @@ const EmployeeList = (props) => {
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
+    if(isFromEmployeeTypeSelection) {
+      window.location.reload()
+    }
+  }, [isFromEmployeeTypeSelection])
+
+  useEffect(() => {
     if(wasRefreshed) {
       return dispatch('MAINTAIN_SCREEN_STATE')
     } else {
@@ -82,12 +90,14 @@ const EmployeeList = (props) => {
     }
   }, [wasRefreshed])
 
-  console.log(state, 'STATE NO EMPLOYEE LIST')
-
   function _goBack() {
     localStorage.removeItem('employeeListScreenState')
     history.push({
       pathname: "/ChooseEmployeeTypeToSee",
+      state: {
+        cameFromList: true,
+        dataToGoBack
+      }
     })
   }
 
@@ -98,10 +108,23 @@ const EmployeeList = (props) => {
     })
   }
 
+  const textForPromotion = useCallback((position) => {
+      if(state['userType'] === 'instructor' && position) {
+        return 'Promover a Team Leader'
+      } else if (state['userType'] === 'salesPerson') {
+        return 'Promover a Instrutor'
+      }
+  }, [state])
+
   const renderEmployee = (employee, i) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
+
+    const isTeamLeader = employee?.is_team_leader;
+    const isInstructor = employee?.is_instructor;
+
+    const renderPromotion = (userType === 'Sales_person' || isInstructor)
 
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
@@ -118,7 +141,13 @@ const EmployeeList = (props) => {
         case "Instructor":
           return "Instrutor";
         case "Sales_person":
-          return "Comercial";
+          if(isTeamLeader) {
+            return 'Team Leader'
+          } else if (isInstructor) {
+            return 'Instrutor';
+          } else {
+            return "Comercial";
+          }
       
         default:
           return;
@@ -138,6 +167,48 @@ const EmployeeList = (props) => {
           employeesComingFromList: state?.isFromEdit ? state?.employeesReturningFromEdit : state?.employees,
         }
       })
+    }
+
+    function _confirmToPromoteEmployee() {
+      const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+          confirmButton: 'btn btn-success',
+          cancelButton: 'btn btn-danger'
+        },
+        buttonsStyling: true
+      })
+      
+      return (
+        swalWithBootstrapButtons.fire({
+          title: 'Tem certeza?',
+          text: `Vai promover o ${employee?.user?.name}.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'Sim',
+          cancelButtonText: 'Não, cancelar',
+          reverseButtons: true
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            await employeesRequests.promoteEmployee(employee?.id)        
+            .then(() => (
+              swalWithBootstrapButtons.fire(
+                'Funcionário Promovido!',
+                'A operação foi concluída com sucesso.',
+                'success'
+              )  
+            )).then(_redirectToEmployeeTypes)      
+          } else if (
+            /* Read more about handling dismissals below */
+            result.dismiss === Swal.DismissReason.cancel
+          ) {
+            swalWithBootstrapButtons.fire(
+              'Ação cancelada!',
+              'O funcionário não foi promovido.',
+              'error'
+            )
+          }
+        })
+      )
     }
 
     function _confirmToDeleteEmployee() {
@@ -239,6 +310,8 @@ const EmployeeList = (props) => {
       doc.save(name + ".pdf");
     };
 
+    const roleToPromotion = isInstructor ? 'teamLeader': 'instructor'
+
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
@@ -297,15 +370,17 @@ const EmployeeList = (props) => {
           </Column>
 
           <Column className={"optionsAboutEmployee"}>
-            <Column className={"promotionContainer"}>
-              <Button
-                disabled={false}
-                action={_confirmToDeleteEmployee}
-                small={false}
-                text="Promover a instrutor"
-                className={"promotionButton"}
-              />
-            </Column>
+            { renderPromotion &&
+              <Column className={"promotionContainer"}>
+                <Button
+                  disabled={false}
+                  action={_confirmToPromoteEmployee}
+                  small={false}
+                  text={textForPromotion(isInstructor)}
+                  className={"promotionButton"}
+                />
+              </Column>
+            }
 
             <Column className={"deleteOrGenerateContract"}>
               <Button

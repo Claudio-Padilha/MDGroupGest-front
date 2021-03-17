@@ -54,7 +54,6 @@ import { MenuItem } from "@material-ui/core";
 
 const ContractDetail = (props) => {
 
- // Select Variables
   const [isLoading, setIsLoading] = useState(true);
   const [maintainState, setMaintainState] = useState(false);
 
