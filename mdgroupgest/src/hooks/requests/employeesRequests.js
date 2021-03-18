@@ -165,6 +165,35 @@ export default {
     })
   },
 
+  promoteEmployee: (id) => {
+    return new Promise((resolve, reject) => {
+
+      var employeePromoteRequest = {
+          method: 'POST',
+          url: `${url}promote/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          data: {
+            employee_id: id
+          },
+          json: true,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(employeePromoteRequest)
+
+      .then(res => {
+
+        resolve(res)
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    });
+  },
+
   addPhoto: (data) => {
     return new Promise((resolve, reject) => {
 

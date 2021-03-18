@@ -78,6 +78,7 @@ const MainDiv = styled.div`
 
 const CardsContainer = styled.div`
   display: flex;
+  margin-top: 10vh;
   flex-direction: column;
   justify-content: space-around;
   width: 80%;

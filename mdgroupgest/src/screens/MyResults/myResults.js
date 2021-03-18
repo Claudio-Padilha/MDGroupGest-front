@@ -76,7 +76,6 @@ const MyResults = (props) => {
     localStorage.setItem('myResultsScreenState', JSON.stringify(initialState))
   }
   
-
   const reducer = (firstState, action) => {
     let reducerState = {}
 
