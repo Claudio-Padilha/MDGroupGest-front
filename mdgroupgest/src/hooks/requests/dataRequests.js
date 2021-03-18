@@ -7,7 +7,7 @@ import useVPSURL from './defaultVpsURL';
 const url = useVPSURL();
 
 export default {
-  getFeedbackCall: () => {
+  getFeedbackCall:  () => {
 
     return new Promise((resolve, reject) => {
 

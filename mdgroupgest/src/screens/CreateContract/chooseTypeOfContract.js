@@ -23,6 +23,18 @@ import dataRequests from "../../hooks/requests/dataRequests";
 import { useStartApp } from "../../hooks/backoffice/startApp";
 
 const ChooseTypeOfContract = (props) => {
+  let contractInfoNeeded = []
+  async function _getAllInfoNeeded() {
+    await contractInfoNeeded.push({ 
+      feedbackCalls: JSON.parse(localStorage.getItem('feedbackCalls')),
+      sellStates: JSON.parse(localStorage.getItem('sellStates')),
+      gasScales: JSON.parse(localStorage.getItem('gasScales')),
+      payments: JSON.parse(localStorage.getItem('payments')),
+      powers: JSON.parse(localStorage.getItem('powerList'))
+    })
+  }
+
+  _getAllInfoNeeded()
   const history = useHistory()
 
   const start = useStartApp()
@@ -146,7 +158,7 @@ const ChooseTypeOfContract = (props) => {
 
   _getAllEmployees()
 
-  let contractInfoNeeded = []
+  
 
   const feedbackCalls = JSON.parse(localStorage.getItem('feedbackCalls'))
   const sellStates = JSON.parse(localStorage.getItem('sellStates'))
@@ -154,22 +166,7 @@ const ChooseTypeOfContract = (props) => {
   const payments = JSON.parse(localStorage.getItem('payments'))
   const powers = JSON.parse(localStorage.getItem('powerList'))
 
-  async function _getAllInfoNeeded() {
-    start ? await contractInfoNeeded.push({ 
-      feedbackCalls: JSON.parse(localStorage.getItem('feedbackCalls')),
-      sellStates: JSON.parse(localStorage.getItem('sellStates')),
-      gasScales: JSON.parse(localStorage.getItem('gasScales')),
-      payments: JSON.parse(localStorage.getItem('gasScales')),
-      powers: JSON.parse(localStorage.getItem('gasScales'))
-    }) :
-    await _getFeedbackCall()
-    await _getSellState()
-    await _getGasScale()
-    await _getPayment()
-    await _getPower()
-  }
-
-  _getAllInfoNeeded()
+  
 
   console.log(contractInfoNeeded, 'INFO NEEDED')
 
@@ -184,10 +181,10 @@ const ChooseTypeOfContract = (props) => {
           title: "Contrato Electricidade",
           typeOfContract: "electricity",
           cameFromChoice: true,
-          feedbackCall: contractInfoNeeded[0]?.feedbackCalls,
-          sellState: contractInfoNeeded[0]?.sellStates,
-          payment: contractInfoNeeded[0]?.payments,
-          power: start ? contractInfoNeeded[0]?.powers : _getPower(false)
+          feedbackCall: contractInfoNeeded[0].feedbackCalls,
+          sellState: contractInfoNeeded[0].sellStates,
+          payment: contractInfoNeeded[0].payments,
+          power: contractInfoNeeded[0].powers
         }  
       }}>
         <MDCard className={"card"}>
@@ -234,7 +231,7 @@ const ChooseTypeOfContract = (props) => {
           cameFromChoice: true,
           feedbackCall: contractInfoNeeded[0]?.feedbackCalls,
           sellState: contractInfoNeeded[0]?.sellStates,
-          gasScale: start ? contractInfoNeeded[0]?.gasScales : _getGasScale(false),
+          gasScale: contractInfoNeeded[0]?.gasScales,
           payment: contractInfoNeeded[0]?.payments
         }  
       }}>

@@ -47,7 +47,12 @@ function _firstTimeOfAnUser(user_id) {
   ))
 }
 
-function _HandleConfirmLoginAlert() {
+async function  _HandleConfirmLoginAlert() {
+  dataRequests.getPower()
+  dataRequests.getGasScale()
+  dataRequests.getPayment()
+  dataRequests.getFeedbackCall()
+  dataRequests.getSellState()
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
   const userTypeForPermission = currentUser?.user?.user_type;
@@ -81,6 +86,7 @@ function _HandleConfirmLoginAlert() {
       }).then(async (result) => {
         await dataRequests.getMySalary()
         await dataRequests.getOfficeResults(currentUser?.user?.office)
+        
         await employeesRequests.getAllEmployees(currentUser?.user?.office)
         // "result.isConfirmed" significa que foi clicado o botão esquerdo do alerta (Inserir contrato)
         if (result.isConfirmed) {
