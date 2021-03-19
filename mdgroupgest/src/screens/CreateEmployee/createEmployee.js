@@ -183,6 +183,22 @@ const CreateEmployee = (props) => {
       }
     }
 
+    const administratorObj = {
+      office: officeID,
+      user: {
+        name: name,
+        email: email,
+        avatar: null,
+        password: "Mdgroup2021@",
+        user_type: "admin",
+        nif: nif,
+        contact: contact,
+        address: address,
+        zipcode: zipCode,
+        is_admin: false
+      }
+    }
+
     function _userObjBasedOnType() {
       switch (userTypeToInsert) {
         case 'sales_person':
@@ -195,6 +211,8 @@ const CreateEmployee = (props) => {
           return secretaryObj
         case 'manager':
           return managerObj  
+        case 'admin':
+          return administratorObj 
         default:
           return;
       }
@@ -223,7 +241,7 @@ const CreateEmployee = (props) => {
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
-
+              console.log(res?.message, 'ERRO DO CLIENTE?')
               if(clientSideError) {
                 return swalWithBootstrapButtons.fire(
                   'Erro',
@@ -268,9 +286,8 @@ const CreateEmployee = (props) => {
   }
 
   const handleSubmitForm = (formFields) => {
-    const userType = props.location.state.userType;
 
-    localStorage.setItem('currentUserType', userType)
+    localStorage.setItem('currentUserType', userTypeToInsert)
 
     _ConfirmEmployeeCreation(formFields)
   };

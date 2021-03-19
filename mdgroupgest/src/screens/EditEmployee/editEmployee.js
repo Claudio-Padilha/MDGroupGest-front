@@ -27,13 +27,17 @@ const EditEmployee = (props) => {
   const employeesComingFromList = props?.location?.state?.employeesComingFromList;
   const currentAssociateID = employee?.manager;
   const currentOfficeID = employee?.office;
+  const employeeListState = props?.location?.state?.employeeListState;
+
+  console.log(employee, 'EMPLOYEE')
 
   function _goBack() {
     history.push({
       pathname: "/EmployeeList",
       state: {
         employeesReturningFromEdit: employeesComingFromList,
-        isFromEdit: true
+        isFromEdit: true,
+        employeeListState
       }
     });    
   }
@@ -53,6 +57,7 @@ const EditEmployee = (props) => {
     var address = formFields?.address; 
     var contact = formFields?.contact?.toString();
     var email = formFields?.email;
+    var zipCode = formFields?.zipCode;
     var employeeAbove = formFields?.employeeAbove;
 
     const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined
@@ -63,6 +68,7 @@ const EditEmployee = (props) => {
         html: 
             `${name ? `O novo nome será: <b>${name}</b> <br>` : ``}
              ${nif ? `O novo NIF será: <b>${nif}</b> <br>` : ``}
+             ${nif ? `O novo Código-Postal será: <b>${zipCode}</b> <br>` : ``}
              ${address ? `A nova morada será: <b>${address}</b> <br>` : ``}
              ${email ? `O novo email será: <b>${email}</b> <br>` : ``}
              ${contact ? `O novo contacto será: <b>${contact}</b> <br>` : ``}
@@ -145,6 +151,7 @@ const EditEmployee = (props) => {
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome", place: employee?.user?.name },
     { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF", place: employee?.user?.nif },
+    { type: "text", subType: "twoColumns", side: "left", key: "zipCode", question: "Código-Postal", place: employee?.user?.zipcode },
     { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone", place: employee?.user?.contact },
     { type: "email", subType: "twoColumns", side: "left", key: "email", question: "E-mail", place: employee?.user?.email },
     { type: "text", subType: "twoColumns", side: "left", key: "address", question: "Morada", place: employee?.user?.address },
@@ -158,7 +165,7 @@ const EditEmployee = (props) => {
       options: _employeeToAssociation() 
     }
   ];
-
+  console.log(FIELDS, 'FIELDS')
   return (
       <MainDiv>
         <BackIcon onClick={_goBack} />

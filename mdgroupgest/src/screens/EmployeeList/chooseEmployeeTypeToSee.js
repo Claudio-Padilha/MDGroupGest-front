@@ -64,8 +64,6 @@ const ChooseEmployeeTypeToSee = (props) => {
     return JSON.parse(localStorage.getItem('currentOffice'))
   }, [currentOfficeID])
 
-  console.log(isFromList, 'VEIO DA LISTA?')
-
   function _allEmployees() {
     if(isFromBackOffice || isFromCreation || isFromList) {
       return employeesRequests.getAllEmployees(currentOfficeID)
@@ -82,15 +80,6 @@ const ChooseEmployeeTypeToSee = (props) => {
     return JSON.parse(localStorage.getItem('allEmployees'))
   }, [isFromBackOffice, isFromCreation, isFromEdit])
 
-  console.log(ceo, 'CEO')
-  console.log(currentUser, 'USER ATUAL')
-  console.log(regularManager, 'Gerentes')
-  console.log(administrator, 'Administrador')
-  console.log(regularSecretary, 'Secretária')
-  console.log(teamLeaders, 'Team Leaders')
-  console.log(instructors, 'Instrutores')
-  console.log(comercials, 'Comerciais')
-
   let initialState = {
     ceo,
     administrator,
@@ -102,7 +91,6 @@ const ChooseEmployeeTypeToSee = (props) => {
     currentOffice: currentOfficeObject
   }
 
-  
   useEffect(() => {
     if(isFromList) {
       initialState = props?.location?.state?.dataToGoBack
@@ -138,8 +126,6 @@ const ChooseEmployeeTypeToSee = (props) => {
       return state
     }
   }, [wasRefreshed])
-
-  console.log(state, 'ESTADO')
 
   const renderCEOCard = () => ( 
     <Link to={{

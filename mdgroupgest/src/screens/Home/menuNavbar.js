@@ -66,7 +66,7 @@ export default function MenuNavbar(props) {
       }
     })
   }
-
+  
   return (
     <MDNavbar bg="dark" variant="dark" fixed="left">
       <ProfileContainer>
@@ -123,7 +123,7 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
-          { isCEO && haveAccessToMenuNavbar &&
+          { isAdmin && (isCEO || isAdministrator) &&
             <Body isReverseColor={true}>
               <Link to="/CreateOffice">Inserir Escritório</Link>
             </Body>

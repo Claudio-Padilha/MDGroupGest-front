@@ -271,19 +271,22 @@ const EmployeeType = (props) => {
     </CardsContainer>
   )
   function _navigateToEmployeeForm() {
-return (    <Redirect
-      to={{
-        pathname: "/CreateEmployee",
-        state: {
-          userType: "manager",
-          title: "Criar Funcionário(a)",
-          officeID: currentOfficeID,
-          officeOBJ: currentOfficeObject,
-          shouldGoToBackOffice: true,
-          shouldRenderEmployeeAssociation: false
-        }  
-      }}
-    />)
+    return (
+      <Redirect
+        to={{
+          pathname: "/CreateEmployee",
+          state: {
+            userType: "sales_person",
+            title: "Criar Funcionário(a)",
+            officeID: currentOfficeID,
+            officeOBJ: currentOfficeObject,
+            shouldGoToBackOffice: true,
+            employeeToAssociate: regularManager?.concat(teamLeaders, instructors),
+            shouldRenderEmployeeAssociation: true
+          }  
+        }}
+      />
+    )
   }
   
 

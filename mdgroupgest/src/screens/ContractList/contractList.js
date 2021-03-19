@@ -66,8 +66,6 @@ const ContractList = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  console.log(contractsFromBackoffice, 'PROPS')
-
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
@@ -129,7 +127,6 @@ const ContractList = (props) => {
 
     return contractsFromDelete;
   }
-  console.log(state?.contractsFromDetail, 'TESTE')
 
   function _handleEditEmployee() {      // CHANGE THIS TO HANDLE CONTRACT UPDATE
     history.push({
@@ -150,7 +147,6 @@ const ContractList = (props) => {
   const [activeContract, setActiveContract] = useState(false)
 
   const contracts = useMemo(() => {
-    console.log('entrei no use memo')
     if (contractsFromBackoffice) {
       return contractsFromBackoffice?.sort((a, b) => b.id - a.id)  
     } else if (cameFromDelete) {
@@ -171,9 +167,7 @@ const ContractList = (props) => {
       return contractsToReturn?.sort((a, b) => b.id - a.id)    
     } 
   },[wasRefreshed, cameFromDelete, cameFromDetail, cameFromBackoffice, isLoading])
-
-  console.log(contracts, 'CONTRATOS')
-
+  
   function _ConfirmContractActivation(contract, i) {
     const sellStateID = () => {
       const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));

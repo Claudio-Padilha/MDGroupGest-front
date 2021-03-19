@@ -37,6 +37,7 @@ const EmployeeList = (props) => {
   const officeID = props?.location?.state?.officeID;
   const employeeToAssociate = props?.location?.state?.employeeToAssociate;
   const isFromEdit = props?.location?.state?.isFromEdit;
+  const employeesListStateFromEdit = props?.location?.state?.employeeListState;
   const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const dataToGoBack = props?.location?.state?.dataGoingToList;
@@ -52,12 +53,17 @@ const EmployeeList = (props) => {
     officeID: officeID,
     employeeToAssociate: employeeToAssociate,
     isFromEdit: isFromEdit,
-    employeesReturningFromEdit: employeesReturningFromEdit,
   }
 
-  if(!wasRefreshed) {
-    localStorage.setItem('employeeListScreenState', JSON.stringify(initialState))
-  }
+  useEffect(() => {
+    if(!wasRefreshed) {
+      if(isFromEdit) {
+        localStorage.setItem('employeeListScreenState', JSON.stringify(employeesListStateFromEdit))
+      } else {
+        localStorage.setItem('employeeListScreenState', JSON.stringify(initialState))
+      } 
+    }
+  }, [wasRefreshed, isFromEdit])
 
   const reducer = (firstState, action) => {
     let reducerState = {}
@@ -83,7 +89,7 @@ const EmployeeList = (props) => {
   }, [isFromEmployeeTypeSelection])
 
   useEffect(() => {
-    if(wasRefreshed) {
+    if(wasRefreshed || isFromEdit) {
       return dispatch('MAINTAIN_SCREEN_STATE')
     } else {
       return state
@@ -113,18 +119,22 @@ const EmployeeList = (props) => {
         return 'Promover a Team Leader'
       } else if (state['userType'] === 'salesPerson') {
         return 'Promover a Instrutor'
+      } else {
+        return
       }
   }, [state])
+
+  console.log(textForPromotion(), 'TEXTO DO BOTÂO')
 
   const renderEmployee = (employee, i) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-
+    
     const isTeamLeader = employee?.is_team_leader;
     const isInstructor = employee?.is_instructor;
 
-    const renderPromotion = (userType === 'Sales_person' || isInstructor)
+    const renderPromotion = ((userType === 'sales_person' && !isTeamLeader) || isInstructor)
 
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
@@ -153,18 +163,19 @@ const EmployeeList = (props) => {
           return;
       }
     }
-
+    console.log(state, 'ESTADO')
     function _handleEditEmployee() {
       history.push({
         pathname: "/EmployeeEdit",
         state: {
           employeeData: employee,
           officeID: officeID,
-          shouldRenderEmployeeAssociation: shouldRenderEmployeeAssociation,
+          shouldRenderEmployeeAssociation: state?.shouldRenderEmployeeAssociation,
           title: state?.title,
           userType: userType,
           employeeToAssociate: state?.employeeToAssociate,
           employeesComingFromList: state?.isFromEdit ? state?.employeesReturningFromEdit : state?.employees,
+          employeeListState: state
         }
       })
     }
@@ -311,7 +322,7 @@ const EmployeeList = (props) => {
     };
 
     const roleToPromotion = isInstructor ? 'teamLeader': 'instructor'
-
+    console.log(renderPromotion, 'DEVE RENDERIZAR PROMOTION')
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
@@ -411,8 +422,8 @@ const EmployeeList = (props) => {
   const employeesToLoop = state?.employees
 
   const employeesToRender = () => {
-    if (state?.isFromEdit) {
-      return employeesFromEdit.map((employee, index) => {
+    if (isFromEdit) {
+      return state?.employees?.map((employee, index) => {
         return renderEmployee(employee, index)
       }) 
     } else if(!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null && !state?.employeesReturningFromEdit) {

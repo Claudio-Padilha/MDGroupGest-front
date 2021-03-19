@@ -20,7 +20,6 @@ export default {
       axios(contractRequest)
 
       .then(async res => {
-        console.log(res, 'RESPOSTA')
         localStorage.removeItem('contracts', JSON.stringify(res.data))
         localStorage.setItem('contracts', JSON.stringify(await res.data.sort((a, b) => b.id - a.id)))
         resolve(res);

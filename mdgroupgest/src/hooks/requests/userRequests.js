@@ -10,8 +10,6 @@ import { Redirect } from 'react-router-dom';
 
 const url = useVPSURL();
 
-console.log(url, 'URL')
-
 function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({

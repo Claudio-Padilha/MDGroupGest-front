@@ -111,7 +111,6 @@ const BackOfficeContent = (props) => {
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
-  console.log(localStorage, 'STORE NO BACKOFFIce')
 
   useEffect(() => {
     if(fromContractsList) {
@@ -138,7 +137,6 @@ const BackOfficeContent = (props) => {
   const currentOfficeObject = state?.ramCurrentOfficeObject;
   const contracts = state?.ramContracts;
   let dataToPopulateGraphic = state?.ramDataToPopulateGraphic;
-  console.log(contracts, 'CONTRATOS')
   const userType =  currentUser?.user?.user_type;
 
   const {
@@ -155,15 +153,6 @@ const BackOfficeContent = (props) => {
     isRegularManager,
     isRegularSecretary
   } = useAuth()
-
-  console.log(ceo, 'CEO')
-  console.log(currentUser, 'USER ATUAL')
-  console.log(regularManager, 'Gerentes')
-  console.log(administrator, 'Administrador')
-  console.log(regularSecretary, 'Secretária')
-  console.log(comercials, 'Comerciais')
-
-  
 
   const dataToForm = []
 

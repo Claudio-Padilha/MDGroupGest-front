@@ -101,11 +101,8 @@ const ChooseTypeOfContract = (props) => {
     return filteredGasScale
   },[])
 
-  console.log(localStorage, 'STORE')
-
   const _getPower = useCallback((isCondominium) => {
     const powersList = JSON.parse(localStorage.getItem('powerList'));
-    console.log(powersList, 'TESTE NO POWER')
     var filteredPowerList = []
 
     for(let i=0; i < powersList?.length; i++) {
@@ -157,20 +154,6 @@ const ChooseTypeOfContract = (props) => {
   }
 
   _getAllEmployees()
-
-  
-
-  const feedbackCalls = JSON.parse(localStorage.getItem('feedbackCalls'))
-  const sellStates = JSON.parse(localStorage.getItem('sellStates'))
-  const gasScales = JSON.parse(localStorage.getItem('gasScales'))
-  const payments = JSON.parse(localStorage.getItem('payments'))
-  const powers = JSON.parse(localStorage.getItem('powerList'))
-
-  
-
-  console.log(contractInfoNeeded, 'INFO NEEDED')
-
-  
 
   const renderElectricityCard = () => {
 

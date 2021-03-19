@@ -53,7 +53,6 @@ const CreateContract = (props) => {
   const gasScales = props?.location?.state?.gasScale;
   const powersList = props?.location?.state?.power;
  
-
   function _getFeedbackCalls() {
     let feedbackCallsArr = []
     for(let i = 0; i < feedbackCalls?.length; i++) {
@@ -95,18 +94,31 @@ const CreateContract = (props) => {
     for(let i = 0; i < powersList?.length; i++) {
       powersListArr.push({value: powersList[i]?.id, label: powersList[i]?.name})
     }
+
+    return powersListArr
   }
 
   const [isLoading, setIsLoading] = useState(true);
 
+  const infoForFields = useMemo(() => {
+    const feedbackCalls = _getFeedbackCalls()
+    const sellStates = _getSellStates()
+    const paymentMethods = _getPaymentMethods()
+    const gasScales = _getGasScales()
+    const powersList = _getPowersList()
+    
+    return {
+      feedbackCalls,
+      sellStates,
+      paymentMethods,
+      gasScales,
+      powersList
+    }
+  }, [isLoading])
+
   setTimeout(() => {
     setIsLoading(false)
   }, [1000]);
-
-  console.log(feedbackCalls, 'PROPS EM CRIAR CONTRATO')
-  console.log(sellStates, 'PROPS EM CRIAR CONTRATO')
-  console.log(paymentMethods, 'PROPS EM CRIAR CONTRATO')
-  console.log(gasScales, 'PROPS EM CRIAR CONTRATO')
 
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
 
@@ -436,7 +448,7 @@ const CreateContract = (props) => {
       side: "left",
       key: "powerForElectricity",
       question: "Potência contratada",
-      options: _getGasScales(),
+      options: infoForFields.powersList,
     },
   ];
 

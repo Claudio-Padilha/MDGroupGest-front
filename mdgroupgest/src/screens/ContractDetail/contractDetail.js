@@ -468,16 +468,12 @@ const ContractDetail = (props) => {
       )
   }
 
-  console.log(contract, 'CONTRACT')
   const [gasPPI, setGasPPI] = useState(contract?.gas_ppi)
   const [electricityPPI, setElectricityPPI] = useState(contract?.electricity_ppi)
   const [pel, setPel] = useState(contract?.pel)
   const [mgi, setMgi] = useState(contract?.mgi)
   const [electronicBill, setElectronicBill] = useState(contract?.electronic_bill)
   const [isEditing, setIsEditing] = useState(false)
- 
-
-  console.log(pel, 'TESTE BOOL')
 
   const renderContract = () => {
     
