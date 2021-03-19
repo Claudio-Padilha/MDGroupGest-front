@@ -203,7 +203,6 @@ const EmployeeList = (props) => {
           if (result.isConfirmed) {
             await employeesRequests.promoteEmployee(employee?.id)        
             .then(async() => {
-              await dataRequests.getMyTeam();
               swalWithBootstrapButtons.fire(
                 'Funcionário Promovido!',
                 'A operação foi concluída com sucesso.',
