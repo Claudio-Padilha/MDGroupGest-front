@@ -26,6 +26,7 @@ import {
 
 import { List } from "semantic-ui-react";
 import { useTheme } from "@material-ui/core";
+import dataRequests from "../../hooks/requests/dataRequests";
 
 const EmployeeList = (props) => {
   const history = useHistory();
@@ -201,13 +202,14 @@ const EmployeeList = (props) => {
         }).then(async (result) => {
           if (result.isConfirmed) {
             await employeesRequests.promoteEmployee(employee?.id)        
-            .then(() => (
+            .then(async() => {
+              await dataRequests.getMyTeam();
               swalWithBootstrapButtons.fire(
                 'Funcionário Promovido!',
                 'A operação foi concluída com sucesso.',
                 'success'
               )  
-            )).then(_redirectToEmployeeTypes)      
+              }).then(_redirectToEmployeeTypes)      
           } else if (
             /* Read more about handling dismissals below */
             result.dismiss === Swal.DismissReason.cancel

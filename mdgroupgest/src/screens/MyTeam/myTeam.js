@@ -56,10 +56,10 @@ const MyTeam = () => {
     copy_sales_people.forEach(person => {
       if (person.is_team_leader){
         team_leaders.push(person)
-        sales_people.slice(sales_people.indexOf(person), 1)
+        sales_people.splice(sales_people.indexOf(person), 1)
       }else if(person.is_instructor){
         instructors.push(person)
-        sales_people.slice(sales_people.indexOf(person), 1)
+        sales_people.splice(sales_people.indexOf(person), 1)
       }
     });
 

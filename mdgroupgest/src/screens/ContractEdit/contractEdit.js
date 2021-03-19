@@ -478,6 +478,7 @@ const ContractEdit = (props) => {
           bg="primary"
           isFullWidth
           btnLabel="Atualizar Contrato"
+        
         />
       <CornerRight><Corner /></CornerRight>
     </MainDiv>

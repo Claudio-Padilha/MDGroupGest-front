@@ -148,6 +148,7 @@ const ContractDetail = (props) => {
   const handleClose = () => {
     setMaintainState(true)
     setOpen(false);
+    window.location.reload()
   };
 
 
