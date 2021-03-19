@@ -66,10 +66,10 @@ const ContractDetail = (props) => {
   const { wasRefreshed } = useRefresh()
 
   useEffect(() => {
-    if(!wasRefreshed && !maintainState) {
+    if(!wasRefreshed && maintainState) {
       window.location.reload()
     }    
-  }, [wasRefreshed])
+  }, [wasRefreshed, maintainState])
 
 
   const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
