@@ -101,6 +101,8 @@ const CreateEmployee = (props) => {
 
     const salesPersonObj = {
       manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
+      team_leader: data?.employeeAbove?.is_team_leader ? data?.employeeAbove?.id : null,
+      instructor: data?.employeeAbove?.is_instructor ? data?.employeeAbove?.id : null,
       office: officeID,
       user: {
         name: name,

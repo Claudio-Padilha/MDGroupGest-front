@@ -16,6 +16,7 @@ import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import dataRequests from '../../hooks/requests/dataRequests';
 
 const EditEmployee = (props) => {
 
@@ -93,6 +94,7 @@ const EditEmployee = (props) => {
               ).then(async (result) => {
                 if(result) {
                   await employeesRequests.getAllEmployees(currentOfficeID)
+                  await dataRequests.getMyTeam(currentOfficeID)
                   return history.push({pathname: "/BackOffice"});
                 }
               });
