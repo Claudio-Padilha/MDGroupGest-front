@@ -331,7 +331,7 @@ const MyTeam = () => {
     // localStorage.setItem('teamData', JSON.stringify(data))
     return data;
   }
-
+  
   const dataToProcess = _getData()
 
   return (
