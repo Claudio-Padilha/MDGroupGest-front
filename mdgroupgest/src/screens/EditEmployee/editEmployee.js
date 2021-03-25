@@ -128,6 +128,9 @@ const EditEmployee = (props) => {
       employee_type: formFields?.employeeAbove?.employee_type,
     }
 
+    console.log(employee, 'EMPLOYEE')
+    console.log(data, 'DATA')
+
     _ConfirmEmployeeUpdate(formFields, data)
   };
 

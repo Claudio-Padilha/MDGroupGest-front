@@ -103,7 +103,8 @@ export default {
     }
 
     var userType = data?.user_type;
-    var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
+    const convertToSalesperson = (userType === "sales_person" || userType === "instructor" || userType === "team_leader")
+    var user_type = convertToSalesperson ? "salesPerson" : userType;
     
     return new Promise((resolve, reject) => {
 
@@ -132,19 +133,13 @@ export default {
   deleteEmployee: (data) => {
     return new Promise((resolve, reject) => {
 
-      function _userTypeCamelCase() {
-        if(data?.user?.user_type === "team_leader") {
-          return "teamLeader"
-        } else if(data?.user?.user_type === "sales_person") {
-          return "salesPerson"
-        } else {
-          return data?.user?.user_type
-        }
-      }
+      var userType = data?.user.user_type;
+      const convertToSalesperson = (userType === "sales_person" || userType === "instructor" || userType === "team_leader")
+      var user_type = convertToSalesperson ? "salesPerson" : userType;
       
       var employeeDeleteRequest = {
         method: 'DELETE',
-        url: `${url}${_userTypeCamelCase()}/`,
+        url: `${url}${user_type}/`,
         headers: {
           'Authorization': 'Token ' + _currentTokenOnRAM(),
         },

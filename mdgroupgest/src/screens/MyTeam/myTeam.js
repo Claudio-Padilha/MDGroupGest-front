@@ -86,6 +86,7 @@ const MyTeam = () => {
       )
 
       for (var j = 0; j < team_leaders?.length; j++) {
+        
         if (team_leaders[j]?.manager === managers[i]?.id) {
           data.children[i].children.push(
             {
@@ -118,9 +119,11 @@ const MyTeam = () => {
                   children:[]
                 }
               )
-
+              
               for (var l = 0; l < sales_people.length; l++){
+                
                 if (sales_people[l].instructor === instructors[k].id) {
+                  
                   var a = data?.children[i]?.children[j]?.children[k]?.children.push(
                     {
                       name: sales_people[l].user.name,
@@ -218,10 +221,11 @@ const MyTeam = () => {
         }
       }
     }
+  
     localStorage.setItem('teamData', JSON.stringify(data))
     return data;
   }
-
+  
   const dataToProcess = _getData()
 
   return (
