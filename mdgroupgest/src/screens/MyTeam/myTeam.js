@@ -36,6 +36,86 @@ const MyTeam = () => {
     alert(`Right clicked ${nodeKey}`);
   }
 
+  function maketree(father, employees) {
+    if (employees.length === 0){
+      return
+    }else{
+      for (var i=0; i<employees.length; i++){
+        if (father.instance.user.user_type === 'manager'){
+          if (father.instance.id === employees[i].manager){
+            father.children.push(
+              {
+                instance: employees[i],
+                name: employees[i]?.user.name,
+                textProps: {x: -30, y: 25},
+                nodeProps: {
+                  href: employees[i]?.user?.avatar ? employees[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                  height: 30,
+                  width: 30,
+                  nodeRadius: 35,
+                  cursor: 'auto',
+                },
+                children:[]
+              }
+            )
+            
+            employees.splice(i, 1)
+
+            return maketree(father.children[father.children.length - 1], employees)
+          }
+
+
+          
+        } else if (father.instance.user.user_type === 'team_leader'){
+          if (father.instance.id === employees[i].team_leader){
+            father.children.push(
+              {
+                instance: employees[i],
+                name: employees[i]?.user.name,
+                textProps: {x: -30, y: 25},
+                nodeProps: {
+                  href: employees[i]?.user?.avatar ? employees[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                  height: 30,
+                  width: 30,
+                  nodeRadius: 35,
+                  cursor: 'auto',
+                },
+                children:[]
+              }
+            )
+            
+            employees.splice(i, 1)
+
+            return maketree(father.children[father.children.length - 1], employees)
+          }
+        } else if (father.instance.user.user_type === 'instructor'){
+          if (father.instance.id === employees[i].instructor){
+            father.children.push(
+              {
+                instance: employees[i],
+                name: employees[i]?.user.name,
+                textProps: {x: -30, y: 25},
+                nodeProps: {
+                  href: employees[i]?.user?.avatar ? employees[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+                  height: 30,
+                  width: 30,
+                  nodeRadius: 35,
+                  cursor: 'auto',
+                },
+                children:[]
+              }
+            )
+            
+            employees.splice(i, 1)
+
+            return maketree(father.children[father.children.length - 1], employees)
+          }
+        }
+
+      }
+    }
+  }
+
   function _goBack() {
     history.push("/BackOffice");
   }
@@ -43,6 +123,7 @@ const MyTeam = () => {
   dataRequests.getMyTeam(currentOffice?.id)
 
   function _getData() {
+
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
@@ -68,157 +149,186 @@ const MyTeam = () => {
       textProps: {x: -30, y: 25},
       children: []
     }
+    
 
-    for (var i = 0; i < managers?.length; i++) {     
-      data.children.push(
-        {
-          name: managers[i]?.user.name,
-          textProps: {x: -30, y: 25},
-          nodeProps: {
-            href: managers[i]?.user?.avatar ? managers[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-            height: 30,
-            width: 30,
-            nodeRadius: 35,
-            cursor: 'auto',
-          },
-          children:[]
-        }
-      )
-
-      for (var j = 0; j < team_leaders?.length; j++) {
-        if (team_leaders[j]?.manager === managers[i]?.id) {
-          data.children[i].children.push(
-            {
-              name: team_leaders[j].user.name,
-              nodeProps: {
-                href: team_leaders[j].user.avatar ? team_leaders[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                height: 30,
-                width: 30,
-                nodeRadius: 35,
-                cursor: 'auto',
-              },
-              textProps: {x: -30, y: 25},
-              children:[]
-            }
-          )
-
-          for (var k = 0; k < instructors.length; k++) {
-            if (instructors[k].team_leader === team_leaders[j].id) {
-              data.children[i].children[j].children.push(
-                {
-                  name: instructors[k].user.name,
-                  nodeProps: {
-                    href: instructors[k].user.avatar ? instructors[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                    height: 30,
-                    width: 30,
-                    nodeRadius: 35,
-                    cursor: 'auto',
-                  },
-                  textProps: {x: -30, y: 25},
-                  children:[]
-                }
-              )
-
-              for (var l = 0; l < sales_people.length; l++){
-                if (sales_people[l].instructor === instructors[k].id) {
-                  var a = data?.children[i]?.children[j]?.children[k]?.children.push(
-                    {
-                      name: sales_people[l].user.name,
-                      nodeProps: {
-                        href: sales_people[l].user.avata ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                        height: 30,
-                        width: 30,
-                        nodeRadius: 35,
-                        cursor: 'auto',
-                      },
-                      textProps: {x: -30, y: 25},
-                      children:[]
-                    }
-                  )
-                }
-              }
-            }
-          }
-
-          for (var l = 0; l < sales_people.length; l++) {
-            if (sales_people[l].team_leader === team_leaders[j].id) {
-              data.children[i].children[j].children.push(
-                {
-                  name: sales_people[l].user.name,
-                  nodeProps: {
-                    href: sales_people[l].user.avatar ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                    height: 30,
-                    width: 30,
-                    nodeRadius: 35,
-                    cursor: 'auto',
-                  },
-                  textProps: {x: -30, y: 25},
-                  children:[]
-                }
-              )
-            } 
-          }
-        }
+    data.children.push(
+      {
+        instance: managers[0],
+        name: managers[0]?.user.name,
+        textProps: {x: -30, y: 25},
+        nodeProps: {
+          href: managers[0]?.user?.avatar ? managers[0].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+          height: 30,
+          width: 30,
+          nodeRadius: 35,
+          cursor: 'auto',
+        },
+        children:[]
       }
+    )
 
-      for (var j = 0; j < instructors.length; j++) {
-        if (instructors[j].manager === managers[i].id) {
-          data.children[i].children.push(
-            {
-              name: instructors[j].user.name,
-              nodeProps: {
-                href: instructors[j].user.avatar ? instructors[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                height: 30,
-                width: 30,
-                nodeRadius: 35,
-                cursor: 'auto',
-              },
-              textProps: {x: -30, y: 25},
-              children:[]
-            }
-          )
+    maketree(data.children[0], sales_people)
 
-          for (var k = 0; k < sales_people.length; k++) {
-            if (sales_people[k].instructor === instructors[j].id) {
-              data.children[i].children[j].children.push(
-                {
-                  name: sales_people[k].user.name,
-                  nodeProps: {
-                    href: sales_people[k].user.avatar ? sales_people[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                    height: 30,
-                    width: 30,
-                    nodeRadius: 35,
-                    cursor: 'auto',
-                  },
-                  textProps: {x: -30, y: 25},
-                  children:[]
-                }
-              )
-            }
-          }
-        }
-      }
 
-      for (var j = 0; j < sales_people.length; j++) {
-        if (sales_people[j].manager === managers[i].id) {
-          data.children[i].children.push(
-            {
-              name: sales_people[j].user.name,
-              nodeProps: {
-                href: sales_people[j].user.avatar ? sales_people[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
-                height: 30,
-                width: 30,
-                nodeRadius: 35,
-                cursor: 'auto',
-              },
-              textProps: {x: -30, y: 25},
-              children:[]
-            }
-          )
-        }
-      }
-    }
-    localStorage.setItem('teamData', JSON.stringify(data))
+
+
+
+
+
+
+
+
+
+    // for (var i = 0; i < managers?.length; i++) {     
+    //   data.children.push(
+    //     {
+    //       name: managers[0]?.user.name,
+    //       textProps: {x: -30, y: 25},
+    //       nodeProps: {
+    //         href: managers[i]?.user?.avatar ? managers[i].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //         height: 30,
+    //         width: 30,
+    //         nodeRadius: 35,
+    //         cursor: 'auto',
+    //       },
+    //       children:[]
+    //     }
+    //   )
+
+    //   for (var j = 0; j < team_leaders?.length; j++) {
+    //     if (team_leaders[j]?.manager === managers[i]?.id) {
+    //       data.children[i].children.push(
+    //         {
+    //           name: team_leaders[j].user.name,
+    //           nodeProps: {
+    //             href: team_leaders[j].user.avatar ? team_leaders[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //             height: 30,
+    //             width: 30,
+    //             nodeRadius: 35,
+    //             cursor: 'auto',
+    //           },
+    //           textProps: {x: -30, y: 25},
+    //           children:[]
+    //         }
+    //       )
+
+    //       for (var k = 0; k < instructors.length; k++) {
+    //         if (instructors[k].team_leader === team_leaders[j].id) {
+    //           data.children[i].children[j].children.push(
+    //             {
+    //               name: instructors[k].user.name,
+    //               nodeProps: {
+    //                 href: instructors[k].user.avatar ? instructors[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //                 height: 30,
+    //                 width: 30,
+    //                 nodeRadius: 35,
+    //                 cursor: 'auto',
+    //               },
+    //               textProps: {x: -30, y: 25},
+    //               children:[]
+    //             }
+    //           )
+
+    //           for (var l = 0; l < sales_people.length; l++){
+    //             if (sales_people[l].instructor === instructors[k].id) {
+    //               var a = data?.children[i]?.children[j]?.children[k]?.children.push(
+    //                 {
+    //                   name: sales_people[l].user.name,
+    //                   nodeProps: {
+    //                     href: sales_people[l].user.avata ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //                     height: 30,
+    //                     width: 30,
+    //                     nodeRadius: 35,
+    //                     cursor: 'auto',
+    //                   },
+    //                   textProps: {x: -30, y: 25},
+    //                   children:[]
+    //                 }
+    //               )
+    //             }
+    //           }
+    //         }
+    //       }
+
+    //       for (var l = 0; l < sales_people.length; l++) {
+    //         if (sales_people[l].team_leader === team_leaders[j].id) {
+    //           data.children[i].children[j].children.push(
+    //             {
+    //               name: sales_people[l].user.name,
+    //               nodeProps: {
+    //                 href: sales_people[l].user.avatar ? sales_people[l].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //                 height: 30,
+    //                 width: 30,
+    //                 nodeRadius: 35,
+    //                 cursor: 'auto',
+    //               },
+    //               textProps: {x: -30, y: 25},
+    //               children:[]
+    //             }
+    //           )
+    //         } 
+    //       }
+    //     }
+    //   }
+
+    //   for (var j = 0; j < instructors.length; j++) {
+    //     if (instructors[j].manager === managers[i].id) {
+    //       data.children[i].children.push(
+    //         {
+    //           name: instructors[j].user.name,
+    //           nodeProps: {
+    //             href: instructors[j].user.avatar ? instructors[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //             height: 30,
+    //             width: 30,
+    //             nodeRadius: 35,
+    //             cursor: 'auto',
+    //           },
+    //           textProps: {x: -30, y: 25},
+    //           children:[]
+    //         }
+    //       )
+
+    //       for (var k = 0; k < sales_people.length; k++) {
+    //         if (sales_people[k].instructor === instructors[j].id) {
+    //           data.children[i].children[j].children.push(
+    //             {
+    //               name: sales_people[k].user.name,
+    //               nodeProps: {
+    //                 href: sales_people[k].user.avatar ? sales_people[k].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //                 height: 30,
+    //                 width: 30,
+    //                 nodeRadius: 35,
+    //                 cursor: 'auto',
+    //               },
+    //               textProps: {x: -30, y: 25},
+    //               children:[]
+    //             }
+    //           )
+    //         }
+    //       }
+    //     }
+    //   }
+
+    //   for (var j = 0; j < sales_people.length; j++) {
+    //     if (sales_people[j].manager === managers[i].id) {
+    //       data.children[i].children.push(
+    //         {
+    //           name: sales_people[j].user.name,
+    //           nodeProps: {
+    //             href: sales_people[j].user.avatar ? sales_people[j].user.avatar : 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9GmQmTlnNxxG_DbYack1kqNxDRQMXAeDF0w&usqp=CAU',
+    //             height: 30,
+    //             width: 30,
+    //             nodeRadius: 35,
+    //             cursor: 'auto',
+    //           },
+    //           textProps: {x: -30, y: 25},
+    //           children:[]
+    //         }
+    //       )
+    //     }
+    //   }
+    // }
+    // localStorage.setItem('teamData', JSON.stringify(data))
     return data;
   }
 
