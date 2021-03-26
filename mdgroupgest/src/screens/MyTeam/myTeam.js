@@ -36,16 +36,15 @@ const MyTeam = () => {
     alert(`Right clicked ${nodeKey}`);
   }
 
-  function maketree(father, employees) {
-    if (employees.length === 0){
-      return
-    }else{
+  function maketree(instance, father, employees) {
+    console.log(father, "FATHER")
+    console.log(employees, "EMPLOYEES")
+  
       for (var i=0; i<employees.length; i++){
-        if (father.instance.user.user_type === 'manager'){
-          if (father.instance.id === employees[i].manager){
+        if (instance.user.user_type === 'manager'){
+          if (instance.id === employees[i].manager){
             father.children.push(
               {
-                instance: employees[i],
                 name: employees[i]?.user.name,
                 textProps: {x: -30, y: 25},
                 nodeProps: {
@@ -58,19 +57,17 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            
+            var instance_send = employees[i]
             employees.splice(i, 1)
-
-            return maketree(father.children[father.children.length - 1], employees)
+            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
 
 
           
-        } else if (father.instance.user.user_type === 'team_leader'){
-          if (father.instance.id === employees[i].team_leader){
+        } else if (instance.user.user_type === 'team_leader'){
+          if (instance.id === employees[i].team_leader){
             father.children.push(
               {
-                instance: employees[i],
                 name: employees[i]?.user.name,
                 textProps: {x: -30, y: 25},
                 nodeProps: {
@@ -83,16 +80,15 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            
+            var instance_send = employees[i]
             employees.splice(i, 1)
 
-            return maketree(father.children[father.children.length - 1], employees)
+            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
-        } else if (father.instance.user.user_type === 'instructor'){
-          if (father.instance.id === employees[i].instructor){
+        } else if (instance.user.user_type === 'instructor'){
+          if (instance.id === employees[i].instructor){
             father.children.push(
               {
-                instance: employees[i],
                 name: employees[i]?.user.name,
                 textProps: {x: -30, y: 25},
                 nodeProps: {
@@ -105,15 +101,15 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            
+            var instance_send = employees[i]
             employees.splice(i, 1)
 
-            return maketree(father.children[father.children.length - 1], employees)
+            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
         }
 
       }
-    }
+      return
   }
 
   function _goBack() {
@@ -122,7 +118,7 @@ const MyTeam = () => {
 
   dataRequests.getMyTeam(currentOffice?.id)
 
-  function _getData() {
+  async function  _getData() {
 
     
     const employees = JSON.parse(localStorage.getItem('myTeam'))
@@ -131,18 +127,20 @@ const MyTeam = () => {
     const sales_people = employees['sales_person']
     const copy_sales_people = employees['sales_person']
 
+    console.log(sales_people, "SALES PEOPLE")
+
     const team_leaders = []
     const instructors = []
 
-    copy_sales_people.forEach(person => {
-      if (person.is_team_leader){
-        team_leaders.push(person)
-        sales_people.splice(sales_people.indexOf(person), 1)
-      }else if(person.is_instructor){
-        instructors.push(person)
-        sales_people.splice(sales_people.indexOf(person), 1)
-      }
-    });
+    // copy_sales_people.forEach(person => {
+    //   if (person.is_team_leader){
+    //     team_leaders.push(person)
+    //     sales_people.splice(sales_people.indexOf(person), 1)
+    //   }else if(person.is_instructor){
+    //     instructors.push(person)
+    //     sales_people.splice(sales_people.indexOf(person), 1)
+    //   }
+    // });
 
     var data = {
       name: currentOffice.name,
@@ -150,10 +148,9 @@ const MyTeam = () => {
       children: []
     }
     
-
+    var instance = managers[0]
     data.children.push(
       {
-        instance: managers[0],
         name: managers[0]?.user.name,
         textProps: {x: -30, y: 25},
         nodeProps: {
@@ -167,12 +164,12 @@ const MyTeam = () => {
       }
     )
 
-    maketree(data.children[0], sales_people)
+    await maketree(instance, data.children[0], sales_people)
 
 
 
 
-
+    console.log(data)
 
 
 
