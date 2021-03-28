@@ -37,8 +37,13 @@ const MyTeam = () => {
   }
 
   function maketree(instance, father, employees) {
-    console.log(father, "FATHER")
-    console.log(employees, "EMPLOYEES")
+    my_children = []
+    my_children_index = 0
+
+    if (employees.length == 0 ){
+      return
+    }
+      
   
       for (var i=0; i<employees.length; i++){
         if (instance.user.user_type === 'manager'){
@@ -57,9 +62,8 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            var instance_send = employees[i]
+            my_children.push(employees[i])
             employees.splice(i, 1)
-            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
 
 
@@ -80,10 +84,9 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            var instance_send = employees[i]
+            my_children.push(employees[i])
             employees.splice(i, 1)
 
-            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
         } else if (instance.user.user_type === 'instructor'){
           if (instance.id === employees[i].instructor){
@@ -101,15 +104,15 @@ const MyTeam = () => {
                 children:[]
               }
             )
-            var instance_send = employees[i]
+            my_children.push(employees[i])
             employees.splice(i, 1)
-
-            return maketree(instance_send, father.children[father.children.length - 1], employees)
           }
         }
 
       }
-      return
+      for (var j = 0; j<my_children.length(); j++){
+        return maketree(my_children[j], father, employees)
+      }
   }
 
   function _goBack() {
