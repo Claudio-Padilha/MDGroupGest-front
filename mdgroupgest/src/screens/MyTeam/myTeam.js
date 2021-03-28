@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import Tree from 'react-tree-graph';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
@@ -18,12 +18,10 @@ const MyTeam = () => {
 
   setTimeout(() => {
     setIsLoading(false)
-  }, [1500]);
+  }, [2000]);
 
   // aqui cada clique leva a pagina de detalhe de cada funcionário
   function _handleMainClick (event, nodeKey) {
-    console.log('handle click ', event);
-    console.log('handle click nodeKey', nodeKey);
 
     localStorage.setItem('employeeDetail', nodeKey)
     history.push("/EmployeeDetail");
@@ -32,7 +30,6 @@ const MyTeam = () => {
   // caso haja lógica para o right click
   function _handleRightClick(event, nodeKey) {
     event.preventDefault();
-    console.log('handle click right', nodeKey)
     alert(`Right clicked ${nodeKey}`);
   }
 
@@ -116,21 +113,23 @@ const MyTeam = () => {
   }
 
   function _goBack() {
-    history.push("/BackOffice");
+    history.push({
+      pathname: "/BackOffice",
+      state: {
+        fromMyTeam: true,
+      }
+    })
   }
 
   dataRequests.getMyTeam(currentOffice?.id)
 
-  async function  _getData() {
+  async function _getData() {
 
-    
     const employees = JSON.parse(localStorage.getItem('myTeam'))
 
     const managers = employees['manager']
     const sales_people = employees['sales_person']
     const copy_sales_people = employees['sales_person']
-
-    console.log(sales_people, "SALES PEOPLE")
 
     const team_leaders = []
     const instructors = []
@@ -168,16 +167,6 @@ const MyTeam = () => {
     )
 
     await maketree(instance, data.children[0], sales_people)
-
-
-
-
-    console.log(data)
-
-
-
-
-
 
     // for (var i = 0; i < managers?.length; i++) {     
     //   data.children.push(
@@ -329,10 +318,20 @@ const MyTeam = () => {
     //   }
     // }
     // localStorage.setItem('teamData', JSON.stringify(data))
+  
     return data;
   }
-  
-  const dataToProcess = _getData()
+
+  const [finalData, setFinalData] = useState({})
+
+  useEffect(() => {
+    _getData()
+      .then((result) => {
+        setFinalData(result)
+      })
+
+    return finalData
+  }, [])
 
   return (
     isLoading ?
@@ -343,7 +342,7 @@ const MyTeam = () => {
     <MainContainer className="custom-container">
       <BackIcon onClick={_goBack} className={"backIcon"}/>
       <Tree
-        data={dataToProcess}
+        data={finalData}
         height={900}
         width={1200}
         animated

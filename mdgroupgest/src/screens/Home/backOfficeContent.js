@@ -47,6 +47,7 @@ const BackOfficeContent = (props) => {
   const fromContractsList = props?.location?.state?.fromContractsList;
   const fromMyResults = props?.location?.state?.fromMyResults;
   const fromEmployeeType = props?.location?.state?.fromEmployeeType;
+  const fromMyTeam = props?.location?.state?.fromMyTeam;
 
   const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
   const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
@@ -112,13 +113,20 @@ const BackOfficeContent = (props) => {
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
+  function _screenStateDispatch() {
+    window.location.reload()
+    return dispatch('MAINTAIN_SCREEN_STATE')
+  }
+
   useEffect(() => {
     if(fromContractsList) {
-      return dispatch('MAINTAIN_SCREEN_STATE')
+      _screenStateDispatch()
     } else if (fromMyResults) {
-      return dispatch('MAINTAIN_SCREEN_STATE')
+      _screenStateDispatch()
     } else if(fromEmployeeType) {
-      return dispatch('MAINTAIN_SCREEN_STATE')
+      _screenStateDispatch()
+    } else if(fromMyTeam) {
+      _screenStateDispatch()
     } else if(wasRefreshed) {
       return dispatch('MAINTAIN_SCREEN_STATE')
     } else if(initialState) {
