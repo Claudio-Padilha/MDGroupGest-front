@@ -34,6 +34,7 @@ const MyTeam = () => {
   }
   
   function maketree(instance, father, employees) {
+    
     let my_children = []
 
     if (employees.length === 0 ){
@@ -59,6 +60,7 @@ const MyTeam = () => {
             )
             employees[i].my_index_on_employees = i
             my_children.push(employees[i])
+            employees.splice(i, 1)
             i--
           }
 
@@ -82,6 +84,7 @@ const MyTeam = () => {
             )
             employees[i].my_index_on_employees = i
             my_children.push(employees[i])
+            employees.splice(i, 1)
             i--
           }
         } else if (instance.user.user_type === 'instructor'){
@@ -102,20 +105,16 @@ const MyTeam = () => {
             )
             employees[i].my_index_on_employees = i
             my_children.push(employees[i])
+            employees.splice(i, 1)
             i--
           }
         }
 
       }
-      for (var k = 0; k<my_children.length; k++){  
-        employees.splice(my_children[k].my_index_on_employees, 1)
-      }
 
       for (var j = 0; j<my_children.length; j++){  
-        return maketree(my_children[j], father?.children[j], employees)
+        maketree(my_children[j], father?.children[j], employees)
       }
-
-      return
   }
 
   function _goBack() {
