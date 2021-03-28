@@ -32,16 +32,14 @@ const MyTeam = () => {
     event.preventDefault();
     alert(`Right clicked ${nodeKey}`);
   }
-
+  
   function maketree(instance, father, employees) {
-    my_children = []
-    my_children_index = 0
+    let my_children = []
 
-    if (employees.length == 0 ){
+    if (employees.length === 0 ){
       return
     }
       
-  
       for (var i=0; i<employees.length; i++){
         if (instance.user.user_type === 'manager'){
           if (instance.id === employees[i].manager){
@@ -59,8 +57,9 @@ const MyTeam = () => {
                 children:[]
               }
             )
+            employees[i].my_index_on_employees = i
             my_children.push(employees[i])
-            employees.splice(i, 1)
+            i--
           }
 
 
@@ -81,9 +80,9 @@ const MyTeam = () => {
                 children:[]
               }
             )
+            employees[i].my_index_on_employees = i
             my_children.push(employees[i])
-            employees.splice(i, 1)
-
+            i--
           }
         } else if (instance.user.user_type === 'instructor'){
           if (instance.id === employees[i].instructor){
@@ -101,15 +100,22 @@ const MyTeam = () => {
                 children:[]
               }
             )
+            employees[i].my_index_on_employees = i
             my_children.push(employees[i])
-            employees.splice(i, 1)
+            i--
           }
         }
 
       }
-      for (var j = 0; j<my_children.length(); j++){
-        return maketree(my_children[j], father, employees)
+      for (var k = 0; k<my_children.length; k++){  
+        employees.splice(my_children[k].my_index_on_employees, 1)
       }
+
+      for (var j = 0; j<my_children.length; j++){  
+        return maketree(my_children[j], father?.children[j], employees)
+      }
+
+      return
   }
 
   function _goBack() {
@@ -332,6 +338,8 @@ const MyTeam = () => {
 
     return finalData
   }, [])
+
+  console.log(finalData, 'FINAL DATA')
 
   return (
     isLoading ?
