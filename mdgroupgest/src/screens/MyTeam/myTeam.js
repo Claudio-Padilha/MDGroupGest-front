@@ -377,8 +377,6 @@ const MyTeam = () => {
           right: 200
         }}
       />
-
-      <button onClick={_getData} />
     </MainContainer>
   );
 };
