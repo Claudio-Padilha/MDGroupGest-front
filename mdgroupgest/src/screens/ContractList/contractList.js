@@ -5,7 +5,7 @@ import _ from 'lodash';
 import Swal from 'sweetalert2';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
-import { SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
+import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon } from '../../components/Icon/icons';
@@ -19,13 +19,13 @@ import {
   Row,
   Col,
   Column,
-  LogoContainer
+  LogoContainer,
+  WidthMessageContainer
 } from "./styles";
 
 import { List } from "semantic-ui-react";
 import SearchBar from "../../components/SearchArea/search";
 import CONSTANTS from "../../constants";
-import { findDOMNode } from "react-dom";
 
 const ContractList = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
@@ -71,8 +71,6 @@ const ContractList = (props) => {
       setIsLoading(false)
     }, [500]);
   }
-
-
 
   const initialState = {
     contracts: contractsFromBackoffice,
@@ -426,93 +424,99 @@ const ContractList = (props) => {
       <SwishSpinner size={200} color="#686769" loading={isLoading} />
     </MainContainer>
     :
-    <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} />
-      <Row style={{
-        width: '65%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginRight: '10%',
-        marginLeft: '5%'
-      }}>
-        <SubHeading style={{
-          marginBottom: '0%',
-          color: CONSTANTS?.colors?.mediumGrey,
-          textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
-        }}>Podes pesquisar aqui 🔍</SubHeading>
-      </Row>
-      <Row style={{
-        width: '67%',
-        display: 'flex',
-        justifyContent: 'space-between',
-        marginRight: '10%',
-        marginLeft: '7%'
-      }}>
-        <Col>
-          <Body style={{marginBottom: '2%'}}>Comercial</Body>
-          <SearchBar onChange={(e) => {
-            setIsSearching(true)
-            _handleSearchName(e.target.value.toLowerCase())
-          }} onBlur={() => setIsSearching(false)}/>
-        </Col>
-        <Col>
-          <Body style={{marginBottom: '2%'}}>Potência</Body>
-          <SearchBar onChange={(e) => {
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer id={"mainContainer"}>
+        <BackIcon onClick={_goBack} />
+        <Row style={{
+          width: '65%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginRight: '10%',
+          marginLeft: '5%'
+        }}>
+          <SubHeading style={{
+            marginBottom: '0%',
+            color: CONSTANTS?.colors?.mediumGrey,
+            textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
+          }}>Podes pesquisar aqui 🔍</SubHeading>
+        </Row>
+        <Row style={{
+          width: '67%',
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginRight: '10%',
+          marginLeft: '7%'
+        }}>
+          <Col>
+            <Body style={{marginBottom: '2%'}}>Comercial</Body>
+            <SearchBar onChange={(e) => {
               setIsSearching(true)
-              _handleSearchPower(e.target.value.toLowerCase())
+              _handleSearchName(e.target.value.toLowerCase())
             }} onBlur={() => setIsSearching(false)}/>
-        </Col>
-        <Col>
-          <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
-          <SearchBar onChange={(e) => {
-              setIsSearching(true)
-              _handleSearchNif(e.target.value.toLowerCase())
-            }} onBlur={() => setIsSearching(false)}/>
-        </Col>
-        <Col>
-          <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
-          <SearchBar onChange={(e) => {
-              setIsSearching(true)
-              _handleSearchContractType(e.target.value.toLowerCase())
-            }} onBlur={() => setIsSearching(false)}/>
-        </Col>  
-        <Col>
-          <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
-          <SearchBar onChange={(e) => {
-              setIsSearching(true)
-              _handleSearchSellState(e.target.value.toLowerCase())
-            }} onBlur={() => setIsSearching(false)}/>
-        </Col>  
-      </Row>
-      <List divided verticalAlign="middle" className={"listContainer"}>
-      { isSearching ?
-        contractsMatched && contractsMatched.map(function(contract, index) {
-          return renderContract(contract, index, true)
-        })
-      : contracts?.length === 0 ?
-        <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
-       cameFromDetail ?
-        stateOfContractsFromDetail &&
-        stateOfContractsFromDetail.map(function(contract, index) {
+          </Col>
+          <Col>
+            <Body style={{marginBottom: '2%'}}>Potência</Body>
+            <SearchBar onChange={(e) => {
+                setIsSearching(true)
+                _handleSearchPower(e.target.value.toLowerCase())
+              }} onBlur={() => setIsSearching(false)}/>
+          </Col>
+          <Col>
+            <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
+            <SearchBar onChange={(e) => {
+                setIsSearching(true)
+                _handleSearchNif(e.target.value.toLowerCase())
+              }} onBlur={() => setIsSearching(false)}/>
+          </Col>
+          <Col>
+            <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
+            <SearchBar onChange={(e) => {
+                setIsSearching(true)
+                _handleSearchContractType(e.target.value.toLowerCase())
+              }} onBlur={() => setIsSearching(false)}/>
+          </Col>  
+          <Col>
+            <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
+            <SearchBar onChange={(e) => {
+                setIsSearching(true)
+                _handleSearchSellState(e.target.value.toLowerCase())
+              }} onBlur={() => setIsSearching(false)}/>
+          </Col>  
+        </Row>
+        <List divided verticalAlign="middle" className={"listContainer"}>
+        { isSearching ?
+          contractsMatched && contractsMatched.map(function(contract, index) {
+            return renderContract(contract, index, true)
+          })
+        : contracts?.length === 0 ?
+          <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
+        cameFromDetail ?
+          stateOfContractsFromDetail &&
+          stateOfContractsFromDetail.map(function(contract, index) {
+              return renderContract(contract, index, false);
+            })
+        : contracts &&
+          contracts.map(function(contract, index) {
             return renderContract(contract, index, false);
           })
-      : contracts &&
-        contracts.map(function(contract, index) {
-          return renderContract(contract, index, false);
-        })
-      }        
-      </List>
-      <LogoContainer>
-        <LogoMD action={
-          () => history.push({
-            pathname: "/BackOffice",
-            state: {
-              fromContractsList: true
-            }}
-          )}
-        />
-      </LogoContainer>
-    </MainContainer>
+        }        
+        </List>
+        <LogoContainer>
+          <LogoMD action={
+            () => history.push({
+              pathname: "/BackOffice",
+              state: {
+                fromContractsList: true
+              }}
+            )}
+          />
+        </LogoContainer>
+      </MainContainer>
+    </>
   )
 
 };

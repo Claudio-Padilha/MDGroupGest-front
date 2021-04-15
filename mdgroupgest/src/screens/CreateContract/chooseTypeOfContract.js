@@ -9,8 +9,10 @@ import {
   FirstRow,
   SecondRow,
   GoHomeButton,
+  WidthMessageContainer,
   MainContainerEType
 } from "./styles";
+
 import CONSTANTS from '../../constants';
 
 import {
@@ -303,26 +305,32 @@ const ChooseTypeOfContract = (props) => {
   };
 
   return(
-    <MainContainerEType>
-      <BackIcon onClick={_goBack} />
-      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Que tipo de contrato queres inserir?</Heading>
-      <CardsContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainerEType>
+        <BackIcon onClick={_goBack} />
+        <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Que tipo de contrato queres inserir?</Heading>
+        <CardsContainer>
 
-        <FirstRow>
-          {renderElectricityCard()}
-          {renderGasCard()}
-          {renderDualCard()}
-        </FirstRow>
+          <FirstRow>
+            {renderElectricityCard()}
+            {renderGasCard()}
+            {renderDualCard()}
+          </FirstRow>
+          
+          <SecondRow>
+            {renderCondominiumElectricityCard()}
+            {renderCondominiumGasCard()}
+            {renderCondominiumDualCard()}
+          </SecondRow>
         
-        <SecondRow>
-          {renderCondominiumElectricityCard()}
-          {renderCondominiumGasCard()}
-          {renderCondominiumDualCard()}
-        </SecondRow>
-      
-      </CardsContainer>
+        </CardsContainer>
 
-    </MainContainerEType>
+      </MainContainerEType>
+    </>
   );
 };
 

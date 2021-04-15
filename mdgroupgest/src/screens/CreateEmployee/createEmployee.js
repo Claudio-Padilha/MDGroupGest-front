@@ -2,14 +2,7 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
-import {
-  MainDiv,
-  CornerLeft,
-  LogoContainer,
-  CornerRight
-} from './styles';
-
-import { SubHeading, SmallSubHeading } from '../../components/Text/text';
+import { Heading, SubHeading, SmallSubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
@@ -17,6 +10,14 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import { _executeValidationsIfHas } from '../../hooks/validation';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+
+import {
+  MainDiv,
+  CornerLeft,
+  LogoContainer,
+  CornerRight,
+  WidthMessageContainer
+} from './styles';
 
 const CreateEmployee = (props) => {
 
@@ -313,6 +314,11 @@ const CreateEmployee = (props) => {
   ];
 
   return (
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
       <MainDiv>
         <BackIcon onClick={_goBack} />
         <CornerLeft><Corner180 /></CornerLeft>
@@ -328,7 +334,8 @@ const CreateEmployee = (props) => {
           btnLabel="Inserir"
         />
         <CornerRight><Corner /></CornerRight>
-    </MainDiv>
+      </MainDiv>
+    </>
   )
 }
 

@@ -4,9 +4,9 @@ import { Avatar } from '@material-ui/core';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { BackIcon } from '../../components/Icon/icons';
-import { Body } from '../../components/Text/text';
+import { Heading, SubHeading, Body } from '../../components/Text/text';
 
-import { MainContainer, DivUploadPhoto, UploadButton ,useStyles } from './styles';
+import { MainContainer, DivUploadPhoto, UploadButton, useStyles, WidthMessageContainer } from './styles';
 
 import {storage} from "../../firebase/firebase"
 
@@ -77,41 +77,47 @@ const MyProfile = (props) => {
         <SwishSpinner size={200} color="#686769" loading={isLoading} />
       </MainContainer>
     :
-    <MainContainer>
-      <BackIcon onClick={_goBack} />
-      <Avatar
-        alt="Profile Image"
-        src={user?.user?.avatar}
-        className={avatarClasses.large}
-      />
-      <Body>{userName}</Body>
-      <Body>{email}</Body>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer>
+        <BackIcon onClick={_goBack} />
+        <Avatar
+          alt="Profile Image"
+          src={user?.user?.avatar}
+          className={avatarClasses.large}
+        />
+        <Body>{userName}</Body>
+        <Body>{email}</Body>
 
-    <DivUploadPhoto>
-      <input
-        style={{
-          marginTop: '10%',
-          display: 'inline-block',
-          background: 'linear-gradient(top, #f9f9f9, #e3e3e3)',
-          border: '1px solid #999',
-          borderRadius: '3px',
-          padding: '10px 15px',
-          outline: 'none',
-          cursor: 'pointer',
-          textShadow: '1px 1px #fff',
-          fontWeight: '700',
-          fontSize: '10pt',
-          marginBottom: '3%',
-        }}
-        type="file"
-        onChange={handleImageAsFile}
-      />
+      <DivUploadPhoto>
+        <input
+          style={{
+            marginTop: '10%',
+            display: 'inline-block',
+            background: 'linear-gradient(top, #f9f9f9, #e3e3e3)',
+            border: '1px solid #999',
+            borderRadius: '3px',
+            padding: '10px 15px',
+            outline: 'none',
+            cursor: 'pointer',
+            textShadow: '1px 1px #fff',
+            fontWeight: '700',
+            fontSize: '10pt',
+            marginBottom: '3%',
+          }}
+          type="file"
+          onChange={handleImageAsFile}
+        />
 
-      <UploadButton onClick={handleFireBaseUpload}>Escolher foto</UploadButton>
-    </DivUploadPhoto>
+        <UploadButton onClick={handleFireBaseUpload}>Escolher foto</UploadButton>
+      </DivUploadPhoto>
 
 
-    </MainContainer>
+      </MainContainer>
+    </>
   )
 };
 

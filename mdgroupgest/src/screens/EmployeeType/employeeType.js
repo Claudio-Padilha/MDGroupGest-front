@@ -5,14 +5,6 @@ import { Heading, SubHeading, Body } from '../../components/Text/text';
 import { BackIcon } from '../../components/Icon/icons';
 
 import CONSTANTS from '../../constants';
-import {
-  MainContainer,
-  CardsContainer,
-  FirstRow,
-  FirstRowForAdmin,
-  SecondRow,
-  HomePageButton
-} from "./styles";
 
 import {
   MDCard,
@@ -25,6 +17,16 @@ import { useEmployees } from '../../hooks/employees/employees';
 import employeesRequests from "../../hooks/requests/employeesRequests";
 import officesRequests from "../../hooks/requests/officesRequests"; 
 import { GoHomeButton } from "../EmployeeList/styles";
+
+import {
+  MainContainer,
+  CardsContainer,
+  FirstRow,
+  FirstRowForAdmin,
+  SecondRow,
+  HomePageButton,
+  WidthMessageContainer
+} from "./styles";
 
 const EmployeeType = (props) => {
   function _goBack() {
@@ -306,44 +308,26 @@ const EmployeeType = (props) => {
   )
 
   return(
-    <MainContainer>
-      <BackIcon onClick={_goBack} />
-      <Heading style={{ position: 'absolute', top: '1%', textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)', color: CONSTANTS?.colors?.darkGrey }}>Qual é o tipo de funcionário a ser inserido?</Heading>
-      { handleUserView(currentUser) }
-      {/* <CardsContainer>
-
-        {isAdmin && <FirstRowForAdmin>
-          {renderManagerCard()}
-          {renderSecretaryCard()}
-          {renderTeamLeaderCard()}
-        </FirstRowForAdmin>}
-
-        {fromEmployeeCreation && <FirstRowForAdmin>
-          {renderManagerCard()}
-          {renderSecretaryCard()}
-          {renderTeamLeaderCard()}
-        </FirstRowForAdmin>}
-
-        {!isAdmin && !fromEmployeeCreation && <FirstRow>
-          {renderSecretaryCard()}
-          {renderTeamLeaderCard()}
-        </FirstRow>}
-        
-        <SecondRow>
-          {renderInstructorCard()}
-          {renderComercialCard()}
-          <HomePageButton>
-            <Body>
-              <Link to={"/BackOffice"}>
-                <MDButton>Cancelar</MDButton>
-              </Link>
-            </Body>
-          </HomePageButton>
-        </SecondRow>
-      
-      </CardsContainer> */}
-
-    </MainContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer>
+        <BackIcon onClick={_goBack} />
+        <Heading style={
+          {
+            position: 'absolute',
+            top: '1%',
+            textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
+            color: CONSTANTS?.colors?.darkGrey
+          }
+        }>
+          Qual é o tipo de funcionário a ser inserido?
+        </Heading>
+        { handleUserView(currentUser) }
+      </MainContainer>
+    </>
   );
 };
 

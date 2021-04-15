@@ -11,7 +11,8 @@ import {
   FirstRow,
   SecondRow,
   GoHomeButton,
-  MainContainerEType
+  MainContainerEType,
+  WidthMessageContainer
 } from "./styles";
 
 import {
@@ -434,10 +435,16 @@ const ChooseEmployeeTypeToSee = (props) => {
   )
  
   return(
-    <MainContainerEType>
-      <BackIcon onClick={_goBack} />
-      { isLoading ? loadingContainer() : contentOfThisPage() }
-    </MainContainerEType>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainerEType>
+        <BackIcon onClick={_goBack} />
+        { isLoading ? loadingContainer() : contentOfThisPage() }
+      </MainContainerEType>
+    </>
   );
 };
 

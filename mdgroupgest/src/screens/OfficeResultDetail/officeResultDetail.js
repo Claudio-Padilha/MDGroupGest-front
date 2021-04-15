@@ -16,7 +16,8 @@ import {
   SecondRow,
   ContractsInfo,
   HomePageButton,
-  EmptyContainer
+  EmptyContainer,
+  WidthMessageContainer
 } from "./styles";
 
 import {
@@ -82,60 +83,66 @@ const OfficeMonthResult = (props) => {
   };
 
   return(
-    <MainContainer>
-      <BackIcon className={"backIcon"} onClick={_goBack} />
-      <OfficeMonthResultContainer>
-        <FirstRow>
-          {all !== 0 ? renderOfficeMonthResult(): <></>}
-          <ContractsInfo>
-          {all === 0 ? 
-            <> 
-            <EmptyContainer>
-              <SubHeading>Ainda não há contratos...</SubHeading>
-            </EmptyContainer>
-            </>
-            :
-            <MDRow style={{display: 'flex',  justifyContent: 'space-around', width: '100%', flexDirection: 'row'}}>
-              <MDCol style={{marginRight: '5%'}}>
-              <SmallSubHeading style={{textAlign: 'center'}}>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok !== 0 ? "Contratos válidos: " : null}</SmallSubHeading>
-              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}}>{ok === 0 ? null : ok}</Heading>
-              <SmallSubHeading style={{color: CONSTANTS?.colors?.green, textAlign: 'center', fontSize: '32px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)' }} >{valid_contract_value + ' €'}</SmallSubHeading>
-              </MDCol>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer>
+        <BackIcon className={"backIcon"} onClick={_goBack} />
+        <OfficeMonthResultContainer>
+          <FirstRow>
+            {all !== 0 ? renderOfficeMonthResult(): <></>}
+            <ContractsInfo>
+            {all === 0 ? 
+              <> 
+              <EmptyContainer>
+                <SubHeading>Ainda não há contratos...</SubHeading>
+              </EmptyContainer>
+              </>
+              :
+              <MDRow style={{display: 'flex',  justifyContent: 'space-around', width: '100%', flexDirection: 'row'}}>
+                <MDCol style={{marginRight: '5%'}}>
+                <SmallSubHeading style={{textAlign: 'center'}}>{ok !== 0 ? null : "Ainda não há contratos válidos"} {ok !== 0 ? "Contratos válidos: " : null}</SmallSubHeading>
+                <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}}>{ok === 0 ? null : ok}</Heading>
+                <SmallSubHeading style={{color: CONSTANTS?.colors?.green, textAlign: 'center', fontSize: '32px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)' }} >{valid_contract_value + ' €'}</SmallSubHeading>
+                </MDCol>
 
-              <MDCol>
-            
-              {pending !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{pending !== 0 ? "Contratos pendentes: " : null}</SmallSubHeading>}
-              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{pending === 0 ? null : pending}</Heading>
-              </MDCol>
+                <MDCol>
+              
+                {pending !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{pending !== 0 ? "Contratos pendentes: " : null}</SmallSubHeading>}
+                <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{pending === 0 ? null : pending}</Heading>
+                </MDCol>
 
-              <MDCol style={{marginLeft: '5%', marginRight: '5%'}}>
-              {ko !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{ko !== 0 ? null : "Não há contratos anulados"} {ko !== 0 ? "Contratos anulados: " : null}</SmallSubHeading>}
-              <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{ko === 0 ? null : ko}</Heading>
-              </MDCol>
-            </MDRow>
+                <MDCol style={{marginLeft: '5%', marginRight: '5%'}}>
+                {ko !== 0 && <SmallSubHeading style={{textAlign: 'center'}}>{ko !== 0 ? null : "Não há contratos anulados"} {ko !== 0 ? "Contratos anulados: " : null}</SmallSubHeading>}
+                <Heading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center', fontSize: '96px', textShadow: '1px 1px 1px rgba(0, 0, 0, 0.4)'}} >{ko === 0 ? null : ko}</Heading>
+                </MDCol>
+              </MDRow>
 
-          }
-          </ContractsInfo>
-        </FirstRow>
+            }
+            </ContractsInfo>
+          </FirstRow>
+          
+          { all !== 0 ?
+          <SecondRow>
+            <HomePageButton>
+              <Body>
+                <Link to={"/BackOffice"}>
+                  <MDButton>Cancelar</MDButton>
+                </Link>
+              </Body>
+            </HomePageButton>
+          </SecondRow>
+          :
+          <>
+          </>
+          } 
         
-        { all !== 0 ?
-        <SecondRow>
-          <HomePageButton>
-            <Body>
-              <Link to={"/BackOffice"}>
-                <MDButton>Cancelar</MDButton>
-              </Link>
-            </Body>
-          </HomePageButton>
-        </SecondRow>
-        :
-        <>
-        </>
-        } 
-      
-      </OfficeMonthResultContainer>
+        </OfficeMonthResultContainer>
 
-    </MainContainer>
+      </MainContainer>
+    </>
   );
 };
 

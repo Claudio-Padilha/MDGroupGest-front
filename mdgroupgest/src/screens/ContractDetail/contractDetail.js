@@ -1,30 +1,25 @@
 import React, { useState, useMemo, useReducer, useEffect } from "react";
 import { useHistory } from "react-router-dom";
 import { Col } from 'react-bootstrap';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import Swal from 'sweetalert2';
+import { List } from "semantic-ui-react";
+
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import { makeStyles } from '@material-ui/core/styles';
 import Dialog from '@material-ui/core/Dialog';
-import ListItemText from '@material-ui/core/ListItemText';
-import ListItem from '@material-ui/core/ListItem';
 import Divider from '@material-ui/core/Divider';
-import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
-import Typography from '@material-ui/core/Typography';
 import CloseIcon from '@material-ui/icons/Close';
 import Slide from '@material-ui/core/Slide';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
-import InputAdornment from '@material-ui/core/InputAdornment';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import TextField from '@material-ui/core/TextField';
-import AccountCircle from '@material-ui/icons/AccountCircle';
-import Avatar from '@material-ui/core/Avatar';
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
-
-import Swal from 'sweetalert2';
+import { MenuItem } from "@material-ui/core";
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
@@ -32,25 +27,18 @@ import Button from "../../components/Button/button";
 import { BackIcon, EditIcon } from '../../components/Icon/icons';
 import SwitchButton from "../../components/ToggleComponent/toggleButton";
 
+import { useRefresh } from '../../hooks/window/refresh';
 import contractsRequests from "../../hooks/requests/contractsRequests";
 import dataRequests from '../../hooks/requests/dataRequests'
-
-import ContractEdit from '../ContractEdit/contractEdit';
 
 import CONSTANTS from '../../constants';
 import {
   MainContainer,
   Row,
   Column,
-  LogoContainer
+  LogoContainer,
+  WidthMessageContainer
 } from "./styles";
-
-import { useRefresh } from '../../hooks/window/refresh';
-
-import { List } from "semantic-ui-react";
-import { Field } from "formik";
-import employeesRequests from "../../hooks/requests/employeesRequests";
-import { MenuItem } from "@material-ui/core";
 
 const ContractDetail = (props) => {
 
@@ -502,6 +490,10 @@ const ContractDetail = (props) => {
     return (
       <>
         <Dialog style={{padding: '2%'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
+        <WidthMessageContainer>
+          <Heading>Você precisa de mais espaço!</Heading>
+          <SubHeading>Volte ao tamanho necessário.</SubHeading>
+        </WidthMessageContainer>
           {/* <AppBar className={classes.appBar}>
             <Toolbar>
               <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -984,17 +976,23 @@ const ContractDetail = (props) => {
   };
 
   return (
-    <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} />
-        {
-          isLoading ?
-          <MainContainer>
-            <SwishSpinner size={200} color="#686769" loading={isLoading} />
-          </MainContainer> : 
-          renderContract()
-        }
-      <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
-    </MainContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer id={"mainContainer"}>
+        <BackIcon onClick={_goBack} />
+          {
+            isLoading ?
+            <MainContainer>
+              <SwishSpinner size={200} color="#686769" loading={isLoading} />
+            </MainContainer> : 
+            renderContract()
+          }
+        <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
+      </MainContainer>
+    </>
   )
 
 };

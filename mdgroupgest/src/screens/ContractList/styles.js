@@ -9,6 +9,11 @@ const MainContainer = styled.div`
   align-items: center;
   height: 100vh;
   min-width: 675px;
+
+  @media only screen and (max-width: 1260px) {
+    display: none;
+  }
+
   svg {
     position: absolute;
     width: 3%;
@@ -132,6 +137,25 @@ const MainContainer = styled.div`
   }
 `;
 
+const WidthMessageContainer = styled.div`
+  display: flex;
+  margin 20%;
+  height: 50vh;
+  flex-direction: column;
+  justify-content: center;
+  @media only screen and (min-width: 1260px) {
+    display: none;
+  }
+  > h3 {
+    text-align: center;
+  }
+  > h2 {
+    text-align: center;
+    font-size: 35px;
+    line-height: 45px;
+    margin-top: 50%;
+  }
+`;
 
 const Column = styled.div`
   display: flex;
@@ -185,5 +209,6 @@ export {
   Row,
   Col,
   LogoContainer,
-  EmptyContainer
+  EmptyContainer,
+  WidthMessageContainer
 };

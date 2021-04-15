@@ -6,7 +6,7 @@ import Swal from 'sweetalert2';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import { jsPDF } from "jspdf";
 
-import { SubHeading, Body, SmallBody, SmallSubHeading } from '../../components/Text/text';
+import { Heading, SubHeading, Body, SmallBody, SmallSubHeading } from '../../components/Text/text';
 import { LogoMD } from '../../components/Logo/logo';
 import Button from "../../components/Button/button";
 import { BackIcon, EditIcon } from '../../components/Icon/icons';
@@ -21,7 +21,8 @@ import {
   Row,
   Column,
   LogoContainer,
-  EmptyContainer
+  EmptyContainer,
+  WidthMessageContainer
 } from "./styles";
 
 import { List } from "semantic-ui-react";
@@ -444,20 +445,26 @@ const EmployeeList = (props) => {
   employeesToRender()
 
   return (
-    <MainContainer id={"mainContainer"}>
-      <BackIcon onClick={_goBack} className={"backIcon"}/>
-      <List divided verticalAlign="middle" className={"listContainer"}>
-        {employeesToRender()}
-      </List>
-      <LogoContainer>
-        <LogoMD action={
-          () => history.push({
-            pathname: "/BackOffice"
-          }
-          )}
-        />
-      </LogoContainer>
-    </MainContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer id={"mainContainer"}>
+        <BackIcon onClick={_goBack} className={"backIcon"}/>
+        <List divided verticalAlign="middle" className={"listContainer"}>
+          {employeesToRender()}
+        </List>
+        <LogoContainer>
+          <LogoMD action={
+            () => history.push({
+              pathname: "/BackOffice"
+            }
+            )}
+          />
+        </LogoContainer>
+      </MainContainer>
+    </>
   )
 
 };

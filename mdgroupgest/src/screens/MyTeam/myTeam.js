@@ -4,8 +4,9 @@ import Tree from 'react-tree-graph';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
 import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading } from "../../components/Text/text";
 
-import { MainContainer } from "./styles";
+import { MainContainer, WidthMessageContainer } from "./styles";
 import dataRequests from '../../hooks/requests/dataRequests';
 import { Autocomplete } from "@material-ui/lab";
 
@@ -346,38 +347,44 @@ const MyTeam = () => {
       <SwishSpinner size={300} color="#686769" loading={isLoading} />
     </MainContainer>  
     :
-    <MainContainer className="custom-container">
-      <BackIcon onClick={_goBack} className={"backIcon"}/>
-      <Tree
-        data={finalData}
-        height={900}
-        width={1200}
-        animated
-        steps={350}
-        duration={2000}
-        svgProps={{
-          className: 'custom',
-        }}
-        // gProps={{
-        //   onClick: _handleMainClick,
-        //   onContextMenu: _handleRightClick
-        // }}
-        nodeShape="image"
-        nodeProps={{
-          height: 45,
-          width: 45,
-          nodeRadius: 35,
-          cursor: 'auto',
-          href: require('../../assets/icons/loboMD.png'),
-        }}
-        margins={{
-          top: 20,
-          bottom: 10,
-          left: 20,
-          right: 200
-        }}
-      />
-    </MainContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer className="custom-container">
+        <BackIcon onClick={_goBack} className={"backIcon"}/>
+        <Tree
+          data={finalData}
+          height={900}
+          width={1200}
+          animated
+          steps={350}
+          duration={2000}
+          svgProps={{
+            className: 'custom',
+          }}
+          // gProps={{
+          //   onClick: _handleMainClick,
+          //   onContextMenu: _handleRightClick
+          // }}
+          nodeShape="image"
+          nodeProps={{
+            height: 45,
+            width: 45,
+            nodeRadius: 35,
+            cursor: 'auto',
+            href: require('../../assets/icons/loboMD.png'),
+          }}
+          margins={{
+            top: 20,
+            bottom: 10,
+            left: 20,
+            right: 200
+          }}
+        />
+      </MainContainer>
+    </>
   );
 };
 

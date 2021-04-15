@@ -12,6 +12,26 @@ const MainContainer = styled.div`
   margin: 10%;
 `;
 
+const WidthMessageContainer = styled.div`
+  display: flex;
+  margin 20%;
+  height: 50vh;
+  flex-direction: column;
+  justify-content: center;
+  @media only screen and (min-width: 1260px) {
+    display: none;
+  }
+  > h3 {
+    text-align: center;
+  }
+  > h2 {
+    text-align: center;
+    font-size: 35px;
+    line-height: 45px;
+    margin-top: 50%;
+  }
+`;
+
 const RightContractContainer = styled.div`
   display: flex; 
   flex-direction: row;
@@ -38,6 +58,11 @@ const MainDiv = styled.div`
   justify-content: space-between;
   width: 100%;
   height: 100vh;
+  
+  @media only screen and (max-width: 1260px) {
+    display: none;
+  }
+
   .jxbNCh {
     align-self: center;
     background-color: #FFF;
@@ -119,5 +144,6 @@ export {
   MainDiv,
   CornerLeft,
   LogoContainer,
-  CornerRight
+  CornerRight,
+  WidthMessageContainer
 };

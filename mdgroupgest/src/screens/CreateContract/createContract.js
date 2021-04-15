@@ -3,14 +3,7 @@ import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
-import {
-  MainDiv,
-  CornerLeft,
-  LogoContainer,
-  CornerRight,
-} from './styles';
-
-import { SubHeading } from '../../components/Text/text';
+import { Heading, SubHeading } from '../../components/Text/text';
 import CForm from '../../components/Form/complexForm';
 import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
@@ -18,7 +11,15 @@ import { BackIcon } from '../../components/Icon/icons';
 
 import { _executeValidationsIfHas } from '../../hooks/validation';
 import contractsRequests from '../../hooks/requests/contractsRequests';
-import dataRequests from '../../hooks/requests/dataRequests'
+import dataRequests from '../../hooks/requests/dataRequests';
+
+import {
+  MainDiv,
+  CornerLeft,
+  LogoContainer,
+  CornerRight,
+  WidthMessageContainer
+} from './styles';
 
 const CreateContract = (props) => {
 
@@ -609,23 +610,29 @@ const CreateContract = (props) => {
       <SwishSpinner size={200} color="#686769" loading={isLoading} />
     </MainDiv>
     :
-    <MainDiv>
-      <BackIcon onClick={_goBack} />
-      
-      <CornerLeft><Corner180 /></CornerLeft>
-      <SubHeading>{props?.location?.state?.title}</SubHeading>
-      <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
-        <CForm
-          key={DYNAMICFORMFIELDS?.key}
-          onSubmit={handleSubmitForm}
-          formFields={DYNAMICFORMFIELDS}
-          top
-          bg="primary"
-          isFullWidth
-          btnLabel="Inserir Contrato"
-        />
-      <CornerRight><Corner /></CornerRight>
-    </MainDiv>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainDiv>
+        <BackIcon onClick={_goBack} />
+        
+        <CornerLeft><Corner180 /></CornerLeft>
+        <SubHeading>{props?.location?.state?.title}</SubHeading>
+        <LogoContainer><LogoMD action={() => history.push("/BackOffice")}/></LogoContainer>
+          <CForm
+            key={DYNAMICFORMFIELDS?.key}
+            onSubmit={handleSubmitForm}
+            formFields={DYNAMICFORMFIELDS}
+            top
+            bg="primary"
+            isFullWidth
+            btnLabel="Inserir Contrato"
+          />
+        <CornerRight><Corner /></CornerRight>
+      </MainDiv>
+    </>
   )
 }
 

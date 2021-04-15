@@ -13,7 +13,8 @@ import {
   MyMonthContainer,
   GreenCircle,
   YellowCircle,
-  RedCircle
+  RedCircle,
+  WidthMessageContainer
 } from "./styles";
 
 import CONSTANTS from "../../constants";
@@ -378,16 +379,22 @@ const MyResults = (props) => {
   };
 
   return(
-    <MainContainer>
-      <BackIcon onClick={_goBack} />
-      <MyMonthContainer>
-        { state?.allContractsQtd !== 0 ?
-          renderMyProfit() :
-          <SubHeading style={{display: 'flex', justifyContent: 'center'}}>Ainda não há contratos...</SubHeading>
-        }  
-      </MyMonthContainer>
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer>
+        <BackIcon onClick={_goBack} />
+        <MyMonthContainer>
+          { state?.allContractsQtd !== 0 ?
+            renderMyProfit() :
+            <SubHeading style={{display: 'flex', justifyContent: 'center'}}>Ainda não há contratos...</SubHeading>
+          }  
+        </MyMonthContainer>
 
-    </MainContainer>
+      </MainContainer>
+    </>
   );
 };
 

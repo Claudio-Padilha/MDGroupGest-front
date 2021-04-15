@@ -7,6 +7,29 @@ const MainContainer = styled.div`
   display: flex;
   height: 100vh;
   width: 100%;
+  @media only screen and (max-width: 1260px) {
+    display: none;
+  }
+`;
+
+const WidthMessageContainer = styled.div`
+  display: flex;
+  margin 20%;
+  height: 50vh;
+  flex-direction: column;
+  justify-content: center;
+  @media only screen and (min-width: 1260px) {
+    display: none;
+  }
+  > h3 {
+    text-align: center;
+  }
+  > h2 {
+    text-align: center;
+    font-size: 35px;
+    line-height: 45px;
+    margin-top: 50%;
+  }
 `;
 
 const ProfileContainer = styled.div`
@@ -432,4 +455,5 @@ export {
   TeamAvatarsContainer,
   NavbarOptionsContainer,
   WelcomeWithLogoContainer,
+  WidthMessageContainer
 };
