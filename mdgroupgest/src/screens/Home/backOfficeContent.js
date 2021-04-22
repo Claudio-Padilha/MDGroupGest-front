@@ -49,6 +49,10 @@ const BackOfficeContent = (props) => {
   const fromEmployeeType = props?.location?.state?.fromEmployeeType;
   const fromMyTeam = props?.location?.state?.fromMyTeam;
 
+  const fromUpdateContract = JSON.parse(localStorage.getItem('fromUpdateContract'))
+
+  console.log(fromUpdateContract, 'testeeeee')
+
   const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
   const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
@@ -63,7 +67,7 @@ const BackOfficeContent = (props) => {
     setIsLoading(false)
   }, [300]);
 
-  useEffect(() => {
+  useEffect(() => { 
     if(fromContractsList || fromMyResults) {
       window.location.reload()
     }

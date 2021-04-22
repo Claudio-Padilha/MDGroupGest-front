@@ -78,9 +78,13 @@ const ContractDetail = (props) => {
     currentContract: propsState?.data
   }
 
-  if(cameFromList) {
-    localStorage.setItem('contractDetailScreenState', JSON.stringify(initialState))
-  }
+  useEffect(() => {
+    if(cameFromList) {
+      localStorage.setItem('contractDetailScreenState', JSON.stringify(initialState))
+      window.location.reload()
+    }
+  }, [cameFromList])
+
   
   const reducer = (firstState, action) => {
     let reducerState = {}
@@ -227,7 +231,7 @@ const ContractDetail = (props) => {
         electricity_ppi: document.getElementById('electricity_ppi') !== null ? document.getElementById('electricity_ppi').checked : null,
         gas_ppi: document.getElementById('gas_ppi') ? document.getElementById('gas_ppi').checked : null,
         pel: document.getElementById('pel') ? document.getElementById('pel').checked : null,
-        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null
+        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null,
       }
     }
     // if (document.getElementById("select-sell-state").value !== "") {
@@ -243,14 +247,26 @@ const ContractDetail = (props) => {
       contractData = {...contractData, ...{power: document.getElementById("select-power").value}}
     } 
 
+    if (document.getElementById("select-sell-state") !== null && document.getElementById("select-sell-state") !== "") {
+      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
+    }
+
     var result = window.confirm("Deseja realmente atualizar o contrato?")
-    if (result){
+    if (result) {
       contractsRequests.updateContract(contractData).then(() => {
-        contractsRequests.getContracts(currentOfficeID).then(
-          alert("Contrato atualizado com sucesso!")
-        )
-        window.location.replace('#/BackOffice');
-      })
+        contractsRequests.getContracts(currentOfficeID)
+        .then(
+          () => {
+            alert('O contrato foi atualizado')
+            localStorage.setItem('fromUpdateContract', JSON.stringify(true))
+            history.push({
+              pathname: '/BackOffice'
+            })
+          })
+          .catch(
+            () => alert('Houve um erro, tente novamente.')
+          )
+        })
     }
   }
 
@@ -371,17 +387,14 @@ const ContractDetail = (props) => {
     )
   }
 
-  function _handleNavigationToEdit() {
-    history.push({
-      pathname: "/ContractEdit",
-      state: {
-        contractToEdit: contract
-      }
-    })
-  }
-
   const history = useHistory();
   const [nif, setNif] = useState('');
+
+  const sellStatesToUpdate = [
+    {name: "ok", value: 1},
+    {name: "ko", value: 2},
+    {name: "r", value: 3}
+  ]
 
   function _ConfirmContractActivation(contract) {
     const sellStateID = () => {
@@ -660,6 +673,19 @@ const ContractDetail = (props) => {
                       display: 'flex',
                       flexDirection: 'column',
                     }}>
+                      <InputLabel style={{ fontSize: '32px', marginBottom: '-10vh'}} htmlFor="select-sell-state">Estado do contrato</InputLabel>
+                      <Select
+                        inputProps={{
+                          name: 'sell-state',
+                          id: 'select-sell-state',
+                        }}
+                      >
+                        {sellStatesToUpdate !== null ? sellStatesToUpdate.map(sellState => (
+                          <MenuItem value={sellState.value}>
+                            {sellState.name}
+                          </MenuItem>
+                        )) : []}
+                      </Select>
                     </Col>
 
                     <Col style={{
@@ -669,6 +695,7 @@ const ContractDetail = (props) => {
                       flexDirection: 'column', 
                       marginRight: '15%'
                     }}>
+
                       <SubHeading style={{display: 'flex'}}>Comissão: 
                       { contract?.sell_state__name !== 'ok' &&
                         <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>

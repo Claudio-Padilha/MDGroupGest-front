@@ -33,13 +33,16 @@ const AdminBackOfficeContent = (props) => {
   const offices = useMemo(() => {
     return JSON.parse(localStorage.getItem('offices'));
   }, [localStorage])
+  
+  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'))
 
   const renderOfficeCard = (office) => {
+
     return (
       <MDCard className={'cardForOffice'}>
         <MDCardBody className={'bodyCardForOffice'}>
           <SubHeading className={'officeName'}>{office?.name}</SubHeading>
-          <Heading className={'officeResult'}>3453€</Heading>
+          <Heading className={'officeResult'}>{ramMySalary}€</Heading>
         </MDCardBody>
       </MDCard>
     );
@@ -48,7 +51,7 @@ const AdminBackOfficeContent = (props) => {
   return (
     isCEO ?
       <ContentContainerForAdmin>
-        <OfficesContainer className={"TESTEZAAAAACO"}>
+        <OfficesContainer>
           { offices?.map((office) => {
             return renderOfficeCard(office);
           })}
