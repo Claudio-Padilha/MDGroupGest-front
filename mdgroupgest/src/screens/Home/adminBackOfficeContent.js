@@ -22,7 +22,7 @@ import officesRequests from '../../hooks/requests/officesRequests'
 
 const AdminBackOfficeContent = (props) => {
 
-  const { isCEO } = useAuth();
+  const { isCEO, isAdministrator } = useAuth();
 
   async function _getOffices() {
     await officesRequests.getOffices()
@@ -49,7 +49,7 @@ const AdminBackOfficeContent = (props) => {
   };
 
   return (
-    isCEO ?
+    (isCEO || isAdministrator) ?
       <ContentContainerForAdmin>
         <OfficesContainer>
           { offices?.map((office) => {

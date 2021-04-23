@@ -119,7 +119,7 @@ export default function MenuNavbar(props) {
                 boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
                 fontSize: 16,
                 padding: 10
-              }} onClick={() => _setToAdmin(isAdmin)}>Versão CEO</Link>
+              }} onClick={() => _setToAdmin(isAdmin)}>{isAdministrator ? 'Versão Admin' : 'Versão CEO'}</Link>
             </Body>
           }
 
