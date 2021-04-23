@@ -35,7 +35,7 @@ const CreateContract = (props) => {
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
         employeeType.map(type => {
-          if (type?.user?.user_type !== "secretary") {
+          if ((type?.user?.user_type === "ceo" || type?.user?.user_type === "manager" || type?.user?.user_type === "sales_person")) {
             allEmployees.push({value: type?.user?.id, label: type?.user?.name})
           }
         })
@@ -45,14 +45,14 @@ const CreateContract = (props) => {
     return allEmployees
   }
 
-  // const typeOfContractFromProps = props?.location?.state?.typeOfContract;
-
   const cameFromChoice = props?.location?.state?.cameFromChoice;
   const feedbackCalls = props?.location?.state?.feedbackCall;
   const sellStates = props?.location?.state?.sellState;
   const paymentMethods = props?.location?.state?.payment;
   const gasScales = props?.location?.state?.gasScale;
   const powersList = props?.location?.state?.power;
+
+  console.log(powersList, 'POWERS LIST ')
  
   function _getFeedbackCalls() {
     let feedbackCallsArr = []
@@ -116,6 +116,8 @@ const CreateContract = (props) => {
       powersList
     }
   }, [isLoading])
+
+  console.log(infoForFields, 'INFO')
 
   setTimeout(() => {
     setIsLoading(false)

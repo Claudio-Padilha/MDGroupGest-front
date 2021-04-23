@@ -30,8 +30,10 @@ const ChooseTypeOfContract = (props) => {
     await contractInfoNeeded.push({ 
       feedbackCalls: JSON.parse(localStorage.getItem('feedbackCalls')),
       sellStates: JSON.parse(localStorage.getItem('sellStates')),
+      gasScalesCond: JSON.parse(localStorage.getItem('gasScalesCond')),
       gasScales: JSON.parse(localStorage.getItem('gasScales')),
       payments: JSON.parse(localStorage.getItem('payments')),
+      powersCond: JSON.parse(localStorage.getItem('powerListCond')),
       powers: JSON.parse(localStorage.getItem('powerList'))
     })
   }
@@ -181,6 +183,8 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
+  console.log(contractInfoNeeded, 'CONTRACT INFO NEEDED')
+
   const renderCondominiumElectricityCard = () => {
 
     return (
@@ -193,7 +197,7 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: contractInfoNeeded[0]?.feedbackCalls,
           sellState: contractInfoNeeded[0]?.sellStates,
           payment: contractInfoNeeded[0]?.payments,
-          power: start ? contractInfoNeeded[0]?.powers : _getPower(false)
+          power: start ? contractInfoNeeded[0]?.powersCond : _getPower(false)
         }  
       }}>
         <MDCard className={"card"}>
@@ -239,7 +243,7 @@ const ChooseTypeOfContract = (props) => {
           cameFromChoice: true,
           feedbackCall: contractInfoNeeded[0]?.feedbackCalls,
           sellState: contractInfoNeeded[0]?.sellStates,
-          gasScale: start ? contractInfoNeeded[0]?.gasScales : _getGasScale(false),
+          gasScale: start ? contractInfoNeeded[0]?.gasScalesCond : _getGasScale(false),
           payment: contractInfoNeeded[0]?.payments
         }  
       }}>
@@ -289,8 +293,8 @@ const ChooseTypeOfContract = (props) => {
           feedbackCall: contractInfoNeeded[0]?.feedbackCalls,
           sellState: contractInfoNeeded[0]?.sellStates,
           payment: contractInfoNeeded[0]?.payments,
-          gasScale: start ? contractInfoNeeded[0]?.gasScales : _getGasScale(false),
-          power: start ? contractInfoNeeded[0]?.powers : _getPower(false),
+          gasScale: start ? contractInfoNeeded[0]?.gasScalesCond : _getGasScale(false),
+          power: start ? contractInfoNeeded[0]?.powersCond : _getPower(false),
           employees: allEmployees
         }  
       }}>

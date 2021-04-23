@@ -91,7 +91,21 @@ export default {
       axios(gasScaleRequest)
 
       .then(res => {
-        localStorage.setItem('gasScales', JSON.stringify(res.data))
+
+        const gasScaleArr = res?.data
+        let gasScalesListCondominium = []
+        let gasScalesList = []
+
+        for (let i = 0; i < gasScaleArr?.length; i++ ) {
+          if (gasScaleArr[i]?.is_condominium) {
+            gasScalesListCondominium.push(gasScaleArr[i])
+          } else {
+            gasScalesList.push(gasScaleArr[i])
+          }
+        }
+        
+        localStorage.setItem('gasScalesCond', JSON.stringify(gasScalesListCondominium)) 
+        localStorage.setItem('gasScales', JSON.stringify(gasScalesList)) 
         resolve(res);
       })
       .catch(error => { 
@@ -114,7 +128,20 @@ export default {
       axios(gasPowerRequest)
 
       .then(res => {
-        localStorage.setItem('powerList', JSON.stringify(res.data)) 
+        const powerArr = res?.data
+        let powersListCondominium = []
+        let powersList = []
+
+        for (let i = 0; i < powerArr?.length; i++ ) {
+          if (powerArr[i]?.is_condominium) {
+            powersListCondominium.push(powerArr[i])
+          } else {
+            powersList.push(powerArr[i])
+          }
+        }
+        
+        localStorage.setItem('powerListCond', JSON.stringify(powersListCondominium)) 
+        localStorage.setItem('powerList', JSON.stringify(powersList)) 
         resolve(res);
       })
       .catch(error => { 
