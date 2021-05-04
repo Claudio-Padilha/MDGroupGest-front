@@ -74,7 +74,7 @@ const ChooseEmployeeTypeToSee = (props) => {
   }
   _allEmployees()
 
-  const { ceo, administrator, regularManager, regularSecretary, teamLeaders, instructors, comercials } = useEmployees()
+  const { ceo, administrator, regularManager, regularSecretary, managerAssistants, teamLeaders, instructors, comercials } = useEmployees()
   const { isCEO, isRegularManager, isAdministrator, isRegularSecretary } = useAuth()
 
   const allEmployees = useMemo(() => {
@@ -86,6 +86,7 @@ const ChooseEmployeeTypeToSee = (props) => {
     administrator,
     regularManager, 
     regularSecretary,
+    managerAssistants,
     teamLeaders,
     instructors,
     comercials,
@@ -193,7 +194,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       pathname:"/EmployeeList",
       state: {
         userType: "manager",
-        title: "Gerente",
+        title: "Empresário",
         data: state?.regularManager,
         dataGoingToList : currentUser,
         officeID: currentOfficeID,
@@ -211,7 +212,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         }
 
         { (isRegularSecretary || isCEO || isAdministrator) &&
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Gerente</SubHeading>
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Empresário</SubHeading>
         }
         </MDCardBody>
       </MDCard>
@@ -243,6 +244,26 @@ const ChooseEmployeeTypeToSee = (props) => {
         { (isCEO || isRegularManager || isAdministrator) &&
           <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Secretário(a)</SubHeading>
         }
+        </MDCardBody>
+      </MDCard>
+    </Link>
+  );
+
+  const renderManagerAssistantCard = () => (
+    <Link to={{
+      pathname:"/EmployeeList",
+      state: {
+        userType: "managerAssistant",
+        title: "Gerente",
+        data: state?.managerAssistants,
+        employeeToAssociate: regularManager || ceo,
+        shouldRenderEmployeeAssociation: true,
+        isFromEmployeeTypeSelection: true
+      }  
+    }}>
+      <MDCard className={"card"}>
+        <MDCardBody>
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
         </MDCardBody>
       </MDCard>
     </Link>
@@ -323,6 +344,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       </FirstRow>
       
       <SecondRow ceo>
+        {renderManagerAssistantCard()}
         {renderTeamLeaderCard()} 
         {renderInstructorCard()}
         {renderComercialCard()}
@@ -349,6 +371,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       </FirstRow>
       
       <SecondRow administrator >
+        {renderManagerAssistantCard()}
         {renderTeamLeaderCard()}
         {renderInstructorCard()}
         {renderComercialCard()}
@@ -375,6 +398,7 @@ const ChooseEmployeeTypeToSee = (props) => {
       </FirstRow>
       
       <SecondRow>
+        {renderManagerAssistantCard()}
         {renderInstructorCard()}
         {renderComercialCard()}
         

@@ -25,6 +25,8 @@ export default function BackOfficeHeader(props) {
       case "admin":
         return "Administrador(a)"
       case "manager": 
+        return "Empresário"
+      case "manager_assistant": 
         return "Gerente"
       case "secretary":
         return "Secretário(a)"

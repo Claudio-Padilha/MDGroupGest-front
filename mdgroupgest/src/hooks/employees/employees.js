@@ -56,9 +56,12 @@ export const useEmployees = () => {
     let comercial = []
     let instructor = []
     let teamLeader = []
+    let managerAssistant = []
 
     for (let i = 0; i < salesPersonArr?.length; i++) {
-      if (salesPersonArr[i]?.is_team_leader) {
+      if (salesPersonArr[i]?.is_manager_assistant) {
+        managerAssistant.push(salesPersonArr[i])
+      } else if (salesPersonArr[i]?.is_team_leader) {
         teamLeader.push(salesPersonArr[i])
       } else if (salesPersonArr[i]?.is_instructor) {
         instructor.push(salesPersonArr[i])
@@ -67,9 +70,10 @@ export const useEmployees = () => {
       }
     }
 
-    return { comercial, instructor, teamLeader }
+    return { comercial, instructor, teamLeader, managerAssistant }
   }, [allEmployees])
 
+  const managerAssistants = salesPerson?.managerAssistant
   const teamLeaders = salesPerson?.teamLeader
   const instructors = salesPerson?.instructor
   const comercials = salesPerson?.comercial
@@ -79,6 +83,7 @@ export const useEmployees = () => {
     regularManager,
     administrator,
     regularSecretary,
+    managerAssistants,
     teamLeaders, 
     instructors, 
     comercials

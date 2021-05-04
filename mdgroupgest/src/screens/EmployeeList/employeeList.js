@@ -117,7 +117,9 @@ const EmployeeList = (props) => {
   }
 
   const textForPromotion = useCallback((position) => {
-      if(state['userType'] === 'instructor' && position) {
+      if (state['userType'] === 'teamLeader') {
+        return 'Promover a Gerente'
+      } else if(state['userType'] === 'instructor' && position) {
         return 'Promover a Team Leader'
       } else if (state['userType'] === 'salesPerson') {
         return 'Promover a Instrutor'
@@ -126,17 +128,19 @@ const EmployeeList = (props) => {
       }
   }, [state])
 
-  console.log(textForPromotion(), 'TEXTO DO BOTÂO')
-
   const renderEmployee = (employee, i) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
+
+    console.log(employee, 'EMPLOYEEE')
+    console.log(userType, 'USER TYPE')
     
+    const isManagerAssistant = employee?.is_manager_assistant
     const isTeamLeader = employee?.is_team_leader;
     const isInstructor = employee?.is_instructor;
 
-    const renderPromotion = ((userType === 'sales_person' && !isTeamLeader) || isInstructor)
+    const renderPromotion = (userType === 'sales_person' || isInstructor || isTeamLeader)
 
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
@@ -145,6 +149,8 @@ const EmployeeList = (props) => {
         case "Admin":
           return "Administrador(a)"
         case "Manager":
+          return "Empresário";
+        case "Manager_assistant":
           return "Gerente";
         case "Secretary":
           return "Secretária";
@@ -153,14 +159,7 @@ const EmployeeList = (props) => {
         case "Instructor":
           return "Instrutor";
         case "Sales_person":
-          if(isTeamLeader) {
-            return 'Team Leader'
-          } else if (isInstructor) {
-            return 'Instrutor';
-          } else {
-            return "Comercial";
-          }
-      
+          return "Comercial";      
         default:
           return;
       }

@@ -91,7 +91,7 @@ const EmployeeType = (props) => {
       pathname:"/CreateEmployee",
       state: {
         userType: "manager",
-        title: "Criar Gerente",
+        title: "Criar Empresário",
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         shouldRenderEmployeeAssociation: false
@@ -99,7 +99,7 @@ const EmployeeType = (props) => {
     }}>
       <MDCard className={"card"}>
         <MDCardBody>
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Gerente</SubHeading>
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Empresário</SubHeading>
         </MDCardBody>
       </MDCard>
     </Link>
@@ -124,45 +124,7 @@ const EmployeeType = (props) => {
     </Link>
   );
 
-  const renderTeamLeaderCard = () => (
-    <Link to={{
-      pathname:"/CreateEmployee",
-      state: {
-        userType: "team_leader",
-        title: "Criar Team Leader",
-        officeID: currentOfficeID,
-        officeOBJ: currentOfficeObject,
-        employeeToAssociate: allEmployees?.manager,
-        shouldRenderEmployeeAssociation: true
-      }  
-    }}>
-      <MDCard className={"card"}>
-        <MDCardBody>
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Team Leader</SubHeading>
-        </MDCardBody>
-      </MDCard>
-    </Link>
-  );
 
-  const renderInstructorCard = () => (
-    <Link to={{
-      pathname:"/CreateEmployee",
-      state: {
-        userType: "instructor",
-        title: "Criar Instrutor(a)",
-        officeID: currentOfficeID,
-        officeOBJ: currentOfficeObject,
-        employeeToAssociate: allEmployees?.sales_person,
-        shouldRenderEmployeeAssociation: true
-      }  
-    }}>
-      <MDCard className={"card"}>
-        <MDCardBody>
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Instrutor(a)</SubHeading>
-        </MDCardBody>
-      </MDCard>
-    </Link>
-  );
 
   const renderComercialCard = () => (
     <Link to={{
