@@ -256,7 +256,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         userType: "managerAssistant",
         title: "Gerente",
         data: state?.managerAssistants,
-        employeeToAssociate: regularManager || ceo,
+        employeeToAssociate: regularManager.concat(ceo),
         shouldRenderEmployeeAssociation: true,
         isFromEmployeeTypeSelection: true
       }  
@@ -276,7 +276,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         userType: "teamLeader",
         title: "Team Leader",
         data: state?.teamLeaders,
-        employeeToAssociate: regularManager || ceo,
+        employeeToAssociate: regularManager.concat(managerAssistants.concat(ceo)),
         shouldRenderEmployeeAssociation: true,
         isFromEmployeeTypeSelection: true
       }  
@@ -298,7 +298,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.instructors,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        employeeToAssociate: teamLeaders.concat(regularManager).concat(ceo),
+        employeeToAssociate: managerAssistants.concat(teamLeaders.concat(regularManager).concat(ceo)),
         shouldRenderEmployeeAssociation: true,
         isFromEmployeeTypeSelection: true
       }  
@@ -320,7 +320,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.comercials,
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        employeeToAssociate: instructors.concat(allEmployees?.manager),
+        employeeToAssociate: managerAssistants.concat(teamLeaders.concat(instructors.concat(allEmployees?.manager))),
         shouldRenderEmployeeAssociation: true,
         isFromEmployeeTypeSelection: true
       }  
