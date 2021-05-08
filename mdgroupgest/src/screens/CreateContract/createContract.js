@@ -35,7 +35,14 @@ const CreateContract = (props) => {
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
         employeeType.map(type => {
-          if ((type?.user?.user_type === "ceo" || type?.user?.user_type === "manager" || type?.user?.user_type === "sales_person")) {
+          if ((
+            type?.user?.user_type === "ceo" ||
+            type?.user?.user_type === "manager" ||
+            type?.user?.user_type === "manager_assistant" ||
+            type?.user?.user_type === "team_leader" ||
+            type?.user?.user_type === "instructor" ||
+            type?.user?.user_type === "sales_person"
+          )) {
             allEmployees.push({value: type?.user?.id, label: type?.user?.name})
           }
         })
@@ -51,13 +58,11 @@ const CreateContract = (props) => {
   const paymentMethods = props?.location?.state?.payment;
   const gasScales = props?.location?.state?.gasScale;
   const powersList = props?.location?.state?.power;
-
-  console.log(powersList, 'POWERS LIST ')
  
   function _getFeedbackCalls() {
     let feedbackCallsArr = []
     for(let i = 0; i < feedbackCalls?.length; i++) {
-      feedbackCallsArr.push({value: feedbackCalls[i]?.id, label: feedbackCalls[i]?.name })
+      feedbackCallsArr.push({value: feedbackCalls[i]?.id, label: feedbackCalls[i]?.name.toUpperCase() })
     }
 
     return feedbackCallsArr
@@ -66,7 +71,7 @@ const CreateContract = (props) => {
   function _getSellStates() {
     let sellStatesArr = []
     for(let i = 0; i < sellStates?.length; i++) {
-      sellStatesArr.push({value: sellStates[i]?.id, label: sellStates[i]?.name })
+      sellStatesArr.push({value: sellStates[i]?.id, label: sellStates[i]?.name.toUpperCase() })
     }
 
     return sellStatesArr
@@ -75,7 +80,7 @@ const CreateContract = (props) => {
   function _getPaymentMethods() {
     let paymentMethodsArr = []
     for(let i = 0; i < paymentMethods?.length; i++) {
-      paymentMethodsArr.push({value: paymentMethods[i]?.id, label: paymentMethods[i]?.name })
+      paymentMethodsArr.push({value: paymentMethods[i]?.id, label: paymentMethods[i]?.name.toUpperCase() })
     }
 
     return paymentMethodsArr
@@ -84,7 +89,7 @@ const CreateContract = (props) => {
   function _getGasScales() {
     let gasScalesArr = []
     for(let i = 0; i < gasScales?.length; i++) {
-      gasScalesArr.push({value: gasScales[i]?.id, label: gasScales[i]?.name })
+      gasScalesArr.push({value: gasScales[i]?.id, label: gasScales[i]?.name.toUpperCase() })
     }
 
     return gasScalesArr
@@ -93,7 +98,7 @@ const CreateContract = (props) => {
   function _getPowersList() {
     let powersListArr = []
     for(let i = 0; i < powersList?.length; i++) {
-      powersListArr.push({value: powersList[i]?.id, label: powersList[i]?.name})
+      powersListArr.push({value: powersList[i]?.id, label: powersList[i]?.name.toUpperCase() })
     }
 
     return powersListArr

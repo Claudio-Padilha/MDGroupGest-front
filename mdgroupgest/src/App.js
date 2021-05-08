@@ -15,6 +15,7 @@ import ChooseTypeOfContract from './screens/CreateContract/chooseTypeOfContract'
 import MyProfile from './screens/MyProfile/myProfile';
 import OfficeMonthResultDetail from './screens/OfficeResultDetail/officeResultDetail';
 import EditEmployee from './screens/EditEmployee/editEmployee';
+import ExportPaymentSheet from './screens/ExportPaymentSheet/exportPaymentSheet';
 
 import Router from './router';
 
@@ -36,6 +37,7 @@ function App() {
     myProfile: "/MyProfile",
     officeResultDetail: "/OfficeMonthResultDetail",
     editEmployee: "/EmployeeEdit",
+    exportPaymentSheet: "/ExportPaymentSheet",
   };
   
   const routes = [
@@ -54,7 +56,8 @@ function App() {
     { path: paths.chooseTypeOfContract, component: ChooseTypeOfContract },
     { path: paths.myProfile, component: MyProfile },
     { path: paths.officeResultDetail, component: OfficeMonthResultDetail },
-    { path: paths.editEmployee, component: EditEmployee }
+    { path: paths.editEmployee, component: EditEmployee },
+    { path: paths.exportPaymentSheet, component: ExportPaymentSheet }
   ];
 
   return (

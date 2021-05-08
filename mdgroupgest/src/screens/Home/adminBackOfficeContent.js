@@ -18,17 +18,9 @@ import {
   ResultsContainer
 } from './styles';
 
-import officesRequests from '../../hooks/requests/officesRequests'
-
 const AdminBackOfficeContent = (props) => {
 
   const { isCEO, isAdministrator } = useAuth();
-
-  async function _getOffices() {
-    await officesRequests.getOffices()
-  }
-
-  _getOffices()
   
   const offices = useMemo(() => {
     return JSON.parse(localStorage.getItem('offices'));

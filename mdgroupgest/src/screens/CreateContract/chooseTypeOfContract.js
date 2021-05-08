@@ -183,8 +183,6 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
-  console.log(contractInfoNeeded, 'CONTRACT INFO NEEDED')
-
   const renderCondominiumElectricityCard = () => {
 
     return (
@@ -256,6 +254,8 @@ const ChooseTypeOfContract = (props) => {
       </Link>
     );
   };
+
+  console.log(localStorage, 'TESTE MAXIMO STORE')
 
   const renderDualCard = () => {
     return (

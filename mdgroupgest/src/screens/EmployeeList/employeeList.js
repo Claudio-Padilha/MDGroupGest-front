@@ -205,7 +205,7 @@ const EmployeeList = (props) => {
             .then(async() => {
               await dataRequests.getMyTeam(currentOfficeID)
               swalWithBootstrapButtons.fire(
-                'Funcionário Promovido!',
+                'Comercial Promovido!',
                 'A operação foi concluída com sucesso.',
                 'success'
               )  
@@ -216,7 +216,7 @@ const EmployeeList = (props) => {
           ) {
             swalWithBootstrapButtons.fire(
               'Ação cancelada!',
-              'O funcionário não foi promovido.',
+              'O comercial não foi promovido.',
               'error'
             )
           }
@@ -247,7 +247,7 @@ const EmployeeList = (props) => {
             await employeesRequests.deleteEmployee(employee)         
             .then(() => (
               swalWithBootstrapButtons.fire(
-                'Funcionário Excluído!',
+                'Comercial Excluído!',
                 'A operação foi concluída com sucesso.',
                 'success'
               )  
@@ -258,7 +258,7 @@ const EmployeeList = (props) => {
           ) {
             swalWithBootstrapButtons.fire(
               'Ação cancelada!',
-              'Seu funcionário não foi excluído.',
+              'O comercial não foi excluído.',
               'error'
             )
           }
@@ -431,7 +431,7 @@ const EmployeeList = (props) => {
     } else if(!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null && !state?.employeesReturningFromEdit) {
       return (
         <EmptyContainer>
-          <SubHeading>Ainda não há funcionários...</SubHeading>
+          <SubHeading>Ainda não há comerciais...</SubHeading>
         </EmptyContainer>
       )
     } else if (!state?.isFromEdit && state?.employees) {

@@ -377,7 +377,7 @@ const BackOfficeContent = (props) => {
         <TeamAvatarsContainer>
           <AvatarGroup max={12}>
             {totalEmployees.map(employee => (
-              <Avatar alt="Avatar Funcionário" src={employee?.user?.avatar} />
+              <Avatar alt="Avatar Comercial" src={employee?.user?.avatar} />
             ))}
           </AvatarGroup>
         </TeamAvatarsContainer>

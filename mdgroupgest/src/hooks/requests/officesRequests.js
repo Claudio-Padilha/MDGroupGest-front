@@ -87,7 +87,7 @@ export default {
         let officesSoFar = JSON.parse(localStorage.getItem('offices'));
         let currentOffices = {...res, ...officesSoFar}
         localStorage.removeItem('offices');
-        localStorage.setItem('offices', currentOffices);
+        localStorage.setItem('offices', JSON.stringify(currentOffices));
         resolve(res);
       })
       .catch(error => {
