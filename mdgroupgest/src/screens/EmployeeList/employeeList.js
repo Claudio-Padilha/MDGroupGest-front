@@ -270,55 +270,75 @@ const EmployeeList = (props) => {
 
       const today = new Date()
 
-      const doc = new jsPDF();
-      doc.text("CONTRATO DE PRESTAÇÃO DE SERVIÇOS",45,30);
-      doc.text("FENIXTHOUSAND SOLUTIONS LDA., sociedade com sede na Rua", 10, 45)
-      doc.text("Ricardo Reis, nº 2, 6º esq, 2675-237 Odivelas, com o NIPC 514216131,", 10, 55)
-      doc.text("matriculada na Conservatória do Registo Comercial de Lisboa,  sob  o", 10, 65)
-      doc.text("mesmo número, neste ato representada na forma de seus atos constitutivos,", 10, 75)
-      doc.text("adiante designada 'Fenixthousand Solutions, Lda.' ou 'Contratante'; e", 10, 85)
-      doc.text(name +",", 10, 95)
-      doc.text("portador(a) do Cartão de Cidadão com o número de identificação civil NR ,", 10, 105)
-      doc.text("emitido por República Portuguesa e válido até (VALIDADE), número de", 10, 115)
-      doc.text("identificação fiscal " + nif + ", com residência habitual na", 10, 125)
-      doc.text(address +",", 10, 135)
-      doc.text("adiante designado como 'Contratado';", 10, 145)
-      doc.text("Sendo Contratante e Contratado, em conjunto, doravante denominados", 10, 155)
-      doc.text("simplesmente 'Partes';", 10, 165)
-      doc.text("Considerando que:", 10, 177)
-      doc.text("i) a Contratante tem por objeto social o exercício da atividade", 10, 187)
-      doc.text("de venda de mercadorias;", 14, 197)
-      doc.text("(ii) A Contratante tem interesse em contratar os serviços do", 10, 207)
-      doc.text("Contratado e que este aceita prestar, em regime de exclusividade,", 14, 217)
-      doc.text("os seus serviços profissionais no sentido de colaborar para o de-", 14, 227)
-      doc.text("senvolvimento da atividade da Fenixthousand Solutions, Lda.", 14, 237)
-      doc.text("Resolvem as Partes, de comum acordo, celebrar o presente Contrato de", 10, 249)
-      doc.text("Prestação de Serviços ('Contrato'), o qual se regerá de acordo com os", 10, 259)
-      doc.text("seguintes termos e condições:", 10, 269)
+      const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4',
+        putOnlyUsedFonts:true
+       });
+      doc.setFontSize(11)
+      doc.text("CONTRATO DE PRESTAÇÃO DE SERVIÇOS",65,30);
+      doc.text(["FENIXTHOUSAND SOLUTIONS LDA., sociedade com sede na Rua Ricardo Reis, nº 2, 6º esq, 2675-237 Odive-", 
+                "las com o NIPC 514216131, matriculada na Conservatória do Registo Comercial de Lisboa,  sob o mesmo núme-",
+                "ro, neste ato representada na forma de seus atos constitutivos, adiante designada 'Fenixthousand Solutions, Lda.",
+                "ou 'CONTRATANTE'; e",
+                "\n",
+                name + " Pereira Martins Silva, portador(a) do Cartão de Cidadão com o número de identificação 000000000",
+                "emitido por República Portuguesa e válido até (VALIDADE), número de identificação fiscal " + nif+ ", com",
+                "residência habitual na " + address + ", adiante designado como 'CONTRATADO';",
+                "\n",
+                "Sendo CONTRATANTE e CONTRATADO, em conjunto, doravante denominados simplesmente 'Partes';",
+                "\n",
+                "                                                       CONSIDERANDO que:",
+                "(i) a CONTRATANTE tem por objeto social o exercício da atividade de venda de mercadorias; angariação de no-",
+                "vos clientes e serviços; e prestação de serviços de divulgação comercial;",
+                "\n",
+                "(ii) A CONTRATANTE tem interesse em contratar os serviços do CONTRATADO e que este aceita prestar, em re-",
+                "gime de exclusividade, os seus serviços profissionais no sentido de colaborar para o desenvolvimento da ativida-",
+                "de da Fenixthousand Solutions, Lda.",
+                "\n",
+                "Resolvem as PARTES, de comum acordo, celebrar o presente Contrato de Prestação de Serviços ('Contrato'),   o",
+                "qual se regerá de acordo com os seguintes termos e condições:",
+                "\n",
+                "                                                       CLÁUSULA PRIMEIRA - OBJETO",
+                "1.1     O presente Contrato tem por objeto a prestação de serviços pelo CONTRATADO à CONTRATANTE, em",
+                "regime de exclusividade,nomeadamente, (i) o desenvolvimento de tarefas necessárias à preparação e ao cum-",
+                "primento dos contratos de venda de mercadorias e de angariação de novos clientes e serviços; e (ii) a presta-",
+                "ção de serviços de divulgação comercial; tudo de forma autônoma e independente, não sujeita à autoridade ou",
+                "direção da Fenixthousand Solutions, Lda ('Serviços');",
+                "1.2     A CONTRATANTE e o CONTRATADO acordam que, pelo facto de serem entidades juridicamente autó-",
+                "nomas e não existir qualque relação de trabalho que não seja a de prestação de serviços, o CONTRATADO é o",
+                "único e exclusivo responsável pelos pagamentos e contribuições relativas a impostos, segurança social, seguros",
+                "de acidentes de trabalho ou outras importâncias devidas e inerentes a sua atividade de profissional liberal (ou",
+                "empresário em nome individual), salvo disposições legais em contrário.",
+                "\n",
+                "                                                        CLÁUSULA SEGUNDA - LOCAL",
+                "O CONTRATADO desenvolverá seus serviços em território português, sendo da essência deste Contrato a ne-",
+                "cessidade de deslocamento em viagens para o desenvolvimento pleno dos Serviços. Tais viagens correrão, ",
+                "exclusivamente, às expensas do CONTRATADO.",
+                "\n",
+                "                                                 CLÁUSULA TERCEIRA - REMUNERAÇÂO PELOS SERVIÇOS",
+                "3.1       Em contrapartida aos serviços prestados, a A Fenixthousand Solutions, Lda deverá ao CONTRATADO",
+                "valor apurado com base em Comissão prevista no respectivo Plano de Comissões do Projeto, com as atualiza-",
+                "ções que vigorarem na data da realização dos serviços, sendo certo que ambas as partes admitem ter pleno co-",
+                "nhecimento do Plano de Comissões vigente e acesso às respectivas atualizações.",
+                "3.2     O valor devido pela prestação dos Serviços acima será pago ao CONTRATADO em até 5 (cinco) dias a",
+                "contar da data em que ocorrer a boa cobrança pela CONTRATANTE dos serviços prestados pelo CONTRATADO,",
+                "o que costuma ocorrer até o dia 12 de cada mês.",
+                "3.3      As despesas incorridas pelo CONTRATADO na execução dos serviços, tais como passagens, estadia", 
+                "e alimentação em viagens, são de exclusiva responsabilidade do CONTRATADO e, via de regra, não serão an-",
+                "tecipadas ou reembolsadas pela CONTRATANTE.",
+               ], 10, 55)
       doc.addPage()
-      doc.text("Cláusula Primeira - Objeto", 10, 15)
-      doc.text("1.      O presente Contrato tem por objeto a prestação de serviços pelo", 10, 27)
-      doc.text("Contratado à Contratante, em regime de exclusividade, nomeadamente, (i) o", 10, 37)
-      doc.text("desenvolvimento de tarefas necessárias à preparação e ao cumprimento dos", 10, 47)
-      doc.text("contratos de venda de mercadorias e de angariação de novos clientes e", 10, 57)
-      doc.text("serviços; e (ii) a prestação de serviços de divulgação comercial; tudo de", 10, 67)
-      doc.text("1.2     A Contratante e o Contratado acordam que, pelo facto de serem", 10, 77)
-      doc.text("entidades juridicamente autónomas e não existir qualquer relação de trabalho", 10, 87)
-      doc.text("que não seja a de prestação de serviços, o Contratado é o único e exclusivo", 10, 97)
-      doc.text("responsável pelos pagamentos e contribuições relativas a impostos, segurança", 10, 107)
-      doc.text("social, seguros de acidentes de trabalho ou outras importâncias devidas e", 10, 117)
-      doc.text("inerentes a sua atividade de profissional liberal (ou empresário em nome", 10, 127)
-      doc.text("individual), salvo disposições legais em contrário.", 10, 137)
-      doc.text("Cláusula Segunda - Local", 10, 149)
-      doc.text("O Contratado desenvolverá seus serviços em território português, sendo", 10, 159)
-      doc.text("da essência deste Contrato a necessidade de deslocamento em viagens", 10, 169)
-      doc.text("para o desenvolvimento pleno dos Serviços. Tais viagens  correrão,", 10, 179)
-      doc.text(" exclusivamente, às expensas do Contratado.", 10, 189)
-      doc.line(10, 229, 80, 229)
-      doc.line(120, 229, 190, 229)
-      doc.text("Contratante", 20, 239)
-      doc.text("Contratado", 130, 239)
-      doc.text("Lisboa, " + String(today.getDate()) + "/" + String((today.getMonth() + 1) > 9 ? today.getMonth() + 1 : "0") + String(today.getMonth() + 1) + "/" + String(today.getFullYear()), 140, 279)
+      doc.text([
+        "                                                   CLÁUSULA QUARTA - PRAZO E RESOLUÇÃO"
+      ], 10, 20)
+     
+      // doc.line(10, 229, 80, 229)
+      // doc.line(120, 229, 190, 229)
+      // doc.text("Contratante", 20, 239)
+      // doc.text("Contratado", 130, 239)
+      // doc.text("Lisboa, " + String(today.getDate()) + "/" + String((today.getMonth() + 1) > 9 ? today.getMonth() + 1 : "0") + String(today.getMonth() + 1) + "/" + String(today.getFullYear()), 140, 279)
      
       doc.save(name + ".pdf");
     };
