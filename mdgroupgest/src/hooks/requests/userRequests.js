@@ -5,6 +5,7 @@ import React from 'react';
 import _currentTokenOnRAM from './currentToken';
 import dataRequests from '../../hooks/requests/dataRequests';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import officesRequests from '../../hooks/requests/officesRequests'
 import useVPSURL from './defaultVpsURL';
 import { Redirect } from 'react-router-dom';
 
@@ -152,7 +153,7 @@ export default {
                   localStorage.setItem('currentUser', JSON.stringify(user));
                   localStorage.setItem('currentToken', currentAuthToken);
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));
-
+                  officesRequests.getOffices()
                   dataRequests.getOfficesResultsByDay(user?.user?.office)
 
                   return new Promise((resolve, reject) => {

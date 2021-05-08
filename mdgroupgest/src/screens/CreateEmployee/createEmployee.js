@@ -222,7 +222,7 @@ const CreateEmployee = (props) => {
     }
       return (
         swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados do funcionário:',
+        title: 'Confirme os dados do comercial:',
         html: 
           `<b>Nome:</b> ${name ? name : `❌`} <br>
             <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
@@ -248,7 +248,7 @@ const CreateEmployee = (props) => {
               if(clientSideError) {
                 return swalWithBootstrapButtons.fire(
                   'Erro',
-                  'Funcionário não inserido, tente de novo. (Verifique os campos)',
+                  'Comercial não inserido, tente de novo. (Verifique os campos)',
                   'error'
                 )
               } else if (serverSideError) {
@@ -260,7 +260,7 @@ const CreateEmployee = (props) => {
               } else {
                 swalWithBootstrapButtons.fire(
                   'Boa!',
-                  'Funcionário inserido com sucesso.',
+                  'Comercial inserido com sucesso.',
                   'success'
                 ).then(async (result) => {
                   if(result) {
@@ -307,7 +307,7 @@ const CreateEmployee = (props) => {
       subType: "twoColumns",
       side: "right",
       key: "employeeAbove",
-      question: "Funcionário responsável",
+      question: "Comercial responsável",
       placeholder: "Escolha o nome",
       options: _employeeToAssociation() 
     }

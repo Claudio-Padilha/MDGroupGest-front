@@ -131,7 +131,7 @@ const EmployeeType = (props) => {
       pathname:"/CreateEmployee",
       state: {
         userType: "sales_person",
-        title: "Criar Funcionário(a)",
+        title: "Criar Comercial",
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         employeeToAssociate: regularManager?.concat(teamLeaders, instructors),
@@ -140,7 +140,7 @@ const EmployeeType = (props) => {
     }}>
       <MDCard className={"card"}>
         <MDCardBody>
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Funcionário(a)</SubHeading>
+          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey}}>Comercial</SubHeading>
         </MDCardBody>
       </MDCard>
     </Link>
@@ -241,7 +241,7 @@ const EmployeeType = (props) => {
           pathname: "/CreateEmployee",
           state: {
             userType: "sales_person",
-            title: "Criar Funcionário(a)",
+            title: "Criar Comercial",
             officeID: currentOfficeID,
             officeOBJ: currentOfficeObject,
             shouldGoToBackOffice: true,
@@ -285,7 +285,7 @@ const EmployeeType = (props) => {
             color: CONSTANTS?.colors?.darkGrey
           }
         }>
-          Qual é o tipo de funcionário a ser inserido?
+          Qual é o tipo de comercial a ser inserido?
         </Heading>
         { handleUserView(currentUser) }
       </MainContainer>

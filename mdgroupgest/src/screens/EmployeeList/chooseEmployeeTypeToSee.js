@@ -447,7 +447,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
         color: CONSTANTS?.colors?.mediumGrey
       }}>
-        Que tipo de funcionário queres ver?
+        Que tipo de comercial queres ver?
       </SubHeading>
     
       { handleUserView(currentUser) }

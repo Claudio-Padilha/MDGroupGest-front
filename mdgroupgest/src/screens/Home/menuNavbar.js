@@ -95,7 +95,7 @@ export default function MenuNavbar(props) {
                   isFromBackOffice: true,
                   user: userForPhoto
                 }    
-              }} >Inserir Funcionário</Link>
+              }} >Inserir Funcionário(a)</Link>
             </Body>
           }
           
@@ -108,7 +108,20 @@ export default function MenuNavbar(props) {
                   user: userForPhoto
                 }
               }}
-              >Ver Funcionários</Link>
+              >Ver Funcionários(as)</Link>
+            </Body>
+          }
+
+          { !isAdmin && haveAccessToMenuNavbar &&
+            <Body isReverseColor={true}>
+              <Link to={{
+                pathname: "/ExportPaymentSheet",
+                state: {
+                  isFromBackOffice: true,
+                  user: userForPhoto
+                }
+              }}
+              >Exportar folha de pagamento</Link>
             </Body>
           }
 
