@@ -15,7 +15,7 @@ function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({
       title: 'Bem vindo(a), escolha uma password.',
-      input: 'password',
+      input: 'text',
       inputAttributes: {
         autocapitalize: 'off'
       },
@@ -52,6 +52,7 @@ async function  _HandleConfirmLoginAlert() {
   dataRequests.getPayment()
   dataRequests.getFeedbackCall()
   dataRequests.getSellState()
+  dataRequests.getResultsToPresent()
   const currentUserOnRAM = localStorage.getItem('currentUser');
   const currentUser = JSON.parse(currentUserOnRAM);
   const userTypeForPermission = currentUser?.user?.user_type;

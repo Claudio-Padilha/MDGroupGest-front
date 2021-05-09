@@ -255,8 +255,6 @@ const ChooseTypeOfContract = (props) => {
     );
   };
 
-  console.log(localStorage, 'TESTE MAXIMO STORE')
-
   const renderDualCard = () => {
     return (
       <Link to={{

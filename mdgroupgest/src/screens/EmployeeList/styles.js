@@ -129,8 +129,6 @@ const MainContainer = styled.div`
         .employeeComission {
           justify-content: flex-start;
           display: flex;
-          color: ${CONSTANTS.colors.green};
-          font-weight: bold;
         }
       }
       height: 25%;

@@ -2,6 +2,7 @@ import _currentTokenOnRAM from './currentToken';
 import axios from 'axios';
 import dataRequests from './dataRequests';
 import useVPSURL from './defaultVpsURL';
+import { LogoLG } from '../../components/Logo/logo';
 
 const url = useVPSURL();
 
@@ -22,6 +23,30 @@ export default {
       .then(async res => {
         localStorage.removeItem('contracts', JSON.stringify(res.data))
         localStorage.setItem('contracts', JSON.stringify(await res.data.sort((a, b) => b.id - a.id)))
+        resolve(res);
+      })
+      .catch(error => {
+        
+        reject(error);
+      })
+    });
+  },
+  getAllContracts: () => { 
+    return new Promise((resolve, reject) => {
+
+      var contractRequest = {
+          method: 'GET',
+          url: `${url}contracts/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+        };
+      
+      axios(contractRequest)
+
+      .then(async res => {
+        localStorage.removeItem('allContracts', JSON.stringify(res.data))
+        localStorage.setItem('allContracts', JSON.stringify(await res.data.sort((a, b) => b.id - a.id)))
         resolve(res);
       })
       .catch(error => {
@@ -51,8 +76,15 @@ export default {
       .then(res => {
         let contractsSoFar = JSON.parse(localStorage.getItem('contracts'));
         let currentContracts = {...res, ...contractsSoFar}
+        
+        let allContractsSoFar = JSON.parse(localStorage.getItem('allContracts'))
+        let currentAllContracts = {...res, ...allContractsSoFar}
+
         localStorage.removeItem('contracts');
-        localStorage.setItem('contracts', currentContracts);
+        localStorage.setItem('contracts', JSON.stringify(currentContracts));
+
+        localStorage.removeItem('allContracts')
+        localStorage.setItem('allContracts', JSON.stringify(currentAllContracts))
         resolve(res);
       })
       .catch(error => {

@@ -122,8 +122,6 @@ const CreateContract = (props) => {
     }
   }, [isLoading])
 
-  console.log(infoForFields, 'INFO')
-
   setTimeout(() => {
     setIsLoading(false)
   }, [1000]);

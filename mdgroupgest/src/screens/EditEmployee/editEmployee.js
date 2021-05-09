@@ -30,8 +30,6 @@ const EditEmployee = (props) => {
   const currentOfficeID = employee?.office;
   const employeeListState = props?.location?.state?.employeeListState;
 
-  console.log(employee, 'EMPLOYEE')
-
   function _goBack() {
     history.push({
       pathname: "/EmployeeList",
@@ -54,6 +52,7 @@ const EditEmployee = (props) => {
     })
 
     var name = formFields?.name; 
+    var nr = formFields?.nr;
     var nif = formFields?.nif?.toString(); 
     var address = formFields?.address; 
     var contact = formFields?.contact?.toString();
@@ -61,15 +60,16 @@ const EditEmployee = (props) => {
     var zipCode = formFields?.zipCode;
     var employeeAbove = formFields?.employeeAbove;
 
-    const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined
+    const nothingWasChanged = name === undefined && nif === undefined && address === undefined && contact === undefined && email === undefined && employeeAbove === undefined && nr === undefined
 
       return (
         swalWithBootstrapButtons.fire({
         title: `${nothingWasChanged ? "Você não alterou nenhuma informação." : "Confirme os dados do comercial:"}`,
         html: 
             `${name ? `O novo nome será: <b>${name}</b> <br>` : ``}
+             ${nr ? `O novo CC/BI será: <b>${nr}</b> <br>` : ``}
              ${nif ? `O novo NIF será: <b>${nif}</b> <br>` : ``}
-             ${nif ? `O novo Código-Postal será: <b>${zipCode}</b> <br>` : ``}
+             ${zipCode ? `O novo Código-Postal será: <b>${zipCode}</b> <br>` : ``}
              ${address ? `A nova morada será: <b>${address}</b> <br>` : ``}
              ${email ? `O novo email será: <b>${email}</b> <br>` : ``}
              ${contact ? `O novo contacto será: <b>${contact}</b> <br>` : ``}
@@ -128,9 +128,6 @@ const EditEmployee = (props) => {
       employee_type: formFields?.employeeAbove?.employee_type,
     }
 
-    console.log(employee, 'EMPLOYEE')
-    console.log(data, 'DATA')
-
     _ConfirmEmployeeUpdate(formFields, data)
   };
 
@@ -155,6 +152,7 @@ const EditEmployee = (props) => {
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome", place: employee?.user?.name },
+    { type: "text", subType: "twoColumns", side: "left", key: "nr", question: "CC/BI", place: employee?.user?.nr },
     { type: "number", subType: "twoColumns", side: "right", key: "nif", question: "NIF", place: employee?.user?.nif },
     { type: "text", subType: "twoColumns", side: "left", key: "zipCode", question: "Código-Postal", place: employee?.user?.zipcode },
     { type: "number", subType: "twoColumns", side: "right", key: "contact", question: "Telefone", place: employee?.user?.contact },
@@ -170,7 +168,7 @@ const EditEmployee = (props) => {
       options: _employeeToAssociation() 
     }
   ];
-  console.log(FIELDS, 'FIELDS')
+  
   return (
       <MainDiv>
         <BackIcon onClick={_goBack} />

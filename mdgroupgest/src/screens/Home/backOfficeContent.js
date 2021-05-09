@@ -51,8 +51,6 @@ const BackOfficeContent = (props) => {
 
   const fromUpdateContract = JSON.parse(localStorage.getItem('fromUpdateContract'))
 
-  console.log(fromUpdateContract, 'testeeeee')
-
   const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
   const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
@@ -61,6 +59,7 @@ const BackOfficeContent = (props) => {
   const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'));
   const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'));
   const ramContracts = JSON.parse(localStorage.getItem('contracts'));
+  const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'));
   const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'));
 
   setTimeout(() => {
@@ -79,6 +78,7 @@ const BackOfficeContent = (props) => {
     await officesRequests.getOffice(ramCurrentOfficeID)
     await contractsRequests.getContracts(ramCurrentOfficeID)
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
+    await contractsRequests.getAllContracts()
   }
 
   _getOffice()
@@ -92,6 +92,7 @@ const BackOfficeContent = (props) => {
     ramMyTeam,
     ramCurrentOfficeObject,
     ramContracts,
+    ramAllContracts,
     ramDataToPopulateGraphic
   }
 
@@ -148,6 +149,7 @@ const BackOfficeContent = (props) => {
   const myTeam = state?.ramMyTeam;
   const currentOfficeObject = state?.ramCurrentOfficeObject;
   const contracts = state?.ramContracts;
+  const allContractsToSend = state?.ramAllContracts;
   let dataToPopulateGraphic = state?.ramDataToPopulateGraphic;
   const userType =  currentUser?.user?.user_type;
 
@@ -194,8 +196,8 @@ const BackOfficeContent = (props) => {
     }
   })
 
-  const manager = totalEmployees?.filter(employee => employee?.user?.user_type === "manager");
-  const managerObject = manager[0];
+  const managerObject = totalEmployees?.filter(employee => employee?.user?.user_type === "manager")[0];
+  const ceoObject = totalEmployees?.filter(employee => employee?.user?.user_type === 'ceo')[0]
 
   // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
     for (var i = 0; i < 1; i++) {
@@ -412,9 +414,9 @@ const BackOfficeContent = (props) => {
 
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
-            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : 'Meu mês'}</SubHeading>
-            { userType === "manager" && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '5%'}}>Até agora você já tem:</Body>}
-            <Heading style={userType === "secretary" ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : `${mySalary}€`}</Heading>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : isAdministrator ? 'CEO' : 'Meu mês'}</SubHeading>
+            { (isRegularManager || isCEO) && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '5%'}}>Até agora você já tem:</Body>}
+            <Heading style={isRegularSecretary ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : isAdministrator ? {color: CONSTANTS?.colors?.black, fontSize: '28px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : isAdministrator ? `${ceoObject?.user?.name}` : `${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
 
@@ -527,7 +529,7 @@ const BackOfficeContent = (props) => {
                 history.push({
                   pathname: "/ContractList",
                   state: {
-                    data: contracts,
+                    data: allContractsToSend,
                   }
                 })
               }}
@@ -610,9 +612,8 @@ const BackOfficeContent = (props) => {
       <ContentContainer>
         <TeamContainer>{renderHero()}</TeamContainer>
         <ResultsContainer>
-          {userType === "manager" && renderOfficeMonth()} 
-          {userType !== "manager" && userType === "secretary" && renderOfficeMonth()} 
-          {renderMyMonth()}
+          {(isCEO || isAdministrator || isRegularManager || isRegularSecretary) && renderOfficeMonth()}
+          { !(isCEO || isAdministrator || isRegularManager || isRegularSecretary) && renderMyMonth()}
           {renderMyContracts()}
           {renderMyResults()}
         </ResultsContainer>

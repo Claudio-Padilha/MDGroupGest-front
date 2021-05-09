@@ -69,6 +69,7 @@ const CreateEmployee = (props) => {
     var contact = data?.contact?.toString();
     var email = data?.email;
     var zipCode = data?.zipCode;
+    var nr = data?.nr;
 
     // Vai genericamente
     var nipc = '';
@@ -116,6 +117,7 @@ const CreateEmployee = (props) => {
         address: address,
         zipcode: zipCode,
         is_admin: false,
+        nr
       }
     }
 
@@ -133,7 +135,8 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
+        nr
       }
     }
 
@@ -150,7 +153,8 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
+        nr
       }
     }
 
@@ -166,7 +170,8 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
+        nr
       }
     }
 
@@ -182,7 +187,8 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
+        nr
       }
     }
 
@@ -198,7 +204,8 @@ const CreateEmployee = (props) => {
         contact: contact,
         address: address,
         zipcode: zipCode,
-        is_admin: false
+        is_admin: false,
+        nr
       }
     }
 
@@ -244,7 +251,6 @@ const CreateEmployee = (props) => {
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
-              console.log(res?.message, 'ERRO DO CLIENTE?')
               if(clientSideError) {
                 return swalWithBootstrapButtons.fire(
                   'Erro',
@@ -297,6 +303,7 @@ const CreateEmployee = (props) => {
 
   const FIELDS = [
     { type: "text", subType: "twoColumns", side: "left", key: "name", question: "Nome" },
+    { type: "text", subType: "twoColumns", side: "right", key: "nr", question: "CC/BI" },
     { type: "email", subType: "twoColumns", side: "right", key: "email", question: "E-mail" },
     { type: "number", subType: "twoColumns", side: "left", key: "nif", question: "NIF" },
     { type: "text", subType: "twoColumns", side: "right", key: "zipCode", question: "Código-Postal" },

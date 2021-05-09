@@ -1,6 +1,7 @@
 import React from 'react';
 import { Form, Col } from 'react-bootstrap';
 import { Formik } from 'formik';
+import Swal from 'sweetalert2';
 
 import 'date-fns';
 import DateFnsUtils from '@date-io/date-fns';
@@ -82,7 +83,7 @@ const CForm = ({
                 <div>
                   {formFields &&
                     formFields.map((field, index) => {
-                      return renderFields(field, index, props);
+                      return renderFields(field, index, props, formFields);
                     })}
                 </div>
   
@@ -168,7 +169,7 @@ const CForm = ({
   )
 };
 
-const renderFields = (field, index, formik) => {
+const renderFields = (field, index, formik, formFields) => {
 
   const fieldProps = {
     key: `${field?.key}-${index}`,
@@ -230,9 +231,30 @@ const renderFields = (field, index, formik) => {
             <KeyboardDatePicker
               margin="normal"
               id="date-picker-dialog"
-              format="MM/dd/yyyy"
+              format="dd/MM/yyyy"
               value={field.date}
-              onChange={date => formik.setFieldValue(field.key ,_handleDateChange(date))}
+              onChange={date => {
+                if (field.key === 'signatureDate') {
+                  if (formFields[index - 1]?.date === null) {
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'warning',
+                      title: 'Você precisa selecionar uma data de entrega.',
+                      showConfirmButton: true
+                    })
+                    return
+                  } else if (date.getDate() > formFields[index - 1]?.date.getDate()) {
+                    Swal.fire({
+                      position: 'top-end',
+                      icon: 'warning',
+                      title: 'A data de assinatura não pode ser posterior à data de entrega.',
+                      showConfirmButton: true
+                    })
+                    return
+                  }
+                }
+                formik.setFieldValue(field.key ,_handleDateChange(date))
+              }}
               KeyboardButtonProps={{
                 'aria-label': 'change date',
               }}

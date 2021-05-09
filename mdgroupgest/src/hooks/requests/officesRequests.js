@@ -97,8 +97,6 @@ export default {
   },
 
   paymentSheetByPeriod: (data) => {
-
-    console.log(data, 'DATA')
     
     return new Promise((resolve) => {
 
@@ -124,7 +122,7 @@ export default {
 
       .then(res => {
         localStorage.removeItem('payrollSheet');
-        localStorage.setItem('payrollSheet', JSON.stringify(res));
+        localStorage.setItem('payrollSheet', JSON.stringify(res?.data));
         resolve(res);
       })
       .catch(error => {

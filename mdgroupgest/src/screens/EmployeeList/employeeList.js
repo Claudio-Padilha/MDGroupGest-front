@@ -132,10 +132,9 @@ const EmployeeList = (props) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-
-    console.log(employee, 'EMPLOYEEE')
-    console.log(userType, 'USER TYPE')
     
+    console.log(employee, 'EMPLOYEE')
+
     const isManagerAssistant = employee?.is_manager_assistant
     const isTeamLeader = employee?.is_team_leader;
     const isInstructor = employee?.is_instructor;
@@ -164,7 +163,7 @@ const EmployeeList = (props) => {
           return;
       }
     }
-    console.log(state, 'ESTADO')
+    
     function _handleEditEmployee() {
       history.push({
         pathname: "/EmployeeEdit",
@@ -266,7 +265,7 @@ const EmployeeList = (props) => {
       )
     }
 
-    function _handlePDFButton(name, nif, address) {
+    function _handlePDFButton(name, nif, address, nr) {
 
       const today = new Date()
 
@@ -283,7 +282,7 @@ const EmployeeList = (props) => {
                 "ro, neste ato representada na forma de seus atos constitutivos, adiante designada 'Fenixthousand Solutions, Lda.",
                 "ou 'CONTRATANTE'; e",
                 "\n",
-                name + ", portador(a) do Cartão de Cidadão com o número de identificação 000000000",
+                name + ", portador(a) do Cartão de Cidadão com o número de identificação " + nr,
                 "emitido por República Portuguesa e válido até (VALIDADE), número de identificação fiscal " + nif+ ", com",
                 "residência habitual na " + address + ", adiante designado como 'CONTRATADO';",
                 "\n",
@@ -502,7 +501,6 @@ const EmployeeList = (props) => {
     };
 
     const roleToPromotion = isInstructor ? 'teamLeader': 'instructor'
-    console.log(renderPromotion, 'DEVE RENDERIZAR PROMOTION')
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
@@ -536,9 +534,9 @@ const EmployeeList = (props) => {
 
           <Column className={"employeeInfo"}>
             <List.Content>
-              <Body><b>Morada:</b></Body>
+              <Body><b>CC/BI:</b></Body>
               <Body>  
-                {employee?.user?.address}
+                {employee?.user?.nr}
               </Body>
             </List.Content>
             <List.Content>
@@ -555,8 +553,8 @@ const EmployeeList = (props) => {
               </Body>
             </List.Content>
             <List.Content>
-              <SmallSubHeading><b>Comissões:</b></SmallSubHeading>
-              <Body className={"employeeComission"}>700€</Body>
+              <Body><b>Morada:</b></Body>
+              <Body className={"employeeComission"}>{employee?.user?.address}</Body>
             </List.Content>
           </Column>
 
@@ -583,7 +581,7 @@ const EmployeeList = (props) => {
               />
               <Button
                 disabled={false}
-                action={() => {_handlePDFButton(employee.user.name, employee.user.nif, employee.user.address)}}
+                action={() => {_handlePDFButton(employee?.user?.name, employee?.user?.nif, employee?.user?.address, employee?.user?.nr)}}
                 small={true}
                 text="Gerar contrato"
                 className={"primaryButton"}

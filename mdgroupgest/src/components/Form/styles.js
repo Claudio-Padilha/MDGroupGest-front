@@ -119,7 +119,14 @@ width: 100%;
   position: absolute;
   top: 28%;
   left: 25%;
-  width: 15%;
+  width: 12%;
+}
+
+.nr {
+  position: absolute;
+  top: 28%;
+  left: 40%;
+  width: 10%; 
 }
 
 .nif {
@@ -146,8 +153,8 @@ width: 100%;
 .email {
   position: absolute;
   top: 28%;
-  left: 45%;
-  width: 25%; 
+  left: 53%;
+  width: 17%; 
 }
 
 .address {

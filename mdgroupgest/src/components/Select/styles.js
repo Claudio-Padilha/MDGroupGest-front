@@ -75,8 +75,11 @@ export const selectStyles = {
   }),
   option: (provided, state) => {
     const color = state.isDisabled ? CONSTANTS?.colors.grey : CONSTANTS?.colors.darkBlue;
-    const backgroundColor = CONSTANTS?.colors.white;
+    const backgroundColor = state.isFocused ? CONSTANTS?.colors.lightBeige : CONSTANTS?.colors.white;
     const transition = "opacity 300ms";
+
+    console.log(provided, 'PROVIDED')
+    console.log(state, 'STATE')
 
     return {
       ...provided,

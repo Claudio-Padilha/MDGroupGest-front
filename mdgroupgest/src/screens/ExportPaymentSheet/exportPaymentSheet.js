@@ -1,14 +1,17 @@
-import React, { useMemo, useReducer, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
-import { DateRangePicker, DateRange } from 'react-date-range';
-import { addDays } from 'date-fns';
+import React, { useMemo, useReducer, useEffect, useState } from "react"
+import { Link, useHistory } from "react-router-dom"
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import { DateRangePicker, DateRange } from 'react-date-range'
+import { addDays } from 'date-fns'
 import { pt } from 'react-date-range/src/locale/index'
+import { saveAs } from "file-saver"
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import Swal from 'sweetalert2'
 
-import CONSTANTS from '../../constants';
+import { Heading, SubHeading, Body } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
+
+import CONSTANTS from '../../constants'
 import {
   CalendarContainer,
   FirstRow,
@@ -17,21 +20,16 @@ import {
   ExportButton,
   MainContainerEType,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import {
-  MDCard,
-  MDCardBody,
-  MDButton 
-} from '../../screens/Home/md';
+import { MDButton } from '../../screens/Home/md'
 
-import { useRefresh } from '../../hooks/window/refresh';
-import employeesRequests from "../../hooks/requests/employeesRequests";
-import officesRequests from '../../hooks/requests/officesRequests';
+import { useRefresh } from '../../hooks/window/refresh'
+import employeesRequests from "../../hooks/requests/employeesRequests"
+import officesRequests from '../../hooks/requests/officesRequests'
 
-import 'react-date-range/dist/styles.css'; // main css file
-import 'react-date-range/dist/theme/default.css'; // theme css file
-import { useCallback } from "react";
+import 'react-date-range/dist/styles.css' // main css file
+import 'react-date-range/dist/theme/default.css' // theme css file
 
 const ExportPaymentSheet = (props) => {
   const history = useHistory()
@@ -48,17 +46,17 @@ const ExportPaymentSheet = (props) => {
 
   const { wasRefreshed } = useRefresh()
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
   // const [date, setDate] = useState([
   //   {
   //     startDate: new Date(),
   //     endDate: addDays(new Date(), 7),
   //     key: 'selection'
   //   }
-  // ]);
+  // ])
 
-  var today = new Date();
-  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0);
+  var today = new Date()
+  var lastDayOfMonth = new Date(today.getFullYear(), today.getMonth()+1, 0)
 
   const [date, setDate] = useState([
     {
@@ -66,25 +64,118 @@ const ExportPaymentSheet = (props) => {
       endDate: lastDayOfMonth,
       key: 'selection'
     }
-  ]);
+  ])
 
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [500]);
+    }, [500])
+  }
+
+
+  async function createNewExcelFile(sheet) {
+
+    console.log(sheet, 'SHEET')
+
+    var Excel = require('exceljs')
+    // A new Excel Work Book
+    var workbook = new Excel.Workbook()
+
+    // Some information about the Excel Work Book.
+    workbook.creator = 'PAD Tech'
+    workbook.lastModifiedBy = ''
+    workbook.created = new Date()
+    workbook.modified = new Date()
+    workbook.lastPrinted = new Date()
+
+    for (let i = 0; i < sheet?.length; i++) {
+      // Create a sheet
+      var eachSheet = workbook.addWorksheet(`${sheet[i]?.funcionario} - ${period}`)
+      // A table header
+      eachSheet.columns = [
+          { header: 'TIPO DE VENDA', key: 'contract_type', width: 18 },
+          { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
+          { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
+          { header: 'PPI LUZ', key: 'electricity_ppi', width: 18, style: { alignment: 'center'}},
+          { header: 'PEL', key: 'pel', width: 18 },
+          { header: 'PPI GÁS', key: 'gas_ppi', width: 18 },
+          { header: 'MGI', key: 'mgi', width: 18 },
+          { header: 'LUZ - CPE', key: 'cpe', width: 18 },
+          { header: 'POTÊNCIA', key: 'power', width: 18 },
+          { header: 'GÁS - CUI', key: 'cui', width: 18 },
+          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 18 },
+          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 18 },
+          { header: 'OBS BO', key: 'observations', width: 18 },
+          { header: 'VALOR', key: 'employee_comission', width: 18 },
+          { header: 'TOTAL', key: 'total', width: 18 },
+      ]
+
+      for (let j = 0; j < sheet[i]?.itens?.length; j++) {
+        eachSheet.addRow(
+          {
+            contract_type: `${
+              sheet[i]?.itens[j]?.contract_type === 'condominium_dual' ? 
+                'Dual Condomínio' : sheet[i]?.itens[j]?.contract_type === 'condominium_electricity' ?
+                'Electricidade Condomínio'
+                : sheet[i]?.itens[j]?.contract_type === 'condominium_gas' ? 
+                'Gás Condomínio' 
+                : sheet[i]?.itens[j]?.contract_type === 'dual' ? 
+                'Dual' 
+                : sheet[i]?.itens[j]?.contract_type === 'gas' ? 
+                'Gás' 
+                : 'Eletricidade'
+                
+            }`,
+            signature_date: sheet[i]?.itens[j]?.signature_date,
+            client_name: sheet[i]?.itens[j]?.client_name,
+            electricity_ppi: `${sheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
+            pel: `${sheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
+            gas_ppi: `${sheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
+            mgi: `${sheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
+            cpe: sheet[i]?.itens[j]?.cpe,
+            power: `${(sheet[i]?.itens[j]?.power__name[0] === 'b' || sheet[i]?.itens[j]?.power__name[0] === 'm') ? sheet[i]?.itens[j]?.power__name : `${sheet[i]?.itens[j]?.power__name} kVA`}`,
+            cui: sheet[i]?.itens[j]?.cui,
+            gas_scale: sheet[i]?.itens[j]?.gas_scale__name,
+            sell_state: sheet[i]?.itens[j]?.sell_state__name.toUpperCase(),
+            observations: sheet[i]?.itens[j]?.observations,
+            employee_comission: `${sheet[i]?.itens[j]?.employee_comission}€`,
+          }
+        )
+      }
+
+      eachSheet.addRow({ total: `${sheet[i]?.total ? `${sheet[i]?.total}€` : '0€'}` }) 
+    }
+
+    // Add rows in the above header
+
+    const buffer = await workbook.xlsx.writeBuffer()
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    const fileExtension = '.xlsx'
+
+    const blob = new Blob([buffer], {type: fileType})
+
+    saveAs(blob, period + fileExtension)
+
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'O seu ficheiro foi gerado com sucesso!',
+      showConfirmButton: false,
+      timer: 2000
+    })
   }
 
   const dateToAPI = (date) => {
 
-    var year = date.getFullYear();
-    var month = date.getMonth()+1;
-    var dt = date.getDate();
+    var year = date.getFullYear()
+    var month = date.getMonth()+1
+    var dt = date.getDate()
     
     if (dt < 10) {
-      dt = '0' + dt;
+      dt = '0' + dt
     }
     if (month < 10) {
-      month = '0' + month;
+      month = '0' + month
     }
 
     return year+'-' + month + '-'+dt
@@ -92,12 +183,13 @@ const ExportPaymentSheet = (props) => {
 
   const startPeriod = dateToAPI(date[0]?.startDate)
   const endPeriod = dateToAPI(date[0]?.endDate)
+  const period = `${startPeriod} - ${endPeriod}`
 
-  const isFromBackOffice = props?.location?.state?.isFromBackOffice;
+  const isFromBackOffice = props?.location?.state?.isFromBackOffice
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-  const currentOfficeID = currentUser?.user?.office;
+  const currentOfficeID = currentUser?.user?.office
 
   const dateToSend = {
     office_id: currentOfficeID,
@@ -124,7 +216,9 @@ const ExportPaymentSheet = (props) => {
     }
   }, [dateToSend])
 
-  console.log(JSON.parse(localStorage.getItem('payrollSheet')), 'TESTE')
+  const payrollExcelSheet = useMemo(() => {
+    return JSON.parse(localStorage.getItem('payrollSheet'))
+  }, [dateToSend])
 
   const allEmployees = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
@@ -144,7 +238,7 @@ const ExportPaymentSheet = (props) => {
 
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
-        reducerState = stateOnRAM;
+        reducerState = stateOnRAM
     }
 
     localStorage.removeItem('exportPaymentSheetState')
@@ -162,27 +256,6 @@ const ExportPaymentSheet = (props) => {
       return state
     }
   }, [wasRefreshed])
-
-  const renderCard = () => (
-    <Link to={{
-      pathname:"/EmployeeList",
-      state: {
-        userType: "secretary", 
-        title: "Secretário(a)",
-        data: state?.regularSecretary,
-        officeID: currentOfficeID,
-        officeOBJ: currentOfficeObject,
-        shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
-      }  
-    }}>
-      <MDCard className={"card"}>
-        <MDCardBody>
-          <SubHeading style={{color: CONSTANTS?.colors?.darkGrey, textAlign: 'center'}}>Teste</SubHeading>
-        </MDCardBody>
-      </MDCard>
-    </Link>
-  );
 
   const handleScreen = () => (
     <CalendarContainer>
@@ -220,7 +293,7 @@ const ExportPaymentSheet = (props) => {
       </FirstRow>
 
       <SecondRow>
-        <ExportButton onClick={() => console.log('exportaaaaar')}>
+        <ExportButton onClick={() => createNewExcelFile(payrollExcelSheet)}>
           <Body>
             <MDButton style={{width: '22vw', height: '5vh', fontSize: '20px'}}>Exportar</MDButton>
           </Body>
@@ -281,7 +354,7 @@ const ExportPaymentSheet = (props) => {
         { isLoading ? loadingContainer() : contentOfThisPage() }
       </MainContainerEType>
     </>
-  );
-};
+  )
+}
 
-export default ExportPaymentSheet;
+export default ExportPaymentSheet

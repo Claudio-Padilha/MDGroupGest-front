@@ -193,9 +193,7 @@ const MyTeam = () => {
 
     return finalData
   }, [])
-
-  console.log(finalData, 'FINAL DATA')
-
+  
   return (
     isLoading ?
     <MainContainer className="custom-container">

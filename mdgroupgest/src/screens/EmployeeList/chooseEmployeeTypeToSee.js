@@ -394,23 +394,23 @@ const ChooseEmployeeTypeToSee = (props) => {
       <FirstRow>
         {renderManagerCard()}
         {renderSecretaryCard()}
-        {renderTeamLeaderCard()}
+        {renderManagerAssistantCard()}
       </FirstRow>
       
       <SecondRow>
-        {renderManagerAssistantCard()}
+        {renderTeamLeaderCard()}
         {renderInstructorCard()}
         {renderComercialCard()}
-        
-        <GoHomeButton>
-          <Body>
-            <Link to={"/BackOffice"}>
-              <MDButton>Cancelar</MDButton>
-            </Link>
-          </Body>
-        </GoHomeButton>
       </SecondRow>
-    
+
+      <GoHomeButton style={{alignSelf: 'center'}}>
+        <Body>
+          <Link to={"/BackOffice"}>
+            <MDButton>Cancelar</MDButton>
+          </Link>
+        </Body>
+      </GoHomeButton>
+  
     </CardsContainer>
   )
 
