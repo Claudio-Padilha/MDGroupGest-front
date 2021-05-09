@@ -31,6 +31,7 @@ import officesRequests from '../../hooks/requests/officesRequests';
 
 import 'react-date-range/dist/styles.css'; // main css file
 import 'react-date-range/dist/theme/default.css'; // theme css file
+import { useCallback } from "react";
 
 const ExportPaymentSheet = (props) => {
   const history = useHistory()
@@ -91,19 +92,18 @@ const ExportPaymentSheet = (props) => {
 
   const startPeriod = dateToAPI(date[0]?.startDate)
   const endPeriod = dateToAPI(date[0]?.endDate)
-  
-  const dateToSend = {
-    inicio_periodo: startPeriod,
-    fim_periodo: endPeriod
-  }
-
-  console.log(dateToSend, 'DATA PARA API')
 
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
 
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   const currentOfficeID = currentUser?.user?.office;
+
+  const dateToSend = {
+    office_id: currentOfficeID,
+    inicio_periodo: startPeriod,
+    fim_periodo: endPeriod
+  }
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -117,6 +117,14 @@ const ExportPaymentSheet = (props) => {
     }
   }
   _allEmployees()
+
+  useEffect(() => {
+    if (dateToSend) {
+      officesRequests.paymentSheetByPeriod(dateToSend)
+    }
+  }, [dateToSend])
+
+  console.log(JSON.parse(localStorage.getItem('payrollSheet')), 'TESTE')
 
   const allEmployees = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))

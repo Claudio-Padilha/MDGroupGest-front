@@ -95,6 +95,43 @@ export default {
       })
     });
   },
+
+  paymentSheetByPeriod: (data) => {
+
+    console.log(data, 'DATA')
+    
+    return new Promise((resolve) => {
+
+      const body = {
+        office_id: data?.office_id,
+        inicio_periodo: data?.inicio_periodo,
+        fim_periodo: data?.fim_periodo,
+      }
+
+      var request = {
+          method: 'POST',
+          url: `${url}payroll/`,
+          headers: {
+              'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          json: true,
+          data: body,
+          dataType: "json",
+          contentType: "application/json"
+        };
+      
+      axios(request)
+
+      .then(res => {
+        localStorage.removeItem('payrollSheet');
+        localStorage.setItem('payrollSheet', JSON.stringify(res));
+        resolve(res);
+      })
+      .catch(error => {
+        resolve(error);
+      })
+    });
+  },
   // updateOffice: (data) => {
 
   //   const officeObj = {
