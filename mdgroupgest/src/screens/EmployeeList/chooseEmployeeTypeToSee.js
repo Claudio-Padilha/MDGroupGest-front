@@ -348,15 +348,15 @@ const ChooseEmployeeTypeToSee = (props) => {
         {renderTeamLeaderCard()} 
         {renderInstructorCard()}
         {renderComercialCard()}
-        
-        <GoHomeButton>
-          <Body>
-            <Link to={"/BackOffice"}>
-              <MDButton>Cancelar</MDButton>
-            </Link>
-          </Body>
-        </GoHomeButton>
       </SecondRow>
+
+      <GoHomeButton style={{alignSelf: 'center'}}>
+        <Body>
+          <Link to={"/BackOffice"}>
+            <MDButton>Cancelar</MDButton>
+          </Link>
+        </Body>
+      </GoHomeButton>
     
     </CardsContainer>
   )
@@ -376,15 +376,15 @@ const ChooseEmployeeTypeToSee = (props) => {
         {renderInstructorCard()}
         {renderComercialCard()}
         
-        <GoHomeButton>
-          <Body>
-            <Link to={"/BackOffice"}>
-              <MDButton>Cancelar</MDButton>
-            </Link>
-          </Body>
-        </GoHomeButton>
       </SecondRow>
     
+      <GoHomeButton style={{alignSelf: 'center'}}>
+        <Body>
+          <Link to={"/BackOffice"}>
+            <MDButton>Cancelar</MDButton>
+          </Link>
+        </Body>
+      </GoHomeButton>
     </CardsContainer>
   )
 
