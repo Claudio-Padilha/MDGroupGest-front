@@ -43,7 +43,7 @@ const MainContainer = styled.div`
       margin-bottom: 0;
     }
     .userTypeTag {
-      width: 20%;
+      width: 25%;
       height: 60%;
       margin-left: 10%;
       cursor: auto;
