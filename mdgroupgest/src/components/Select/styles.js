@@ -31,11 +31,13 @@ export const SelectContainer = styled.div`
 export const selectStyles = {
   menu: (provided, state) => ({
     ...provided,
-    width: "100%",
     filter: "drop-shadow(0px 4px 13px rgba(193, 188, 183, 0.3))",
     border: `1px solid ${CONSTANTS?.colors.mediumBeige}`,
     marginTop: 3,
-    borderRadius: 2
+    borderRadius: 2,
+    width: 'auto',
+    display: 'flex',
+    alignItems: 'center'
   }),
   indicatorSeparator: () => ({
     display: "none"
@@ -74,8 +76,8 @@ export const selectStyles = {
     }
   }),
   option: (provided, state) => {
-    const color = state.isDisabled ? CONSTANTS?.colors.grey : CONSTANTS?.colors.darkBlue;
-    const backgroundColor = state.isFocused ? CONSTANTS?.colors.lightBeige : CONSTANTS?.colors.white;
+    const color = state.isDisabled ? CONSTANTS?.colors.grey : state.isFocused ? CONSTANTS?.colors?.white : CONSTANTS?.colors.black;
+    const backgroundColor = state.isFocused ? CONSTANTS?.colors.black : CONSTANTS?.colors.white;
     const transition = "opacity 300ms";
 
     console.log(provided, 'PROVIDED')
@@ -87,8 +89,10 @@ export const selectStyles = {
       transition,
       backgroundColor,
       "&:hover": {
-        backgroundColor: CONSTANTS?.colors.lightBeige
-      }
+        backgroundColor: CONSTANTS?.colors.black
+      },
+      cursor: 'pointer',
+      width: '100%'
     };
   }
 };
