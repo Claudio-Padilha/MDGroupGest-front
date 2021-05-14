@@ -133,7 +133,7 @@ const ExportPaymentSheet = (props) => {
             gas_ppi: `${sheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
             mgi: `${sheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
             cpe: sheet[i]?.itens[j]?.cpe,
-            power: `${(sheet[i]?.itens[j]?.power__name[0] === 'b' || sheet[i]?.itens[j]?.power__name[0] === 'm') ? sheet[i]?.itens[j]?.power__name : `${sheet[i]?.itens[j]?.power__name} kVA`}`,
+            power: `${sheet[i]?.itens[j]?.power__name !== null && (sheet[i]?.itens[j]?.power__name[0] === 'b' || sheet[i]?.itens[j]?.power__name[0] === 'm') ? sheet[i]?.itens[j]?.power__name : `${sheet[i]?.itens[j]?.power__name} kVA`}`,
             cui: sheet[i]?.itens[j]?.cui,
             gas_scale: sheet[i]?.itens[j]?.gas_scale__name,
             sell_state: sheet[i]?.itens[j]?.sell_state__name.toUpperCase(),
