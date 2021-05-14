@@ -64,6 +64,34 @@ export default {
       })
     })
   },
+  getMyTeamResults: () => {
+    return new Promise((resolve, reject) => {
+      var getMyTeamResults = {
+        method: 'GET',
+        url: `${url}myTeamResult/`,
+        headers: { 
+          'Authorization': 'Token ' + _currentTokenOnRAM(),
+        },
+        json: true,
+        dataType: "json",
+        contentType: "application/json"
+      }
+        
+
+      axios(getMyTeamResults)
+
+      .then((res) => {
+        localStorage.removeItem('myTeamResults');
+        localStorage.setItem('myTeamResults', JSON.stringify(res.data));
+        resolve(res);     
+      })
+
+      .catch(error => {
+        localStorage.removeItem('myTeamResults');
+        reject(error);
+      })
+    })
+  },
   createEmployee: (user_type, data) => {
 
     var userType = localStorage.getItem('currentUserType');

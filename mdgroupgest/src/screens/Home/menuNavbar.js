@@ -81,11 +81,22 @@ export default function MenuNavbar(props) {
         }
 
         <SubHeading isReverseColor={true}>{userName}</SubHeading>
-        <Body isSmall isReverseColor onClick={_handleMyProfileNavigation} className={"myProfileLink"}>Ver perfil</Body>
+        <Body
+          isSmall
+          isReverseColor
+          onClick={_handleMyProfileNavigation}
+          className={"myProfileLink"}
+        >Ver perfil</Body>
       </ProfileContainer>
       <NavbarOptionsContainer>
         <OptionsDiv>
-          {!isAdmin && haveAccessToMenuNavbar && <Body isReverseColor={true}><Link to="/ChooseTypeOfContract" >Inserir Contrato</Link></Body>}
+          {
+            !isAdmin && 
+            haveAccessToMenuNavbar && 
+            <Body isReverseColor={true}>
+              <Link to="/ChooseTypeOfContract" >Inserir Contrato</Link>
+            </Body>
+          }
           
           { !isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
@@ -115,13 +126,26 @@ export default function MenuNavbar(props) {
           { !isAdmin && haveAccessToMenuNavbar &&
             <Body isReverseColor={true}>
               <Link to={{
+                pathname: "/TeamReport",
+                state: {
+                  isFromBackOffice: true,
+                  user: userForPhoto
+                }
+              }}
+              >Relatório de Equipa</Link>
+            </Body>
+          }
+
+          { !isAdmin && haveAccessToMenuNavbar &&
+            <Body isReverseColor={true}>
+              <Link to={{
                 pathname: "/ExportPaymentSheet",
                 state: {
                   isFromBackOffice: true,
                   user: userForPhoto
                 }
               }}
-              >Exportar folha de pagamento</Link>
+              >Folha de pagamento</Link>
             </Body>
           }
 

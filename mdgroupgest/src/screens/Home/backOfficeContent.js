@@ -36,6 +36,7 @@ import { useEmployees } from '../../hooks/employees/employees';
 import { useRefresh } from '../../hooks/window/refresh';
 import { useStartApp } from '../../hooks/backoffice/startApp';
 import { useAuth } from '../../hooks/employees/auth';
+import employeesRequests from '../../hooks/requests/employeesRequests';
 
 const BackOfficeContent = (props) => {
   
@@ -61,6 +62,7 @@ const BackOfficeContent = (props) => {
   const ramContracts = JSON.parse(localStorage.getItem('contracts'));
   const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'));
   const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'));
+  const ramMyTeamResults = JSON.parse(localStorage.getItem('myTeamResults'));
 
   setTimeout(() => {
     setIsLoading(false)
@@ -79,6 +81,7 @@ const BackOfficeContent = (props) => {
     await contractsRequests.getContracts(ramCurrentOfficeID)
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
     await contractsRequests.getAllContracts()
+    await employeesRequests.getMyTeamResults()
   }
 
   _getOffice()
@@ -93,7 +96,8 @@ const BackOfficeContent = (props) => {
     ramCurrentOfficeObject,
     ramContracts,
     ramAllContracts,
-    ramDataToPopulateGraphic
+    ramDataToPopulateGraphic,
+    ramMyTeamResults
   }
 
   if(!wasRefreshed || fromContractsList || initialState !== undefined || fromMyResults) {
