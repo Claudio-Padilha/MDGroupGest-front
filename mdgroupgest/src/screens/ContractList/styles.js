@@ -82,7 +82,7 @@ const MainContainer = styled.div`
         margin-top: 3%;
       }
       .clientInfo {
-        width: 30%;
+        width: 50%;
       }
       .rowOfClientInfo {
         width: 100%;

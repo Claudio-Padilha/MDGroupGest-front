@@ -29,7 +29,7 @@ export default function MenuNavbar(props) {
 
   const [isLoading, setIsLoading] = useState(true);
 
-  const { isCEO, isAdministrator, isRegularManager, isRegularSecretary } = useAuth()
+  const { isCEO, isAdministrator, isRegularManager, isRegularSecretary, isSalesPerson } = useAuth()
 
   setTimeout(() => {
     setIsLoading(false)
@@ -57,6 +57,8 @@ export default function MenuNavbar(props) {
 
   const isAdmin = JSON.parse(localStorage.getItem('isAdmin'))
   const haveAccessToMenuNavbar = isCEO || isAdministrator || isRegularManager || isRegularSecretary
+
+  const haveAccessToMyTeam = !isSalesPerson
 
   function _handleMyProfileNavigation() {
     history.push({
@@ -123,7 +125,7 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
-          { !isAdmin && haveAccessToMenuNavbar &&
+          { !isAdmin && haveAccessToMyTeam &&
             <Body isReverseColor={true}>
               <Link to={{
                 pathname: "/TeamReport",
@@ -149,8 +151,19 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
+          { isAdmin && (isCEO || isAdministrator) &&
+            <Body isReverseColor={true}>
+              <Link to="/CreateOffice">Inserir Escritório</Link>
+            </Body>
+          }
+
+
+        </OptionsDiv>
+
+        <LogoutDiv>
+
           { !isAdmin && (isCEO || isAdministrator)  && 
-            <Body isReverseColor={true} style={{marginTop: '30%'}}>
+            <Body isReverseColor={true} style={{marginBottom: '20%'}}>
               <Link style={{
                 backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
                 boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
@@ -160,14 +173,8 @@ export default function MenuNavbar(props) {
             </Body>
           }
 
-          { isAdmin && (isCEO || isAdministrator) &&
-            <Body isReverseColor={true}>
-              <Link to="/CreateOffice">Inserir Escritório</Link>
-            </Body>
-          }
-
           { isAdmin && haveAccessToMenuNavbar &&
-            <Body isReverseColor={true} style={{marginTop: '55%'}}>
+            <Body isReverseColor={true} style={{marginBottom: '20%'}}>
               <Link style={{
                 backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
                 boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
@@ -176,9 +183,6 @@ export default function MenuNavbar(props) {
               }} onClick={() => _setToAdmin(isAdmin)}>Versão Gerente</Link>
             </Body>
           }
-        </OptionsDiv>
-
-        <LogoutDiv>
           <LogoutIcon className={"logoutIcon"} onClick={() => {
               userRequests.logout()
               history.push("/")

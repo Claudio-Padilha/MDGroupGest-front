@@ -55,7 +55,14 @@ const TeamReport = (props) => {
   }
 
   const isFromBackOffice = props?.location?.state?.isFromBackOffice
+  const fromTeamReportDetail = props?.location?.state?.fromTeamReportDetail
 
+  useEffect(() => {
+    if (fromTeamReportDetail) {
+      window.location.reload()
+    }
+  }, [fromTeamReportDetail])
+  
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
   const currentOfficeID = currentUser?.user?.office
@@ -79,7 +86,7 @@ const TeamReport = (props) => {
 
   const myTeam = useMemo(() => {
     return JSON.parse(localStorage.getItem('myTeamResults'))
-  }, [isFromBackOffice])
+  }, [isFromBackOffice, fromTeamReportDetail])
 
   console.log(myTeam, 'MY TEAM ')
  
@@ -110,18 +117,35 @@ const TeamReport = (props) => {
   // }, [wasRefreshed])
 
   const renderCard = (employee, i) => {
+
+    const total = employee?.ok_contract_amount + employee?.r_contract_amount + employee?.ko_contract_amount
+
+    function _getPercentage(percent) {
+      if (percent !== 0 || total !== 0) {
+        const p = (percent / total) * 100
+        return p.toFixed(2);
+      } else {
+        return 0;
+      }
+    }
+  
+    const koPercentage = _getPercentage(employee?.ko_contract_amount)
+    const okPercentage = _getPercentage(employee?.ok_contract_amount)
+    const rPercentage = _getPercentage(employee?.r_contract_amount)
+
     const darkGrey = CONSTANTS?.colors?.darkGrey
     const rowInfoStyle = {
       display: 'flex',
-      justifyContent: 'flex-end',
+      justifyContent: 'center',
       width: '15vh',
       alignSelf: 'center'
     }
+
     const linkStyle = {
       marginRight: '1vw',
       marginLeft: '1vw',
       height: '40%',
-      width: '30%'
+      width: '25%'
     }
 
     const column = {
@@ -134,55 +158,192 @@ const TeamReport = (props) => {
       flexDirection: 'row'
     }
 
+    const avatarContainerStyle = {
+      width: '100%',
+      justifyContent: 'center',
+      display: 'flex',
+      marginTop: '2vh'
+    }
+
+    const nameStyle = {
+      color: darkGrey,
+      textAlign: 'center',
+      marginBottom: '0'
+    }
+
+    const resultStatusStyle = {
+      width: total > 0 ? '80%' : '100%',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      flexDirection: 'row',
+      display: 'flex',
+      height: '5vh',
+      marginBottom: '2vh',
+    }
+
+    const resultStatus = () => {
+    
+      if (total === 0) {
+        return "⚪️";
+      } else if (okPercentage < 70) {
+        return "🔴";
+      } else if (okPercentage < 80){
+        return "🟡";
+      } else if (okPercentage > 80) {
+        return "🟢"
+      } else {
+        return "⚪️"
+      }
+    }
+
     return (
       <Link style={linkStyle} key={i} to={{
-        pathname:"/",
+        pathname:"/teamReportDetail",
         state: {
-          teste: "Teste"
+          employee,
+          fromTeamReportList: true
         }
       }}>
         <MDCard className={"card"} style={{margin: '1vh'}}>
-          <MDCardBody style={{...row, width: '100%'}}>
-            <div className={'AVATAR CONTAINER'} style={{
-              width: '30%',
-              justifyContent: 'center',
-              display: 'flex',
-            }}>
+          <MDCardBody style={{...column, width: '100%'}}>
+            <div className={'AVATAR CONTAINER'} style={avatarContainerStyle}>
               <Avatar
                 alt="Profile Image"
                 className={screenStyle?.large}
-                src={employee?.profile_url ?? 'https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png'}
+                src={
+                  employee?.profile_url ?? 
+                  'https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png'
+                }
               />
             </div>
 
-            <div style={{...column, width: '70%'}} className={'LADO ESQUERDO'}>
-              <SubHeading style={{color: darkGrey, textAlign: 'center', marginBottom: '0'}}>{employee?.employee}</SubHeading>
-
+            <div style={{...column, width: '100%'}} className={'LADO ESQUERDO'}>
+              <MDRow style={row}>
+                <SubHeading style={nameStyle}>{employee?.employee}</SubHeading>
+              </MDRow>
+              
+              {
+                total > 0 && 
+                <MDRow style={row}>
+                  <Body style={{color: darkGrey, marginTop: '15px', marginBottom: '-5px'}}>
+                    {'Taxa de anulados'}
+                  </Body>
+                </MDRow>
+              }
               <MDRow style={rowInfoStyle}>
-                <SubHeading style={{color: darkGrey}}>723€</SubHeading>
-                <div style={{marginLeft: '15px'}}>
-                  <SubHeading style={{color: darkGrey, marginBottom: '0'}}>🔴</SubHeading>
-                  <Body style={{color: darkGrey, marginTop: '0'}}>32%</Body>
+                
+                <div style={resultStatusStyle}>
+                  <Body style={{color: darkGrey, marginTop: '0', marginBottom: '0'}}>
+                    {total > 0 ? `${koPercentage}%` : 'Sem contratos'}
+                  </Body>
+                  <SubHeading style={{color: darkGrey, marginTop: '0', marginBottom: '0'}}>
+                    {resultStatus()}
+                  </SubHeading>
                 </div>
               </MDRow>
             </div>
           </MDCardBody>
         </MDCard>
+        <Body style={{display: 'flex', width: '100%', justifyContent: 'center', marginLeft: '10px'}}>
+          Clique para ver detalhes
+        </Body>
       </Link>
     )
-  };
+  }
 
-  const handleScreen = () => (
-    <TeamContainer>
-      <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
-        { myTeam && 
-          myTeam?.map((employee, i) => {
-            return renderCard(employee, i)
-          }) 
-        }
-      </FirstRow>    
-    </TeamContainer>
-  )
+  const managerAssistants = myTeam?.filter(employee => employee?.job === 'Gerente')
+  const teamLeaders = myTeam?.filter(employee => employee?.job === 'Team Leader')
+  const instructors = myTeam?.filter(employee => employee?.job === 'Instrutor')
+  const salesPersons = myTeam?.filter(employee => employee?.job === 'Comercial')
+
+  console.log(managerAssistants, 'GERENTES');
+  console.log(teamLeaders, 'TEAM LEADERS');
+  console.log(instructors, 'INSTRUTORES');
+  console.log(salesPersons, 'COMERCIAIS');
+
+  const handleScreen = () => {
+    const horizontalLine = () => (
+      <span>
+        <hr style={{
+          height:'2px',
+          width: '100%',
+          borderWidth: '0',
+          color: CONSTANTS?.colors?.mediumGrey,
+          backgroundColor: CONSTANTS?.colors?.mediumGrey
+        }}/>
+      </span>
+    )
+
+    return (
+
+      <TeamContainer>
+        { managerAssistants?.length > 0 &&
+          <>
+            <Heading style={{ color: CONSTANTS?.colors?.darkGrey }}>
+              Gerentes
+            </Heading>
+            <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
+              
+              { 
+                managerAssistants?.map((employee, i) => {
+                  return renderCard(employee, i)
+                }) 
+              }
+            </FirstRow>
+          </>
+        }  
+
+        { teamLeaders?.length > 0 &&
+          <>
+            <Heading style={{ color: CONSTANTS?.colors?.darkGrey }}>
+              { managerAssistants?.length > 0 && horizontalLine() }
+              Team Leaders
+            </Heading>
+            <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
+              { 
+                teamLeaders?.map((employee, i) => {
+                  return renderCard(employee, i)
+                }) 
+              }
+            </FirstRow>
+          </>
+        }  
+
+        { instructors?.length > 0 &&
+          <>
+            <Heading style={{ color: CONSTANTS?.colors?.darkGrey }}>
+              { teamLeaders?.length > 0 && horizontalLine() }
+              Instrutores
+            </Heading>
+            <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
+              { 
+                instructors?.map((employee, i) => {
+                  return renderCard(employee, i)
+                }) 
+              }
+            </FirstRow>
+          </>
+        }  
+
+        { salesPersons?.length > 0 &&
+          <>
+            <Heading style={{ color: CONSTANTS?.colors?.darkGrey }}>
+              { instructors?.length > 0 && horizontalLine() }
+              Comerciais
+            </Heading>
+            <FirstRow style={{flexWrap: 'wrap', height: 'auto', marginBottom: '15vh'}}>
+              
+              { 
+                salesPersons?.map((employee, i) => {
+                  return renderCard(employee, i)
+                }) 
+              }
+            </FirstRow>
+          </>
+        }  
+      </TeamContainer>
+    )
+  }
 
   
   const contentOfThisPage = () => (
@@ -202,7 +363,7 @@ const TeamReport = (props) => {
         textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
         color: CONSTANTS?.colors?.mediumGrey
       }}>
-        Sua equipa
+        Veja sua equipa
       </SubHeading>
     
       { handleScreen() }
@@ -219,7 +380,7 @@ const TeamReport = (props) => {
         <Heading>Você precisa de mais espaço!</Heading>
         <SubHeading>Volte ao tamanho necessário.</SubHeading>
       </WidthMessageContainer>
-      <MainContainerEType>
+      <MainContainerEType style={isLoading ? { height: '100vh' } : {}}>
         <BackIcon onClick={_goBack} />
         { isLoading ? loadingContainer() : contentOfThisPage() }
       </MainContainerEType>

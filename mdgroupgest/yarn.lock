@@ -4942,7 +4942,7 @@
   "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-1.30.1.tgz"
   "version" "1.30.1"
 
-"date-fns@^2.0.0-beta.5", "date-fns@^2.0.1", "date-fns@2.0.0-alpha.7 || >=2.0.0":
+"date-fns@^2.0.0-beta.5", "date-fns@^2.0.1":
   "integrity" "sha512-HeYdzCaFflc1i4tGbj7JKMjM4cKGYoyxwcIIkHzNgCkX8xXDNJDZXgDDVchIWpN4eQc3lH37WarduXFZJOtxfw=="
   "resolved" "https://registry.npmjs.org/date-fns/-/date-fns-2.21.3.tgz"
   "version" "2.21.3"
@@ -11412,7 +11412,7 @@
     "d3-hierarchy" "^1.1.5"
     "prop-types" "^15.5.7"
 
-"react@^0.14 || ^15.0.0-rc || >=15.0", "react@^16.12.0", "react@^16.13.1", "react@0.14 || 15 || 16 || 17":
+"react@^16.12.0", "react@^16.13.1":
   "integrity" "sha512-YMZQQq32xHLX0bz5Mnibv1/LHb3Sqzngu7xstSM+vrkE5Kzr9xE0yMByK5kMoTK30YVJE61WfbxIFFvfeDKT1w=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.13.1.tgz"
   "version" "16.13.1"

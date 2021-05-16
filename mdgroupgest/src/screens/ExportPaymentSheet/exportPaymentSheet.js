@@ -93,21 +93,21 @@ const ExportPaymentSheet = (props) => {
       var eachSheet = workbook.addWorksheet(`${sheet[i]?.funcionario} - ${period}`)
       // A table header
       eachSheet.columns = [
-          { header: 'TIPO DE VENDA', key: 'contract_type', width: 18 },
+          { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
           { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
           { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
-          { header: 'PPI LUZ', key: 'electricity_ppi', width: 18, style: { alignment: 'center'}},
-          { header: 'PEL', key: 'pel', width: 18 },
-          { header: 'PPI GÁS', key: 'gas_ppi', width: 18 },
-          { header: 'MGI', key: 'mgi', width: 18 },
-          { header: 'LUZ - CPE', key: 'cpe', width: 18 },
-          { header: 'POTÊNCIA', key: 'power', width: 18 },
-          { header: 'GÁS - CUI', key: 'cui', width: 18 },
-          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 18 },
-          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 18 },
+          { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
+          { header: 'PEL', key: 'pel', width: 8 },
+          { header: 'PPI GÁS', key: 'gas_ppi', width: 8 },
+          { header: 'MGI', key: 'mgi', width: 8 },
+          { header: 'LUZ - CPE', key: 'cpe', width: 8 },
+          { header: 'POTÊNCIA', key: 'power', width: 8 },
+          { header: 'GÁS - CUI', key: 'cui', width: 8 },
+          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 8 },
+          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 8 },
           { header: 'OBS BO', key: 'observations', width: 18 },
-          { header: 'VALOR', key: 'employee_comission', width: 18 },
-          { header: 'TOTAL', key: 'total', width: 18 },
+          { header: 'VALOR', key: 'employee_comission', width: 8 },
+          { header: 'TOTAL', key: 'total', width: 10 },
       ]
 
       for (let j = 0; j < sheet[i]?.itens?.length; j++) {

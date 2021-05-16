@@ -38,6 +38,8 @@ const ChooseTypeOfContract = (props) => {
     })
   }
 
+  console.log(localStorage, 'LOCAL STORAGE')
+
   _getAllInfoNeeded()
   const history = useHistory()
 

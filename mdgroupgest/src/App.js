@@ -17,6 +17,7 @@ import OfficeMonthResultDetail from './screens/OfficeResultDetail/officeResultDe
 import EditEmployee from './screens/EditEmployee/editEmployee';
 import ExportPaymentSheet from './screens/ExportPaymentSheet/exportPaymentSheet';
 import TeamReport from './screens/TeamReport/teamReport';
+import TeamReportDetail from './screens/TeamReportDetail/teamReportDetail';
 
 import Router from './router';
 
@@ -40,6 +41,7 @@ function App() {
     editEmployee: "/EmployeeEdit",
     exportPaymentSheet: "/ExportPaymentSheet",
     teamReport: "/TeamReport",
+    teamReportDetail: "/TeamReportDetail",
   };
   
   const routes = [
@@ -60,7 +62,8 @@ function App() {
     { path: paths.officeResultDetail, component: OfficeMonthResultDetail },
     { path: paths.editEmployee, component: EditEmployee },
     { path: paths.exportPaymentSheet, component: ExportPaymentSheet },
-    { path: paths.teamReport, component: TeamReport }
+    { path: paths.teamReport, component: TeamReport },
+    { path: paths.teamReportDetail, component: TeamReportDetail }
   ];
 
   return (

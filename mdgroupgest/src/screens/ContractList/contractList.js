@@ -244,6 +244,28 @@ const ContractList = (props) => {
   const renderContract = (contract, i, searched) => {
     var sellState = contract?.sell_state__name
 
+    const titleStyle =  {
+      width: '100%',
+      marginTop: -10,
+      marginBottom: '10px',
+      marginLeft: 0
+    }
+
+    const spanStyle = {
+      borderBottom: '2px solid',
+      borderBottomColor: `${CONSTANTS?.colors?.black}`
+    }
+
+    const buttonStyle = {
+      width: '60%',
+      height: '30%',
+      backgroundColor: 'green',
+      marginLeft: '3%',
+      marginTop:' -2.5%',
+      borderRadius: '5%',
+      cursor: 'pointer'
+    }
+
     function _contractType () {
       switch (contract?.contract_type) {
         case "dual":
@@ -288,25 +310,20 @@ const ContractList = (props) => {
         )
       }
     }
-
+    console.log(contract, 'CONTRATO')
     return (
       <>
-        <List.Item key={contract.id} className={searched ? "eachContractSearched" : "eachContract"} style={{display: display}}>
+        <List.Item key={contract?.id} className={searched ? "eachContractSearched" : "eachContract"} style={{display: display}}>
           <Column className={"clientInfo"}>
             <Column>
               <Row>
-                <SubHeading style={{width: '80%', marginTop: -10, marginBottom: 0, marginLeft: 0}}>{`Contrato nº: ${contract?.id}`}</SubHeading>
+                <SubHeading style={titleStyle}>
+                  {`${contract?.user__name} - `}
+                  <span style={spanStyle}>{contract?.signature_date}</span>
+                </SubHeading>
               { contract?.sell_state__name !== 'ok' &&
                 <Button
-                  style={{
-                    width: '60%',
-                    height: '30%',
-                    backgroundColor: 'green',
-                    marginLeft: '3%',
-                    marginTop:' -2.5%',
-                    borderRadius: '5%',
-                    cursor: 'pointer',
-                  }}
+                  style={buttonStyle}
                   disabled={false}
                   action={() => _ConfirmContractActivation(contract, i)}
                   small={true}
@@ -319,45 +336,48 @@ const ContractList = (props) => {
             <Row className={"rowOfClientInfo"}>
               <Column className={"pairOfClientInfo"}>
                 <List.Content>
-                  <Body className={"clientInfoTitle"}><b>Cliente:</b></Body>
+                  <Body className={"clientInfoTitle"}><b>Nome do Cliente:</b></Body>
                   <Body className={"clientInfoContent"}>  
-                    {contract.client_name}
+                    {contract?.client_name}
                   </Body>
                 </List.Content>
                 <List.Content>
-                <Body className={"clientInfoTitle"}><b>NIF / NIPC:</b></Body> 
-                  <Body className={"clientInfoContent"}>
-                    {contract.client_nif}
+                  <Body className={"clientInfoTitle"}><b>Contato do Cliente:</b></Body> 
+                  <Body className={"clientInfoContent"}>               
+                    {contract?.client_contact}
                   </Body>
                 </List.Content>
               </Column>
               <Column className={"pairOfClientInfo"}>
                 <List.Content>
-                <Body className={"clientInfoTitle"}><b>Data de entrega:</b></Body>
+                  <Body className={"clientInfoTitle"}><b>Data de entrega:</b></Body>
                   <Body className={"clientInfoContent"}> 
-                    {contract.delivery_date}
+                    {contract?.delivery_date}
                   </Body>
                 </List.Content>
                 <List.Content>
-                <Body className={"clientInfoTitle"}><b>Data de assinatura:</b></Body> 
-                  <Body className={"clientInfoContent"}>               
-                    {contract.signature_date}
+                  <Body className={"clientInfoTitle"}><b>NIF / NIPC:</b></Body> 
+                  <Body className={"clientInfoContent"}>
+                    {contract?.client_nif}
                   </Body>
                 </List.Content>
+
               </Column>
             </Row>
           </Column>
 
-          { contract.sell_state__name === "ok" &&
+          { contract?.sell_state__name === "ok" &&
             <Column className={"contractComission"}>
               <List.Content>
                 <SmallSubHeading><b>Este contrato vale:</b></SmallSubHeading>
-                <Body className={"employeeComission"}>{`${contract.employee_comission}€`}</Body>
+                <Body className={"employeeComission"}>
+                  {`${contract?.employee_comission === null ? '0' : `${contract?.employee_comission}`}€`}
+                </Body>
               </List.Content>
             </Column>
           }
 
-          { contract.sell_state__name !== "ok" &&
+          { contract?.sell_state__name !== "ok" &&
             <Column className={"contractComission"} style={{width: '10%'}}>
               <List.Content>
                 <SmallSubHeading></SmallSubHeading>
@@ -392,7 +412,7 @@ const ContractList = (props) => {
   const [contractsMatched, setContractsMatched] = useState([])
 
   function _handleSearchName(value) {
-    setContractsMatched(contracts?.filter(contract => contract.user__name.toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract?.user__name.toLowerCase().includes(value)))
     return contractsMatched, isSearching
   }
 
@@ -402,17 +422,17 @@ const ContractList = (props) => {
   }
 
   function _handleSearchNif(value) {
-    setContractsMatched(contracts?.filter(contract => contract.client_nif.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract?.client_nif.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 
   function _handleSearchContractType(value) {
-    setContractsMatched(contracts?.filter(contract => contract.contract_type.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract?.contract_type.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 
   function _handleSearchSellState(value) {
-    setContractsMatched(contracts?.filter(contract => contract.sell_state__name.toString().toLowerCase().includes(value)))
+    setContractsMatched(contracts?.filter(contract => contract?.sell_state__name.toString().toLowerCase().includes(value)))
     return contractsMatched
   }
 

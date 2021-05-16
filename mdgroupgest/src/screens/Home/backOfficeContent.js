@@ -1,6 +1,7 @@
 import React, { useState, useMemo, useReducer, useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom";
 import _ from 'lodash';
+import Swal from 'sweetalert2'
 
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 import { Avatar } from '@material-ui/core';
@@ -37,6 +38,8 @@ import { useRefresh } from '../../hooks/window/refresh';
 import { useStartApp } from '../../hooks/backoffice/startApp';
 import { useAuth } from '../../hooks/employees/auth';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+
+import './styles.css'
 
 const BackOfficeContent = (props) => {
   
@@ -172,6 +175,8 @@ const BackOfficeContent = (props) => {
     isRegularSecretary
   } = useAuth()
 
+  const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
+
   const dataToForm = []
 
   Object.keys(dataToPopulateGraphic).forEach(function(item){
@@ -204,55 +209,50 @@ const BackOfficeContent = (props) => {
   const ceoObject = totalEmployees?.filter(employee => employee?.user?.user_type === 'ceo')[0]
 
   // Aqui começa a iteração sobre o Obj principal, por isso o "1" (Só há um escritório) -> Retiramos os TEAM LEADERS
-    for (var i = 0; i < 1; i++) {
+  for (var i = 0; i < 1; i++) {
 
-      var teamLeaders = myTeam?.children;
-      var teamLeadersQuantity = myTeam?.children?.length;
-  
-      // Loop para colocarmos todos os Team Leaders em uma array só
-      for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
-        teamLeadersArr.push(teamLeaders[qtd]);
-      }
-  
-      teamLeadersCounter += teamLeadersQuantity;
-  
-      // Loop sobre os Team Leaders -> Retiramos os INSTRUTORES
-      for (var j = 0; j < teamLeaders?.length; j++) {
-  
-        var instructors = teamLeaders[j]?.children;
-        var instructorsQuantity = teamLeaders[j]?.children?.length;
-        instructorsCounter += instructorsQuantity;
-  
-          // Loop para colocarmos todos os instrutores em uma array só
-          for (let qtd = 0; qtd < instructorsQuantity; qtd++) {
-            instructorsArr.push(instructors[qtd]);
-          }         
-  
-        // Loop sobre os Instrutores -> Retiramos os COMERCIAIS
-        for (var k = 0; k < instructors.length; k++) {
-  
-          var salesPersons = instructors[k]?.children;
-          var salesPersonsQuantity = instructors[k]?.children.length;
-          salesPersonsCounter += salesPersonsQuantity;
-  
-            // Loop para colocarmos todos os comerciais em uma array só
-            for (let qtd = 0; qtd < salesPersonsQuantity; qtd++) {
-              salesPersonsArr.push(salesPersons[qtd]);
-            }             
-        }
-      }
+    var teamLeaders = myTeam?.children;
+    var teamLeadersQuantity = myTeam?.children?.length;
+
+    // Loop para colocarmos todos os Team Leaders em uma array só
+    for (var qtd = 0; qtd < teamLeadersQuantity; qtd++) {
+      teamLeadersArr.push(teamLeaders[qtd]);
     }
 
-  const koContracts = [];
-  const okContracts = [];
-  const rContracts = [];
-  const allContracts = [];
+    teamLeadersCounter += teamLeadersQuantity;
+
+    // Loop sobre os Team Leaders -> Retiramos os INSTRUTORES
+    for (var j = 0; j < teamLeaders?.length; j++) {
+
+      var instructors = teamLeaders[j]?.children;
+      var instructorsQuantity = teamLeaders[j]?.children?.length;
+      instructorsCounter += instructorsQuantity;
+
+        // Loop para colocarmos todos os instrutores em uma array só
+        for (let qtd = 0; qtd < instructorsQuantity; qtd++) {
+          instructorsArr.push(instructors[qtd]);
+        }         
+
+      // Loop sobre os Instrutores -> Retiramos os COMERCIAIS
+      for (var k = 0; k < instructors.length; k++) {
+
+        var salesPersons = instructors[k]?.children;
+        var salesPersonsQuantity = instructors[k]?.children.length;
+        salesPersonsCounter += salesPersonsQuantity;
+
+          // Loop para colocarmos todos os comerciais em uma array só
+          for (let qtd = 0; qtd < salesPersonsQuantity; qtd++) {
+            salesPersonsArr.push(salesPersons[qtd]);
+          }             
+      }
+    }
+  }
 
   const _getMonthContracts = useMemo(() => {
-    const currentDateJS = new Date();
+    const currentDateJS = new Date()
 
     const monthContractsForManagerOrSecretary = contracts.filter(contract => {
-      var date = new Date(contract.delivery_date);
+      var date = new Date(contract.delivery_date)
       return (
         date.getMonth() === currentDateJS?.getMonth() 
         && 
@@ -261,7 +261,7 @@ const BackOfficeContent = (props) => {
     })
 
     const monthContractsForEmployee = contracts.filter(contract => {
-      var date = new Date(contract.delivery_date);
+      var date = new Date(contract.delivery_date)
       return (
         date.getMonth() === currentDateJS?.getMonth() 
         && 
@@ -271,64 +271,84 @@ const BackOfficeContent = (props) => {
       )
     })
 
-    if(isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
-      return monthContractsForManagerOrSecretary;
+    if (haveAccess) {
+      return monthContractsForManagerOrSecretary
     } else if(userType === "secretary") {
-      return monthContractsForManagerOrSecretary;
+      return monthContractsForManagerOrSecretary
     } else {
-      return monthContractsForEmployee;
+      return monthContractsForEmployee
     }
   },[contracts])
 
-  
+  const koContracts = []
+  const okContracts = []
+  const rContracts = []
+
+  const monthKoContracts = []
+  const monthOkContracts = []
+  const monthRContracts = []
+
+  console.log(contracts, 'TESTE CONTRATOS')
+  console.log(_getMonthContracts, 'TESTE CONTRATOS 2')
+  console.log(currentUser, 'CURRENT USER')
 
   function _sellStateOfContract() {
 
-    for(let i = 0; i < _getMonthContracts?.length; i++) {
-      if (isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
+    if (haveAccess) {
+      for (let i = 0; i < _getMonthContracts?.length; i++) {
         if(_getMonthContracts[i]?.sell_state__name === "r") {
-          rContracts.push(_getMonthContracts[i]);
+          monthRContracts.push(_getMonthContracts[i]);
         } else if (_getMonthContracts[i]?.sell_state__name === "ok"){
-          okContracts.push(_getMonthContracts[i]);
+          monthOkContracts.push(_getMonthContracts[i]);
         } else if (_getMonthContracts[i]?.sell_state__name === "ko") {
-          koContracts.push(_getMonthContracts[i]);
+          monthKoContracts.push(_getMonthContracts[i]);
         }
-      } else {
-        if(_getMonthContracts[i]?.sell_state__name === "r" && _getMonthContracts[i]?.user === currentUser?.user?.id) {
-          rContracts.push(_getMonthContracts[i]);
-        } else if (_getMonthContracts[i]?.sell_state__name === "ok" && _getMonthContracts[i]?.user === currentUser?.user?.id){
-          okContracts.push(_getMonthContracts[i]);
-        } else if (_getMonthContracts[i]?.sell_state__name === "ko" && _getMonthContracts[i]?.user === currentUser?.user?.id) {
-          koContracts.push(_getMonthContracts[i]);
+      }
+    } else {
+      for(let i = 0; i < contracts?.length; i++) {
+        if(contracts[i]?.sell_state__name === "r" && contracts[i]?.user === currentUser?.user?.id) {
+          rContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ok" && contracts[i]?.user === currentUser?.user?.id){
+          okContracts.push(contracts[i]);
+        } else if (contracts[i]?.sell_state__name === "ko" && contracts[i]?.user === currentUser?.user?.id) {
+          koContracts.push(contracts[i]);
         }
       }
     }
 
-    return koContracts, okContracts, rContracts;
+
+
+    return monthKoContracts, monthOkContracts, monthRContracts, okContracts, rContracts;
   }
-
-
 
   _sellStateOfContract()
 
-    // "x" is ko contracts qtd
-    const x = koContracts?.length;
+  console.log(okContracts, 'OK')
+  console.log(rContracts, 'PENDENTES')
+  console.log(koContracts, 'KO')
 
-    // "y" is ok contracts qtd
-    const y = okContracts?.length;
+  console.log(monthOkContracts, 'OK 2')
+  console.log(monthRContracts, 'PENDENTES 2')
+  console.log(monthKoContracts, 'KO 2')
 
-    // "z" is r contracts qtd
-    const z = rContracts?.length;
+  // "x" is ko contracts qtd
+  const x = haveAccess ? monthKoContracts?.length : koContracts?.length;
 
-    // "k" is total contracts qtd
-    const a = _getMonthContracts?.length;
+  // "y" is ok contracts qtd
+  const y = haveAccess ? monthOkContracts?.length : okContracts?.length;
 
-    const dataOfficeResult = [ [
-      'Dias',
-      `${y === 1 || y === 0 ? `(${y}) Válido` : `(${y}) Válidos`}`,
-      `${z === 1 || z === 0 ? `(${z}) Pendente` : `(${z}) Pendentes`}`,
-      `${x === 1 || x === 0 ? `(${x}) Anulado` : `(${x}) Anulados`}`,
-    ], ...dataToForm]
+  // "z" is r contracts qtd
+  const z = haveAccess ? monthRContracts?.length : rContracts?.length;
+
+  // "k" is total contracts qtd
+  const a = haveAccess ? _getMonthContracts?.length : contracts?.length;
+
+  const dataOfficeResult = [[
+    'Dias',
+    `${y === 1 || y === 0 ? `(${y}) Válido` : `(${y}) Válidos`}`,
+    `${z === 1 || z === 0 ? `(${z}) Pendente` : `(${z}) Pendentes`}`,
+    `${x === 1 || x === 0 ? `(${x}) Anulado` : `(${x}) Anulados`}`,
+  ], ...dataToForm]
 
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {
@@ -342,6 +362,42 @@ const BackOfficeContent = (props) => {
   const koPercentage = _getPercentage(x, a);
   const okPercentage = _getPercentage(y, a);
   const rPercentage = _getPercentage(z, a);
+
+  // const handleMessageButton = () => (
+  //   <div style={{
+  //     position: 'absolute',
+  //     top: '5vh',
+  //     right: '10vw'
+  //   }}>
+  //     <Button
+  //       fullWidth={false}
+  //       disabled={false}
+  //       action={() => createNotification('error')}
+  //       small={true}
+  //       text="Tens uma notificação"
+  //     />
+  //   </div>
+
+  // )
+
+  // const [showPenalizationMessage, setShowPenalizationMessage] = useState(koPercentage > 30)
+
+  // useEffect(() => {
+
+  //   if (showPenalizationMessage) {
+  //     Swal.fire({
+  //       position: 'top-end',
+  //       icon: 'warning',
+  //       iconColor: '',
+  //       titleText: haveAccess ? 'Atenção!' : 'Atenção! Estás a ser penalizado.',
+  //       text: haveAccess ? `A Taxa de anulados do escritório está em: ${parseInt(koPercentage)}%`  : `A Taxa de anulados é: ${parseInt(koPercentage)}%`,
+  //       showConfirmButton: false,
+  //       timer: 4500
+  //     })
+
+  //     setShowPenalizationMessage(false)
+  //   }
+  // }, [showPenalizationMessage])
 
   var deletedID = props?.location?.state?.deletedID;
 
@@ -392,6 +448,22 @@ const BackOfficeContent = (props) => {
   };
   
   const renderOfficeMonth = () => {
+    const negativeSalary = mySalary < 0
+
+    const valueStyle = 
+      isRegularSecretary ? 
+        {
+          color: CONSTANTS?.colors?.black,
+          fontSize: '36px',
+          marginTop: '-20%'} 
+        : isAdministrator ? 
+          {
+            color: CONSTANTS?.colors?.black,
+            fontSize: '28px',
+            marginTop: '-20%'
+          } 
+          : negativeSalary ? { color: CONSTANTS?.colors?.red } : {}
+
     return (
       <MDCard className={"officeMonth"}>
         <MDCard className={"officeMonthResult"}>
@@ -402,9 +474,9 @@ const BackOfficeContent = (props) => {
                 state: {
                   contracts: {
                     all: _getMonthContracts,
-                    ok: okContracts,
-                    ko: koContracts,
-                    pending: rContracts,
+                    ok: monthOkContracts,
+                    ko: monthKoContracts,
+                    pending: monthRContracts,
                     dataToDiagram: dataOfficeResult,
                   }
                 }
@@ -418,9 +490,24 @@ const BackOfficeContent = (props) => {
 
         <MDCard className={"managerMonth"}>
           <MDCard.Body className={"managerMonthCardBody"}>
-            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>{userType === "secretary" ? 'Gerente' : isAdministrator ? 'CEO' : 'Meu mês'}</SubHeading>
-            { (isRegularManager || isCEO) && <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '5%'}}>Até agora você já tem:</Body>}
-            <Heading style={isRegularSecretary ? {color: CONSTANTS?.colors?.black, fontSize: '36px', marginTop: '-20%'} : isAdministrator ? {color: CONSTANTS?.colors?.black, fontSize: '28px', marginTop: '-20%'} : {}} className={"mySalary"}>{userType === "secretary" ? `${managerObject?.user?.name}` : isAdministrator ? `${ceoObject?.user?.name}` : `${mySalary}€`}</Heading>
+            <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>
+              {userType === "secretary" ? 'Gerente' : isAdministrator ? 'CEO' : 'Meu mês'}
+            </SubHeading>
+            { (isRegularManager || isCEO) && 
+              <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '5%'}}>
+                Até agora você tem:
+              </Body>
+            }
+            <Heading style={valueStyle} className={"mySalary"} id={negativeSalary ? "pulse" : ""}>
+              {userType === "secretary" ? 
+                `${managerObject?.user?.name}`
+                : 
+                isAdministrator ? 
+                `${ceoObject?.user?.name}`
+                : 
+                `${mySalary}€`
+              }
+            </Heading>
           </MDCard.Body>
         </MDCard>
 
@@ -429,6 +516,8 @@ const BackOfficeContent = (props) => {
   }
 
   const renderMyMonth = () => {
+    const negativeSalary = mySalary < 0
+
     if(isRegularManager || isRegularSecretary) {
       return;
     }
@@ -437,8 +526,12 @@ const BackOfficeContent = (props) => {
         <MDCard>
           <MDCard.Body className={"monthCardBody"}>
             <SubHeading style={{alignSelf: 'center', marginLeft: '0'}}>Meu mês</SubHeading>
-            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-35%'}}>Até agora você já tem:</Body>
-            <Heading className={"mySalary"}>{`${mySalary}€`}</Heading>
+            <Body style={{alignSelf: 'center', marginLeft: '0', marginBottom: '-35%'}}>Até agora você tem:</Body>
+            <Heading
+              className={"mySalary"} 
+              id={negativeSalary ? "pulse" : ""}
+              style={negativeSalary ? { color: CONSTANTS?.colors?.red } : {}}
+            >{`${mySalary}€`}</Heading>
           </MDCard.Body>
         </MDCard>
       );
@@ -455,57 +548,140 @@ const BackOfficeContent = (props) => {
       }
     })
   }
-  const currentMonth = useDate();
+  const currentMonth = useDate()
+
   const renderMyContracts = () => {
+    const currentMonthDivStyle = {
+      display: 'flex',
+      flexDirection: 'row',
+      marginTop: '-10%',
+      marginBottom: '-10%',
+      justifyContent: 'space-between',
+      alignItems: 'center',
+      width: '100%'
+    }
+
+    const currentMonthTitleStyle = {
+      marginLeft: '0',
+      marginRight: '50%'
+    }
+
+    const titleStyle = {
+      marginBottom: 0,
+      marginTop: '10%'
+    }
+
+    const counterStyle = {
+      textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)",
+      marginLeft: '0',
+      marginRight: '0'
+    }
+
+    const columnStyle = {
+      justifyContent: 'center',
+      width: '100%' ,
+      marginBottom: '5%'
+    }
+
+    const normalRowStyle = {
+      display: 'flex',
+      width: '100%',
+      justifyContent: 'space-between',
+      marginBottom: '-5%'
+    }
+
+    const lastRowStyle = {
+      display: 'flex',
+      width: '100%',
+      justifyContent: 'space-between'
+    }
+
+    const monthContractsButtonStyle = {
+      marginTop: '1%',
+      display: 'flex',
+      alignSelf: 'center',
+      width: '100%'
+    }
+
+    const handleOKRow = () => (
+      <MDRow style={normalRowStyle}>
+        <MDCol>
+          <Body>
+            {haveAccess ? monthOkContracts?.length : okContracts?.length} {
+              `${(haveAccess ? monthOkContracts?.length === 1 : okContracts?.length === 1)? "contrato" : "contratos"}
+              ${(haveAccess ? monthOkContracts?.length === 1 : okContracts?.length === 1) ? "válido" : "válidos"}`
+            } 
+          </Body>
+        </MDCol>
+        <MDCol style={{marginRight: '5%'}}>
+          <Body>
+            🟢
+          </Body>
+        </MDCol>
+      </MDRow>
+    )
+
+    const handlePendingRow = () => (
+      <MDRow style={normalRowStyle}>      
+        <MDCol>
+          <Body>
+            { haveAccess ? monthRContracts?.length : rContracts?.length} {
+              `${( haveAccess ? monthRContracts?.length === 1 : rContracts?.length === 1) ? "contrato" : "contratos"} por recuperar`}
+          </Body>
+        </MDCol>
+        <MDCol style={{marginRight: '5%'}}>
+          <Body>
+            🟡
+          </Body>
+        </MDCol>
+      </MDRow>
+    )
+
+    const handleKORow = () => (
+      <MDRow style={lastRowStyle}>
+        <MDCol>
+          <Body>
+            { haveAccess ? monthKoContracts?.length : koContracts?.length} { 
+              `${( haveAccess ? monthKoContracts?.length === 1 : koContracts?.length === 1) ? "contrato" : "contratos"}
+              ${( haveAccess ? monthKoContracts?.length === 1 : koContracts?.length === 1) ? "anulado" : "anulados"}`
+            }
+          </Body>
+        </MDCol>
+        <MDCol style={{marginRight: '5%'}}>
+          <Body>
+            🔴
+          </Body>
+        </MDCol>
+      </MDRow>
+    )
+
+    const handleCurrentMonthRow = () => (
+      <div style={currentMonthDivStyle}>
+        <SubHeading style={currentMonthTitleStyle}>
+          {currentMonth.toUpperCase()}
+        </SubHeading>
+        <Heading style={counterStyle}>
+          {haveAccess ? _getMonthContracts?.length : contracts?.length}
+        </Heading>    
+      </div>
+    )
+
     return (
       <MDCard isTheMiddleCard>
         <MDCard.Body className={"contractsCardBody"}>
-          <Link
-            onClick={handleContractListNavigation}
-            // to={{
-            //   pathname: "/ContractList",
-            //   state: {
-            //     currentUser: currentUser,
-            //     cameFromBackoffice: true,
-            //     data: { contracts: _getMonthContracts},
-            //   }
-            // }}
-          >
-            <SubHeading style={{marginBottom: 0, marginTop: '10%'}}>Contratos</SubHeading>
+          <Link onClick={handleContractListNavigation}>
+            <SubHeading style={titleStyle}>
+              Contratos
+            </SubHeading>
           </Link>
 
-            <div style={{display: 'flex', flexDirection: 'row', marginTop: '-10%', marginBottom: '-10%', justifyContent: 'space-between', alignItems: 'center', width: '100%'}}>
-              <SubHeading style={{marginLeft: '0', marginRight: '50%'}}>{currentMonth.toUpperCase()}</SubHeading>
-              <Heading style={{ textShadow: "1px 1px 3px rgba(200, 200, 200, 0.7)", marginLeft: '0', marginRight: '0'}}>{_getMonthContracts?.length}</Heading>
-            </div>
-          <MDCol style={{justifyContent: 'center', width: '100%' , marginBottom: '5%'}}>
-
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>
-                <MDCol>
-                  <Body>
-                    {okContracts?.length} {`${okContracts?.length === 1 ? "contrato" : "contratos"} ${okContracts?.length === 1 ? "válido" : "válidos"}`} 
-                  </Body>
-                </MDCol>
-                <MDCol style={{marginRight: '5%'}}><Body>🟢</Body></MDCol>
-              </MDRow>
-
-
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between', marginBottom: '-5%'}}>      
-                <MDCol>
-                  <Body>{rContracts?.length} {`${rContracts?.length === 1 ? "contrato" : "contratos"} por recuperar`}</Body>
-                </MDCol>
-                <MDCol style={{marginRight: '5%'}}><Body>🟡</Body></MDCol>
-              </MDRow>
-
-              <MDRow style={{display: 'flex', width: '100%', justifyContent: 'space-between'}}>
-                <MDCol>
-                  <Body>
-                    {koContracts?.length} {`${koContracts?.length === 1 ? "contrato" : "contratos"} ${koContracts?.length === 1 ? "anulado" : "anulados"}`}
-                  </Body>
-                </MDCol>
-                <MDCol style={{marginRight: '5%'}}><Body>🔴</Body></MDCol>
-              </MDRow>
-            
+          
+          { handleCurrentMonthRow() }
+          
+          <MDCol style={columnStyle}>
+            { handleOKRow() }
+            { handlePendingRow() }
+            { handleKORow() }  
           </MDCol>
 
           <Button
@@ -515,17 +691,16 @@ const BackOfficeContent = (props) => {
               history.push({
                 pathname: "/ContractList",
                 state: {
-                  data: _getMonthContracts,
+                  data: contracts,
                 }
               })
             }}
-
             small={true}
-            style={{marginTop: '1%', display: 'flex', alignSelf: 'center', width: '100%'}}
+            style={monthContractsButtonStyle}
             text="Contratos do mês"
           />
           
-          { (isCEO || isAdministrator || isRegularManager || isRegularSecretary) &&
+          { haveAccess &&
             <Button
               fullWidth={false}
               disabled={false}
@@ -549,11 +724,12 @@ const BackOfficeContent = (props) => {
   };
 
   const resultStatus = () => {
-    if (okPercentage < 70 && _getMonthContracts?.length !== 0) {
+    
+    if (okPercentage < 70 && ( haveAccess ? _getMonthContracts?.length !== 0 : contracts?.length !== 0)) {
       return "🔴";
-    } else if (okPercentage < 80 && _getMonthContracts?.length !== 0) {
+    } else if (okPercentage < 80 && ( haveAccess ? _getMonthContracts?.length !== 0 : contracts?.length !== 0)) {
       return "🟡";
-    } else if (okPercentage > 70 && _getMonthContracts?.length !== 0){
+    } else if (okPercentage > 70 && ( haveAccess ? _getMonthContracts?.length !== 0 : contracts?.length !== 0)){
       return "🟢";
     } else {
       return "⚪️"
@@ -561,6 +737,47 @@ const BackOfficeContent = (props) => {
   }
 
   const renderMyResults = () => {
+    const okPercentageStyle = {
+      color: "#37981F",
+      marginTop: 30,
+      marginBottom: 0
+    }
+    const okPercentageTitleStyle = {
+      marginTop: -15,
+      marginBottom: 0,
+      fontSize: 12
+    }
+
+    const rPercentageStyle = {
+      color: "#FEC35A",
+      marginTop: 0,
+      marginBottom: 0
+    }
+
+    const rPercentageTitleStyle = {
+      marginTop: -15,
+      marginBottom: 0,
+      fontSize: 12
+    }
+
+    const koPercentageStyle = {
+      color: "#FF461E",
+      marginTop: 0,
+      marginBottom: 0
+    }
+
+    const koPercentageTitleStyle = {
+      marginTop: -15,
+      marginBottom: 0, 
+      fontSize: 12
+    }
+
+    const resultStatusStyle = {
+      display: 'flex',
+      alignSelf: 'center',
+      alignContent: "flex-start"
+    }
+
     return (
       <MDCard>
         <MDCard.Body className={"resultsCardBody"}>
@@ -576,7 +793,7 @@ const BackOfficeContent = (props) => {
                 ok: okContracts,
                 r: rContracts,
                 ko: koContracts,
-                all: _getMonthContracts
+                all: contracts
               },
               resultsInfo: resultsToPresent,
               currentSalary: mySalary,
@@ -585,14 +802,26 @@ const BackOfficeContent = (props) => {
           }}>
             <SubHeading style={{marginTop: '0%'}}>Resultados</SubHeading>
           </Link>
-          <Heading style={{color: "#37981F",marginTop: 30, marginBottom: 0}}>{`${okPercentage}%`}</Heading>
-          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos válidos</Body>
-          <Heading style={{color: "#FEC35A",marginTop: 0, marginBottom: 0}}>{`${rPercentage}%`}</Heading>
-          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos por recuperar</Body>
-          <Heading style={{color: "#FF461E",marginTop: 0, marginBottom: 0}}>{`${koPercentage}%`}</Heading>
-          <Body style={{marginTop: -15, marginBottom: 0, fontSize: 12}}>Contratos anulados</Body>
+          <Heading style={okPercentageStyle}>
+            {`${okPercentage}%`}
+          </Heading>
+          <Body style={okPercentageTitleStyle}>
+            Contratos válidos
+          </Body>
+          <Heading style={rPercentageStyle}>
+            {`${rPercentage}%`}
+          </Heading>
+          <Body style={rPercentageTitleStyle}>
+            Contratos por recuperar
+          </Body>
+          <Heading style={koPercentageStyle}>
+            {`${koPercentage}%`}
+          </Heading>
+          <Body style={koPercentageTitleStyle}>
+            Contratos Anulados
+          </Body>
 
-          <Body style={{display: 'flex', alignSelf: 'center', alignContent: "flex-start"}}>{resultStatus()}</Body>
+          <Body style={resultStatusStyle}>{resultStatus()}</Body>
         </MDCard.Body>
       </MDCard>
     );
@@ -616,8 +845,8 @@ const BackOfficeContent = (props) => {
       <ContentContainer>
         <TeamContainer>{renderHero()}</TeamContainer>
         <ResultsContainer>
-          {(isCEO || isAdministrator || isRegularManager || isRegularSecretary) && renderOfficeMonth()}
-          { !(isCEO || isAdministrator || isRegularManager || isRegularSecretary) && renderMyMonth()}
+          { haveAccess && renderOfficeMonth()}
+          { !haveAccess && renderMyMonth()}
           {renderMyContracts()}
           {renderMyResults()}
         </ResultsContainer>

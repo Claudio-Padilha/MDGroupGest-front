@@ -421,7 +421,7 @@ const OptionsDiv = styled.div`
 const LogoutDiv = styled.div`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   margin-bottom: 15%;
   width: 100%;
   height: 100%;
