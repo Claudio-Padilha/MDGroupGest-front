@@ -64,18 +64,16 @@ const CForm = ({
   // key: "contact"
   // key: "address"
 
-  // const validationSchema = Yup.object().shape({
-  //   name: Yup.string(),
-  //   nr: Yup
-  //     .string()
-  //     // .matches(/^[0-9]+$/, "Must be only digits")
-  //     .min(5, 'Must be exactly 5 digits')
-  //     .max(5, 'Must be exactly 5 digits'),
-  //   officeName: Yup.string().required(),
-  //   officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   email: Yup.string().email('Tipo de email inválido').required('* Campo Obrigatório'),
-  // });
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().max(5, 'Must be exactly 5 digits'),
+    nr: Yup.string().max(5, 'Must be exactly 5 digits'),
+      // .matches(/^[0-9]+$/, "Must be only digits")
+      // .min(5, 'Must be exactly 5 digits')
+    officeName: Yup.string().required(),
+    officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    email: Yup.string().email('Tipo de email inválido').required('* Campo Obrigatório'),
+  });
 
   return (
     <>

@@ -19,12 +19,14 @@ const MyProfile = (props) => {
   const [imageAsFile, setImageAsFile] = useState('')
   const [imageAsUrl, setImageAsUrl] = useState(allImputs)
 
+  console.log(user, 'CURRENT USER')
+
   const history = useHistory();
   const avatarClasses = useStyles();
   const [isLoading, setIsLoading] = useState(false);
 
-  const userName = props?.location?.state?.data?.user?.name;
-  const email = props?.location?.state?.data?.user?.email;
+  const userName = user?.user?.name;
+  const email = user?.user?.email;
 
  const handleImageAsFile = (e) => {
     const image = e.target.files[0]
@@ -40,7 +42,7 @@ const MyProfile = (props) => {
       alert("Selecione uma imagem!")
     }
 
-    const uploadTask = storage.ref(`/images/${imageAsFile.name + user.user.id}`).put(imageAsFile)
+    const uploadTask = storage.ref(`/images/${imageAsFile.name + user?.user?.id}`).put(imageAsFile)
 
     uploadTask.on('state_changed', 
     (snapShot) => {
@@ -55,8 +57,8 @@ const MyProfile = (props) => {
        .then(async fireBaseUrl => {
 
         var data = {
-          id: user.user.id,
-          user_type: user.user.user_type,
+          id: user?.user?.id,
+          user_type: user?.user?.user_type,
           avatar: fireBaseUrl
         }
         await employeesRequests.addPhoto(data)  
