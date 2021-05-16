@@ -26,6 +26,7 @@ import {
   useStyles
 } from "./styles"
 
+import { useAuth } from '../../hooks/employees/auth'
 import { useRefresh } from '../../hooks/window/refresh'
 import employeesRequests from "../../hooks/requests/employeesRequests"
 import officesRequests from '../../hooks/requests/officesRequests'
@@ -41,6 +42,13 @@ const TeamReport = (props) => {
       }
     })
   }
+
+  const { 
+    isCEO,
+    isAdministrator,
+    isRegularManager,
+    isRegularSecretary
+  } = useAuth()
 
   const screenStyle = useStyles();
 
@@ -87,9 +95,6 @@ const TeamReport = (props) => {
   const myTeam = useMemo(() => {
     return JSON.parse(localStorage.getItem('myTeamResults'))
   }, [isFromBackOffice, fromTeamReportDetail])
-
-  console.log(myTeam, 'MY TEAM ')
- 
 
   // const reducer = (firstState, action) => {
   //   let reducerState = {}
@@ -256,11 +261,6 @@ const TeamReport = (props) => {
   const instructors = myTeam?.filter(employee => employee?.job === 'Instrutor')
   const salesPersons = myTeam?.filter(employee => employee?.job === 'Comercial')
 
-  console.log(managerAssistants, 'GERENTES');
-  console.log(teamLeaders, 'TEAM LEADERS');
-  console.log(instructors, 'INSTRUTORES');
-  console.log(salesPersons, 'COMERCIAIS');
-
   const handleScreen = () => {
     const horizontalLine = () => (
       <span>
@@ -363,7 +363,7 @@ const TeamReport = (props) => {
         textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
         color: CONSTANTS?.colors?.mediumGrey
       }}>
-        Veja sua equipa
+        {isAdministrator ? 'Toda a equipa' : 'Veja sua equipa'}
       </SubHeading>
     
       { handleScreen() }
@@ -381,7 +381,7 @@ const TeamReport = (props) => {
         <SubHeading>Volte ao tamanho necessário.</SubHeading>
       </WidthMessageContainer>
       <MainContainerEType style={isLoading ? { height: '100vh' } : {}}>
-        <BackIcon onClick={_goBack} />
+        <BackIcon style={{position: 'fixed', color: CONSTANTS?.colors?.darkGrey}} onClick={_goBack} />
         { isLoading ? loadingContainer() : contentOfThisPage() }
       </MainContainerEType>
     </>

@@ -288,10 +288,6 @@ const BackOfficeContent = (props) => {
   const monthOkContracts = []
   const monthRContracts = []
 
-  console.log(contracts, 'TESTE CONTRATOS')
-  console.log(_getMonthContracts, 'TESTE CONTRATOS 2')
-  console.log(currentUser, 'CURRENT USER')
-
   function _sellStateOfContract() {
 
     if (haveAccess) {
@@ -322,14 +318,6 @@ const BackOfficeContent = (props) => {
   }
 
   _sellStateOfContract()
-
-  console.log(okContracts, 'OK')
-  console.log(rContracts, 'PENDENTES')
-  console.log(koContracts, 'KO')
-
-  console.log(monthOkContracts, 'OK 2')
-  console.log(monthRContracts, 'PENDENTES 2')
-  console.log(monthKoContracts, 'KO 2')
 
   // "x" is ko contracts qtd
   const x = haveAccess ? monthKoContracts?.length : koContracts?.length;

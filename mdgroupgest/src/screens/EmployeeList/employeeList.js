@@ -132,8 +132,6 @@ const EmployeeList = (props) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-    
-    console.log(employee, 'EMPLOYEE')
 
     const isManagerAssistant = employee?.is_manager_assistant
     const isTeamLeader = employee?.is_team_leader;

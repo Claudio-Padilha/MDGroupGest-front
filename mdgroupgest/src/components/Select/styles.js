@@ -80,9 +80,6 @@ export const selectStyles = {
     const backgroundColor = state.isFocused ? CONSTANTS?.colors.black : CONSTANTS?.colors.white;
     const transition = "opacity 300ms";
 
-    console.log(provided, 'PROVIDED')
-    console.log(state, 'STATE')
-
     return {
       ...provided,
       color,

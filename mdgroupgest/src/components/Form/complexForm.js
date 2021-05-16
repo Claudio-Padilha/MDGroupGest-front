@@ -54,14 +54,27 @@ const CForm = ({
     return initialValues;
   }
 
-  // const Yup = require('yup')
+  const Yup = require('yup')
+
+  // key: "name"
+  // key: "nr"
+  // key: "email"
+  // key: "nif"
+  // key: "zipCode"
+  // key: "contact"
+  // key: "address"
 
   // const validationSchema = Yup.object().shape({
   //   name: Yup.string(),
+  //   nr: Yup
+  //     .string()
+  //     // .matches(/^[0-9]+$/, "Must be only digits")
+  //     .min(5, 'Must be exactly 5 digits')
+  //     .max(5, 'Must be exactly 5 digits'),
   //   officeName: Yup.string().required(),
   //   officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
   //   officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   email: Yup.string().email('Invalid email').required('Required'),
+  //   email: Yup.string().email('Tipo de email inválido').required('* Campo Obrigatório'),
   // });
 
   return (
@@ -75,7 +88,7 @@ const CForm = ({
         <Formik 
           initialValues={ getInitialValues() }
           onSubmit={onSubmit}
-          // validationSchema={validationSchema}
+          //validationSchema={validationSchema}
         >
           {
             props => (

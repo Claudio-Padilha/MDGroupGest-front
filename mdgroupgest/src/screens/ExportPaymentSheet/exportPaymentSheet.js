@@ -75,8 +75,6 @@ const ExportPaymentSheet = (props) => {
 
   async function createNewExcelFile(sheet) {
 
-    console.log(sheet, 'SHEET')
-
     var Excel = require('exceljs')
     // A new Excel Work Book
     var workbook = new Excel.Workbook()

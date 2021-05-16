@@ -81,7 +81,7 @@ const TeamReportDetail = (props) => {
 
   const initialState = { employee }
 
-  if(!wasRefreshed || fromTeamReportList || initialState !== undefined) {
+  if(!wasRefreshed && fromTeamReportList) {
     localStorage.setItem('teamReportDetailState', JSON.stringify(initialState))
   }
 
@@ -104,15 +104,15 @@ const TeamReportDetail = (props) => {
 
   useEffect(() => {
     if(wasRefreshed) {
-      return dispatch('MAINTAIN_SCREEN_STATE')
+      dispatch('MAINTAIN_SCREEN_STATE')
     } else {
       return state
     }
   }, [wasRefreshed])
 
-  console.log(state, 'STATE')
+  const employeeWithState = state?.employee
 
-  const total = employee?.ok_contract_amount + employee?.r_contract_amount + employee?.ko_contract_amount
+  const total = employeeWithState?.ok_contract_amount + employeeWithState?.r_contract_amount + employeeWithState?.ko_contract_amount
 
   function _getPercentage(percent) {
     if (percent !== 0 || total !== 0) {
@@ -123,13 +123,17 @@ const TeamReportDetail = (props) => {
     }
   }
 
-  const koPercentage = _getPercentage(employee?.ko_contract_amount)
-  const okPercentage = _getPercentage(employee?.ok_contract_amount)
-  const rPercentage = _getPercentage(employee?.r_contract_amount)
+  const koPercentage = _getPercentage(employeeWithState?.ko_contract_amount)
+  const okPercentage = _getPercentage(employeeWithState?.ok_contract_amount)
+  const rPercentage = _getPercentage(employeeWithState?.r_contract_amount)
+
+  const okContracts = employeeWithState?.ok_contract_amount
+  const rContracts = employeeWithState?.r_contract_amount
+  const koContracts = employeeWithState?.ko_contract_amount
 
   const renderFirstCards = (info, i) => {
 
-    const darkGrey = CONSTANTS?.colors?.darkGrey
+    const mediumGrey = CONSTANTS?.colors?.mediumGrey
 
     const linkStyle = {
       marginRight: '1vw',
@@ -149,7 +153,7 @@ const TeamReportDetail = (props) => {
     }
 
     const nameStyle = {
-      color: darkGrey,
+      color: mediumGrey,
       textAlign: 'center',
       marginBottom: '0'
     }
@@ -160,7 +164,7 @@ const TeamReportDetail = (props) => {
           <MDCardBody style={{...column, width: '100%'}}>
 
             <div style={{...column, width: '100%', alignItems: 'center'}}>
-              <Body>{info?.label}</Body>
+              <SubHeading>{info?.label}</SubHeading>
               <MDRow style={column}>
                 
                 <SubHeading style={nameStyle}>{`${info?.qtd <= 1 ? `${info?.qtd} contrato` : `${info?.qtd} contratos`}`}</SubHeading>
@@ -175,7 +179,7 @@ const TeamReportDetail = (props) => {
 
   const renderSecondCards = (info, i) => {
 
-    const darkGrey = CONSTANTS?.colors?.darkGrey
+    const mediumGrey = CONSTANTS?.colors?.mediumGrey
 
     const linkStyle = {
       marginRight: '1vw',
@@ -189,13 +193,8 @@ const TeamReportDetail = (props) => {
       flexDirection: 'column'
     }
 
-    const row = {
-      display: 'flex',
-      flexDirection: 'row'
-    }
-
     const nameStyle = {
-      color: darkGrey,
+      color: mediumGrey,
       textAlign: 'center',
       marginBottom: '0'
     }
@@ -209,7 +208,7 @@ const TeamReportDetail = (props) => {
               <SubHeading>{info?.label}</SubHeading>
               <MDRow style={column}>
                 <SubHeading style={nameStyle}>{info?.comissionLabel}{info?.comissionValue}{info?.comissionDay}</SubHeading>
-                <SubHeading style={nameStyle}>{info?.contractLabel}{info?.contractValue}{info?.contractDay}</SubHeading>
+                <SubHeading style={nameStyle}>{info?.contractLabel}{info?.contractCounter}{info?.contractDay}</SubHeading>
               </MDRow>
             </div>
           </MDCardBody>
@@ -219,7 +218,7 @@ const TeamReportDetail = (props) => {
   }
 
   const renderThirdCards = (info, i) => {
-    const darkGrey = CONSTANTS?.colors?.darkGrey
+    const mediumGrey = CONSTANTS?.colors?.mediumGrey
 
     const linkStyle = {
       marginRight: '1vw',
@@ -234,7 +233,7 @@ const TeamReportDetail = (props) => {
     }
 
     const nameStyle = {
-      color: darkGrey,
+      color: mediumGrey,
       textAlign: 'center',
       marginBottom: '0'
     }
@@ -245,7 +244,7 @@ const TeamReportDetail = (props) => {
           <MDCardBody style={{...column, width: '100%'}}>
 
             <div style={{...column, width: '100%', alignItems: 'center'}}>
-              <Body>Valor</Body>
+              <SubHeading>Valor</SubHeading>
               <MDRow style={column}>
 
                 { koPercentage > 30 &&
@@ -256,7 +255,7 @@ const TeamReportDetail = (props) => {
                     ...nameStyle, 
                     color: koPercentage > 30 ? CONSTANTS?.colors?.red : CONSTANTS?.colors?.green
                   }
-                } id={koPercentage > 30 ? "pulse" : ""}>{employee?.total}€</SubHeading>
+                } id={koPercentage > 30 ? "pulse" : ""}>{employeeWithState?.total}€</SubHeading>
                 
               </MDRow>
             </div>
@@ -287,30 +286,21 @@ const TeamReportDetail = (props) => {
     }
 
     const handleFirstSection = () => {
-      const okContracts = employee?.ok_contract_amount
-      const rContracts = employee?.r_contract_amount
-      const koContracts = employee?.ko_contract_amount
+      const headingStyle = {
+        color: CONSTANTS?.colors?.darkGrey,
+        marginTop: '10vh'
+      }
 
-      const resultStatus = () => {
-    
-        if (total === 0) {
-          return "⚪️";
-        } else if (okPercentage < 70) {
-          return "🔴";
-        } else if (okPercentage < 80){
-          return "🟡";
-        } else if (okPercentage > 80) {
-          return "🟢"
-        } else {
-          return "⚪️"
-        }
+      const subHeadingStyle = {
+        marginTop: '0',
+        color: CONSTANTS?.colors?.mediumGrey
       }
 
       return (
-        <div className={'CONTENT CONTAINER'}>
-          <Heading style={{ color: CONSTANTS?.colors?.darkGrey, marginTop: '10vh' }}>
+        <div>
+          <Heading style={headingStyle}>
            { horizontalLine() }
-            Contratos <span><SubHeading style={{marginTop: '0', color: CONSTANTS?.colors?.mediumGrey}}>({total} no total)</SubHeading></span>
+            Contratos <span><SubHeading style={subHeadingStyle}>({total} no total)</SubHeading></span>
           </Heading>
           <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
             { renderFirstCards({
@@ -350,19 +340,19 @@ const TeamReportDetail = (props) => {
             { renderSecondCards({
               comissionValue: `${bestComissionDay?.value}€ - `, 
               comissionDay: bestComissionDay?.best_day,
-              contractCounter: bestContractDay?.value,
+              contractCounter: `${bestContractDay?.value} - `,
               contractDay: bestContractDay?.best_day,
-              comissionLabel: 'Comissões: ',
-              contractLabel: 'Contratos: ',
+              comissionLabel: 'Em comissões: ',
+              contractLabel: 'Em contratos: ',
               label: 'Melhor dia'
             })}
             { renderSecondCards({
               comissionValue: `${worstComissionDay?.value}€ - `, 
               comissionDay: worstComissionDay?.worst_day,
-              contractCounter: worstContractDay?.value,
+              contractCounter: `${worstContractDay?.value} - `,
               contractDay: worstContractDay?.worst_day,
-              comissionLabel: 'Comissões: ',
-              contractLabel: 'Contratos: ',
+              comissionLabel: 'Em comissões: ',
+              contractLabel: 'Em contratos: ',
               label: 'Pior dia'
             })}
           </FirstRow>
@@ -381,7 +371,7 @@ const TeamReportDetail = (props) => {
     }
 
     const handleThirdSection = () => (
-      <div className={'CONTENT CONTAINER'} style={{marginBottom: '10vh'}}>
+      <div style={{marginBottom: '10vh'}}>
         <Heading style={{ color: CONSTANTS?.colors?.darkGrey, marginTop: '10vh' }}>
           { horizontalLine() }
           Salário
@@ -400,41 +390,47 @@ const TeamReportDetail = (props) => {
             alt="Profile Image"
             className={screenStyle?.large}
             src={
-              employee?.profile_url ?? 
+              employeeWithState?.profile_url ?? 
               'https://www.kindpng.com/picc/m/105-1055656_account-user-profile-avatar-avatar-user-profile-icon.png'
             }
           />
         </div>
         { handleFirstSection()}
-        { handleSecondSection(employee?.results) }
+        { handleSecondSection(employeeWithState?.results) }
         { handleThirdSection() }
       </TeamContainer>
     )
   }
 
-  const contentOfThisPage = () => (
-    <>
-      <Heading style={{
-        position: 'absolute',
-        top: '0%',
-        textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
-        color: CONSTANTS?.colors?.darkGrey
-      }}>
-        {currentUser?.user?.name}, veja o relatório:
-      </Heading>
+  const contentOfThisPage = () => {
+    const headingStyle = {
+      position: 'absolute',
+      top: '0%',
+      textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
+      color: CONSTANTS?.colors?.darkGrey
+    }
 
-      <SubHeading style={{
-        position: 'absolute',
-        top: '10%',
-        textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
-        color: CONSTANTS?.colors?.mediumGrey
-      }}>
-        {employee?.employee}
-      </SubHeading>
-    
-      { handleScreen() }
-    </>
-  )  
+    const subHeadingStyle = {
+      position: 'absolute',
+      top: '10%',
+      textShadow: '2px 2px 5px rgba(230, 230, 230, 0.8)',
+      color: CONSTANTS?.colors?.mediumGrey
+    }
+
+    return (
+      <>
+        <Heading style={headingStyle}>
+          {currentUser?.user?.name}, veja o relatório:
+        </Heading>
+
+        <SubHeading style={subHeadingStyle}>
+          {employeeWithState?.employee}
+        </SubHeading>
+      
+        { handleScreen() }
+      </>
+    )
+  }
   
   const loadingContainer = () => (
     <SwishSpinner size={200} color="#686769" loading={isLoading} />

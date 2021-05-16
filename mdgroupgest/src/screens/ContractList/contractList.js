@@ -310,7 +310,7 @@ const ContractList = (props) => {
         )
       }
     }
-    console.log(contract, 'CONTRATO')
+    
     return (
       <>
         <List.Item key={contract?.id} className={searched ? "eachContractSearched" : "eachContract"} style={{display: display}}>
