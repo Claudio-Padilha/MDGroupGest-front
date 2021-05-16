@@ -139,7 +139,8 @@ const TeamReportDetail = (props) => {
       marginRight: '1vw',
       marginLeft: '1vw',
       height: '35%',
-      width: '24%'
+      width: '24%',
+      cursor: 'default'
     }
 
     const column = {
@@ -185,7 +186,8 @@ const TeamReportDetail = (props) => {
       marginRight: '1vw',
       marginLeft: '1vw',
       height: '35%',
-      width: '40%'
+      width: '40%',
+      cursor: 'default'
     }
 
     const column = {
@@ -224,7 +226,8 @@ const TeamReportDetail = (props) => {
       marginRight: '1vw',
       marginLeft: '1vw',
       height: '35%',
-      width: '40%'
+      width: '40%',
+      cursor: 'default'
     }
 
     const column = {

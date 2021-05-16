@@ -220,10 +220,8 @@ export default {
     return new Promise((resolve, reject) => {
 
       let user_type_for_route 
-      if(data?.user_type === "team_leader") {
-        user_type_for_route = "teamLeader"
-      } else if(data?.user_type === "sales_person") {
-        user_type_for_route ="salesPerson"
+      if(data?.user_type === "team_leader" || data?.user_type === "sales_person" || data?.user_type === "manager_assistant" || data?.user_type === "instructor") {
+        user_type_for_route = "salesPerson"
       } else {
         user_type_for_route = data?.user_type
       }
@@ -243,6 +241,7 @@ export default {
       axios(employeeUpdateRequest)
 
       .then(res => {
+        console.log(res, 'RESPOSTA DO PATCH');
         localStorage.removeItem('userForPhoto');
         localStorage.setItem('userForPhoto', JSON.stringify(res.data))
 
