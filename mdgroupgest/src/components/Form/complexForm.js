@@ -54,9 +54,48 @@ const CForm = ({
     return initialValues;
   }
 
-  
-
   const Yup = require('yup')
+
+  const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
+  const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
+  const numberMessage = 'Este campo é numérico.'
+
+  const validationSchema = Yup.object().shape({
+    name: Yup.string().required('* Campo Obrigatório'),
+    //nr: Yup.string().max(5, 'Máximo 5 digits'),
+    nif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    zipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
+    contact: Yup.number(numberMessage),
+    clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    clientContact: Yup.number(numberMessage),
+    CPEDUAL: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
+    CPEForElectricity: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
+    CUIDUAL: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
+    CUIForGas: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
+    //officeName: Yup.string().required(),
+    officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    email: Yup.string().email('Tipo de email inválido').required('* Campo Obrigatório'),
+  });
+
+
+  // const validate = values => {
+
+  //   const errors = {};
+
+  //   const required = (!values?.name || !values?.officeName || !values?.email)
+
+  //   if (required) {
+  //     errors.name = "* Campo Obrigatório"
+  //     errors.officeName = "* Campo Obrigatório"
+  //     errors.email = "* Campo Obrigatório"
+  //   }
+
+  //   if (value?.email)
+  
+  //   return errors;
+  // };
+  // console.log(validationSchema, 'SCHEMA')
 
   return (
     <>
@@ -69,7 +108,8 @@ const CForm = ({
         <Formik 
           initialValues={ getInitialValues() }
           onSubmit={onSubmit}
-          //validationSchema={validationSchema}
+          //validate={(values) => validate(values)}
+          // validationSchema={validationSchema}
         >
           {
             props => (
@@ -120,19 +160,19 @@ const renderFields = (field, index, formik, formFields) => {
     case "number":
     case "password":
       return (
-        <Form.Group as={Col} className={field?.key}>
+        <Form.Group as={Col} className={field?.key} controlId="validationFormik100">
           <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
         </Form.Group>
       );
     case "text-area":
       return (
-        <Form.Group as={Col} className={field?.key} >
+        <Form.Group as={Col} className={field?.key} controlId="validationFormik101">
           <TextArea {...fieldProps} />
         </Form.Group>
       );
     case "dropdown":
       return (
-        <Form.Group as={Col} className={field?.key} >
+        <Form.Group as={Col} className={field?.key} controlId="validationFormik102">
           <Select
             onChange={async (option) => {
               if (field.key === 'feedbackCall'){
@@ -180,7 +220,7 @@ const renderFields = (field, index, formik, formFields) => {
       }
 
       return (
-        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
+        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } controlId="validationFormik103">
           {field.question && <Body>{field.question}</Body>}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
@@ -225,7 +265,7 @@ const renderFields = (field, index, formik, formFields) => {
       }
 
       return (
-        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } >
+        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } controlId="validationFormik104">
           <SwitchButton
             key={`${field.key}-${index}`}
             name={field.key}

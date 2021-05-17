@@ -12,7 +12,8 @@ const Select = ({
   onChange,
   isDisabled,
   isMulti,
-  defaultValue
+  defaultValue,
+  ref
 }) => {
   // TODO Add different color to placeholder
   return (
@@ -27,6 +28,7 @@ const Select = ({
         error={error}
         defaultValue={defaultValue}
         placeholder={placeholder}
+        ref={ref}
       />
       {error && <ErrorText>{error}</ErrorText>}
     </SelectContainer>

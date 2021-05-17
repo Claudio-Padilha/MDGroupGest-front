@@ -10,6 +10,7 @@ const TextInput = ({
   error,
   placeholder,
   defaultValue,
+  value,
   label,
   onChange,
   type,
@@ -46,6 +47,7 @@ const TextInput = ({
         onChange={onChange}
         type={inputType}
         error={error}
+        value={value}
         placeholder={placeholder}
         {...otherProps}
       />
