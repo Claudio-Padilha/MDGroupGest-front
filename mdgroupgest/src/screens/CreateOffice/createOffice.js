@@ -153,6 +153,16 @@ const CreateOffice = () => {
     { type: "text", key: "officeZipCode", question: "Código-postal", initialValue: ''},
     { type: "text", key: "officeEmail", question: "Email do escritório", initialValue: ''}
   ];
+
+  const Yup = require('yup')
+
+  const validationSchema = Yup.object().shape({
+    officeName: Yup.string(),
+    officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    officeEmail: Yup.string().email('Tipo de email inválido').required('* O campo é obrigatório'),
+  });
+
   
   return (
     <MainDiv>
@@ -166,6 +176,7 @@ const CreateOffice = () => {
         formFields={FIELDS}
         btnLabel="Criar Escritório"
         onSubmit={handleSubmitForm}
+        validationSchema={validationSchema}
       />
       <CornerRight><Corner /></CornerRight>
     </MainDiv>

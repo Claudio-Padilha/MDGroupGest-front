@@ -24,20 +24,10 @@ import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
 const CForm = ({
   formFields,
   btnLabel,
-  bg,
   onSubmit,
-  handleSubmit,
-  handleChange,
-  handleBlur,
-  values,
-  touched,
-  isValid,
-  errors,
   children,
   isFullWidth,
-  initialValue,
-  subType,
-  place
+  validationSchema
 }) => {
 
   const getInitialValues = () => {
@@ -54,48 +44,49 @@ const CForm = ({
     return initialValues;
   }
 
-  const Yup = require('yup')
+  // const Yup = require('yup')
 
-  const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
-  const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
-  const numberMessage = 'Este campo é numérico.'
+  // const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
+  // const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
+  // const numberMessage = 'Este campo é numérico.'
 
-  const validationSchema = Yup.object().shape({
-    name: Yup.string().required('* Campo Obrigatório'),
-    //nr: Yup.string().max(5, 'Máximo 5 digits'),
-    nif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    zipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
-    contact: Yup.number(numberMessage),
-    clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    clientContact: Yup.number(numberMessage),
-    CPEDUAL: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
-    CPEForElectricity: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
-    CUIDUAL: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
-    CUIForGas: Yup.string().test('len', 'O formato deve ser: PT0002554877874469YK', val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20),
-    //officeName: Yup.string().required(),
-    officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    email: Yup.string().email('Tipo de email inválido').required('* Campo Obrigatório'),
-  });
-
-
-  // const validate = values => {
-
-  //   const errors = {};
-
-  //   const required = (!values?.name || !values?.officeName || !values?.email)
-
-  //   if (required) {
-  //     errors.name = "* Campo Obrigatório"
-  //     errors.officeName = "* Campo Obrigatório"
-  //     errors.email = "* Campo Obrigatório"
-  //   }
-
-  //   if (value?.email)
-  
-  //   return errors;
-  // };
-  // console.log(validationSchema, 'SCHEMA')
+  // const validationSchema = Yup.object().shape({
+  //   name: Yup.string(),
+  //   nr: Yup.string().max(5, 'Máximo 5 digits'),
+  //   nif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   zipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
+  //   contact: Yup.number(numberMessage),
+  //   clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   clientContact: Yup.number(numberMessage),
+  //   CPEDUAL: Yup.string()
+  //     .test(
+  //       'len',
+  //       'O formato deve ser: PT0002554877874469YK',
+  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+  //     ),
+  //   CPEForElectricity: Yup.string()
+  //     .test(
+  //       'len',
+  //       'O formato deve ser: PT0002554877874469YK',
+  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+  //     ),
+  //   CUIDUAL: Yup.string()
+  //     .test(
+  //       'len',
+  //       'O formato deve ser: PT0002554877874469YK',
+  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+  //     ),
+  //   CUIForGas: Yup.string()
+  //     .test(
+  //       'len',
+  //       'O formato deve ser: PT0002554877874469YK',
+  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+  //     ),
+  //   officeName: Yup.string(),
+  //   officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+  //   email: Yup.string().email('Tipo de email inválido'),
+  // });
 
   return (
     <>
@@ -108,8 +99,7 @@ const CForm = ({
         <Formik 
           initialValues={ getInitialValues() }
           onSubmit={onSubmit}
-          //validate={(values) => validate(values)}
-          // validationSchema={validationSchema}
+          validationSchema={validationSchema}
         >
           {
             props => (
@@ -171,36 +161,29 @@ const renderFields = (field, index, formik, formFields) => {
         </Form.Group>
       );
     case "dropdown":
+      const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
       return (
         <Form.Group as={Col} className={field?.key} controlId="validationFormik102">
           <Select
             onChange={async (option) => {
               if (field.key === 'feedbackCall'){
-                if (option.label != 'OK') {
+                if (option.label !== 'OK') {
                   let obj 
-                  let ausente = true
-                  await formFields[index + 1].options.map(el => {
-                    if (el.label == 'OK') {
-                      ausente = false
+
+                  await formFields[index + 1]?.options?.map(el => {
+                    if (el?.label === 'OK') {
                       obj = el
                     }
                   })
-                  if (! ausente) {
-                    formFields[index + 1].options.splice(formFields[index + 1].options.indexOf(obj), 1)
-                    console.log(formFields[index + 1].options)
-                  }
-                }else{
-                  let presente = false
-                  console.log(formFields[index + 1].options)
-                  await formFields[index + 1].options.map(el => {
-                    if (el.label == 'OK') {
-                      presente = true
+                  formFields[index + 1].options[formFields[index + 1].options.indexOf(obj)].label = ''
+
+                } else {
+
+                  await formFields[index + 1]?.options.map(el => {
+                    if (el?.label === '') {
+                      el.label = 'OK'
                     }
                   })
-
-                  if (! presente) {
-                    // Pegar vetor de estado da venda da store e colocar no option
-                  }
                 }
               }
               formik.setFieldValue(field.key, option.value);

@@ -304,7 +304,11 @@ const CreateContract = (props) => {
       sell_state: sellState,
       power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
       gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
-      contract_type: typeOfContractFromProps
+      contract_type: typeOfContractFromProps,
+      //comission: {
+      // office_comission: value ?? null ,
+      // employee_comission:
+      //}  // valor que vem do alerta
     }
 
     function _currentConfirmationMessage() {
@@ -610,6 +614,42 @@ const CreateContract = (props) => {
     }
   }, [typeOfContractFromProps, window])
 
+  const Yup = require('yup')
+
+  const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
+  const numberMessage = 'Este campo é numérico.'
+
+  const validationSchema = Yup.object().shape({
+    clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    clientContact: Yup.number(numberMessage),
+    CPEDUAL: Yup.string()
+      .test(
+        'len',
+        'O formato deve ser: PT0002554877874469YK',
+        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+      ),
+    CPEForElectricity: Yup.string()
+      .test(
+        'len',
+        'O formato deve ser: PT0002554877874469YK',
+        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+      ),
+    CUIDUAL: Yup.string()
+      .test(
+        'len',
+        'O formato deve ser: PT0002554877874469YK',
+        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+      ),
+    CUIForGas: Yup.string()
+      .test(
+        'len',
+        'O formato deve ser: PT0002554877874469YK',
+        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+      )
+  });
+
+  console.log(DYNAMICFORMFIELDS, 'DYNAMIC FORM FIELDS')
+
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
       <SwishSpinner size={200} color="#686769" loading={isLoading} />
@@ -634,6 +674,7 @@ const CreateContract = (props) => {
             bg="primary"
             isFullWidth
             btnLabel="Inserir Contrato"
+            validationSchema={validationSchema}
           />
         <CornerRight><Corner /></CornerRight>
       </MainDiv>
