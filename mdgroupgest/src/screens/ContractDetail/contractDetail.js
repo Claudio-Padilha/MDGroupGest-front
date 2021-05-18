@@ -44,6 +44,7 @@ const ContractDetail = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
   const [maintainState, setMaintainState] = useState(false);
+  let comissionObj = null
 
   if (isLoading) {
     setTimeout(() => {
@@ -59,6 +60,13 @@ const ContractDetail = (props) => {
     }    
   }, [wasRefreshed, maintainState])
 
+  const swalWithBootstrapButtons = Swal.mixin({
+    customClass: {
+      confirmButton: 'btn btn-success',
+      cancelButton: 'btn btn-danger'
+    },
+    buttonsStyling: true
+  })
 
   const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
   optionsSellState.forEach(el => el['value'] = el.id)
@@ -194,74 +202,6 @@ const ContractDetail = (props) => {
     }
   }, [contract])
 
-  function setData(event) {
-
-    event.preventDefault()
-
-    let contractData = {
-      id: contract.id,
-    }
-
-    if (document.getElementById("name").value !== "" ) {
-      contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
-    }
-    if (document.getElementById("nif").value !== "") {
-      contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
-    }
-    if (document.getElementById("contact").value !== "") {
-      contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
-    }
-    if (document.getElementById("delivery_date").value !== "") {
-      contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
-    }
-    if (document.getElementById("signature_date").value !== "") {
-      contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
-    }
-
-    contractData = {
-      ...contractData,
-      ...{ 
-        electronic_bill: document.getElementById('electronic_bill') !== null ? document.getElementById('electronic_bill').checked : null,
-        electricity_ppi: document.getElementById('electricity_ppi') !== null ? document.getElementById('electricity_ppi').checked : null,
-        gas_ppi: document.getElementById('gas_ppi') ? document.getElementById('gas_ppi').checked : null,
-        pel: document.getElementById('pel') ? document.getElementById('pel').checked : null,
-        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null,
-      }
-    }
-    // if (document.getElementById("select-sell-state").value !== "") {
-    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
-    // }
-    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
-      contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
-    }
-
-    if (document.getElementById("select-feedback-call").value !== "") {
-      contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
-    }
-
-    if (document.getElementById("select-sell-state") !== null && document.getElementById("select-sell-state") !== "") {
-      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
-    }
-
-    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
-      if (document.getElementById("select-power").label === 'BTE' || document.getElementById("select-power").label === 'MT') {
-        alert('') // construir alerta Swal com três campos
-        // comission: {
-        //   power: ,
-        //   office_comission: ,
-        //   employee_comission:
-        // } ?? null
-      } else {
-        contractData = {
-          contract: { ...contractData, ...{power: document.getElementById("select-power").value},
-          comission: null
-        }}
-
-        //updateContract(contractData)
-      }
-    }
-  }
-
   async function updateContract (contractData) {
 
     const swalWithBootstrapButtons = Swal.mixin({
@@ -289,6 +229,98 @@ const ContractDetail = (props) => {
           )
         })
     }
+  }
+
+  function setData(event) {
+
+    event.preventDefault()
+
+    let contractData = {
+      id: contract.id,
+    }
+
+    console.log(contractData, 'TESTE DO CONTRACT DATA')
+
+    if (document.getElementById("name").value !== "" ) {
+      contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
+    }
+    if (document.getElementById("nif").value !== "") {
+      contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
+    }
+    if (document.getElementById("contact").value !== "") {
+      contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
+    }
+    if (document.getElementById("delivery_date").value !== "") {
+      contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
+    }
+    if (document.getElementById("signature_date").value !== "") {
+      contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
+    }
+
+    contractData = {
+      ...contractData,
+      ...{ 
+        electronic_bill: document.getElementById('electronic_bill') !== null ? document.getElementById('electronic_bill').checked : null,
+        electricity_ppi: document.getElementById('electricity_ppi') !== null ? document.getElementById('electricity_ppi').checked : null,
+        gas_ppi: document.getElementById('gas_ppi') ? document.getElementById('gas_ppi').checked : null,
+        pel: document.getElementById('pel') ? document.getElementById('pel').checked : null,
+        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null,
+      }
+    }
+
+    // if (document.getElementById("select-sell-state").value !== "") {
+    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
+    // }
+    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
+      contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
+    }
+
+    if (document.getElementById("select-feedback-call").value !== "") {
+      contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
+    }
+
+    if (document.getElementById("select-sell-state") !== null && document.getElementById("select-sell-state").value !== "") {
+      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
+    }
+
+    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
+      if ((document.getElementById("select-power").label === 'BTE' || document.getElementById("select-power").label === 'MT')) {
+        return swalWithBootstrapButtons.fire({
+          title: 'Escolheu uma potência dinâmica, escreva os valores: ',
+          html: '<input id="dynamicPower" placeholder="Potência" class="swal2-input">' +
+                '<input id="officeComission" placeholder="Comissão Escritório" class="swal2-input">' +
+                '<input id="employeeComission" placeholder="Comissão Comercial" class="swal2-input">',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonText: 'É isso!',
+          cancelButtonText: 'Refazer',
+          reverseButtons: true
+          }).then((result) => {
+            if (result) {
+              var dynamicPower = document.getElementById('dynamicPower')?.value
+              var officeComission = document.getElementById('officeComission')?.value
+              var employeeComission = document.getElementById('employeeComission')?.value
+            }
+  
+            comissionObj = {
+              comissions: {
+                dynamic_power: dynamicPower,
+                office_comission: officeComission,
+                employee_comission: employeeComission
+              }
+            }
+          })
+      } else {
+        contractData = {
+          contract: { ...contractData, ...{power: document.getElementById("select-power").value},
+          comissions: null
+        }}
+      }
+    }
+
+    console.log(contractData, 'CONTRACT DATA');
+
+    updateContract(contractData)
   }
 
   const stateMessage = useMemo(() => {
@@ -494,27 +526,13 @@ const ContractDetail = (props) => {
   const [gasPPI, setGasPPI] = useState(contract?.gas_ppi)
   const [electricityPPI, setElectricityPPI] = useState(contract?.electricity_ppi)
   const [pel, setPel] = useState(contract?.pel)
-  const [mgi, setMgi] = useState(contract?.mgi)
+  let mgi = contract?.mgi
   const [electronicBill, setElectronicBill] = useState(contract?.electronic_bill)
   const [isEditing, setIsEditing] = useState(false)
 
+  console.log(contract, 'MGI');
+
   const renderContract = () => {
-    
-    function _handleChecked(value, type) {
-      setIsEditing(true)
-      switch (type) {
-        case 'gasPPI':
-          setGasPPI(!value)
-        case 'electricityPPI':
-          setElectricityPPI(!value) 
-        case 'pel':
-          setPel(!value)
-        case 'mgi':
-          setMgi(!value)
-        case 'electronicBill':
-          setElectronicBill(!value)
-      }
-    }
 
     function _setNif (value) {
       const nif = value;
@@ -634,26 +652,30 @@ const ContractDetail = (props) => {
                       marginLeft: '1%',
                       marginRight: '5%'
                     }}>
+                      { electronicBill &&
                       <SwitchButton
-                        key="electronicBill"
-                        name="electronicBill"
-                        subType="twoColumns"
-                        side="left"
-                        initialValue={electronicBill}
-                        label="Factura Electrónica"
-                        value={electronicBill}
-                        id="electronic_bill"
-                      />
-                      <SwitchButton
-                        key="lightPPI"
-                        name="lightPPI"
-                        subType="twoColumns"
-                        side="left"
-                        initialValue={electricityPPI}
-                        label="PPI Luz"
-                        value={electricityPPI}
-                        id="electricity_ppi"
-                      />
+                          key="electronicBill"
+                          name="electronicBill"
+                          subType="twoColumns"
+                          side="left"
+                          initialValue={electronicBill}
+                          label="Factura Electrónica"
+                          value={electronicBill}
+                          id="electronic_bill"
+                        />
+                      }
+                      { (contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity')  &&
+                        <SwitchButton
+                          key="lightPPI"
+                          name="lightPPI"
+                          subType="twoColumns"
+                          side="left"
+                          initialValue={electricityPPI}
+                          label="PPI Luz"
+                          value={electricityPPI}
+                          id="electricity_ppi"
+                        />
+                      }
 
                     </Col>
 
@@ -663,7 +685,19 @@ const ContractDetail = (props) => {
                       display: 'flex',
                       flexDirection: 'column',
                     }}>
-                      { contract?.gas_ppi && <SwitchButton
+                      { (contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') &&
+                        <SwitchButton
+                          key="mgi"
+                          name="mgi"
+                          subType="twoColumns"
+                          side="left"
+                          initialValue={mgi}
+                          label="MGI"
+                          value={mgi}
+                          id="mgi"
+                        />
+                      }
+                      { (contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') && <SwitchButton
                         key="gasPPI"
                         name="gasPPI"
                         subType="twoColumns"
@@ -673,16 +707,18 @@ const ContractDetail = (props) => {
                         value={gasPPI}
                         id="gas_ppi"
                       />}
-                      <SwitchButton
-                        key="PEL"
-                        name="PEL"
-                        subType="twoColumns"
-                        side="left"
-                        initialValue={pel}
-                        label="PEL"
-                        value={pel}
-                        id="pel"
-                      />
+                      { (contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity') &&
+                        <SwitchButton
+                          key="PEL"
+                          name="PEL"
+                          subType="twoColumns"
+                          side="left"
+                          initialValue={pel}
+                          label="PEL"
+                          value={pel}
+                          id="pel"
+                        />
+                      }
                     </Col>
                   </Row>
                 </Col>
@@ -915,7 +951,7 @@ const ContractDetail = (props) => {
                     <SmallSubHeading><b>Fatura Electrónica:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.electronic_bill ? "🟢" : "🔴"}`}</Body>
 
-                  {(typeContainsElectricity) &&
+                  {(contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity') &&
                     <>
                       <SmallSubHeading><b>PPI Luz:</b></SmallSubHeading>
                       <Body className={"field"}>{` ${contract?.electricity_ppi ? "🟢" : "🔴"}`}</Body>
@@ -924,15 +960,21 @@ const ContractDetail = (props) => {
                   </Column>
 
                   <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start', marginTop: '3%'} : {}}>
-                  {(typeContainsGas) &&
+                  {(contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') &&
                     <>
                       <SmallSubHeading><b>PPI Gás:</b></SmallSubHeading>
                       <Body className={"field"}>{` ${contract?.gas_ppi ? "🟢" : "🔴"}`}</Body>
                     </>
                   }
 
+                  {(contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') &&
+                    <>
+                      <SmallSubHeading><b>MGI:</b></SmallSubHeading>
+                      <Body className={"field"}>{` ${contract?.mgi ? "🟢" : "🔴"}`}</Body>
+                    </>
+                  }
 
-                  {(typeContainsElectricity) &&
+                  {(contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity') &&
                     <>
                       <SmallSubHeading><b>PEL:</b></SmallSubHeading>
                       <Body className={"field"}>{` ${contract?.pel ? "🟢" : "🔴"}`}</Body>

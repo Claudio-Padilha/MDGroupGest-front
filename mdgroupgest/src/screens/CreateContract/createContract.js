@@ -29,6 +29,7 @@ const CreateContract = (props) => {
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
   const [currentForm, setCurrentForm] = useState('')
+  const [comissionObj, setComissionObj] = useState(null)
 
   function _allEmployees() {
     var allEmployees = []
@@ -123,6 +124,9 @@ const CreateContract = (props) => {
     }
   }, [isLoading])
 
+  const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value
+  const mtId = infoForFields?.powersList.find(power => power?.label === 'MT')?.value
+
   setTimeout(() => {
     setIsLoading(false)
   }, [1000]);
@@ -171,6 +175,8 @@ const CreateContract = (props) => {
       return "";
     }
 
+    console.log(data, 'DATA');
+
     var user = data?.employeeName;
     var clientName = data?.clientName ;
     var clientNif = data?.clientNif;
@@ -207,6 +213,33 @@ const CreateContract = (props) => {
 
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
+
+    const contractObj = {
+      contract: {
+        user: user,
+        office: currentOfficeID,
+        delivery_date: deliveryWorkedDate,
+        signature_date: signatureWorkedDate,
+        client_name: clientName,
+        client_nif: clientNif,
+        client_contact: clientContact,
+        electronic_bill: electronicBill ? electronicBill : false,
+        cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
+        electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
+        mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
+        cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
+        gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
+        pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
+        observations: observations,
+        feedback_call: feedbackCall,
+        payment: paymentMethods,
+        sell_state: sellState,
+        power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
+        gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
+        contract_type: typeOfContractFromProps,
+      },
+      comissions: comissionObj
+    }
 
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -257,38 +290,6 @@ const CreateContract = (props) => {
     <b>Potência Contratada:</b> ${powerDUAL ? powerDUAL : `❌`} <br>
     <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
 
-    const contractObj = {
-      contract: {
-        user: user,
-        office: currentOfficeID,
-        delivery_date: deliveryWorkedDate,
-        signature_date: signatureWorkedDate,
-        client_name: clientName,
-        client_nif: clientNif,
-        client_contact: clientContact,
-        electronic_bill: electronicBill ? electronicBill : false,
-        cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
-        electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
-        mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
-        cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
-        gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
-        pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
-        observations: observations,
-        feedback_call: feedbackCall,
-        payment: paymentMethods,
-        sell_state: sellState,
-        power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
-        gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
-        contract_type: typeOfContractFromProps,
-      }
-
-      // comission: {
-      //   power: ,
-      //   office_comission: ,
-      //   employee_comission:
-      // } ?? null
-    }
-
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {
         case "electricity":
@@ -308,78 +309,116 @@ const CreateContract = (props) => {
       }
     }
 
-      return (
-        swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados inseridos: ',
-        html: _currentConfirmationMessage(),
+    const showDynamicPowerModal = (
+      powerDUAL === bteId ||
+      powerDUAL === mtId ||
+      powerForElectricity === bteId ||
+      powerForElectricity === mtId
+    )
+
+    if (showDynamicPowerModal) {
+      return swalWithBootstrapButtons.fire({
+        title: 'Escolheu uma potência dinâmica, escreva os valores: ',
+        html: '<input id="dynamicPower" placeholder="Potência" class="swal2-input">' +
+              '<input id="officeComission" placeholder="Comissão Escritório" class="swal2-input">' +
+              '<input id="employeeComission" placeholder="Comissão Comercial" class="swal2-input">',
         icon: 'warning',
         showCancelButton: true,
         confirmButtonText: 'É isso!',
         cancelButtonText: 'Refazer',
         reverseButtons: true
-        }).then(async (result) => {
+        }).then((result) => {
+          if (result) {
+            var dynamicPower = document.getElementById('dynamicPower')?.value
+            var officeComission = document.getElementById('officeComission')?.value
+            var employeeComission = document.getElementById('employeeComission')?.value
+          }
 
-        // "result.isConfimed significa clicar em "'E isso!"
-          if (result.isConfirmed) {
-            await contractsRequests.createContract(contractObj)
-            .then(res => {
-              const clientSideError = res?.message?.match(/400/g);
-              const serverSideError = res?.message?.match(/500/g);
-              dataRequests.getResultsToPresent();
+          setComissionObj({
+            comissions: {
+              dynamic_power: dynamicPower,
+              office_comission: officeComission,
+              employee_comission: employeeComission
+            }
+          })
 
-              if (clientSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Contrato não inserido, tente de novo. (Verifique os campos)',
-                  'error'
-                )
-                
-              } else if (serverSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Erro no servidor. Tente novamente mais tarde.',
-                  'error'
-                )
-              } else {
-                return swalWithBootstrapButtons.fire({
-                  title: 'Boa!',
-                  html: `Contrato inserido com sucesso. <br>                                               
-                  Queres continuar a inserir?<br> `,
-                  icon: 'success',
-                  showCancelButton: true,
-                  confirmButtonText: 'Sim!',
-                  cancelButtonText: 'Não',
-                  reverseButtons: true
-                }).then(async (result) => {
-                  if(result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
-                    await dataRequests.getOfficeResults(currentOfficeID)
-                    await dataRequests.getMySalary()
-                    return history.push({pathname:"/ChooseTypeOfContract"});
-                  } else if(!result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
-                    await dataRequests.getOfficeResults(currentOfficeID)
-                    await dataRequests.getMySalary()
-                    return history.push({
-                      pathname: "/BackOffice",
-                    });
-                    // window.location.assign("/ContractList");
-                  }
-                });
-              }
-            })
-        // "!result.isConfimed significa clicar em "Refazer" 
-          } else if (!result.isConfirmed) {
-            swalWithBootstrapButtons.fire(
-              'Cancelado',
-              'Corrija o que estava errado...',
-              'info'
+          if (result?.isConfirmed) {
+            return (
+              swalWithBootstrapButtons.fire({
+              title: 'Confirme os dados inseridos: ',
+              html: _currentConfirmationMessage(),
+              icon: 'warning',
+              showCancelButton: true,
+              confirmButtonText: 'É isso!',
+              cancelButtonText: 'Refazer',
+              reverseButtons: true
+              }).then(async (result) => {
+      
+              // "result.isConfimed significa clicar em "'E isso!"
+                if (result.isConfirmed) {
+                  await contractsRequests.createContract(contractObj)
+                  .then(res => {
+                    const clientSideError = res?.message?.match(/400/g);
+                    const serverSideError = res?.message?.match(/500/g);
+                    dataRequests.getResultsToPresent();
+      
+                    if (clientSideError) {
+                      return swalWithBootstrapButtons.fire(
+                        'Erro',
+                        'Contrato não inserido, tente de novo. (Verifique os campos)',
+                        'error'
+                      )
+                      
+                    } else if (serverSideError) {
+                      return swalWithBootstrapButtons.fire(
+                        'Erro',
+                        'Erro no servidor. Tente novamente mais tarde.',
+                        'error'
+                      )
+                    } else {
+                      return swalWithBootstrapButtons.fire({
+                        title: 'Boa!',
+                        html: `Contrato inserido com sucesso. <br>                                               
+                        Queres continuar a inserir?<br> `,
+                        icon: 'success',
+                        showCancelButton: true,
+                        confirmButtonText: 'Sim!',
+                        cancelButtonText: 'Não',
+                        reverseButtons: true
+                      }).then(async (result) => {
+                        if(result.isConfirmed) {
+                          await contractsRequests.getContracts(currentOfficeID)
+                          await dataRequests.getOfficeResults(currentOfficeID)
+                          await dataRequests.getMySalary()
+                          return history.push({pathname:"/ChooseTypeOfContract"});
+                        } else if(!result.isConfirmed) {
+                          await contractsRequests.getContracts(currentOfficeID)
+                          await dataRequests.getOfficeResults(currentOfficeID)
+                          await dataRequests.getMySalary()
+                          return history.push({
+                            pathname: "/BackOffice",
+                          });
+                          // window.location.assign("/ContractList");
+                        }
+                      });
+                    }
+                  })
+              // "!result.isConfimed significa clicar em "Refazer" 
+                } else if (!result.isConfirmed) {
+                  swalWithBootstrapButtons.fire(
+                    'Cancelado',
+                    'Corrija o que estava errado...',
+                    'info'
+                  )
+                }
+              })
             )
           }
         })
-      )
-
+    }
   }
+
+  console.log(comissionObj, 'OBJETO DA COMISSÃO')
 
   const ELECTRICITYFIELDS = [
     { 
@@ -506,7 +545,7 @@ const CreateContract = (props) => {
       key: "employeeName",
       question: "Nome do Comercial",  
       options: _allEmployees() 
-  },
+    },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientNif", question: "NIF / NIPC Cliente" },
     { type: "number", subType: "twoColumns", side: "right", key: "clientContact", question: "Contacto Cliente" },
@@ -538,7 +577,6 @@ const CreateContract = (props) => {
       question: "Estado da venda",
       options: _getSellStates()
     },
-
     {
       type: "dropdown",
       subType: "twoColumns",
@@ -548,7 +586,6 @@ const CreateContract = (props) => {
       question: "Método de Pagamento",
       options: _getPaymentMethods()
     },   
-    
     {
       type: "dropdown",
       subType: "twoColumns",
