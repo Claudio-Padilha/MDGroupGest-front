@@ -369,7 +369,7 @@ const ContractList = (props) => {
           { contract?.sell_state__name === "ok" &&
             <Column className={"contractComission"}>
               <List.Content>
-                <SmallSubHeading><b>Este contrato vale:</b></SmallSubHeading>
+                <SmallSubHeading><b>Comissão do comercial:</b></SmallSubHeading>
                 <Body className={"employeeComission"}>
                   {`${contract?.employee_comission === null ? '0' : `${contract?.employee_comission}`}€`}
                 </Body>

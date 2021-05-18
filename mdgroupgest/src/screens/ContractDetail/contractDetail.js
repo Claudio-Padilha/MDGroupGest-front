@@ -988,13 +988,13 @@ const ContractDetail = (props) => {
 
               <Column className={"secondColumn"}> 
                 <Row className={"firstRowInsideFirstColumn"}>  
-                  <Column>
+                  {/* <Column>
                     <SmallSubHeading><b>Comercial:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.user__name || ''}`}</Body>
 
                     <SmallSubHeading></SmallSubHeading>
                     <Body className={"field"}></Body>
-                  </Column>
+                  </Column> */}
 
                   <Column>
                     <SmallSubHeading><b>Comissão: </b></SmallSubHeading>
