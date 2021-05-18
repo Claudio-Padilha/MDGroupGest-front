@@ -29,7 +29,6 @@ const CreateContract = (props) => {
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
   const [currentForm, setCurrentForm] = useState('')
-  const [comissionObj, setComissionObj] = useState(null)
 
   function _allEmployees() {
     var allEmployees = []
@@ -216,33 +215,6 @@ const CreateContract = (props) => {
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
 
-    const contractObj = {
-      contract: {
-        user: user,
-        office: currentOfficeID,
-        delivery_date: deliveryWorkedDate,
-        signature_date: signatureWorkedDate,
-        client_name: clientName,
-        client_nif: clientNif,
-        client_contact: clientContact,
-        electronic_bill: electronicBill ? electronicBill : false,
-        cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
-        electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
-        mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
-        cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
-        gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
-        pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
-        observations: observations,
-        feedback_call: feedbackCall,
-        payment: paymentMethods,
-        sell_state: sellState,
-        power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
-        gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
-        contract_type: typeOfContractFromProps,
-      },
-      comissions: comissionObj
-    }
-
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
@@ -334,19 +306,46 @@ const CreateContract = (props) => {
         cancelButtonText: 'Refazer',
         reverseButtons: true
         }).then((result) => {
-          if (result) {
-            var dynamicPower = document.getElementById('dynamicPower')?.value
-            var officeComission = document.getElementById('officeComission')?.value
-            var employeeComission = document.getElementById('employeeComission')?.value
-          }
 
-          setComissionObj({
-            comissions: {
+          var dynamicPower = document.getElementById('dynamicPower')?.value
+          var officeComission = document.getElementById('officeComission')?.value
+          var employeeComission = document.getElementById('employeeComission')?.value
+
+
+          console.log()
+
+          const comissionObj= {
               dynamic_power: dynamicPower,
               office_comission: officeComission,
               employee_comission: employeeComission
-            }
-          })
+          }
+
+          const contractObj = {
+            contract: {
+              user: user,
+              office: currentOfficeID,
+              delivery_date: deliveryWorkedDate,
+              signature_date: signatureWorkedDate,
+              client_name: clientName,
+              client_nif: clientNif,
+              client_contact: clientContact,
+              electronic_bill: electronicBill ? electronicBill : false,
+              cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
+              electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
+              mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
+              cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
+              gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
+              pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
+              observations: observations,
+              feedback_call: feedbackCall,
+              payment: paymentMethods,
+              sell_state: sellState,
+              power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
+              gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
+              contract_type: typeOfContractFromProps,
+            },
+            comissions: comissionObj
+          }
 
           if (result?.isConfirmed) {
             return (
@@ -435,6 +434,36 @@ const CreateContract = (props) => {
 
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
+
+
+            const contractObj = {
+              contract: {
+                user: user,
+                office: currentOfficeID,
+                delivery_date: deliveryWorkedDate,
+                signature_date: signatureWorkedDate,
+                client_name: clientName,
+                client_nif: clientNif,
+                client_contact: clientContact,
+                electronic_bill: electronicBill ? electronicBill : false,
+                cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
+                electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
+                mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
+                cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
+                gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
+                pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
+                observations: observations,
+                feedback_call: feedbackCall,
+                payment: paymentMethods,
+                sell_state: sellState,
+                power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
+                gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
+                contract_type: typeOfContractFromProps,
+              },
+              comissions: null
+            }
+
+
             await contractsRequests.createContract(contractObj)
             .then(res => {
               const clientSideError = res?.message?.match(/400/g);
@@ -494,8 +523,6 @@ const CreateContract = (props) => {
       )
     }
   }
-
-  console.log(comissionObj, 'OBJETO DA COMISSÃO')
 
   const ELECTRICITYFIELDS = [
     { 
