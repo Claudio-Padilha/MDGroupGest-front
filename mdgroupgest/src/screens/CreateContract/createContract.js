@@ -200,10 +200,12 @@ const CreateContract = (props) => {
     var feedbackCall = data?.feedbackCall;
     var sellState = data?.sellState;
     var paymentMethods = data?.paymentMethods;
-    var powerForElectricity = data?.powerForElectricity;
-    var powerDUAL = data?.powerDUAL;
+    var powerForElectricity = data?.powerForElectricity || null;
+    var powerDUAL = data?.powerDUAL || null;
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
+
+    console.log(powerDUAL, 'POWER DUAL');
 
     const deliveryDateFormated = _formatDate(deliveryDate);
     const signatureDateFormated = _formatDate(signatureDate);
@@ -316,6 +318,10 @@ const CreateContract = (props) => {
       powerForElectricity === mtId
     )
 
+    console.log(bteId, 'BTE');
+    console.log(powerForElectricity, 'TESTE NO UNDEFINED');
+    console.log(mtId, 'MT');
+
     if (showDynamicPowerModal) {
       return swalWithBootstrapButtons.fire({
         title: 'Escolheu uma potência dinâmica, escreva os valores: ',
@@ -415,6 +421,77 @@ const CreateContract = (props) => {
             )
           }
         })
+    } else {
+      return (
+        swalWithBootstrapButtons.fire({
+        title: 'Confirme os dados inseridos: ',
+        html: _currentConfirmationMessage(),
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'É isso!',
+        cancelButtonText: 'Refazer',
+        reverseButtons: true
+        }).then(async (result) => {
+
+        // "result.isConfimed significa clicar em "'E isso!"
+          if (result.isConfirmed) {
+            await contractsRequests.createContract(contractObj)
+            .then(res => {
+              const clientSideError = res?.message?.match(/400/g);
+              const serverSideError = res?.message?.match(/500/g);
+              dataRequests.getResultsToPresent();
+
+              if (clientSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Contrato não inserido, tente de novo. (Verifique os campos)',
+                  'error'
+                )
+                
+              } else if (serverSideError) {
+                return swalWithBootstrapButtons.fire(
+                  'Erro',
+                  'Erro no servidor. Tente novamente mais tarde.',
+                  'error'
+                )
+              } else {
+                return swalWithBootstrapButtons.fire({
+                  title: 'Boa!',
+                  html: `Contrato inserido com sucesso. <br>                                               
+                  Queres continuar a inserir?<br> `,
+                  icon: 'success',
+                  showCancelButton: true,
+                  confirmButtonText: 'Sim!',
+                  cancelButtonText: 'Não',
+                  reverseButtons: true
+                }).then(async (result) => {
+                  if(result.isConfirmed) {
+                    await contractsRequests.getContracts(currentOfficeID)
+                    await dataRequests.getOfficeResults(currentOfficeID)
+                    await dataRequests.getMySalary()
+                    return history.push({pathname:"/ChooseTypeOfContract"});
+                  } else if(!result.isConfirmed) {
+                    await contractsRequests.getContracts(currentOfficeID)
+                    await dataRequests.getOfficeResults(currentOfficeID)
+                    await dataRequests.getMySalary()
+                    return history.push({
+                      pathname: "/BackOffice",
+                    });
+                    // window.location.assign("/ContractList");
+                  }
+                });
+              }
+            })
+        // "!result.isConfimed significa clicar em "Refazer" 
+          } else if (!result.isConfirmed) {
+            swalWithBootstrapButtons.fire(
+              'Cancelado',
+              'Corrija o que estava errado...',
+              'info'
+            )
+          }
+        })
+      )
     }
   }
 

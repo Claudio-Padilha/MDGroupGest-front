@@ -283,6 +283,8 @@ const ContractDetail = (props) => {
       contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
     }
 
+    console.log(document.getElementById('select-power'), 'TESTE NO DOCUMENTO')
+
     if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
       if ((document.getElementById("select-power").label === 'BTE' || document.getElementById("select-power").label === 'MT')) {
         return swalWithBootstrapButtons.fire({
@@ -783,7 +785,7 @@ const ContractDetail = (props) => {
                         }}
                       >
                         {optionsPower !== null ? optionsPower.map(power => (
-                          <MenuItem value={power.value}>
+                          <MenuItem value={power.value} label={power.name}>
                             {power.name}
                           </MenuItem>
                         )) : []}
