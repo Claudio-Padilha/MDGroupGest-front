@@ -194,19 +194,13 @@ const ContractDetail = (props) => {
     }
   }, [contract])
 
-  function updateContract (event) {
+  function setData(event) {
+
     event.preventDefault()
+
     let contractData = {
       id: contract.id,
     }
-
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: true
-    })
 
     if (document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
@@ -240,16 +234,43 @@ const ContractDetail = (props) => {
     if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
       contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
     }
+
     if (document.getElementById("select-feedback-call").value !== "") {
       contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
     }
-    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
-      contractData = {...contractData, ...{power: document.getElementById("select-power").value}}
-    } 
 
     if (document.getElementById("select-sell-state") !== null && document.getElementById("select-sell-state") !== "") {
       contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
     }
+
+    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
+      if (document.getElementById("select-power").label === 'BTE' || document.getElementById("select-power").label === 'MT') {
+        alert('') // construir alerta Swal com três campos
+        // comission: {
+        //   power: ,
+        //   office_comission: ,
+        //   employee_comission:
+        // } ?? null
+      } else {
+        contractData = {
+          contract: { ...contractData, ...{power: document.getElementById("select-power").value},
+          comission: null
+        }}
+
+        //updateContract(contractData)
+      }
+    }
+  }
+
+  async function updateContract (contractData) {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: true
+    })
 
     var result = window.confirm("Deseja realmente atualizar o contrato?")
     if (result) {
@@ -800,7 +821,7 @@ const ContractDetail = (props) => {
               </Row>  
 
               <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-              <Button action={updateContract} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
+              <Button action={setData} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
             </DialogActions>
           </form>
 

@@ -44,50 +44,6 @@ const CForm = ({
     return initialValues;
   }
 
-  // const Yup = require('yup')
-
-  // const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
-  // const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
-  // const numberMessage = 'Este campo é numérico.'
-
-  // const validationSchema = Yup.object().shape({
-  //   name: Yup.string(),
-  //   nr: Yup.string().max(5, 'Máximo 5 digits'),
-  //   nif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   zipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
-  //   contact: Yup.number(numberMessage),
-  //   clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   clientContact: Yup.number(numberMessage),
-  //   CPEDUAL: Yup.string()
-  //     .test(
-  //       'len',
-  //       'O formato deve ser: PT0002554877874469YK',
-  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-  //     ),
-  //   CPEForElectricity: Yup.string()
-  //     .test(
-  //       'len',
-  //       'O formato deve ser: PT0002554877874469YK',
-  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-  //     ),
-  //   CUIDUAL: Yup.string()
-  //     .test(
-  //       'len',
-  //       'O formato deve ser: PT0002554877874469YK',
-  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-  //     ),
-  //   CUIForGas: Yup.string()
-  //     .test(
-  //       'len',
-  //       'O formato deve ser: PT0002554877874469YK',
-  //       val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-  //     ),
-  //   officeName: Yup.string(),
-  //   officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-  //   email: Yup.string().email('Tipo de email inválido'),
-  // });
-
   return (
     <>
       <WidthMessageContainer>
@@ -142,7 +98,6 @@ const renderFields = (field, index, formik, formFields) => {
     initialValue: field?.initialValue,
     booleanValue: formik.values[field?.booleanValue],
   };  
-
 
   switch (field?.type) {
     case "text":

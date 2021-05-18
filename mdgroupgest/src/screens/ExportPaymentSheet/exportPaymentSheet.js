@@ -73,7 +73,11 @@ const ExportPaymentSheet = (props) => {
   }
 
 
-  async function createNewExcelFile(sheet) {
+  async function createNewExcelFile() {
+
+    await officesRequests.paymentSheetByPeriod(dateToSend)
+
+    const sheet = JSON.parse(localStorage.getItem('payrollSheet'))
 
     var Excel = require('exceljs')
     // A new Excel Work Book
@@ -163,6 +167,7 @@ const ExportPaymentSheet = (props) => {
     })
   }
 
+
   const dateToAPI = (date) => {
 
     var year = date.getFullYear()
@@ -207,20 +212,6 @@ const ExportPaymentSheet = (props) => {
     }
   }
   _allEmployees()
-
-  useEffect(() => {
-    if (dateToSend) {
-      officesRequests.paymentSheetByPeriod(dateToSend)
-    }
-  }, [dateToSend])
-
-  const payrollExcelSheet = useMemo(() => {
-    return JSON.parse(localStorage.getItem('payrollSheet'))
-  }, [dateToSend])
-
-  const allEmployees = useMemo(() => {
-    return JSON.parse(localStorage.getItem('allEmployees'))
-  }, [isFromBackOffice])
 
   let initialState = {
     currentOffice: currentOfficeObject
@@ -291,7 +282,7 @@ const ExportPaymentSheet = (props) => {
       </FirstRow>
 
       <SecondRow>
-        <ExportButton onClick={() => createNewExcelFile(payrollExcelSheet)}>
+        <ExportButton onClick={createNewExcelFile}>
           <Body>
             <MDButton style={{width: '22vw', height: '5vh', fontSize: '20px'}}>Exportar</MDButton>
           </Body>

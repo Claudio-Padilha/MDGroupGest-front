@@ -103,5 +103,8 @@ export const ButtonText = styled.span`
 `;
 
 export const ErrorText = styled(SmallBody)`
-  color: ${CONSTANTS?.colors.red};
+  color: ${CONSTANTS?.colors?.feedback?.error?.default};
+  font-size: 12px;
+  margin-top: 5px;
+  padding-top: 0;
 `;

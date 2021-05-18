@@ -120,7 +120,8 @@ export default {
       
       axios(request)
 
-      .then(res => {
+      .then((res) => {
+        console.log(res?.data, 'RES DATA');
         localStorage.removeItem('payrollSheet');
         localStorage.setItem('payrollSheet', JSON.stringify(res?.data));
         resolve(res);

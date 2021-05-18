@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
@@ -28,6 +28,7 @@ const CreateContract = (props) => {
   }, [])
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
+  const [currentForm, setCurrentForm] = useState('')
 
   function _allEmployees() {
     var allEmployees = []
@@ -198,14 +199,6 @@ const CreateContract = (props) => {
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
 
-    var name = '';
-    var nif = '';
-    var nipc = '';
-    var address = '';
-    var contact = '';
-    var email = '';
-    var zipCode = '';
-
     const deliveryDateFormated = _formatDate(deliveryDate);
     const signatureDateFormated = _formatDate(signatureDate);
 
@@ -214,25 +207,6 @@ const CreateContract = (props) => {
 
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
-
-    // await _executeValidationsIfHas(
-    //   name,
-    //   nif,
-    //   nipc,
-    //   address,
-    //   contact,
-    //   email,
-    //   zipCode,
-    //   clientName,
-    //   clientNif,
-    //   clientContact,
-    //   CUIDUAL,
-    //   CUIForGas,
-    //   CPEDUAL,
-    //   CPEForElectricity,
-    //   observations
-    // )
-    // const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
 
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -284,31 +258,35 @@ const CreateContract = (props) => {
     <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
 
     const contractObj = {
-      user: user,
-      office: currentOfficeID,
-      delivery_date: deliveryWorkedDate,
-      signature_date: signatureWorkedDate,
-      client_name: clientName,
-      client_nif: clientNif,
-      client_contact: clientContact,
-      electronic_bill: electronicBill ? electronicBill : false,
-      cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
-      electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
-      mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
-      cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
-      gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
-      pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
-      observations: observations,
-      feedback_call: feedbackCall,
-      payment: paymentMethods,
-      sell_state: sellState,
-      power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
-      gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
-      contract_type: typeOfContractFromProps,
-      //comission: {
-      // office_comission: value ?? null ,
-      // employee_comission:
-      //}  // valor que vem do alerta
+      contract: {
+        user: user,
+        office: currentOfficeID,
+        delivery_date: deliveryWorkedDate,
+        signature_date: signatureWorkedDate,
+        client_name: clientName,
+        client_nif: clientNif,
+        client_contact: clientContact,
+        electronic_bill: electronicBill ? electronicBill : false,
+        cpe: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? CPEDUAL : CPEForElectricity,
+        electricity_ppi: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? lightPPIDUAL ? lightPPIDUAL : false : lightPPIForElectricity ? lightPPIForElectricity : false,
+        mgi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? MGIForDUAL ? MGIForDUAL : false : MGIForGas ? MGIForGas : false,
+        cui: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? CUIDUAL : CUIForGas,
+        gas_ppi: typeOfContractFromProps === "electricity" ? null : typeOfContractFromProps === "dual" ? gasPPIDUAL ? gasPPIDUAL : false : gasPPIForGas ? gasPPIForGas : false ,
+        pel: typeOfContractFromProps === "gas" ? null : typeOfContractFromProps === "dual" ? PELForDUAL ? PELForDUAL : false : PELForElectricity ? PELForElectricity : false,
+        observations: observations,
+        feedback_call: feedbackCall,
+        payment: paymentMethods,
+        sell_state: sellState,
+        power: typeOfContractFromProps === "gas" || typeOfContractFromProps === "condominium_gas" ? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? powerDUAL : powerForElectricity,
+        gas_scale: typeOfContractFromProps === "electricity" || typeOfContractFromProps === "condominium_electricity"? null : typeOfContractFromProps === "dual" || typeOfContractFromProps === "condominium_dual"? gasScaleDUAL : gasScaleForGas,
+        contract_type: typeOfContractFromProps,
+      }
+
+      // comission: {
+      //   power: ,
+      //   office_comission: ,
+      //   employee_comission:
+      // } ?? null
     }
 
     function _currentConfirmationMessage() {
@@ -330,7 +308,6 @@ const CreateContract = (props) => {
       }
     }
 
-    if(true){
       return (
         swalWithBootstrapButtons.fire({
         title: 'Confirme os dados inseridos: ',
@@ -401,7 +378,7 @@ const CreateContract = (props) => {
           }
         })
       )
-    }
+
   }
 
   const ELECTRICITYFIELDS = [
@@ -593,24 +570,23 @@ const CreateContract = (props) => {
     },   
   ];
 
-  // switch para identificar tipo de contrato, fazendo match depois do _ de condominium
-  // e depois usar um ternário para identificar se é condomínio ou não para mostrar 
-  // a lista correta de potência 👇🏻
   const DYNAMICFORMFIELDS = useMemo(() => {
     switch (typeOfContractFromProps) {
       case "electricity":
       case "condominium_electricity":
+        setCurrentForm('electricity')
         return ELECTRICITYFIELDS;
 
       case "gas":
       case "condominium_gas":
+        setCurrentForm('gas')
         return GASFIELDS;
 
       case "dual":
       case "condominium_dual":
+        setCurrentForm('dual')
         return DUALFIELDS;
     
-
     }
   }, [typeOfContractFromProps, window])
 
@@ -619,16 +595,32 @@ const CreateContract = (props) => {
   const CPEAndCUIRegex = new RegExp(/^PT+[0-9]+[0-9]+[A-Z]+[A-Z]/)
   const numberMessage = 'Este campo é numérico.'
 
-  const validationSchema = Yup.object().shape({
+  const validationSchemaGas = Yup.object().shape({
     clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
     clientContact: Yup.number(numberMessage),
-    CPEDUAL: Yup.string()
+    CUIForGas: Yup.string()
+      .test(
+        'len',
+        'O formato deve ser: PT0002554877874469YK',
+        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
+      )
+  });
+
+  const validationSchemaElectricity = Yup.object().shape({
+    clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    clientContact: Yup.number(numberMessage),
+    CPEForElectricity: Yup.string()
       .test(
         'len',
         'O formato deve ser: PT0002554877874469YK',
         val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
       ),
-    CPEForElectricity: Yup.string()
+  });
+
+  const validationSchemaDual = Yup.object().shape({
+    clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    clientContact: Yup.number(numberMessage),
+    CPEDUAL: Yup.string()
       .test(
         'len',
         'O formato deve ser: PT0002554877874469YK',
@@ -639,14 +631,22 @@ const CreateContract = (props) => {
         'len',
         'O formato deve ser: PT0002554877874469YK',
         val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-      ),
-    CUIForGas: Yup.string()
-      .test(
-        'len',
-        'O formato deve ser: PT0002554877874469YK',
-        val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
       )
   });
+
+  const validationSchema = useMemo(() => {
+    switch (currentForm) {
+      case 'gas':
+        return validationSchemaGas
+      case 'electricity':
+        return validationSchemaElectricity
+      case 'dual':
+        return validationSchemaDual
+    
+      default:
+        return;
+    }
+  }, [currentForm])
 
   console.log(DYNAMICFORMFIELDS, 'DYNAMIC FORM FIELDS')
 

@@ -1,13 +1,11 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 
-import { MainContainer, LoginContainer } from './styles';
+import { MainContainer, LoginContainer } from './styles'
 
-import Swal from 'sweetalert2';
-
-import Form from '../../components/Form/normalForm';
-import { LogoMD } from '../../components/Logo/logo';
-import { Corner, Corner180} from '../../components/Corner/corner';
-import userRequests from '../../hooks/requests/userRequests';
+import Form from '../../components/Form/normalForm'
+import { LogoMD } from '../../components/Logo/logo'
+import { Corner, Corner180} from '../../components/Corner/corner'
+import userRequests from '../../hooks/requests/userRequests'
  
 const Login = () => {
 
@@ -15,12 +13,12 @@ const Login = () => {
 
   setTimeout(() => {
     setIsForPassword(true)
-  }, 1000);
+  }, 1000)
 
   const FIELDS = [
     { type: "email", key: "email", question: "Email" },
     { type: "password", key: "password", question: "Senha", isForPassword: isForPassword },
-  ];
+  ]
 
   const handleSubmitForm = (formFields) => {
     try {
@@ -28,7 +26,7 @@ const Login = () => {
     } catch (error) {
       console.log(`Houve um erro: ${error?.message}`)
     }
-  };
+  }
 
   return(
     <MainContainer>
@@ -47,7 +45,7 @@ const Login = () => {
       <Corner180 />
       </LoginContainer>
     </MainContainer>
-  );
-};
+  )
+}
 
-export default Login;
+export default Login
