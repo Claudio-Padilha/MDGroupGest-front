@@ -40,6 +40,8 @@ import {
   WidthMessageContainer
 } from "./styles";
 
+import './styles.css';
+
 const ContractDetail = (props) => {
 
   const [isLoading, setIsLoading] = useState(true);
@@ -241,6 +243,8 @@ const ContractDetail = (props) => {
 
     console.log(contractData, 'TESTE DO CONTRACT DATA')
 
+    const powerValue = JSON.parse(document.getElementById('select-power').value)
+
     if (document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
     }
@@ -283,10 +287,9 @@ const ContractDetail = (props) => {
       contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
     }
 
-    console.log(document.getElementById('select-power'), 'TESTE NO DOCUMENTO')
-
-    if (document.getElementById("select-power") !== null && document.getElementById("select-power").value !== "") {
-      if ((document.getElementById("select-power").label === 'BTE' || document.getElementById("select-power").label === 'MT')) {
+    if (powerValue !== null && powerValue !== "") {
+      if ((powerValue?.name === 'BTE' || powerValue?.name === 'MT')) {
+        setOpen(false)
         return swalWithBootstrapButtons.fire({
           title: 'Escolheu uma potência dinâmica, escreva os valores: ',
           html: '<input id="dynamicPower" placeholder="Potência" class="swal2-input">' +
@@ -298,31 +301,35 @@ const ContractDetail = (props) => {
           cancelButtonText: 'Refazer',
           reverseButtons: true
           }).then((result) => {
-            if (result) {
+            if (result.isConfirmed) {
               var dynamicPower = document.getElementById('dynamicPower')?.value
               var officeComission = document.getElementById('officeComission')?.value
               var employeeComission = document.getElementById('employeeComission')?.value
-            }
-  
-            comissionObj = {
-              comissions: {
+
+              comissionObj = {
                 dynamic_power: dynamicPower,
                 office_comission: officeComission,
                 employee_comission: employeeComission
               }
+
+              contractData = { contract: contractData, comissions: comissionObj }
+              updateContract(contractData)
             }
+  
+
           })
       } else {
         contractData = {
-          contract: { ...contractData, ...{power: document.getElementById("select-power").value},
+          contract: { ...contractData, ...{ power: powerValue?.value},
           comissions: null
         }}
+
+        updateContract(contractData)
       }
     }
 
-    console.log(contractData, 'CONTRACT DATA');
 
-    updateContract(contractData)
+    
   }
 
   const stateMessage = useMemo(() => {
@@ -450,80 +457,6 @@ const ContractDetail = (props) => {
     {name: "ko", value: 2},
     {name: "r", value: 3}
   ]
-
-  function _ConfirmContractActivation(contract) {
-    const sellStateID = () => {
-      const sellStatesOnRAM = JSON.parse(localStorage.getItem('sellStates'));
-      const sellStateMatched = sellStatesOnRAM.find(sellState => { return sellState?.name === 'ok' })
-      return sellStateMatched
-    }
-
-    const sellStateIDTOActivate = sellStateID()?.id;
-
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: true
-    })
-
-      return (
-        swalWithBootstrapButtons.fire({
-        title: 'Tem certeza?',
-        html: 
-          `Não é possível desativar um contrato.<br>`,
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonText: 'É isso!',
-        cancelButtonText: 'Cancelar',
-        reverseButtons: true
-      }).then(async (result) => {
-
-        // "result.isConfimed significa clicar em "É isto"
-          if (result.isConfirmed) {
-            await contractsRequests.updateContract({id: contract?.id, sell_state: sellStateIDTOActivate})
-            .then(async (res) => {
-              await contractsRequests.getContracts(currentOfficeID)
-              const clientSideError = res?.message?.match(/400/g);
-              const serverSideError = res?.message?.match(/500/g);
-
-              if(clientSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Algo correu mal... tente de novo.',
-                  'error'
-                )
-              } else if (serverSideError) {
-                return swalWithBootstrapButtons.fire(
-                  'Erro',
-                  'Erro no servidor. Tente novamente mais tarde.',
-                  'error'
-                )
-              } else {
-                swalWithBootstrapButtons.fire(
-                  'Boa!',
-                  'Contrato ativado com sucesso.',
-                  'success'
-                ).then(async result => {
-                  if (result.isConfirmed) {
-                    setIsLoading(true)
-                    history.push({pathname: "/BackOffice"})
-                  }
-                })
-              }
-            })
-        // "!result.isConfimed significa clicar em "Refazer!"
-          } else if (!result.isConfirmed) {
-            swalWithBootstrapButtons.fire(
-              'Cancelado',
-              'Corrija o que estava errado...',
-              'info'
-            )
-          }
-        })
-      )
-  }
 
   const [gasPPI, setGasPPI] = useState(contract?.gas_ppi)
   const [electricityPPI, setElectricityPPI] = useState(contract?.electricity_ppi)
@@ -785,7 +718,7 @@ const ContractDetail = (props) => {
                         }}
                       >
                         {optionsPower !== null ? optionsPower.map(power => (
-                          <MenuItem value={power.value} label={power.name}>
+                          <MenuItem value={JSON.stringify(power)}>
                             {power.name}
                           </MenuItem>
                         )) : []}
@@ -867,16 +800,25 @@ const ContractDetail = (props) => {
         </Dialog>
 
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
-          <Row style={{ width: '35%', display: 'flex', justifyContent: 'space-between'}}>
-            <Heading>{`Contrato nº: ${contractNumber}`}</Heading>
-            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '14%', left: '38%'}}/>
-          </Row> 
+          <Column style={{ width: '80%', display: 'flex', justifyContent: 'space-between'}}>
+            <Heading style={{marginBottom: '0'}}>{contract?.user__name}</Heading>
+            <Heading style={{marginTop: '-1vh'}}>
+              <span style={{ 
+                  borderBottom: '2px solid',
+                  borderBottomColor: `${CONSTANTS?.colors?.black}`
+                }}
+              >
+                {contract?.signature_date}
+              </span>
+            </Heading>
+            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '15%', left: '75%'}}/>
+          </Column> 
           <Row>
             <Body style={
               {
                 fontWeight: "bold",
                 marginLeft: 5,
-                marginTop: -35,
+                marginTop: -30,
                 marginBottom: 40,
                 textShadow: "2px 2px 4px rgba(200, 200, 200, 0.8)"
               }
@@ -885,7 +827,7 @@ const ContractDetail = (props) => {
               {
                 fontSize: 14,
                 marginLeft: 10,
-                marginTop: -35,
+                marginTop: -30,
                 marginBottom: 40,
               }
             }>{stateMessage}</Body>
@@ -898,7 +840,7 @@ const ContractDetail = (props) => {
                     color: `${CONSTANTS?.colors?.brand?.blue}`,
                     fontWeight: "bold",
                     marginLeft: 20,
-                    marginTop: -34,
+                    marginTop: -30,
                     cursor: "pointer",
                     marginBottom: 40,
                   }
@@ -914,7 +856,7 @@ const ContractDetail = (props) => {
                   color: `${CONSTANTS?.colors?.black}`,
                   fontWeight: "bold",
                   marginLeft: 20,
-                  marginTop: -34,
+                  marginTop: -30,
                   marginBottom: 40,
                 }
               }>({contractType})</Body>
@@ -1007,7 +949,7 @@ const ContractDetail = (props) => {
 
                 <Row className={"secondRowInsideFirstColumn"}>  
                   <Column style={typeContainsElectricity || typeContainsGas ? { justifyContent: 'flex-start'} : {}}>
-                    <SmallSubHeading><b>Estado da venda:</b></SmallSubHeading>
+                    <SmallSubHeading style={{marginRight: '1vw'}}><b>Estado da venda:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.sell_state__name || ''}`}</Body>
 
                     {(typeContainsGas) && 
@@ -1034,7 +976,7 @@ const ContractDetail = (props) => {
                     {(typeContainsElectricity) && 
                       <>
                         <SmallSubHeading><b>Potência:</b></SmallSubHeading>
-                        <Body className={"field"}>{` ${contract?.power__name || ''}`}</Body>                     
+                        <Body className={"field"}>{` ${ contract?.dynamic_power !== null ? `${contract?.dynamic_power} kVA` : `${contract?.power__name} kVA`}`}</Body>                     
                       </>
                     }
 

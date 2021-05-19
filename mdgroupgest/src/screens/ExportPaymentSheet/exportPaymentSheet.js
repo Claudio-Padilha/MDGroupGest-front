@@ -79,6 +79,8 @@ const ExportPaymentSheet = (props) => {
 
     const sheet = JSON.parse(localStorage.getItem('payrollSheet'))
 
+    console.log(sheet, 'SHEEET')
+
     var Excel = require('exceljs')
     // A new Excel Work Book
     var workbook = new Excel.Workbook()
@@ -135,12 +137,12 @@ const ExportPaymentSheet = (props) => {
             gas_ppi: `${sheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
             mgi: `${sheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
             cpe: sheet[i]?.itens[j]?.cpe,
-            power: `${sheet[i]?.itens[j]?.power__name !== null && (sheet[i]?.itens[j]?.power__name[0] === 'b' || sheet[i]?.itens[j]?.power__name[0] === 'm') ? sheet[i]?.itens[j]?.power__name : `${sheet[i]?.itens[j]?.power__name} kVA`}`,
+            power: `${ sheet[i]?.itens[j]?.dynamic_power !== null ? `${sheet[i]?.itens[j]?.dynamic_power} kVA` : `${sheet[i]?.itens[j]?.power__name} kVA`}`,
             cui: sheet[i]?.itens[j]?.cui,
             gas_scale: sheet[i]?.itens[j]?.gas_scale__name,
             sell_state: sheet[i]?.itens[j]?.sell_state__name.toUpperCase(),
             observations: sheet[i]?.itens[j]?.observations,
-            employee_comission: `${sheet[i]?.itens[j]?.employee_comission}€`,
+            employee_comission: sheet[i]?.itens[j]?.employee_comission === null ? 'anulado' : `${sheet[i]?.itens[j]?.employee_comission}€`,
           }
         )
       }
