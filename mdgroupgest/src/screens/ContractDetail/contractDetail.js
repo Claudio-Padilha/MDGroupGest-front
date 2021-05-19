@@ -476,7 +476,7 @@ const ContractDetail = (props) => {
     
     return (
       <>
-        <Dialog style={{padding: '2%'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
+        <Dialog style={{padding: '2%', zIndex: '500'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
         <WidthMessageContainer>
           <Heading>Você precisa de mais espaço!</Heading>
           <SubHeading>Volte ao tamanho necessário.</SubHeading>
