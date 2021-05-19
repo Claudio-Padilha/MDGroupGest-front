@@ -320,9 +320,9 @@ const ContractDetail = (props) => {
           })
       } else {
         contractData = {
-          contract: { ...contractData, ...{ power: powerValue?.value},
+          contract: { ...contractData, power: powerValue?.value },
           comissions: null
-        }}
+        }
 
         updateContract(contractData)
       }

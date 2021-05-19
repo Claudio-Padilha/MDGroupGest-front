@@ -31,7 +31,7 @@ import {
 
 const OfficeMonthResult = (props) => {
 
-  const valid_contract_value = JSON.parse(localStorage.getItem('myCurrentSalary'));
+  const valid_contract_value = JSON.parse(localStorage.getItem('officeResults'));
 
   const data = props?.location?.state?.contracts?.dataToDiagram
   const user = JSON.parse(localStorage.getItem('currentUser'))
