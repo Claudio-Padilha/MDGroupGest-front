@@ -469,35 +469,35 @@ const ContractList = (props) => {
             <SearchBar onChange={(e) => {
               setIsSearching(true)
               _handleSearchName(e.target.value.toLowerCase())
-            }} onBlur={() => setIsSearching(false)}/>
+            }}/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>Potência</Body>
             <SearchBar onChange={(e) => {
                 setIsSearching(true)
                 _handleSearchPower(e.target.value.toLowerCase())
-              }} onBlur={() => setIsSearching(false)}/>
+              }}/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
             <SearchBar onChange={(e) => {
                 setIsSearching(true)
                 _handleSearchNif(e.target.value.toLowerCase())
-              }} onBlur={() => setIsSearching(false)}/>
+              }}/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
             <SearchBar onChange={(e) => {
                 setIsSearching(true)
                 _handleSearchContractType(e.target.value.toLowerCase())
-              }} onBlur={() => setIsSearching(false)}/>
+              }}/>
           </Col>  
           <Col>
             <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
             <SearchBar onChange={(e) => {
                 setIsSearching(true)
                 _handleSearchSellState(e.target.value.toLowerCase())
-              }} onBlur={() => setIsSearching(false)}/>
+              }}/>
           </Col>  
         </Row>
         <List divided verticalAlign="middle" className={"listContainer"}>
