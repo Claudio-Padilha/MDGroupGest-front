@@ -52,6 +52,8 @@ const ContractList = (props) => {
 
   const { isCEO, isAdministrator, isRegularManager, isRegularSecretary } = useAuth()
 
+  const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
+
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
   const cameFromUpdate = props?.location?.state?.cameFromUpdate
@@ -124,15 +126,6 @@ const ContractList = (props) => {
     })
 
     return contractsFromDelete;
-  }
-
-  function _handleEditEmployee() {      // CHANGE THIS TO HANDLE CONTRACT UPDATE
-    history.push({
-      pathname: "/EmployeeEdit",
-      // state: {
-      //   employeeData: employee
-      // }
-    })
   }
 
   const [display, setDisplay] = useState('flex')
@@ -321,7 +314,7 @@ const ContractList = (props) => {
                   {`${contract?.user__name} - `}
                   <span style={spanStyle}>{contract?.signature_date}</span>
                 </SubHeading>
-              { contract?.sell_state__name !== 'ok' &&
+              { contract?.sell_state__name !== 'ok' && haveAccess &&
                 <Button
                   style={buttonStyle}
                   disabled={false}

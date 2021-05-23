@@ -377,7 +377,7 @@ const TeamReportDetail = (props) => {
       <div style={{marginBottom: '10vh'}}>
         <Heading style={{ color: CONSTANTS?.colors?.darkGrey, marginTop: '10vh' }}>
           { horizontalLine() }
-          Salário
+          Faturação
         </Heading>
         <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
           { renderThirdCards()}

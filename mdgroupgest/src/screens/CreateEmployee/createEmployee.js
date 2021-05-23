@@ -322,15 +322,14 @@ const CreateEmployee = (props) => {
 
   const Yup = require('yup')
 
-  const zipCodeRegex = new RegExp(/^\d{4}\d{3}?$/)
+  const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
   const numberMessage = 'Este campo é numérico.'
 
   const validationSchema = Yup.object().shape({
     name: Yup.string().required('* O campo é obrigatório'),
-    nr: Yup.string().max(5, 'Máximo 5 digits'),
     email: Yup.string().email('Tipo de email inválido').required('* O campo é obrigatório'),
     nif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    zipCode: Yup.string().test('format', 'O formato deve ser: 1234123', val => val?.match(zipCodeRegex)),
+    zipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
     contact: Yup.number(numberMessage)    
   });
 

@@ -133,12 +133,12 @@ const MyResults = (props) => {
       flexDirection: 'column',
       alignItems: 'center',
     };
-    
+    console.log(state, 'ESTADO');
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
 
-          { !isRegularManager && !isRegularSecretary && 
+          { !isCEO && !isAdministrator && !isRegularManager && !isRegularSecretary && 
             <Col style={colStyle}>
 
               <SmallSubHeading style={
@@ -147,7 +147,7 @@ const MyResults = (props) => {
                   color: `${CONSTANTS?.colors?.darkGrey}`,
                 }
               }>
-                O seu salário até agora está em
+                A tua faturação até agora está em
               </SmallSubHeading>
               <Heading style={
                 {
@@ -158,6 +158,30 @@ const MyResults = (props) => {
                 }
               }>
                 {state?.currentSalary}€
+              </Heading>
+            </Col>
+          }
+
+          { (isAdministrator || isRegularSecretary) && 
+            <Col style={colStyle}>
+
+              <SmallSubHeading style={
+                {
+                  marginTop: '10%',
+                  color: `${CONSTANTS?.colors?.darkGrey}`,
+                }
+              }>
+                O total de contratos é de
+              </SmallSubHeading>
+              <Heading style={
+                {
+                  marginTop: '-5%',
+                  textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
+                  color: `${CONSTANTS?.colors?.green}`,
+                  fontSize: '56px',
+                }
+              }>
+                {state?.allContractsQtd}
               </Heading>
             </Col>
           }
@@ -184,21 +208,6 @@ const MyResults = (props) => {
                 {state?.currentFacturing}€
               </Heading>
 
-            </Col>
-          }
-
-          { isRegularSecretary &&
-            <Col style={colStyle}>
-              <SmallSubHeading style={{
-                marginTop: '10%',
-                color: `${CONSTANTS?.colors?.darkGrey}`,
-              }}>A faturação do escritório até agora é de</SmallSubHeading>
-              <Heading style={{
-                marginTop: '-5%',
-                textShadow: '2px 2px 3px rgba(0, 0, 0, 0.4)',
-                color: `${CONSTANTS?.colors?.green}`,
-                fontSize: '56px',
-              }}>{state?.currentFacturing}€</Heading>
             </Col>
           }
 

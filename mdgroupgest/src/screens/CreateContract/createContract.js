@@ -29,6 +29,7 @@ const CreateContract = (props) => {
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
   const [currentForm, setCurrentForm] = useState('')
+  const [dynamicPowerConfirmation, setDynamicPowerConfirmation] = useState('')
 
   function _allEmployees() {
     var allEmployees = []
@@ -99,7 +100,14 @@ const CreateContract = (props) => {
   function _getPowersList() {
     let powersListArr = []
     for(let i = 0; i < powersList?.length; i++) {
-      powersListArr.push({value: powersList[i]?.id, label: powersList[i]?.name.toUpperCase() })
+      powersListArr.push({
+        value: 
+        { 
+          value: powersList[i]?.id, 
+          label: powersList[i]?.name.toUpperCase() 
+        }, 
+        label: powersList[i]?.name.toUpperCase() 
+      })
     }
 
     return powersListArr
@@ -123,8 +131,8 @@ const CreateContract = (props) => {
     }
   }, [isLoading])
 
-  const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value
-  const mtId = infoForFields?.powersList.find(power => power?.label === 'MT')?.value
+  const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label
+  const mtId = infoForFields?.powersList.find(power => power?.label === 'MT')?.value?.label
 
   setTimeout(() => {
     setIsLoading(false)
@@ -140,6 +148,8 @@ const CreateContract = (props) => {
       window.location.replace('#/ChooseTypeOfContract') :
       window.location.replace('#/BackOffice'); 
   }
+
+  console.log(infoForFields, 'INFO ')
 
   async function _ConfirmContractCreation(data) {
 
@@ -174,8 +184,6 @@ const CreateContract = (props) => {
       return "";
     }
 
-    console.log(data, 'DATA');
-
     var user = data?.employeeName;
     var clientName = data?.clientName ;
     var clientNif = data?.clientNif;
@@ -199,12 +207,13 @@ const CreateContract = (props) => {
     var feedbackCall = data?.feedbackCall;
     var sellState = data?.sellState;
     var paymentMethods = data?.paymentMethods;
-    var powerForElectricity = data?.powerForElectricity || null;
-    var powerDUAL = data?.powerDUAL || null;
+    var powerForElectricity = data?.powerForElectricity?.value || null;
+    var powerDUAL = data?.powerDUAL?.value || null;
     var gasScaleDUAL = data?.gasScaleDUAL;
     var gasScaleForGas = data?.gasScaleForGas;
 
-    console.log(powerDUAL, 'POWER DUAL');
+    var powerForElectricityConfirmation = data?.powerForElectricity?.label || null;
+    var powerDUALConfirmation = data?.powerDUAL?.label || null;
 
     const deliveryDateFormated = _formatDate(deliveryDate);
     const signatureDateFormated = _formatDate(signatureDate);
@@ -214,6 +223,21 @@ const CreateContract = (props) => {
 
     var signatureDateBeforeJSON = signatureDate?.toJSON();
     var signatureWorkedDate = signatureDateBeforeJSON?.substring(0, 10);
+
+    console.log(bteId, 'BTE')
+    console.log(mtId, 'MT')
+
+    console.log(data, 'DATAAAAA')
+
+    const showDynamicPowerModal = (
+      powerDUALConfirmation === bteId ||
+      powerDUALConfirmation === mtId ||
+      powerForElectricityConfirmation === bteId ||
+      powerForElectricityConfirmation === mtId
+    )
+
+    console.log(showDynamicPowerModal, 'SHOW MODAL?')
+    console.log(dynamicPowerConfirmation, 'DYNAMIC POWER CONFIRMATION')
 
     const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -227,8 +251,7 @@ const CreateContract = (props) => {
     <b>Data de Assinatura:</b> ${signatureDateFormated ? signatureDateFormated : `❌`} <br>
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
     <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
-    <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
-    <b>Potência contratada:</b> ${powerForElectricity ? powerForElectricity : `❌`} <br>`; 
+    <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>`; 
 
     const gasMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
@@ -260,15 +283,19 @@ const CreateContract = (props) => {
     <b>Observações:</b> ${observations ? clientContact : `❌`} <br>
     <b>Feedback da Chamada:</b> ${feedbackCall ? feedbackCall : `❌`} <br>
     <b>Estado da venda:</b> ${sellState ? sellState : `❌`} <br>
-    <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods : `❌`} <br>
-    <b>Potência Contratada:</b> ${powerDUAL ? powerDUAL : `❌`} <br>
-    <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>`;
+    <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods : `❌`} <br>`;
 
     function _currentConfirmationMessage() {
       switch (typeOfContractFromProps) {
         case "electricity":
         case "condominium_electricity":
-          return electricityMessage;
+          return `
+            ${electricityMessage} 
+            <b>Potência contratada:</b> ${showDynamicPowerModal ?
+              `${document.getElementById('dynamicPower')?.value} kVA` : powerForElectricity ?
+              `${powerForElectricityConfirmation} kVA` : `❌`
+            } <br>
+          `;
   
         case "gas":
         case "condominium_gas":
@@ -276,23 +303,18 @@ const CreateContract = (props) => {
   
         case "dual":
         case "condominium_dual":
-          return dualMessage;
+          return `
+            ${dualMessage}
+            <b>Potência Contratada:</b> ${showDynamicPowerModal ?
+              `${document.getElementById('dynamicPower')?.value} kVA` : powerDUAL ?
+              `${powerDUALConfirmation} kVA` : `❌`} <br>
+            <b>Escalão Gás:</b> ${gasScaleDUAL ? gasScaleDUAL : `❌`} <br>  
+          `;
       
         default:
           break;
       }
     }
-
-    const showDynamicPowerModal = (
-      powerDUAL === bteId ||
-      powerDUAL === mtId ||
-      powerForElectricity === bteId ||
-      powerForElectricity === mtId
-    )
-
-    console.log(bteId, 'BTE');
-    console.log(powerForElectricity, 'TESTE NO UNDEFINED');
-    console.log(mtId, 'MT');
 
     if (showDynamicPowerModal) {
       return swalWithBootstrapButtons.fire({
@@ -310,9 +332,6 @@ const CreateContract = (props) => {
           var dynamicPower = document.getElementById('dynamicPower')?.value
           var officeComission = document.getElementById('officeComission')?.value
           var employeeComission = document.getElementById('employeeComission')?.value
-
-
-          console.log()
 
           const comissionObj= {
               dynamic_power: dynamicPower,
@@ -435,7 +454,6 @@ const CreateContract = (props) => {
         // "result.isConfimed significa clicar em "'E isso!"
           if (result.isConfirmed) {
 
-
             const contractObj = {
               contract: {
                 user: user,
@@ -462,7 +480,6 @@ const CreateContract = (props) => {
               },
               comissions: null
             }
-
 
             await contractsRequests.createContract(contractObj)
             .then(res => {
@@ -788,8 +805,6 @@ const CreateContract = (props) => {
         return;
     }
   }, [currentForm])
-
-  console.log(DYNAMICFORMFIELDS, 'DYNAMIC FORM FIELDS')
 
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

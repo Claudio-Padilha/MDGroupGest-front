@@ -79,8 +79,6 @@ const ExportPaymentSheet = (props) => {
 
     const sheet = JSON.parse(localStorage.getItem('payrollSheet'))
 
-    console.log(sheet, 'SHEEET')
-
     var Excel = require('exceljs')
     // A new Excel Work Book
     var workbook = new Excel.Workbook()
@@ -159,9 +157,36 @@ const ExportPaymentSheet = (props) => {
         )
       }
 
-      eachSheet.addRow({ total: `${sheet[i]?.total ? `${sheet[i]?.total}€` : '0€'}` }) 
+      eachSheet.addRow({ total: `${sheet[i]?.total ? `${sheet[i]?.total}€` : '0€'}` })
     }
 
+    let cellAddress
+
+    workbook.eachSheet(function (sheet) {
+      sheet.eachRow(function(row) {
+        row.eachCell(function(cell) {
+          if (cell?._column?._key === 'total') {
+            cellAddress = cell?._address
+          }
+        })
+      })
+
+      sheet.getCell(cellAddress).border = {
+        top: {style:'thick', color: {argb:'00000000'}},
+        left: {style:'thick', color: {argb:'00000000'}},
+        bottom: {style:'thick', color: {argb:'00000000'}},
+        right: {style:'thick', color: {argb:'00000000'}}
+      };
+
+      sheet.getCell(cellAddress).font = { bold: true }
+    })
+
+
+
+    // console.log(test1, 'TESTE 1')
+
+    // console.log(eachSheet, 'TESTE');
+    // console.log(workbook, 'WORK BOOK');
     // Add rows in the above header
 
     const buffer = await workbook.xlsx.writeBuffer()

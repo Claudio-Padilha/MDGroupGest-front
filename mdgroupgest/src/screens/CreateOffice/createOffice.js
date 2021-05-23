@@ -156,14 +156,15 @@ const CreateOffice = () => {
 
   const Yup = require('yup')
 
+  const zipCodeRegex = new RegExp(/^\d{4}-\d{3}?$/)
+
   const validationSchema = Yup.object().shape({
     officeName: Yup.string(),
     officeNIPC: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
-    officeZipCode: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
+    officeZipCode: Yup.string().test('format', 'O formato deve ser: 1234-123', val => val?.match(zipCodeRegex)),
     officeEmail: Yup.string().email('Tipo de email inválido').required('* O campo é obrigatório'),
   });
 
-  
   return (
     <MainDiv>
       <BackIcon onClick={_goBack} />
