@@ -206,6 +206,8 @@ const ContractDetail = (props) => {
 
   async function updateContract (contractData) {
 
+    console.log("ENTREI AQUI")
+
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -241,9 +243,10 @@ const ContractDetail = (props) => {
       id: contract.id,
     }
 
-    console.log(contractData, 'TESTE DO CONTRACT DATA')
-
-    const powerValue = JSON.parse(document.getElementById('select-power').value)
+    let powerValue = ""
+    if (document.getElementById('select-power') != null){
+      powerValue = JSON.parse(document.getElementById('select-power').value)
+    }
 
     if (document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
@@ -287,7 +290,7 @@ const ContractDetail = (props) => {
       contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
     }
 
-    if (powerValue !== null && powerValue !== "") {
+    if (powerValue !== "") {
       if ((powerValue?.name === 'BTE' || powerValue?.name === 'MT')) {
         setOpen(false)
         return swalWithBootstrapButtons.fire({
@@ -326,6 +329,12 @@ const ContractDetail = (props) => {
 
         updateContract(contractData)
       }
+    }else{
+      contractData = {
+        contract: { ...contractData},
+        comissions: null
+      }
+      updateContract(contractData)
     }
 
 
