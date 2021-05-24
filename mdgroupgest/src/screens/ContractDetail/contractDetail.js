@@ -244,8 +244,9 @@ const ContractDetail = (props) => {
     }
 
     let powerValue = ""
-    if (document.getElementById('select-power') != null){
-      powerValue = JSON.parse(document.getElementById('select-power').value)
+    if (document.getElementById('select-power') !== null && document.getElementById('select-power').value !== ""){
+      const value = document.getElementById('select-power').value
+      powerValue = JSON.parse(value)
     }
 
     if (document.getElementById("name").value !== "" ) {
@@ -286,7 +287,7 @@ const ContractDetail = (props) => {
       contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
     }
 
-    if (document.getElementById("select-sell-state") !== null && document.getElementById("select-sell-state").value !== "") {
+    if (document.getElementById("select-sell-state").value !== "") {
       contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
     }
 
@@ -329,16 +330,13 @@ const ContractDetail = (props) => {
 
         updateContract(contractData)
       }
-    }else{
+    } else {
       contractData = {
         contract: { ...contractData},
         comissions: null
       }
       updateContract(contractData)
-    }
-
-
-    
+    }    
   }
 
   const stateMessage = useMemo(() => {
