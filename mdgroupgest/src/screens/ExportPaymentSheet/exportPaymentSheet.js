@@ -72,7 +72,6 @@ const ExportPaymentSheet = (props) => {
     }, [500])
   }
 
-
   async function createNewExcelFile() {
 
     await officesRequests.paymentSheetByPeriod(dateToSend)

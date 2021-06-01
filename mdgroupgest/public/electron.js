@@ -12,6 +12,8 @@ function createWindow () {
     }
   })
 
+  win.webContents.setZoomFactor(1.0);
+
 //   var menu = Menu.buildFromTemplate([
 //     {
 //       label: 'MDGroupGest',

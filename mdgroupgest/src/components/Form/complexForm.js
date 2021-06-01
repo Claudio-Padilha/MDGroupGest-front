@@ -158,7 +158,11 @@ const renderFields = (field, index, formik, formFields) => {
       }
 
       return (
-        <Form.Group as={Col} className={field?.subType === "twoColumns" ? field?.key : "" } controlId="validationFormik103">
+        <Form.Group 
+          as={Col} 
+          className={field?.subType === "twoColumns" ? field?.key : "" } 
+          controlId="validationFormik103"
+        >
           {field.question && <Body>{field.question}</Body>}
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
@@ -176,7 +180,7 @@ const renderFields = (field, index, formik, formFields) => {
                       showConfirmButton: true
                     })
                     return
-                  } else if (date.getDate() > formFields[index - 1]?.date.getDate()) {
+                  } else if (date > formFields[index - 1]?.date) {
                     Swal.fire({
                       position: 'top-end',
                       icon: 'warning',
