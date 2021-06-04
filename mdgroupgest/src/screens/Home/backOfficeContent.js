@@ -157,7 +157,7 @@ const BackOfficeContent = (props) => {
   const currentOfficeObject = state?.ramCurrentOfficeObject;
   const contracts = state?.ramContracts;
   const allContractsToSend = state?.ramAllContracts;
-  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic;
+  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {};
   const userType =  currentUser?.user?.user_type;
 
   const {

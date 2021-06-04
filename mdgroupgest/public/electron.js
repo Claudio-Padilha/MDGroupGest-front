@@ -8,11 +8,10 @@ function createWindow () {
     width: 1300,
     height: 900,
     webPreferences: {
-      nodeIntegration: true
+      nodeIntegration: true,
+      zoomFactor: 0.8
     }
   })
-
-  win.webContents.setZoomFactor(1.0);
 
 //   var menu = Menu.buildFromTemplate([
 //     {
