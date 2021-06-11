@@ -144,14 +144,14 @@ const ContractDetail = (props) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = () => {
-    setOpen(true);
-  };
+    setOpen(true)
+  }
 
   const handleClose = () => {
     setMaintainState(true)
     setOpen(false);
     window.location.reload()
-  };
+  }
 
 
 // end modal
@@ -264,15 +264,41 @@ const ContractDetail = (props) => {
     if (document.getElementById("signature_date").value !== "") {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
     }
+    
+    if (document.getElementById('pel')?.checked !== contract?.pel) {
+      contractData = {
+        ...contractData,
+        ...{ 
+          pel: document.getElementById('pel')?.checked,
+        }
+      }
+    }
 
-    contractData = {
-      ...contractData,
-      ...{ 
-        electronic_bill: document.getElementById('electronic_bill') !== null ? document.getElementById('electronic_bill').checked : null,
-        electricity_ppi: document.getElementById('electricity_ppi') !== null ? document.getElementById('electricity_ppi').checked : null,
-        gas_ppi: document.getElementById('gas_ppi') ? document.getElementById('gas_ppi').checked : null,
-        pel: document.getElementById('pel') ? document.getElementById('pel').checked : null,
-        mgi: document.getElementById('mgi') ? document.getElementById('mgi').checked : null,
+    if (document.getElementById('gas_ppi')?.checked !== contract?.gas_ppi) {
+      contractData = {
+        ...contractData,
+        gas_ppi: document.getElementById('gas_ppi')?.checked,
+      }
+    }
+
+    if (document.getElementById('electricity_ppi')?.checked !== contract?.electricity_ppi) {
+      contractData = {
+        ...contractData,
+        electricity_ppi: document.getElementById('electricity_ppi').checked,
+      }
+    }
+
+    if (document.getElementById('electronic_bill')?.checked !== contract?.electronic_bill) {
+      contractData = {
+        ...contractData,
+        electronic_bill: document.getElementById('electronic_bill').checked,
+      }
+    }
+
+    if (document.getElementById('mgi')?.checked !== contract?.mgi) {
+      contractData = {
+        ...contractData,
+        mgi: document.getElementById('mgi')?.checked,
       }
     }
 
@@ -465,14 +491,48 @@ const ContractDetail = (props) => {
     {name: "r", value: 3}
   ]
 
-  const [gasPPI, setGasPPI] = useState(contract?.gas_ppi)
-  const [electricityPPI, setElectricityPPI] = useState(contract?.electricity_ppi)
-  const [pel, setPel] = useState(contract?.pel)
-  let mgi = contract?.mgi
-  const [electronicBill, setElectronicBill] = useState(contract?.electronic_bill)
+  // let gasPPI = contract?.gas_ppi
+  // let electricityPPI = contract?.electricity_ppi
+
+  const auxElectricityPPI = useMemo(async () => {
+    await contract?.electricity_ppi
+  }, [contract])
+
+  const auxGasPPI = useMemo(() => {
+
+    Promise.resolve(
+      contract?.gas_ppi
+    ).then(() => contract?.gas_ppi)
+  }, [contract])
+
+  const auxPel = useMemo(async () => (
+    await contract?.pel
+  ), [contract])
+
+  const auxMgi = useMemo(async () => (
+    await contract?.mgi
+  ), [contract])
+
+  const auxElectronicBill = useMemo(async () => (
+    await contract?.electronic_bill
+  ), [contract])
+
+  const [pel, setPel] = useState(auxPel)
+  const [gasPPI, setGasPPI] = useState(auxGasPPI)
+  const [electricityPPI, setElectricityPPI] = useState(auxElectricityPPI)
+  const [mgi, setMGI] = useState(auxMgi)
+  const [electronicBill, setElectronicBill] = useState(auxElectronicBill)
+
+
+  console.log(pel, 'PEL')
+  console.log(electronicBill, 'FATURA ELETRONICA')
+  console.log(gasPPI, '')
+  // let mgi = contract?.mgi
+  // let electronicBill = contract?.electronic_bill
+
   const [isEditing, setIsEditing] = useState(false)
 
-  console.log(contract, 'MGI');
+  console.log(contract, 'CONTRACT');
 
   const renderContract = () => {
 
@@ -482,6 +542,7 @@ const ContractDetail = (props) => {
     }
     
     return (
+      console.log(contract, 'CONTRATO DENTRO DO MODAL'),
       <>
         <Dialog style={{padding: '2%', zIndex: '500'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
         <WidthMessageContainer>
@@ -594,18 +655,20 @@ const ContractDetail = (props) => {
                       marginLeft: '1%',
                       marginRight: '5%'
                     }}>
-                      { electronicBill &&
+
                       <SwitchButton
-                          key="electronicBill"
-                          name="electronicBill"
-                          subType="twoColumns"
-                          side="left"
-                          initialValue={electronicBill}
-                          label="Factura Electrónica"
-                          value={electronicBill}
-                          id="electronic_bill"
-                        />
-                      }
+                        key="electronicBill"
+                        name="electronicBill"
+                        subType="twoColumns"
+                        side="left"
+                        initialValue={electronicBill}
+                        label="Factura Electrónica"
+                        onChange={() => setElectronicBill(!electronicBill)}
+                        checked={electronicBill}
+                        value={electronicBill}
+                        id="electronic_bill"
+                      />
+            
                       { (contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity')  &&
                         <SwitchButton
                           key="lightPPI"
@@ -613,6 +676,8 @@ const ContractDetail = (props) => {
                           subType="twoColumns"
                           side="left"
                           initialValue={electricityPPI}
+                          checked={electricityPPI}
+                          onChange={() => setElectricityPPI(!electricityPPI)}
                           label="PPI Luz"
                           value={electricityPPI}
                           id="electricity_ppi"
@@ -635,6 +700,8 @@ const ContractDetail = (props) => {
                           side="left"
                           initialValue={mgi}
                           label="MGI"
+                          onChange={() => setMGI(!mgi)}
+                          checked={mgi}
                           value={mgi}
                           id="mgi"
                         />
@@ -646,6 +713,8 @@ const ContractDetail = (props) => {
                         side="left"
                         initialValue={gasPPI}
                         label="PPI Gás"
+                        onChange={() => setGasPPI(!gasPPI)}
+                        checked={gasPPI}
                         value={gasPPI}
                         id="gas_ppi"
                       />}
@@ -657,6 +726,8 @@ const ContractDetail = (props) => {
                           side="left"
                           initialValue={pel}
                           label="PEL"
+                          onChange={() => setPel(!pel)}
+                          checked={pel}
                           value={pel}
                           id="pel"
                         />
@@ -897,7 +968,7 @@ const ContractDetail = (props) => {
                   </Column>
                 </Row>
 
-                <Row className={"secondRowInsideFirstColumn"}>  
+                <Row className={"secondRowInsideFirstColumn"}>
                   <Column>
                     <SmallSubHeading><b>Fatura Electrónica:</b></SmallSubHeading>
                     <Body className={"field"}>{` ${contract?.electronic_bill ? "🟢" : "🔴"}`}</Body>
