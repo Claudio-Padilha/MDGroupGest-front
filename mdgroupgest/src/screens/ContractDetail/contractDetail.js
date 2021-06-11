@@ -494,34 +494,55 @@ const ContractDetail = (props) => {
   // let gasPPI = contract?.gas_ppi
   // let electricityPPI = contract?.electricity_ppi
 
-  const auxElectricityPPI = useMemo(async () => {
-    await contract?.electricity_ppi
+  const [electricityPPI, setAuxElectricityPPI] = useState()
+  const [gasPPI, setAuxGasPPI] = useState()
+  const [pel, setAuxPel] = useState()
+  const [mgi, setAuxMGI] = useState()
+  const [electronicBill, setAuxElectronicBill] = useState()
+
+  useEffect(() => {
+    if (contract) {
+      Promise.resolve(
+        contract?.electricity_ppi,
+        contract?.gasPPI,
+        contract?.pel,
+        contract?.mgi,
+        contract?.electronicBill
+      ).then(() => 
+          setAuxElectricityPPI(contract?.electricity_ppi),
+          setAuxGasPPI(contract?.gasPPI),
+          setAuxPel(contract?.pel),
+          setAuxMGI(contract?.mgi),
+          setAuxElectronicBill(contract?.electronicBill)
+        )
+    }
   }, [contract])
 
-  const auxGasPPI = useMemo(() => {
+  // const electricityPPI = useMemo(() => {
 
-    Promise.resolve(
-      contract?.gas_ppi
-    ).then(() => contract?.gas_ppi)
-  }, [contract])
+  // }, [contract])
 
-  const auxPel = useMemo(async () => (
-    await contract?.pel
-  ), [contract])
+  // const gasPPI = useMemo(() => {
+  //   Promise.resolve(
+  //     contract?.gas_ppi
+  //   ).then(() => setAuxGasPPI(contract?.gas_ppi))
+  // }, [contract])
 
-  const auxMgi = useMemo(async () => (
-    await contract?.mgi
-  ), [contract])
+  // const pel = useMemo(() => (
+  //   Promise.resolve(
+  //     contract?.pel
+  //   ).then(() => setAuxPel(contract?.pel))
+  // ), [contract])
 
-  const auxElectronicBill = useMemo(async () => (
-    await contract?.electronic_bill
-  ), [contract])
+  // const mgi = useMemo(() => (
+  //   Promise.resolve(
+  //     contract?.mgi
+  //   ).then(() => setAuxMGI(contract?.mgi))
+  // ), [contract])
 
-  const [pel, setPel] = useState(auxPel)
-  const [gasPPI, setGasPPI] = useState(auxGasPPI)
-  const [electricityPPI, setElectricityPPI] = useState(auxElectricityPPI)
-  const [mgi, setMGI] = useState(auxMgi)
-  const [electronicBill, setElectronicBill] = useState(auxElectronicBill)
+  // const auxElectronicBill = useMemo(async () => (
+  //   await contract?.electronic_bill
+  // ), [contract])
 
 
   console.log(pel, 'PEL')
@@ -663,7 +684,7 @@ const ContractDetail = (props) => {
                         side="left"
                         initialValue={electronicBill}
                         label="Factura Electrónica"
-                        onChange={() => setElectronicBill(!electronicBill)}
+                        onChange={() => setAuxElectronicBill(!electronicBill)}
                         checked={electronicBill}
                         value={electronicBill}
                         id="electronic_bill"
@@ -677,7 +698,7 @@ const ContractDetail = (props) => {
                           side="left"
                           initialValue={electricityPPI}
                           checked={electricityPPI}
-                          onChange={() => setElectricityPPI(!electricityPPI)}
+                          onChange={() => setAuxElectricityPPI(!electricityPPI)}
                           label="PPI Luz"
                           value={electricityPPI}
                           id="electricity_ppi"
@@ -700,7 +721,7 @@ const ContractDetail = (props) => {
                           side="left"
                           initialValue={mgi}
                           label="MGI"
-                          onChange={() => setMGI(!mgi)}
+                          onChange={() => setAuxMGI(!mgi)}
                           checked={mgi}
                           value={mgi}
                           id="mgi"
@@ -713,7 +734,7 @@ const ContractDetail = (props) => {
                         side="left"
                         initialValue={gasPPI}
                         label="PPI Gás"
-                        onChange={() => setGasPPI(!gasPPI)}
+                        onChange={() => setAuxGasPPI(!gasPPI)}
                         checked={gasPPI}
                         value={gasPPI}
                         id="gas_ppi"
@@ -726,7 +747,7 @@ const ContractDetail = (props) => {
                           side="left"
                           initialValue={pel}
                           label="PEL"
-                          onChange={() => setPel(!pel)}
+                          onChange={() => setAuxPel(!pel)}
                           checked={pel}
                           value={pel}
                           id="pel"
