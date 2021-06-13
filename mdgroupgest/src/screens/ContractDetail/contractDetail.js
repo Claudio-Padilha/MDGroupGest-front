@@ -491,9 +491,6 @@ const ContractDetail = (props) => {
     {name: "r", value: 3}
   ]
 
-  // let gasPPI = contract?.gas_ppi
-  // let electricityPPI = contract?.electricity_ppi
-
   const [electricityPPI, setAuxElectricityPPI] = useState()
   const [gasPPI, setAuxGasPPI] = useState()
   const [pel, setAuxPel] = useState()
@@ -517,39 +514,6 @@ const ContractDetail = (props) => {
         )
     }
   }, [contract])
-
-  // const electricityPPI = useMemo(() => {
-
-  // }, [contract])
-
-  // const gasPPI = useMemo(() => {
-  //   Promise.resolve(
-  //     contract?.gas_ppi
-  //   ).then(() => setAuxGasPPI(contract?.gas_ppi))
-  // }, [contract])
-
-  // const pel = useMemo(() => (
-  //   Promise.resolve(
-  //     contract?.pel
-  //   ).then(() => setAuxPel(contract?.pel))
-  // ), [contract])
-
-  // const mgi = useMemo(() => (
-  //   Promise.resolve(
-  //     contract?.mgi
-  //   ).then(() => setAuxMGI(contract?.mgi))
-  // ), [contract])
-
-  // const auxElectronicBill = useMemo(async () => (
-  //   await contract?.electronic_bill
-  // ), [contract])
-
-
-  console.log(pel, 'PEL')
-  console.log(electronicBill, 'FATURA ELETRONICA')
-  console.log(gasPPI, '')
-  // let mgi = contract?.mgi
-  // let electronicBill = contract?.electronic_bill
 
   const [isEditing, setIsEditing] = useState(false)
 

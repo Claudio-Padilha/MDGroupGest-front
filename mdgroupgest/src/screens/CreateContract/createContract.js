@@ -770,7 +770,23 @@ const CreateContract = (props) => {
         'len',
         'O formato deve ser: PT0002554877874469YK',
         val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-      )
+      ),
+    feedbackCall: Yup.object().shape({
+        label: Yup.string().required(),
+        value: Yup.string().required()
+      }),
+    sellState: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    paymentMethods: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    gasScaleForGas: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    })
   });
 
   const validationSchemaElectricity = Yup.object().shape({
@@ -782,6 +798,22 @@ const CreateContract = (props) => {
         'O formato deve ser: PT0002554877874469YK',
         val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
       ),
+    feedbackCall: Yup.object().shape({
+        label: Yup.string().required(),
+        value: Yup.string().required()
+      }),
+    sellState: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    paymentMethods: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    powerForElectricity: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    })
   });
 
   const validationSchemaDual = Yup.object().shape({
@@ -798,7 +830,27 @@ const CreateContract = (props) => {
         'len',
         'O formato deve ser: PT0002554877874469YK',
         val => val?.match(CPEAndCUIRegex)?.toString()?.length === 20
-      )
+      ),
+    feedbackCall: Yup.object().shape({
+        label: Yup.string().required(),
+        value: Yup.string().required()
+      }),
+    sellState: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    paymentMethods: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    powerDUAL: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    }),
+    gasScaleDUAL: Yup.object().shape({
+      label: Yup.string().required(),
+      value: Yup.string().required()
+    })
   });
 
   const validationSchema = useMemo(() => {
