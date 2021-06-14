@@ -115,6 +115,8 @@ const ContractList = (props) => {
       return dispatch('MAINTAIN_SCREEN_STATE')
     } else if (cameFromDetailUpdate) {
       return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if (cameFromBackoffice) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
     } else {
       return state?.contracts
     }
