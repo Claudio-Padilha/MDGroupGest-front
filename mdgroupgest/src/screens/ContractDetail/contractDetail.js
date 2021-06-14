@@ -517,8 +517,6 @@ const ContractDetail = (props) => {
 
   const [isEditing, setIsEditing] = useState(false)
 
-  console.log(contract, 'CONTRACT');
-
   const renderContract = () => {
 
     function _setNif (value) {
