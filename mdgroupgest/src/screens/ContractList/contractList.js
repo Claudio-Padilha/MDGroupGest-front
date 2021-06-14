@@ -56,6 +56,7 @@ const ContractList = (props) => {
 
   const history = useHistory();
   const cameFromDetail = props?.location?.state?.cameFromDetail;
+  const cameFromDetailUpdate = props?.location?.state?.cameFromDetailUpdate;
   const cameFromUpdate = props?.location?.state?.cameFromUpdate
   const cameFromDelete = props?.location?.state?.fromDelete;
   const cameFromBackoffice = props?.location?.state?.cameFromBackoffice;
@@ -112,10 +113,12 @@ const ContractList = (props) => {
       return dispatch('MAINTAIN_SCREEN_STATE')
     } else if (cameFromDelete) {
       return dispatch('MAINTAIN_SCREEN_STATE')
+    } else if (cameFromDetailUpdate) {
+      return dispatch('MAINTAIN_SCREEN_STATE')
     } else {
       return state?.contracts
     }
-  }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice])
+  }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice, cameFromDetailUpdate])
 
   var fromDelete = props?.location?.state?.fromDelete;
   var deletedID = props?.location?.state?.deletedID;

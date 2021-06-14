@@ -432,6 +432,7 @@ const ContractDetail = (props) => {
                 state: {
                   fromDelete: true,
                   deletedID: contractID,
+                  cameFromDetailUpdate: true,
                   contractsToReturnFromDelete: contractsToReturn,
                 }
               }))
