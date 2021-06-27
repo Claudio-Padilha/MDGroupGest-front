@@ -94,6 +94,7 @@ const ExportPaymentSheet = (props) => {
       var eachSheet = workbook.addWorksheet(`${sheet[i]?.funcionario} - ${period}`)
       // A table header
       eachSheet.columns = [
+          { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
           { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
           { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
           { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
@@ -110,6 +111,25 @@ const ExportPaymentSheet = (props) => {
           { header: 'VALOR', key: 'employee_comission', width: 8 },
           { header: 'TOTAL', key: 'total', width: 10 },
       ]
+
+      eachSheet.addRow({
+          employee_name: `${sheet[i]?.funcionario}`,
+          contract_type: '',
+          signature_date: '',
+          client_name: '',
+          electricity_ppi: '',
+          pel: '',
+          gas_ppi: '',
+          mgi: '',
+          cpe: '',
+          power: '',
+          cui: '',
+          gas_scale: '',
+          sell_state: '',
+          observations: '',
+          employee_comission: '',
+        
+      })
 
       for (let j = 0; j < sheet[i]?.itens?.length; j++) {
         const hasPower = (

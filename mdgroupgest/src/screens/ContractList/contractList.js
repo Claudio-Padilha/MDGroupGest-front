@@ -1,16 +1,16 @@
-import React, { useMemo, useState, useEffect, useReducer } from "react";
-import { useHistory } from "react-router-dom";
-import Divider from '@material-ui/core/Divider';
-import _ from 'lodash';
-import Swal from 'sweetalert2';
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import React, { useMemo, useState, useEffect, useReducer } from "react"
+import { useHistory } from "react-router-dom"
+import Divider from '@material-ui/core/Divider'
+import _ from 'lodash'
+import Swal from 'sweetalert2'
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
 
-import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
-import { LogoMD } from '../../components/Logo/logo';
-import Button from "../../components/Button/button";
-import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
+import { LogoMD } from '../../components/Logo/logo'
+import Button from "../../components/Button/button"
+import { BackIcon } from '../../components/Icon/icons'
 
-import contractsRequests from "../../hooks/requests/contractsRequests";
+import contractsRequests from "../../hooks/requests/contractsRequests"
 import { useRefresh } from '../../hooks/window/refresh'
 import { useAuth } from '../../hooks/employees/auth'
 
@@ -21,11 +21,11 @@ import {
   Column,
   LogoContainer,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import { List } from "semantic-ui-react";
-import SearchBar from "../../components/SearchArea/search";
-import CONSTANTS from "../../constants";
+import { List } from "semantic-ui-react"
+import SearchBar from "../../components/SearchArea/search"
+import CONSTANTS from "../../constants"
 
 const ContractList = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
@@ -54,25 +54,25 @@ const ContractList = (props) => {
 
   const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
 
-  const history = useHistory();
-  const cameFromDetail = props?.location?.state?.cameFromDetail;
-  const cameFromDetailUpdate = props?.location?.state?.cameFromDetailUpdate;
+  const history = useHistory()
+  const cameFromDetail = props?.location?.state?.cameFromDetail
+  const cameFromDetailUpdate = props?.location?.state?.cameFromDetailUpdate
   const cameFromUpdate = props?.location?.state?.cameFromUpdate
-  const cameFromDelete = props?.location?.state?.fromDelete;
-  const cameFromBackoffice = props?.location?.state?.cameFromBackoffice;
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const cameFromDelete = props?.location?.state?.fromDelete
+  const cameFromBackoffice = props?.location?.state?.cameFromBackoffice
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-  const contractsFromBackoffice = props?.location?.state?.data;
-  const contractsFromDetail = props?.location?.state?.contractsToReturn;
-  const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete;
-  const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate;
+  const contractsFromBackoffice = props?.location?.state?.data
+  const contractsFromDetail = props?.location?.state?.contractsToReturn
+  const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete
+  const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [500]);
+    }, [500])
   }
 
   const initialState = {
@@ -83,7 +83,10 @@ const ContractList = (props) => {
   }
 
   if(!wasRefreshed) {
-    localStorage.setItem('contractListScreenState', JSON.stringify(initialState))
+    localStorage.setItem(
+      'contractListScreenState',
+      JSON.stringify(initialState)
+    )
   }
   
   const reducer = (firstState, action) => {
@@ -93,13 +96,16 @@ const ContractList = (props) => {
 
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
-        reducerState = stateOnRAM;
+        reducerState = stateOnRAM
     }
 
     localStorage.removeItem('contractListScreenState')
-    localStorage.setItem('contractListScreenState', JSON.stringify(reducerState))
+    localStorage.setItem(
+      'contractListScreenState',
+      JSON.stringify(reducerState)
+    )
 
-    return reducerState;
+    return reducerState
   }
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -122,15 +128,15 @@ const ContractList = (props) => {
     }
   }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice, cameFromDetailUpdate])
 
-  var fromDelete = props?.location?.state?.fromDelete;
-  var deletedID = props?.location?.state?.deletedID;
+  var fromDelete = props?.location?.state?.fromDelete
+  var deletedID = props?.location?.state?.deletedID
 
   function _removeContractFromRAM() {
     _.remove(contractsFromDelete, function(obj) {
       return obj.id === deletedID
     })
 
-    return contractsFromDelete;
+    return contractsFromDelete
   }
 
   const [display, setDisplay] = useState('flex')
