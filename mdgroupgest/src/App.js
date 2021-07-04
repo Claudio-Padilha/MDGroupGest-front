@@ -1,25 +1,26 @@
-import React from 'react';
-import Login from './screens/Login/login';
-import CreateContract from './screens/CreateContract/createContract';
-import CreateEmployee from './screens/CreateEmployee/createEmployee';
-import CreateOffice from './screens/CreateOffice/createOffice';
-import BackOffice from './screens/Home/backOffice';
-import EmployeeType from './screens/EmployeeType/employeeType';
-import ContractList from './screens/ContractList/contractList';
-import MyResults from './screens/MyResults/myResults';
-import MyTeam from './screens/MyTeam/myTeam';
-import EmployeeList from './screens/EmployeeList/employeeList';
-import ContractDetail from './screens/ContractDetail/contractDetail';
-import ChooseEmployeeTypeToSee from './screens/EmployeeList/chooseEmployeeTypeToSee';
-import ChooseTypeOfContract from './screens/CreateContract/chooseTypeOfContract';
-import MyProfile from './screens/MyProfile/myProfile';
-import OfficeMonthResultDetail from './screens/OfficeResultDetail/officeResultDetail';
-import EditEmployee from './screens/EditEmployee/editEmployee';
-import ExportPaymentSheet from './screens/ExportPaymentSheet/exportPaymentSheet';
-import TeamReport from './screens/TeamReport/teamReport';
-import TeamReportDetail from './screens/TeamReportDetail/teamReportDetail';
+import React from 'react'
+import Login from './screens/Login/login'
+import CreateContract from './screens/CreateContract/createContract'
+import CreateEmployee from './screens/CreateEmployee/createEmployee'
+import CreateOffice from './screens/CreateOffice/createOffice'
+import BackOffice from './screens/Home/backOffice'
+import EmployeeType from './screens/EmployeeType/employeeType'
+import ContractList from './screens/ContractList/contractList'
+import MyResults from './screens/MyResults/myResults'
+import MyTeam from './screens/MyTeam/myTeam'
+import EmployeeList from './screens/EmployeeList/employeeList'
+import ContractDetail from './screens/ContractDetail/contractDetail'
+import ContractEdit from './screens/ContractEdit/contractEdit'
+import ChooseEmployeeTypeToSee from './screens/EmployeeList/chooseEmployeeTypeToSee'
+import ChooseTypeOfContract from './screens/CreateContract/chooseTypeOfContract'
+import MyProfile from './screens/MyProfile/myProfile'
+import OfficeMonthResultDetail from './screens/OfficeResultDetail/officeResultDetail'
+import EditEmployee from './screens/EditEmployee/editEmployee'
+import ExportPaymentSheet from './screens/ExportPaymentSheet/exportPaymentSheet'
+import TeamReport from './screens/TeamReport/teamReport'
+import TeamReportDetail from './screens/TeamReportDetail/teamReportDetail'
 
-import Router from './router';
+import Router from './router'
 
 function App() {
   const paths = {
@@ -34,6 +35,7 @@ function App() {
     myTeam: "/MyTeam",
     employeeList: "/EmployeeList",
     contractDetail: "/ContractDetail",
+    contractEdit: "/ContractEdit",
     chooseEmployeeTypeToSee: "/ChooseEmployeeTypeToSee",
     chooseTypeOfContract: "/ChooseTypeOfContract",
     myProfile: "/MyProfile",
@@ -42,7 +44,7 @@ function App() {
     exportPaymentSheet: "/ExportPaymentSheet",
     teamReport: "/TeamReport",
     teamReportDetail: "/TeamReportDetail",
-  };
+  }
   
   const routes = [
     { path: paths.login, component: Login },
@@ -56,6 +58,7 @@ function App() {
     { path: paths.myTeam, component: MyTeam },
     { path: paths.employeeList, component: EmployeeList },
     { path: paths.contractDetail, component: ContractDetail },
+    { path: paths.contractEdit, component: ContractEdit },
     { path: paths.chooseEmployeeTypeToSee, component: ChooseEmployeeTypeToSee },
     { path: paths.chooseTypeOfContract, component: ChooseTypeOfContract },
     { path: paths.myProfile, component: MyProfile },
@@ -64,11 +67,11 @@ function App() {
     { path: paths.exportPaymentSheet, component: ExportPaymentSheet },
     { path: paths.teamReport, component: TeamReport },
     { path: paths.teamReportDetail, component: TeamReportDetail }
-  ];
+  ]
 
   return (
     <Router routes={routes} />
-  );
+  )
 }
 
-export default App;
+export default App

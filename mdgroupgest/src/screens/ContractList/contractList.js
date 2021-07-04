@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom"
 import Divider from '@material-ui/core/Divider'
 import _ from 'lodash'
 import Swal from 'sweetalert2'
+import Fuse from 'fuse.js'
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
@@ -12,6 +13,7 @@ import { BackIcon } from '../../components/Icon/icons'
 
 import contractsRequests from "../../hooks/requests/contractsRequests"
 import { useRefresh } from '../../hooks/window/refresh'
+import { useDebounce } from '../../hooks/utils'
 import { useAuth } from '../../hooks/employees/auth'
 
 import {
@@ -418,34 +420,46 @@ const ContractList = (props) => {
         <Divider />
       </>
     );
-  };
-
-  const [contractsMatched, setContractsMatched] = useState([])
-
-  function _handleSearchName(value) {
-    setContractsMatched(contracts?.filter(contract => contract?.user__name.toLowerCase().includes(value)))
-    return contractsMatched, isSearching
   }
 
-  function _handleSearchPower(value) {
-    setContractsMatched(contracts?.filter(contract => contract?.power__name?.toLowerCase().includes(value)))
-    return contractsMatched
+  const [query, setQuery] = useState('')
+  const [fuse, setFuse] = useState()
+
+  const debouncedQuery = useDebounce(query, 100)
+
+  useEffect(() => {
+    if (debouncedQuery === '') {
+      setIsSearching(false)
+    }
+    if (contracts) {
+      const keys = ['user__name', 'power__name', 'client_nif', 'contract_type', 'sell_state__name']
+
+      const options = {
+        keys,
+        includeScore: true,
+        minMatchCharLength: 1,
+      }
+
+      const newFuse = new Fuse(contracts, options)
+
+      setFuse(newFuse)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
+
+  const _handleSearchChange = (value) => {
+    setIsSearching(true)
+    setQuery(value)
   }
 
-  function _handleSearchNif(value) {
-    setContractsMatched(contracts?.filter(contract => contract?.client_nif.toString().toLowerCase().includes(value)))
-    return contractsMatched
-  }
-
-  function _handleSearchContractType(value) {
-    setContractsMatched(contracts?.filter(contract => contract?.contract_type.toString().toLowerCase().includes(value)))
-    return contractsMatched
-  }
-
-  function _handleSearchSellState(value) {
-    setContractsMatched(contracts?.filter(contract => contract?.sell_state__name.toString().toLowerCase().includes(value)))
-    return contractsMatched
-  }
+  const fuseMatchedContracts = useMemo(() => {
+    if (debouncedQuery === '') {
+      return contracts
+    } else {
+      return fuse?.search(debouncedQuery).filter(value => value?.score <= 0.1)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [debouncedQuery])
 
   const stateOfContractsFromDetail = state?.contractsFromDetail
 
@@ -484,45 +498,32 @@ const ContractList = (props) => {
         }}>
           <Col>
             <Body style={{marginBottom: '2%'}}>Comercial</Body>
-            <SearchBar onChange={(e) => {
-              setIsSearching(true)
-              _handleSearchName(e.target.value.toLowerCase())
-            }}/>
+            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>Potência</Body>
-            <SearchBar onChange={(e) => {
-                setIsSearching(true)
-                _handleSearchPower(e.target.value.toLowerCase())
-              }}/>
+            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
-            <SearchBar onChange={(e) => {
-                setIsSearching(true)
-                _handleSearchNif(e.target.value.toLowerCase())
-              }}/>
+            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
           </Col>
           <Col>
             <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
-            <SearchBar onChange={(e) => {
-                setIsSearching(true)
-                _handleSearchContractType(e.target.value.toLowerCase())
-              }}/>
+            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
           </Col>  
           <Col>
             <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
-            <SearchBar onChange={(e) => {
-                setIsSearching(true)
-                _handleSearchSellState(e.target.value.toLowerCase())
-              }}/>
+            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
           </Col>  
         </Row>
         <List divided verticalAlign="middle" className={"listContainer"}>
         { isSearching ?
-          contractsMatched && contractsMatched.map(function(contract, index) {
-            return renderContract(contract, index, true)
-          })
+          fuseMatchedContracts && fuseMatchedContracts?.map(
+            function(contract, index) {
+              return renderContract(contract?.item, index, true)
+            }
+          )
         : contracts?.length === 0 ?
           <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
         cameFromDetail ?

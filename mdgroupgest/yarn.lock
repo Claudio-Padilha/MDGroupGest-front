@@ -6575,6 +6575,11 @@
   "resolved" "https://registry.npmjs.org/functional-red-black-tree/-/functional-red-black-tree-1.0.1.tgz"
   "version" "1.0.1"
 
+"fuse.js@^6.4.6":
+  "integrity" "sha512-/gYxR/0VpXmWSfZOIPS3rWwU8SHgsRTwWuXhyb2O6s7aRuVtHtxCkR33bNYu3wyLyNx/Wpv0vU7FZy8Vj53VNw=="
+  "resolved" "https://registry.npmjs.org/fuse.js/-/fuse.js-6.4.6.tgz"
+  "version" "6.4.6"
+
 "gaxios@^4.0.0":
   "integrity" "sha512-vb0to8xzGnA2qcgywAjtshOKKVDf2eQhJoiL6fHhgW5tVN7wNk7egnYIO9zotfn3lQ3De1VPdf7V5/BWfCtCmg=="
   "resolved" "https://registry.npmjs.org/gaxios/-/gaxios-4.1.0.tgz"
@@ -11390,6 +11395,11 @@
     "react" "^16.12.0"
     "react-dom" "^16.12.0"
     "styled-components" "^4.4.1"
+
+"react-styles-hook@^1.1.2":
+  "integrity" "sha512-IF7QhfsyasYePF210+GSKVRCqKPBUn+ZYAh0NHW6qwR0BHDoIO6zO+6B6j2Sb/bNOVxQk2nu8xcHGdpCJn/2bQ=="
+  "resolved" "https://registry.npmjs.org/react-styles-hook/-/react-styles-hook-1.1.2.tgz"
+  "version" "1.1.2"
 
 "react-transition-group@^4.0.0", "react-transition-group@^4.3.0", "react-transition-group@^4.4.0", "react-transition-group@^4.4.1":
   "integrity" "sha512-Djqr7OQ2aPUiYurhPalTrVy9ddmFCCzwhqQmtN+J3+3DzLO209Fdr70QrN8Z3DsglWql6iY1lDWAfpFiBtuKGw=="

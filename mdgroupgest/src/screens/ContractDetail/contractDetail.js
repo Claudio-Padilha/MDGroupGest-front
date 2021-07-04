@@ -1,57 +1,57 @@
-import React, { useState, useMemo, useReducer, useEffect } from "react";
-import { useHistory } from "react-router-dom";
-import { Col } from 'react-bootstrap';
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
-import Swal from 'sweetalert2';
-import { List } from "semantic-ui-react";
+import React, { useState, useMemo, useReducer, useEffect } from "react"
+import { useHistory } from "react-router-dom"
+import { Col } from 'react-bootstrap'
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import Swal from 'sweetalert2'
+import { List } from "semantic-ui-react"
 
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import { makeStyles } from '@material-ui/core/styles';
-import Dialog from '@material-ui/core/Dialog';
-import Divider from '@material-ui/core/Divider';
-import Toolbar from '@material-ui/core/Toolbar';
-import IconButton from '@material-ui/core/IconButton';
-import CloseIcon from '@material-ui/icons/Close';
-import Slide from '@material-ui/core/Slide';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-import TextField from '@material-ui/core/TextField';
-import { MenuItem } from "@material-ui/core";
+import InputLabel from '@material-ui/core/InputLabel'
+import Select from '@material-ui/core/Select'
+import { makeStyles } from '@material-ui/core/styles'
+import Dialog from '@material-ui/core/Dialog'
+import Divider from '@material-ui/core/Divider'
+import Toolbar from '@material-ui/core/Toolbar'
+import IconButton from '@material-ui/core/IconButton'
+import CloseIcon from '@material-ui/icons/Close'
+import Slide from '@material-ui/core/Slide'
+import DialogActions from '@material-ui/core/DialogActions'
+import DialogContent from '@material-ui/core/DialogContent'
+import DialogContentText from '@material-ui/core/DialogContentText'
+import DialogTitle from '@material-ui/core/DialogTitle'
+import TextField from '@material-ui/core/TextField'
+import { MenuItem } from "@material-ui/core"
 
-import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text';
-import { LogoMD } from '../../components/Logo/logo';
-import Button from "../../components/Button/button";
-import { BackIcon, EditIcon } from '../../components/Icon/icons';
-import SwitchButton from "../../components/ToggleComponent/toggleButton";
+import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
+import { LogoMD } from '../../components/Logo/logo'
+import Button from "../../components/Button/button"
+import { BackIcon, EditIcon } from '../../components/Icon/icons'
+import SwitchButton from "../../components/ToggleComponent/toggleButton"
 
-import { useRefresh } from '../../hooks/window/refresh';
-import contractsRequests from "../../hooks/requests/contractsRequests";
+import { useRefresh } from '../../hooks/window/refresh'
+import contractsRequests from "../../hooks/requests/contractsRequests"
 import dataRequests from '../../hooks/requests/dataRequests'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 import {
   MainContainer,
   Row,
   Column,
   LogoContainer,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import './styles.css';
+import './styles.css'
 
 const ContractDetail = (props) => {
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [maintainState, setMaintainState] = useState(false);
-  let comissionObj = null
+  const [isLoading, setIsLoading] = useState(true)
+  const [maintainState, setMaintainState] = useState(false)
+  const history = useHistory()
 
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [500]);
+    }, [500])
   }
 
   const { wasRefreshed } = useRefresh()
@@ -61,14 +61,6 @@ const ContractDetail = (props) => {
       window.location.reload()
     }    
   }, [wasRefreshed, maintainState])
-
-  const swalWithBootstrapButtons = Swal.mixin({
-    customClass: {
-      confirmButton: 'btn btn-success',
-      cancelButton: 'btn btn-danger'
-    },
-    buttonsStyling: true
-  })
 
   const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
   optionsSellState.forEach(el => el['value'] = el.id)
@@ -103,13 +95,13 @@ const ContractDetail = (props) => {
 
     switch(action) {
       case 'MAINTAIN_SCREEN_STATE':
-        reducerState = stateOnRAM;
+        reducerState = stateOnRAM
     }
 
     localStorage.removeItem('contractDetailScreenState')
     localStorage.setItem('contractDetailScreenState', JSON.stringify(reducerState))
 
-    return reducerState;
+    return reducerState
   }
 
   const [stateOfCurrentContract, dispatch] = useReducer(reducer, initialState)
@@ -124,44 +116,10 @@ const ContractDetail = (props) => {
     }
   }, [wasRefreshed, cameFromList]);
 
-  const useStyles = makeStyles((theme) => ({
-    appBar: {
-      position: 'relative',
-      backgroundColor: CONSTANTS?.colors?.lightGrey,
-      height: '100%'
-    },
-    title: {
-      marginLeft: theme.spacing(2),
-      flex: 1,
-    },
-  }));
-
-  const Transition = React.forwardRef(function Transition(props, ref) {
-    return <Slide direction="up" ref={ref} {...props} />
-  });
-
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-
-  const handleClickOpen = () => {
-    setOpen(true)
-  }
-
-  const handleClose = () => {
-    setMaintainState(true)
-    setOpen(false);
-    window.location.reload()
-  }
-
-
-// end modal
   const contract = useMemo(() => {
     return stateOfCurrentContract?.currentContract
   }, [stateOfCurrentContract]);
 
-  const contractNumber = useMemo(() => {
-    return stateOfCurrentContract?.contractNumber;
-  }, [stateOfCurrentContract]);
   
   const contractID = useMemo(() => {
     return stateOfCurrentContract?.currentContract?.id;
@@ -204,167 +162,6 @@ const ContractDetail = (props) => {
     }
   }, [contract])
 
-  async function updateContract (contractData) {
-
-    console.log("ENTREI AQUI")
-
-    const swalWithBootstrapButtons = Swal.mixin({
-      customClass: {
-        confirmButton: 'btn btn-success',
-        cancelButton: 'btn btn-danger'
-      },
-      buttonsStyling: true
-    })
-
-    var result = window.confirm("Deseja realmente atualizar o contrato?")
-    if (result) {
-      contractsRequests.updateContract(contractData).then(() => {
-        contractsRequests.getContracts(currentOfficeID)
-        .then(
-          () => {
-            alert('O contrato foi atualizado')
-            localStorage.setItem('fromUpdateContract', JSON.stringify(true))
-            history.push({
-              pathname: '/BackOffice'
-            })
-          })
-          .catch(
-            () => alert('Houve um erro, tente novamente.')
-          )
-        })
-    }
-  }
-
-  function setData(event) {
-
-    event.preventDefault()
-
-    let contractData = {
-      id: contract.id,
-    }
-
-    let powerValue = ""
-    if (document.getElementById('select-power') !== null && document.getElementById('select-power').value !== ""){
-      const value = document.getElementById('select-power').value
-      powerValue = JSON.parse(value)
-    }
-
-    if (document.getElementById("name").value !== "" ) {
-      contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
-    }
-    if (document.getElementById("nif").value !== "") {
-      contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
-    }
-    if (document.getElementById("contact").value !== "") {
-      contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
-    }
-    if (document.getElementById("delivery_date").value !== "") {
-      contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
-    }
-    if (document.getElementById("signature_date").value !== "") {
-      contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
-    }
-    
-    if (document.getElementById('pel')?.checked !== contract?.pel) {
-      contractData = {
-        ...contractData,
-        ...{ 
-          pel: document.getElementById('pel')?.checked,
-        }
-      }
-    }
-
-    if (document.getElementById('gas_ppi')?.checked !== contract?.gas_ppi) {
-      contractData = {
-        ...contractData,
-        gas_ppi: document.getElementById('gas_ppi')?.checked,
-      }
-    }
-
-    if (document.getElementById('electricity_ppi')?.checked !== contract?.electricity_ppi) {
-      contractData = {
-        ...contractData,
-        electricity_ppi: document.getElementById('electricity_ppi').checked,
-      }
-    }
-
-    if (document.getElementById('electronic_bill')?.checked !== contract?.electronic_bill) {
-      contractData = {
-        ...contractData,
-        electronic_bill: document.getElementById('electronic_bill').checked,
-      }
-    }
-
-    if (document.getElementById('mgi')?.checked !== contract?.mgi) {
-      contractData = {
-        ...contractData,
-        mgi: document.getElementById('mgi')?.checked,
-      }
-    }
-
-    // if (document.getElementById("select-sell-state").value !== "") {
-    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
-    // }
-    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
-      contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
-    }
-
-    if (document.getElementById("select-feedback-call").value !== "") {
-      contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
-    }
-
-    if (document.getElementById("select-sell-state").value !== "") {
-      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
-    }
-
-    if (powerValue !== "") {
-      if ((powerValue?.name === 'BTE' || powerValue?.name === 'MT')) {
-        setOpen(false)
-        return swalWithBootstrapButtons.fire({
-          title: 'Escolheu uma potência dinâmica, escreva os valores: ',
-          html: '<input id="dynamicPower" placeholder="Potência" class="swal2-input">' +
-                '<input id="officeComission" placeholder="Comissão Escritório" class="swal2-input">' +
-                '<input id="employeeComission" placeholder="Comissão Comercial" class="swal2-input">',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonText: 'É isso!',
-          cancelButtonText: 'Refazer',
-          reverseButtons: true
-          }).then((result) => {
-            if (result.isConfirmed) {
-              var dynamicPower = document.getElementById('dynamicPower')?.value
-              var officeComission = document.getElementById('officeComission')?.value
-              var employeeComission = document.getElementById('employeeComission')?.value
-
-              comissionObj = {
-                dynamic_power: dynamicPower,
-                office_comission: officeComission,
-                employee_comission: employeeComission
-              }
-
-              contractData = { contract: contractData, comissions: comissionObj }
-              updateContract(contractData)
-            }
-  
-
-          })
-      } else {
-        contractData = {
-          contract: { ...contractData, power: powerValue?.value },
-          comissions: null
-        }
-
-        updateContract(contractData)
-      }
-    } else {
-      contractData = {
-        contract: { ...contractData},
-        comissions: null
-      }
-      updateContract(contractData)
-    }    
-  }
-
   const stateMessage = useMemo(() => {
     if(contract?.sell_state__name === "ok") {
       return "Válido";
@@ -377,15 +174,21 @@ const ContractDetail = (props) => {
 
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const typeContainsElectricity = (contractType === "Dual" || 
-                                 contractType === "Electricidade" || 
-                                 contractType === "Dual Condomínio" || 
-                                 contractType === "Electricidade Condomínio");
+  const typeContainsElectricity = 
+    (
+      contractType === "Dual" || 
+      contractType === "Electricidade" || 
+      contractType === "Dual Condomínio" || 
+      contractType === "Electricidade Condomínio"
+    )
 
-  const typeContainsGas = (contractType === "Dual" || 
-                          contractType === "Gás" || 
-                          contractType === "Dual Condomínio" || 
-                          contractType === "Gás Condomínio");
+  const typeContainsGas = 
+    (
+      contractType === "Dual" || 
+      contractType === "Gás" || 
+      contractType === "Dual Condomínio" || 
+      contractType === "Gás Condomínio"
+    )
 
   async function _goBack() {
     history.push({
@@ -483,384 +286,10 @@ const ContractDetail = (props) => {
     )
   }
 
-  const history = useHistory();
-  const [nif, setNif] = useState('');
-
-  const sellStatesToUpdate = [
-    {name: "ok", value: 1},
-    {name: "ko", value: 2},
-    {name: "r", value: 3}
-  ]
-
-  const [electricityPPI, setAuxElectricityPPI] = useState()
-  const [gasPPI, setAuxGasPPI] = useState()
-  const [pel, setAuxPel] = useState()
-  const [mgi, setAuxMGI] = useState()
-  const [electronicBill, setAuxElectronicBill] = useState()
-
-  useEffect(() => {
-    if (contract) {
-      Promise.resolve(
-        contract?.electricity_ppi,
-        contract?.gasPPI,
-        contract?.pel,
-        contract?.mgi,
-        contract?.electronicBill
-      ).then(() => 
-          setAuxElectricityPPI(contract?.electricity_ppi),
-          setAuxGasPPI(contract?.gasPPI),
-          setAuxPel(contract?.pel),
-          setAuxMGI(contract?.mgi),
-          setAuxElectronicBill(contract?.electronicBill)
-        )
-    }
-  }, [contract])
-
-  const [isEditing, setIsEditing] = useState(false)
-
   const renderContract = () => {
 
-    function _setNif (value) {
-      const nif = value;
-      return nif;
-    }
-    
     return (
-      console.log(contract, 'CONTRATO DENTRO DO MODAL'),
       <>
-        <Dialog style={{padding: '2%', zIndex: '500'}} fullScreen open={isEditing ? true : open} onClose={handleClose} TransitionComponent={Transition}>
-        <WidthMessageContainer>
-          <Heading>Você precisa de mais espaço!</Heading>
-          <SubHeading>Volte ao tamanho necessário.</SubHeading>
-        </WidthMessageContainer>
-          {/* <AppBar className={classes.appBar}>
-            <Toolbar>
-              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-                <CloseIcon />
-              </IconButton>
-            </Toolbar>
-
-            <ContractEdit />
-          </AppBar> */}
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-          </Toolbar>
-
-          <DialogTitle id="form-dialog-title" style={{padding: '0', marginLeft: '3%', marginTop: '3%'}}>Editar contrato</DialogTitle>
-          
-          <DialogContent style={{marginLeft: '3%', padding: '0'}}>
-
-            <DialogContentText style={{marginBottom: '3%', marginTop: '0%'}}>
-              {`Olá ${currentUser?.user?.name}, você tem permissões para alterar um contrato. ✅`}
-            </DialogContentText>
-
-            <form noValidate autoComplete="off">
-              <Row style={{height: '60vh', width: '100%'}}>
-                <Col style={{width: '50%'}}>
-                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                    <Col style={{
-                      width: '45%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}>
-                      
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Nome do cliente"
-                        placeholder={contract?.client_name || ''}
-                        type="text"
-                      />
-
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="nif"
-                        label="NIF / NIPC"
-                        placeholder={contract?.client_nif || ''}
-                        type="text"
-                      />
-
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="contact"
-                        label="Contacto"
-                        placeholder={contract?.client_contact || ''}
-                        type="text"
-                      />
-                    </Col>
-                    <Col style={{
-                      width: '30%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      marginRight: '15%'
-                    }}>
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="delivery_date"
-                        label="Data de entrega"
-                        placeholder={contract?.delivery_date || ''}
-                        type="text"
-                      />
-
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="signature_date"
-                        label="Data de assinatura"
-                        placeholder={contract?.signature_date || ''}
-                        type="text"
-                      />
-
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="name"
-                        label="Tipo de pagamento"
-                        placeholder={contract?.payment__name || ''}
-                        type="text"
-                      />
-                    </Col>
-                  </Row>
-
-                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '55%',height: '20vh', marginTop: '3%'}}>
-                    <Col style={{
-                      width: '40%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      marginLeft: '1%',
-                      marginRight: '5%'
-                    }}>
-
-                      <SwitchButton
-                        key="electronicBill"
-                        name="electronicBill"
-                        subType="twoColumns"
-                        side="left"
-                        initialValue={electronicBill}
-                        label="Factura Electrónica"
-                        onChange={() => setAuxElectronicBill(!electronicBill)}
-                        checked={electronicBill}
-                        value={electronicBill}
-                        id="electronic_bill"
-                      />
-            
-                      { (contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity')  &&
-                        <SwitchButton
-                          key="lightPPI"
-                          name="lightPPI"
-                          subType="twoColumns"
-                          side="left"
-                          initialValue={electricityPPI}
-                          checked={electricityPPI}
-                          onChange={() => setAuxElectricityPPI(!electricityPPI)}
-                          label="PPI Luz"
-                          value={electricityPPI}
-                          id="electricity_ppi"
-                        />
-                      }
-
-                    </Col>
-
-                    <Col style={{
-                      width: '30%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}>
-                      { (contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') &&
-                        <SwitchButton
-                          key="mgi"
-                          name="mgi"
-                          subType="twoColumns"
-                          side="left"
-                          initialValue={mgi}
-                          label="MGI"
-                          onChange={() => setAuxMGI(!mgi)}
-                          checked={mgi}
-                          value={mgi}
-                          id="mgi"
-                        />
-                      }
-                      { (contract?.contract_type === 'gas' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_gas') && <SwitchButton
-                        key="gasPPI"
-                        name="gasPPI"
-                        subType="twoColumns"
-                        side="left"
-                        initialValue={gasPPI}
-                        label="PPI Gás"
-                        onChange={() => setAuxGasPPI(!gasPPI)}
-                        checked={gasPPI}
-                        value={gasPPI}
-                        id="gas_ppi"
-                      />}
-                      { (contract?.contract_type === 'electricity' || contract?.contract_type === 'dual' || contract?.contract_type === 'condominium_electricity') &&
-                        <SwitchButton
-                          key="PEL"
-                          name="PEL"
-                          subType="twoColumns"
-                          side="left"
-                          initialValue={pel}
-                          label="PEL"
-                          onChange={() => setAuxPel(!pel)}
-                          checked={pel}
-                          value={pel}
-                          id="pel"
-                        />
-                      }
-                    </Col>
-                  </Row>
-                </Col>
-                <Col style={{width: '50%'}}>
-                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                    <Col style={{
-                      width: '45%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}>
-                      <InputLabel style={{ fontSize: '32px', marginBottom: '-10vh'}} htmlFor="select-sell-state">Estado do contrato</InputLabel>
-                      <Select
-                        inputProps={{
-                          name: 'sell-state',
-                          id: 'select-sell-state',
-                        }}
-                      >
-                        {sellStatesToUpdate !== null ? sellStatesToUpdate.map(sellState => (
-                          <MenuItem value={sellState.value}>
-                            {sellState.name}
-                          </MenuItem>
-                        )) : []}
-                      </Select>
-                    </Col>
-
-                    <Col style={{
-                      width: '30%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column', 
-                      marginRight: '15%'
-                    }}>
-
-                      <SubHeading style={{display: 'flex'}}>Comissão: 
-                      { contract?.sell_state__name !== 'ok' &&
-                        <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>0€</SubHeading>
-                      }
-                      { contract?.sell_state__name === 'ok' &&
-                        <SubHeading style={{margin: '0', marginLeft: '5%', color: CONSTANTS?.colors?.green}}>{contract?.employee_comission || ''}€</SubHeading>
-                      }
-                      </SubHeading>
-                    </Col>
-                  </Row>
-
-                  <Row style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '100%', height: '25vh', marginBottom: '7%' }}>
-                    <Col style={{
-                      width: '45%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                    }}>
-                      
-                      {
-                      typeContainsElectricity &&
-                      <>
-                      <InputLabel htmlFor="select-power">Potência</InputLabel>
-                      <Select
-                        inputProps={{
-                          name: 'power',
-                          id: 'select-power',
-                        }}
-                      >
-                        {optionsPower !== null ? optionsPower.map(power => (
-                          <MenuItem value={JSON.stringify(power)}>
-                            {power.name}
-                          </MenuItem>
-                        )) : []}
-                      </Select> </>
-                      }
-                      {
-                      typeContainsElectricity &&
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="CPE"
-                        label="CPE"
-                        placeholder={contract?.cpe || ''}
-                        type="text"
-                      />
-                      }
-                      <InputLabel htmlFor="select-gas-scale">Feedback Call</InputLabel>
-                      <Select
-                        inputProps={{
-                          name: 'feedback-call',
-                          id: 'select-feedback-call',
-                        }}
-                      >
-                        {optionsFeedbackCall !== [] ? optionsFeedbackCall.map(feedbackCall => (
-                          <MenuItem value={feedbackCall.value}>
-                            {feedbackCall.name}
-                          </MenuItem>
-                        )) : []}
-                      </Select>
-
-                    </Col>
-                    <Col style={{
-                      width: '30%',
-                      justifyContent: 'space-around',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      marginRight: '15%'
-                    }}>
-                      {
-                      typeContainsGas &&
-                      <>
-                      <InputLabel htmlFor="select-gas-scale">Escalão de Gás</InputLabel>
-                      <Select
-                        inputProps={{
-                          name: 'gas-scale',
-                          id: 'select-gas-scale',
-                        }}
-                      >
-                        {optionsGasScale !== [] ? optionsGasScale.map(gasScale => (
-                          <MenuItem value={gasScale.value}>
-                            {gasScale.name}
-                          </MenuItem>
-                        )) : []}
-                      </Select> </>
-                      }
-                      {
-                      typeContainsGas &&
-                      <TextField
-                        autoFocus
-                        margin="dense"
-                        id="CUI"
-                        label="CUI"
-                        placeholder={contract?.cui || ''}
-                        type="text"
-                      />
-                      }
-
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>  
-
-              <DialogActions style={{justifyContent: 'center', marginBottom: '1.5%'}}>
-              <Button action={setData} text="Atualizar contrato" style={{backgroundColor: 'black', color: 'white', width: '30%'}} />
-            </DialogActions>
-          </form>
-
-          </DialogContent>
-        </Dialog>
-
         <List.Item className={isDeleting ? "hideContract" : "contract"}>
           <Column style={{ width: '80%', display: 'flex', justifyContent: 'space-between'}}>
             <Heading style={{marginBottom: '0'}}>{contract?.user__name}</Heading>
@@ -873,7 +302,20 @@ const ContractDetail = (props) => {
                 {contract?.signature_date}
               </span>
             </Heading>
-            <EditIcon color={"black"} onClick={handleClickOpen} style={{ width: '3%', height: '5%', position: 'absolute', top: '15%', left: '75%'}}/>
+            <EditIcon
+              color={"black"}
+              onClick={() => 
+                history.push(
+                  {
+                    pathname: '/contractEdit',
+                    state: {
+                      cameFromDetail: true,
+                      contractFromDetail: contract
+                    }
+                  }
+                )
+              }
+              style={{ width: '3%', height: '5%', position: 'absolute', top: '15%', left: '75%'}}/>
           </Column> 
           <Row>
             <Body style={
@@ -1069,7 +511,7 @@ const ContractDetail = (props) => {
         <Divider />
       </>
     );
-  };
+  }
 
   return (
     <>
