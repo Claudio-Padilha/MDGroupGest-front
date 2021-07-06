@@ -84,9 +84,10 @@ const FirstRow = styled.div`
 const SecondRow = styled.div`
   display: flex;
   flex-direction: row;
-  justify-content: space-around;
+  justify-content: center;
   width: 100%;
   height: 100%;
+  margin-top: 5vh;
   a {
     height: 80%;
     width: ${props => props.ceo ? '22%' : props?.administrator ? '22%' : '25%'};

@@ -5,6 +5,7 @@ import _ from 'lodash'
 import Swal from 'sweetalert2'
 import Fuse from 'fuse.js'
 import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import TextField from '@material-ui/core/TextField'
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
 import { LogoMD } from '../../components/Logo/logo'
@@ -497,24 +498,99 @@ const ContractList = (props) => {
           marginLeft: '7%'
         }}>
           <Col>
-            <Body style={{marginBottom: '2%'}}>Comercial</Body>
-            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Comercial"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
           </Col>
           <Col>
-            <Body style={{marginBottom: '2%'}}>Potência</Body>
-            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Potência"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
           </Col>
           <Col>
-            <Body style={{marginBottom: '2%'}}>NIF / NIPC</Body>
-            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="NIF / NIPC"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
           </Col>
           <Col>
-            <Body style={{marginBottom: '2%'}}>Tipo de contrato</Body>
-            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Tipo de contrato"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
           </Col>  
           <Col>
-            <Body style={{marginBottom: '2%'}}>Estado da venda</Body>
-            <SearchBar onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }/>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Estado da venda"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
           </Col>  
         </Row>
         <List divided verticalAlign="middle" className={"listContainer"}>

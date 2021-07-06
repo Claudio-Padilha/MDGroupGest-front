@@ -225,6 +225,138 @@ const ExportPaymentSheet = (props) => {
     })
   }
 
+  async function createNewExcelFileAllContracts() {
+
+    await officesRequests.paymentSheetByPeriod(dateToSend)
+
+    const allContractsSheet = JSON.parse(localStorage.getItem('payrollSheet'))
+
+    var Excel = require('exceljs')
+    // A new Excel Work Book
+    var workbook = new Excel.Workbook()
+
+    // Some information about the Excel Work Book.
+    workbook.creator = 'PAD Tech'
+    workbook.lastModifiedBy = ''
+    workbook.created = new Date()
+    workbook.modified = new Date()
+    workbook.lastPrinted = new Date()
+
+    // Create a sheet
+    var defaultSheet = workbook.addWorksheet(`${period}`)
+
+    let auxTotal = 0
+
+    for (let i = 0; i < allContractsSheet?.length; i++) {
+      
+      // A table header
+      defaultSheet.columns = [
+          { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
+          { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
+          { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
+          { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
+          { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
+          { header: 'PEL', key: 'pel', width: 8 },
+          { header: 'PPI GÁS', key: 'gas_ppi', width: 8 },
+          { header: 'MGI', key: 'mgi', width: 8 },
+          { header: 'LUZ - CPE', key: 'cpe', width: 8 },
+          { header: 'POTÊNCIA', key: 'power', width: 8 },
+          { header: 'GÁS - CUI', key: 'cui', width: 8 },
+          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 8 },
+          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 8 },
+          { header: 'OBS BO', key: 'observations', width: 18 },
+          { header: 'VALOR', key: 'employee_comission', width: 8 },
+          { header: 'TOTAL', key: 'total', width: 10 },
+      ]
+
+      defaultSheet.addRow({
+          employee_name: `${allContractsSheet[i]?.funcionario}`,
+          contract_type: '',
+          signature_date: '',
+          client_name: '',
+          electricity_ppi: '',
+          pel: '',
+          gas_ppi: '',
+          mgi: '',
+          cpe: '',
+          power: '',
+          cui: '',
+          gas_scale: '',
+          sell_state: '',
+          observations: '',
+          employee_comission: '',
+        
+      })
+
+      for (let j = 0; j < allContractsSheet[i]?.itens?.length; j++) {
+        const hasPower = (
+          allContractsSheet[i]?.itens[j]?.contract_type === 'electricity' ||
+          allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_electricity' ||
+          allContractsSheet[i]?.itens[j]?.contract_type === 'dual' ||
+          allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_dual' 
+        )
+
+        auxTotal += allContractsSheet[i]?.itens[j]?.employee_comission
+
+        defaultSheet.addRow(
+          {
+            contract_type: `${
+              allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_dual' ? 
+                'Dual Condomínio' : allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_electricity' ?
+                'Electricidade Condomínio'
+                : allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_gas' ? 
+                'Gás Condomínio' 
+                : allContractsSheet[i]?.itens[j]?.contract_type === 'dual' ? 
+                'Dual' 
+                : allContractsSheet[i]?.itens[j]?.contract_type === 'gas' ? 
+                'Gás' 
+                : 'Eletricidade'
+                
+            }`,
+ 
+
+            signature_date: allContractsSheet[i]?.itens[j]?.signature_date,
+            client_name: allContractsSheet[i]?.itens[j]?.client_name,
+            electricity_ppi: `${allContractsSheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
+            pel: `${allContractsSheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
+            gas_ppi: `${allContractsSheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
+            mgi: `${allContractsSheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
+            cpe: allContractsSheet[i]?.itens[j]?.cpe,
+            power: 
+              hasPower ? `${
+                allContractsSheet[i]?.itens[j]?.dynamic_power !== null ? 
+                `${allContractsSheet[i]?.itens[j]?.dynamic_power} kVA` : 
+                `${allContractsSheet[i]?.itens[j]?.power__name} kVA`}` : 
+                '',
+            cui: allContractsSheet[i]?.itens[j]?.cui,
+            gas_scale: allContractsSheet[i]?.itens[j]?.gas_scale__name,
+            sell_state: allContractsSheet[i]?.itens[j]?.sell_state__name.toUpperCase(),
+            observations: allContractsSheet[i]?.itens[j]?.observations,
+            employee_comission: allContractsSheet[i]?.itens[j]?.employee_comission === null ? 'anulado' : `${allContractsSheet[i]?.itens[j]?.employee_comission}€`,
+          }
+        )
+      }
+
+    }
+    defaultSheet.addRow({ total: `${auxTotal ? `-> ${auxTotal}€` : '0€'}` })
+
+    const buffer = await workbook.xlsx.writeBuffer()
+    const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    const fileExtension = '.xlsx'
+
+    const blob = new Blob([buffer], {type: fileType})
+
+    saveAs(blob, `${period} | Total` + fileExtension)
+
+    Swal.fire({
+      position: 'top-end',
+      icon: 'success',
+      title: 'O seu ficheiro foi gerado com sucesso!',
+      showConfirmButton: false,
+      timer: 2000
+    })
+  }
+
 
   const dateToAPI = (date) => {
 
@@ -342,7 +474,13 @@ const ExportPaymentSheet = (props) => {
       <SecondRow>
         <ExportButton onClick={createNewExcelFile}>
           <Body>
-            <MDButton style={{width: '22vw', height: '5vh', fontSize: '20px'}}>Exportar</MDButton>
+            <MDButton style={{width: '20vw', height: '5vh', fontSize: '20px'}}>Exportar individual</MDButton>
+          </Body>
+        </ExportButton>
+
+        <ExportButton onClick={createNewExcelFileAllContracts}>
+          <Body>
+            <MDButton style={{width: '20vw', height: '5vh', fontSize: '20px'}}>Exportar tudo</MDButton>
           </Body>
         </ExportButton>
       </SecondRow>
