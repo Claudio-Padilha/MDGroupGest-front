@@ -295,14 +295,18 @@ const ContractEdit = (props) => {
 
     var result = window.confirm("Deseja realmente atualizar o contrato?")
     if (result) {
-      contractsRequests.updateContract(contractData).then(() => {
+      contractsRequests.updateContract(contractData).then((res) => {
+        console.log(res, 'RESPOSTA DO UPDATE')
         contractsRequests.getContracts(currentOfficeID)
         .then(
           () => {
             alert('O contrato foi atualizado')
             localStorage.setItem('fromUpdateContract', JSON.stringify(true))
             history.push({
-              pathname: '/BackOffice'
+              pathname: '/ContractList',
+              state: {
+                cameFromEdit: true
+              }
             })
           })
           .catch(

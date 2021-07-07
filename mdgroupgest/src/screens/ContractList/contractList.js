@@ -59,6 +59,7 @@ const ContractList = (props) => {
 
   const history = useHistory()
   const cameFromDetail = props?.location?.state?.cameFromDetail
+  const cameFromEdit = props?.location?.state?.cameFromEdit
   const cameFromDetailUpdate = props?.location?.state?.cameFromDetailUpdate
   const cameFromUpdate = props?.location?.state?.cameFromUpdate
   const cameFromDelete = props?.location?.state?.fromDelete
@@ -77,6 +78,12 @@ const ContractList = (props) => {
       setIsLoading(false)
     }, [500])
   }
+
+  useEffect(() => {
+    if(cameFromEdit) {
+      window.location.reload()
+    }
+  }, [])
 
   const initialState = {
     contracts: contractsFromBackoffice,
@@ -477,32 +484,35 @@ const ContractList = (props) => {
       </WidthMessageContainer>
       <MainContainer id={"mainContainer"}>
         <BackIcon onClick={_goBack} />
-        <Row style={{
-          width: '65%',
+        <Col style={{
+          width: '100%',
           display: 'flex',
-          justifyContent: 'space-between',
-          marginRight: '10%',
-          marginLeft: '5%'
+          justifyContent: 'center',
+          alignItems: 'center'
         }}>
-          <SubHeading style={{
-            marginBottom: '0%',
-            color: CONSTANTS?.colors?.mediumGrey,
-            textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
-          }}>Podes pesquisar aqui 🔍</SubHeading>
-        </Row>
-        <Row style={{
-          width: '67%',
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginRight: '10%',
-          marginLeft: '7%'
-        }}>
+          <Col>
+            <Row style={{
+              width: '100%',
+              display: 'flex',
+              textAlign: 'center',
+              marginTop: '.75vh',
+              justifyContent: 'space-between',
+            }}>
+              <SubHeading style={{
+                marginBottom: '0%',
+                color: CONSTANTS?.colors?.mediumGrey,
+                textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
+              }}>Podes pesquisar aqui 🔍</SubHeading>
+            </Row>
+          </Col>
+
           <Col>
             <TextField
               id="outlined-basic"
               variant="outlined"
               InputProps={{
                 style: {
+                  width: '40vw',
                   color: 'black',
                   borderBottomColor: 'black',
                   '& .MuiInput-underline:after': {
@@ -511,12 +521,12 @@ const ContractList = (props) => {
                   }
                 }
               }}
-              label="Comercial"
+              label="Comercial, Potência, Tipo de Contrato, Estado da venda..."
               onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
               style={{marginTop: '2vh'}}
             />
           </Col>
-          <Col>
+          {/* <Col>
             <TextField
               id="outlined-basic"
               variant="outlined"
@@ -573,7 +583,7 @@ const ContractList = (props) => {
               style={{marginTop: '2vh'}}
             />
           </Col>  
-          <Col>
+          <Col> 
             <TextField
               id="outlined-basic"
               variant="outlined"
@@ -591,8 +601,9 @@ const ContractList = (props) => {
               onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
               style={{marginTop: '2vh'}}
             />
-          </Col>  
-        </Row>
+          </Col>
+          */}
+        </Col>
         <List divided verticalAlign="middle" className={"listContainer"}>
         { isSearching ?
           fuseMatchedContracts && fuseMatchedContracts?.map(

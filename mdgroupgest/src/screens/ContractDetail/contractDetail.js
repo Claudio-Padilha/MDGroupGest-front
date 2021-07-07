@@ -77,7 +77,9 @@ const ContractDetail = (props) => {
   const initialState = {
     contractNumber: propsState?.contractNumber,
     contractsToReturn: propsState?.contractsToReturn,
-    currentContract: propsState?.data
+    currentContract: propsState?.data,
+    contractFromEdit: propsState?.contractFromEdit,
+    cameFromEdit: propsState?.cameFromEdit
   }
 
   useEffect(() => {
@@ -114,10 +116,12 @@ const ContractDetail = (props) => {
     } else {
       return stateOfCurrentContract
     }
-  }, [wasRefreshed, cameFromList]);
+  }, [wasRefreshed, cameFromList])
 
-  const contract = useMemo(() => {
-    return stateOfCurrentContract?.currentContract
+  console.log(stateOfCurrentContract?.cameFromEdit ? stateOfCurrentContract?.contractFromEdit : stateOfCurrentContract?.currentContract, 'TESTE DA EDIÇÂO')
+
+  const contract = useMemo(() => { 
+    return stateOfCurrentContract?.cameFromEdit ? stateOfCurrentContract?.contractFromEdit : stateOfCurrentContract?.currentContract
   }, [stateOfCurrentContract]);
 
   
