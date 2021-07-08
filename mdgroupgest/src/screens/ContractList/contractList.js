@@ -433,19 +433,26 @@ const ContractList = (props) => {
   const [query, setQuery] = useState('')
   const [fuse, setFuse] = useState()
 
-  const debouncedQuery = useDebounce(query, 100)
-
   useEffect(() => {
-    if (debouncedQuery === '') {
+    if (query === '') {
       setIsSearching(false)
     }
     if (contracts) {
-      const keys = ['user__name', 'power__name', 'client_nif', 'contract_type', 'sell_state__name']
+      const keys = [
+        {
+          name: 'client_nif',
+          weight: 2
+        },
+        'user__name',
+        'contract_type',
+        'sell_state__name'
+      ]
 
       const options = {
         keys,
         includeScore: true,
         minMatchCharLength: 1,
+        findAllMatches: true
       }
 
       const newFuse = new Fuse(contracts, options)
@@ -453,11 +460,11 @@ const ContractList = (props) => {
       setFuse(newFuse)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery])
+  }, [query])
 
   const _handleSearchChange = (value) => {
     setIsSearching(true)
-    setQuery(value)
+    setQuery(value?.toString())
   }
   
   const renderSearchBar = useCallback(() => (
@@ -475,22 +482,30 @@ const ContractList = (props) => {
           }
         }
       }}
-      label="Comercial, Potência, Tipo de Contrato, Estado da venda..."
+      label="NIF, Comercial, Tipo de Contrato, Estado da venda..."
       onChange={e =>  _handleSearchChange(e?.target?.value?.toLowerCase()) }
       style={{marginTop: '2vh'}}
     />
   ), [isSearching])
 
-  const fuseMatchedContracts = useMemo(() => {
-    if (debouncedQuery === '') {
-      return contracts
-    } else {
-      return fuse?.search(debouncedQuery).filter(value => value?.score <= 0.1)
-    }
+  const fuseMatchedContracts = useMemo(() => (
+    fuse?.search(query).filter(value => ( value?.score <= 0.0001 ))
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [debouncedQuery])
+  ), [query])
 
   const stateOfContractsFromDetail = state?.contractsFromDetail
+
+  const handleEmptySearch = () => (
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '70vh'
+    }}>
+      <h1>Não encontramos nada...</h1>
+    </div>
+  )
 
   return (
     isLoading ?
@@ -610,11 +625,11 @@ const ContractList = (props) => {
         </Col>
         <List divided verticalAlign="middle" className={"listContainer"}>
         { isSearching ?
-          fuseMatchedContracts && fuseMatchedContracts?.map(
+          fuseMatchedContracts?.length !== 0 ? fuseMatchedContracts?.map(
             function(contract, index) {
               return renderContract(contract?.item, index, true)
             }
-          )
+          ) : handleEmptySearch()
         : contracts?.length === 0 ?
           <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
         cameFromDetail ?
