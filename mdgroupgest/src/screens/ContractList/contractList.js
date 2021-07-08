@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect, useReducer } from "react"
+import React, { useMemo, useState, useEffect, useReducer, useCallback } from "react"
 import { useHistory } from "react-router-dom"
 import Divider from '@material-ui/core/Divider'
 import _ from 'lodash'
@@ -459,6 +459,27 @@ const ContractList = (props) => {
     setIsSearching(true)
     setQuery(value)
   }
+  
+  const renderSearchBar = useCallback(() => (
+    <TextField
+      id="outlined-basic"
+      variant="outlined"
+      InputProps={{
+        style: {
+          width: '40vw',
+          color: 'black',
+          borderBottomColor: 'black',
+          '& .MuiInput-underline:after': {
+            color: 'black',
+            borderBottomColor: 'black'
+          }
+        }
+      }}
+      label="Comercial, Potência, Tipo de Contrato, Estado da venda..."
+      onChange={e =>  _handleSearchChange(e?.target?.value?.toLowerCase()) }
+      style={{marginTop: '2vh'}}
+    />
+  ), [isSearching])
 
   const fuseMatchedContracts = useMemo(() => {
     if (debouncedQuery === '') {
@@ -507,24 +528,7 @@ const ContractList = (props) => {
           </Col>
 
           <Col>
-            <TextField
-              id="outlined-basic"
-              variant="outlined"
-              InputProps={{
-                style: {
-                  width: '40vw',
-                  color: 'black',
-                  borderBottomColor: 'black',
-                  '& .MuiInput-underline:after': {
-                    color: 'black',
-                    borderBottomColor: 'black'
-                  }
-                }
-              }}
-              label="Comercial, Potência, Tipo de Contrato, Estado da venda..."
-              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
-              style={{marginTop: '2vh'}}
-            />
+            {renderSearchBar()}
           </Col>
           {/* <Col>
             <TextField

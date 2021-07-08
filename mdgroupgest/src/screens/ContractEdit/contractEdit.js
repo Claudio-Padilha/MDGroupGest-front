@@ -293,27 +293,47 @@ const ContractEdit = (props) => {
 
   async function updateContract (contractData) {
 
-    var result = window.confirm("Deseja realmente atualizar o contrato?")
-    if (result) {
-      contractsRequests.updateContract(contractData).then((res) => {
-        console.log(res, 'RESPOSTA DO UPDATE')
-        contractsRequests.getContracts(currentOfficeID)
-        .then(
-          () => {
-            alert('O contrato foi atualizado')
-            localStorage.setItem('fromUpdateContract', JSON.stringify(true))
-            history.push({
-              pathname: '/ContractList',
-              state: {
-                cameFromEdit: true
-              }
+    swalWithBootstrapButtons.fire({
+      title: 'Deseja realmente atualizar o contrato? ',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'É isso!',
+      cancelButtonText: 'Refazer',
+      reverseButtons: true
+    }).then((result) => {
+      if (result?.isConfirmed) {
+        contractsRequests.updateContract(contractData).then((res) => {
+          contractsRequests.getContracts(currentOfficeID)
+          .then(
+            () => {
+              swalWithBootstrapButtons.fire({
+                title: 'Boa!',
+                html: 'Contrato atualizado com sucesso. <br>',
+                icon: 'success',
+                showCancelButton: false,
+                confirmButtonText: 'Ok!',
+                reverseButtons: true
+              }).then(() => {
+                history.push({
+                  pathname: '/ContractList',
+                  state: {
+                    cameFromEdit: true
+                  }
+                })
+              })
             })
+            .catch(
+              () => alert('Houve um erro, tente novamente.')
+            )
           })
-          .catch(
-            () => alert('Houve um erro, tente novamente.')
-          )
-        })
-    }
+      } else if (!result?.isConfirmed) {
+        swalWithBootstrapButtons.fire(
+          'Ação Cancelada',
+          '',
+          'info'
+        )
+      }
+    })
   }
 
   function setData(event) {

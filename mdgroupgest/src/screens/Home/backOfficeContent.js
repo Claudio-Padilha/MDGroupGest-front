@@ -53,8 +53,6 @@ const BackOfficeContent = (props) => {
   const fromEmployeeType = props?.location?.state?.fromEmployeeType;
   const fromMyTeam = props?.location?.state?.fromMyTeam;
 
-  const fromUpdateContract = JSON.parse(localStorage.getItem('fromUpdateContract'))
-
   const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
   const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
