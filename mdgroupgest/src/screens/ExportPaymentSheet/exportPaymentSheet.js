@@ -251,6 +251,7 @@ const ExportPaymentSheet = (props) => {
           { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
           { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
           { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
+          { header: 'NIF / NIPC', key: 'client_nif', width: 14 },
           { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
           { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
           { header: 'PEL', key: 'pel', width: 8 },
@@ -270,6 +271,7 @@ const ExportPaymentSheet = (props) => {
           employee_name: `${allContractsSheet[i]?.funcionario}`,
           contract_type: '',
           signature_date: '',
+          client_nif: '',
           client_name: '',
           electricity_ppi: '',
           pel: '',
@@ -310,9 +312,8 @@ const ExportPaymentSheet = (props) => {
                 : 'Eletricidade'
                 
             }`,
- 
-
             signature_date: allContractsSheet[i]?.itens[j]?.signature_date,
+            client_nif: allContractsSheet[i]?.itens[j]?.client_nif,
             client_name: allContractsSheet[i]?.itens[j]?.client_name,
             electricity_ppi: `${allContractsSheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
             pel: `${allContractsSheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
