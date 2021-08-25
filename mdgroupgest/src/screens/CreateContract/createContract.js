@@ -178,8 +178,6 @@ const CreateContract = (props) => {
 
   async function _ConfirmContractCreation(data) {
 
-    console.log(data, 'DATA');
-
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
         confirmButton: 'btn btn-success',
@@ -219,11 +217,6 @@ const CreateContract = (props) => {
     const paymentMethodValue = paymentMethods?.value
     const feedbackCallValue = feedbackCall?.value
     const sellStateValue = sellState?.value
-
-    console.log(paymentMethods, 'paymentMethods')
-    console.log(feedbackCall, 'feedbackCall')
-    console.log(powerForElectricity, 'powerForElectricity')
-    console.log(sellState, 'sellState')
 
     var powerForElectricityConfirmation = data?.powerForElectricity?.label || null
     var powerDUALConfirmation = data?.powerDUAL?.label || null
@@ -372,8 +365,6 @@ const CreateContract = (props) => {
             },
             comissions: comissionObj
           }
-
-          console.log(contractObj, 'OBJETO DO CONTRATO')
 
           if (result?.isConfirmed) {
             return (
@@ -916,8 +907,6 @@ const CreateContract = (props) => {
       return state
     }
   }, [cameFromChoice, wasRefreshed])
-
-  console.log(typeOfContractFromProps, 'TYPE')
 
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

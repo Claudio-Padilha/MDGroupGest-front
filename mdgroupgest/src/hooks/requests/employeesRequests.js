@@ -241,7 +241,6 @@ export default {
       axios(employeeUpdateRequest)
 
       .then(res => {
-        console.log(res, 'RESPOSTA DO PATCH');
         localStorage.removeItem('userForPhoto');
         localStorage.setItem('userForPhoto', JSON.stringify(res.data))
 

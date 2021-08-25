@@ -142,7 +142,6 @@ export default {
               } else {             
                 resolve(res);
                 const user = res?.data;
-                console.log(user, 'USER NO LOGIN');
 
                 if (user[0] === "invalid credentials") {
                   _HandleDeniedLogin()

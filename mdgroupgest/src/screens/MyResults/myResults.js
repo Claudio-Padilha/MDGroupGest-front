@@ -133,7 +133,7 @@ const MyResults = (props) => {
       flexDirection: 'column',
       alignItems: 'center',
     };
-    console.log(state, 'ESTADO');
+    
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>

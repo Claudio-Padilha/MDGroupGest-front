@@ -19,8 +19,6 @@ const MyProfile = (props) => {
   const [imageAsFile, setImageAsFile] = useState('')
   const [imageAsUrl, setImageAsUrl] = useState(allImputs)
 
-  console.log(user, 'CURRENT USER')
-
   const history = useHistory();
   const avatarClasses = useStyles();
   const [isLoading, setIsLoading] = useState(false);

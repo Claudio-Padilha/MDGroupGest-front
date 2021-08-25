@@ -118,8 +118,6 @@ const ContractDetail = (props) => {
     }
   }, [wasRefreshed, cameFromList])
 
-  console.log(stateOfCurrentContract?.cameFromEdit ? stateOfCurrentContract?.contractFromEdit : stateOfCurrentContract?.currentContract, 'TESTE DA EDIÇÂO')
-
   const contract = useMemo(() => { 
     return stateOfCurrentContract?.cameFromEdit ? stateOfCurrentContract?.contractFromEdit : stateOfCurrentContract?.currentContract
   }, [stateOfCurrentContract]);

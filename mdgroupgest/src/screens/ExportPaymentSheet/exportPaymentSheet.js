@@ -97,6 +97,7 @@ const ExportPaymentSheet = (props) => {
           { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
           { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
           { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
+          { header: 'NIF / NIPC', key: 'client_nif', width: 14 },
           { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
           { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
           { header: 'PEL', key: 'pel', width: 8 },
@@ -116,6 +117,7 @@ const ExportPaymentSheet = (props) => {
           employee_name: `${sheet[i]?.funcionario}`,
           contract_type: '',
           signature_date: '',
+          client_nif: '',
           client_name: '',
           electricity_ppi: '',
           pel: '',
@@ -155,6 +157,7 @@ const ExportPaymentSheet = (props) => {
                 
             }`,
             signature_date: sheet[i]?.itens[j]?.signature_date,
+            client_nif: sheet[i]?.itens[j]?.client_nif,
             client_name: sheet[i]?.itens[j]?.client_name,
             electricity_ppi: `${sheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
             pel: `${sheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
@@ -200,12 +203,6 @@ const ExportPaymentSheet = (props) => {
       sheet.getCell(cellAddress).font = { bold: true }
     })
 
-
-
-    // console.log(test1, 'TESTE 1')
-
-    // console.log(eachSheet, 'TESTE');
-    // console.log(workbook, 'WORK BOOK');
     // Add rows in the above header
 
     const buffer = await workbook.xlsx.writeBuffer()
