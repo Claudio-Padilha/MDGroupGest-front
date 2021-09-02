@@ -98,10 +98,7 @@ const ContractEdit = (props) => {
     let sellStatesArr = []
     for(let i = 0; i < sellStates?.length; i++) {
       sellStatesArr.push({
-        value: {
-          value: sellStates[i]?.id,
-          label: sellStates[i]?.name.toUpperCase()
-        },
+        value: sellStates[i]?.id,
         label: sellStates[i]?.name.toUpperCase()
       })
     }
@@ -346,6 +343,7 @@ const ContractEdit = (props) => {
 
     let powerValue = ""
     if (document.getElementById('select-power') !== null && document.getElementById('select-power').value !== ""){
+      console.log(document.getElementById('select-power'), 'DOCUMENT SELECT BY ID')
       const value = document.getElementById('select-power').value
       powerValue = JSON.parse(value)
     }
@@ -415,7 +413,7 @@ const ContractEdit = (props) => {
     }
 
     if (document.getElementById("select-sell-state").value !== "") {
-      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
+      contractData = { ...contractData, ...{ sell_state: Number(document.getElementById("select-sell-state").value) } }
     }
 
     if (powerValue !== "") {
@@ -491,11 +489,9 @@ const ContractEdit = (props) => {
     contractType === "Gás Condomínio"
   )
 
-  const sellStatesToUpdate = [
-    {name: "ok", value: 1},
-    {name: "ko", value: 2},
-    {name: "r", value: 3}
-  ]
+  const sellStatesToUpdate = infoForFields?.sellStates
+
+  console.log(sellStatesToUpdate, 'TESTE FINAL')
 
   useEffect(() => {
     if (state?.contractFromDetail) {
@@ -670,7 +666,7 @@ const ContractEdit = (props) => {
                   >
                     {sellStatesToUpdate !== null ? sellStatesToUpdate.map(sellState => (
                       <MenuItem value={sellState.value}>
-                        {sellState.name}
+                        {sellState.label}
                       </MenuItem>
                     )) : []}
                   </Select>
