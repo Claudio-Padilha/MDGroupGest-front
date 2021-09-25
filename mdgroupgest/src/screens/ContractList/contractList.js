@@ -13,8 +13,8 @@ import Button from "../../components/Button/button"
 import { BackIcon } from '../../components/Icon/icons'
 
 import contractsRequests from "../../hooks/requests/contractsRequests"
+import dataRequests from "../../hooks/requests/dataRequests"
 import { useRefresh } from '../../hooks/window/refresh'
-import { useDebounce } from '../../hooks/utils'
 import { useAuth } from '../../hooks/employees/auth'
 
 import {
@@ -27,7 +27,6 @@ import {
 } from "./styles"
 
 import { List } from "semantic-ui-react"
-import SearchBar from "../../components/SearchArea/search"
 import CONSTANTS from "../../constants"
 
 const ContractList = (props) => {
@@ -220,6 +219,8 @@ const ContractList = (props) => {
               }
             )
             .then(async (res) => {
+              await dataRequests.getResultsToPresent(currentOfficeID)
+              await dataRequests.getOfficeResults(currentOfficeID)
               await contractsRequests.getContracts(currentOfficeID)
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);

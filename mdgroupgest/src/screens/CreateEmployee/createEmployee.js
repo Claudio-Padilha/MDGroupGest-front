@@ -71,40 +71,10 @@ const CreateEmployee = (props) => {
     var zipCode = data?.zipCode;
     var nr = data?.nr;
 
-    // Vai genericamente
-    var nipc = '';
-    var clientName='';
-    var clientNif='';
-    var clientContact='';
-    var CUIDUAL='';
-    var CUIForGas='';
-    var CPEDUAL='';
-    var CPEForElectricity='';
-    var observations='';
-    
-    // await _executeValidationsIfHas(
-    //   name,
-    //   nif,
-    //   nipc,
-    //   address,
-    //   contact,
-    //   email,
-    //   zipCode,
-    //   clientName,
-    //   clientNif,
-    //   clientContact,
-    //   CUIDUAL,
-    //   CUIForGas,
-    //   CPEDUAL,
-    //   CPEForElectricity,
-    //   observations
-    // )
-    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
-
     const salesPersonObj = {
       manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
-      team_leader: data?.employeeAbove?.is_team_leader ? data?.employeeAbove?.id : null,
-      instructor: data?.employeeAbove?.is_instructor ? data?.employeeAbove?.id : null,
+      team_leader: employeeTypeOfList === "team_leader" ? data?.employeeAbove?.id : null,
+      instructor: employeeTypeOfList === "instructor" ? data?.employeeAbove?.id : null,
       office: officeID,
       user: {
         name: name,

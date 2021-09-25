@@ -299,7 +299,9 @@ const ContractEdit = (props) => {
       reverseButtons: true
     }).then((result) => {
       if (result?.isConfirmed) {
-        contractsRequests.updateContract(contractData).then((res) => {
+        contractsRequests.updateContract(contractData).then(async (res) => {
+          await dataRequests.getResultsToPresent(currentOfficeID)
+          await dataRequests.getOfficeResults(currentOfficeID)
           contractsRequests.getContracts(currentOfficeID)
           .then(
             () => {

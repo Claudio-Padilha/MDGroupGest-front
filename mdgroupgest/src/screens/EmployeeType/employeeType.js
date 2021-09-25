@@ -33,23 +33,16 @@ const EmployeeType = (props) => {
     window.location.replace('#/BackOffice');    
   }
 
-  const history = useHistory();
-
   const isFromBackOffice = props?.location?.state?.isFromBackOffice;
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const currentUser = props?.location?.state?.user;
-  const isAdmin = currentUser?.user?.is_admin;
-  const fromEmployeeCreation = props?.location?.state?.fromEmployeeCreation;
 
   const { isCEO, isRegularManager, isAdministrator, isRegularSecretary } = useAuth()
-  const { 
-    ceo, 
+  const {
     regularManager,
-    administrator,
-    regularSecretary,
+    managerAssistants,
     teamLeaders, 
-    instructors, 
-    comercials
+    instructors,
   } = useEmployees()
 
   const currentOfficeObject = useMemo(() => {
@@ -134,7 +127,7 @@ const EmployeeType = (props) => {
         title: "Criar Comercial",
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
-        employeeToAssociate: regularManager?.concat(teamLeaders, instructors),
+        employeeToAssociate: regularManager?.concat(managerAssistants, teamLeaders, instructors),
         shouldRenderEmployeeAssociation: true
       }  
     }}>
