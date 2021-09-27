@@ -345,7 +345,6 @@ const ContractEdit = (props) => {
 
     let powerValue = ""
     if (document.getElementById('select-power') !== null && document.getElementById('select-power').value !== ""){
-      console.log(document.getElementById('select-power'), 'DOCUMENT SELECT BY ID')
       const value = document.getElementById('select-power').value
       powerValue = JSON.parse(value)
     }
@@ -366,7 +365,7 @@ const ContractEdit = (props) => {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
     }
     
-    if (document.getElementById('pel')?.checked !== state?.contractFromDetail?.pel) {
+    if (typeof(document.getElementById('pel')?.checked) !== 'undefined' && document.getElementById('pel')?.checked !== state?.contractFromDetail?.pel) {
       contractData = {
         ...contractData,
         ...{ 
@@ -375,38 +374,38 @@ const ContractEdit = (props) => {
       }
     }
 
-    if (document.getElementById('gas_ppi')?.checked !== state?.contractFromDetail?.gas_ppi) {
+    if (typeof(document.getElementById('gas_ppi')?.checked) !== 'undefined' && document.getElementById('gas_ppi')?.checked !== state?.contractFromDetail?.gas_ppi) {
       contractData = {
         ...contractData,
         gas_ppi: document.getElementById('gas_ppi')?.checked,
       }
     }
 
-    if (document.getElementById('electricity_ppi')?.checked !== state?.contractFromDetail?.electricity_ppi) {
+    if (typeof(document.getElementById('electricity_ppi')?.checked) !== 'undefined' && document.getElementById('electricity_ppi')?.checked !== state?.contractFromDetail?.electricity_ppi) {
       contractData = {
         ...contractData,
-        electricity_ppi: document.getElementById('electricity_ppi').checked,
+        electricity_ppi: document.getElementById('electricity_ppi')?.checked,
       }
     }
 
-    if (document.getElementById('electronic_bill')?.checked !== state?.contractFromDetail?.electronic_bill) {
+    if (typeof(document.getElementById('electronic_bill')?.checked)  !== 'undefined' && document.getElementById('electronic_bill')?.checked !== state?.contractFromDetail?.electronic_bill) {
       contractData = {
         ...contractData,
-        electronic_bill: document.getElementById('electronic_bill').checked,
+        electronic_bill: document.getElementById('electronic_bill')?.checked,
       }
     }
 
-    if (document.getElementById('mgi')?.checked !== state?.contractFromDetail?.mgi) {
+    if (typeof(document.getElementById('mgi')?.checked) !== 'undefined' && document.getElementById('mgi')?.checked !== state?.contractFromDetail?.mgi) {
       contractData = {
         ...contractData,
         mgi: document.getElementById('mgi')?.checked,
       }
     }
 
-    // if (document.getElementById("select-sell-state").value !== "") {
+    // if (typeof(state?.contractFromDetail?.gas_ppi) !== 'undefined' && document.getElementById("select-sell-state").value !== "") {
     //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
     // }
-    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
+    if (document.getElementById("select-gas-scale").value !== "") {
       contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
     }
 
@@ -417,6 +416,8 @@ const ContractEdit = (props) => {
     if (document.getElementById("select-sell-state").value !== "") {
       contractData = { ...contractData, ...{ sell_state: Number(document.getElementById("select-sell-state").value) } }
     }
+
+    console.log(contractData, 'CONTRACT DATA')
 
     if (powerValue !== "") {
       if ((powerValue?.name === 'BTE' || powerValue?.name === 'MT')) {
