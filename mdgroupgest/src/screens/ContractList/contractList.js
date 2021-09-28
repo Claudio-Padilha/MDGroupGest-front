@@ -391,7 +391,7 @@ const ContractList = (props) => {
           { contract?.sell_state__name === "ok" &&
             <Column className={"contractComission"}>
               <List.Content>
-                <SmallSubHeading><b>Comissão do comercial:</b></SmallSubHeading>
+                <SmallSubHeading><b>Comissão do colaborador:</b></SmallSubHeading>
                 <Body className={"employeeComission"}>
                   {`${contract?.employee_comission === null ? '0' : `${contract?.employee_comission}`}€`}
                 </Body>
@@ -483,7 +483,7 @@ const ContractList = (props) => {
           }
         }
       }}
-      label="NIF, Comercial, Tipo de Contrato, Estado da venda..."
+      label="NIF, Colaborador, Tipo de Contrato, Estado da venda..."
       onChange={e =>  _handleSearchChange(e?.target?.value?.toLowerCase()) }
       style={{marginTop: '2vh'}}
     />

@@ -108,7 +108,7 @@ export default function MenuNavbar(props) {
                   isFromBackOffice: true,
                   user: userForPhoto
                 }    
-              }} >Inserir Funcionário(a)</Link>
+              }} >Inserir Colaborador(a)</Link>
             </Body>
           }
           
@@ -121,7 +121,7 @@ export default function MenuNavbar(props) {
                   user: userForPhoto
                 }
               }}
-              >Ver Funcionários(as)</Link>
+              >Ver Colaboradores(as)</Link>
             </Body>
           }
 

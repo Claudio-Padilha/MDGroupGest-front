@@ -44,17 +44,19 @@ const EmployeeList = (props) => {
   const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
   const dataToGoBack = props?.location?.state?.dataGoingToList;
   const isFromEmployeeTypeSelection = props?.location?.state?.isFromEmployeeTypeSelection;
+  const emptyPhrase = props?.location?.state?.emptyPhrase
 
   const { wasRefreshed } = useRefresh()
 
   const initialState = {
-    employees: employees,
-    userType: userType,
-    shouldRenderEmployeeAssociation: shouldRenderEmployeeAssociation,
-    title: title,
-    officeID: officeID,
-    employeeToAssociate: employeeToAssociate,
-    isFromEdit: isFromEdit,
+    employees,
+    userType,
+    shouldRenderEmployeeAssociation,
+    title,
+    officeID,
+    employeeToAssociate,
+    isFromEdit,
+    emptyPhrase
   }
 
   useEffect(() => {
@@ -202,7 +204,7 @@ const EmployeeList = (props) => {
             .then(async() => {
               await dataRequests.getMyTeam(currentOfficeID)
               swalWithBootstrapButtons.fire(
-                'Comercial Promovido!',
+                'Colaborador Promovido!',
                 'A operação foi concluída com sucesso.',
                 'success'
               )  
@@ -213,7 +215,7 @@ const EmployeeList = (props) => {
           ) {
             swalWithBootstrapButtons.fire(
               'Ação cancelada!',
-              'O comercial não foi promovido.',
+              'O Colaborador não foi promovido.',
               'error'
             )
           }
@@ -244,7 +246,7 @@ const EmployeeList = (props) => {
             await employeesRequests.deleteEmployee(employee)         
             .then(() => (
               swalWithBootstrapButtons.fire(
-                'Comercial Excluído!',
+                'Colaborador Excluído!',
                 'A operação foi concluída com sucesso.',
                 'success'
               )  
@@ -255,7 +257,7 @@ const EmployeeList = (props) => {
           ) {
             swalWithBootstrapButtons.fire(
               'Ação cancelada!',
-              'O comercial não foi excluído.',
+              'O colaborador não foi excluído.',
               'error'
             )
           }
@@ -605,7 +607,7 @@ const EmployeeList = (props) => {
     } else if(!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null && !state?.employeesReturningFromEdit) {
       return (
         <EmptyContainer>
-          <SubHeading>Ainda não há comerciais...</SubHeading>
+          <SubHeading>{state?.emptyPhrase}</SubHeading>
         </EmptyContainer>
       )
     } else if (!state?.isFromEdit && state?.employees) {

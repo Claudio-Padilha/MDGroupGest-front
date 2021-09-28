@@ -237,7 +237,7 @@ const CreateContract = (props) => {
       powerForElectricityConfirmation === mtId
     )
 
-    const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const electricityMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -252,7 +252,7 @@ const CreateContract = (props) => {
     <b>Estado da venda:</b> ${sellState ? sellState.label : `❌`} <br>
     <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods.label : `❌`} <br>`; 
 
-    const gasMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const gasMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -268,7 +268,7 @@ const CreateContract = (props) => {
     <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods.label : `❌`} <br>
     <b>Escalão Gás:</b> ${gasScaleForGas ? gasScaleForGas.label : `❌`} <br>`; 
 
-    const dualMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const dualMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -548,7 +548,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
@@ -606,7 +606,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
@@ -664,7 +664,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
     },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },

@@ -161,7 +161,12 @@ export default {
     return new Promise((resolve, reject) => {
 
       var userType = data?.user.user_type;
-      const convertToSalesperson = (userType === "sales_person" || userType === "instructor" || userType === "team_leader")
+      const convertToSalesperson = (
+        userType === "sales_person" ||
+        userType === "instructor" ||
+        userType === "team_leader" ||
+        userType === 'manager_assistant'
+      )
       var user_type = convertToSalesperson ? "salesPerson" : userType;
       
       var employeeDeleteRequest = {

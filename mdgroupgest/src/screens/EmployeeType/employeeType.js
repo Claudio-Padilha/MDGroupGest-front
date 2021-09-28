@@ -278,7 +278,7 @@ const EmployeeType = (props) => {
             color: CONSTANTS?.colors?.darkGrey
           }
         }>
-          Qual é o tipo de comercial a ser inserido?
+          Qual é o tipo de colaborador a ser inserido?
         </Heading>
         { handleUserView(currentUser) }
       </MainContainer>

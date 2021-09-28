@@ -251,7 +251,7 @@ const TeamReportDetail = (props) => {
               <MDRow style={column}>
 
                 { koPercentage > 30 &&
-                  <Body style={nameStyle}>{`Este comercial está com a taxa de anulados em: ${koPercentage}%`}</Body>
+                  <Body style={nameStyle}>{`Este colaborador está com a taxa de anulados em: ${koPercentage}%`}</Body>
                 }
                 <SubHeading style={
                   {
@@ -367,7 +367,7 @@ const TeamReportDetail = (props) => {
             Resultados
           </Heading>
           <FirstRow style={{flexWrap: 'wrap', height: 'auto'}}>
-            <SubHeading>Esse comercial ainda não tem resultados</SubHeading>
+            <SubHeading>Esse colaborador ainda não tem resultados</SubHeading>
           </FirstRow>
         </div>
       )

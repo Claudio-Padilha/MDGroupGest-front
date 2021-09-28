@@ -139,7 +139,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         dataGoingToList: state,
         officeID: currentOfficeID,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há CEO.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -169,7 +170,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Administradores(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -187,7 +189,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderManagerCard = () => (
     <Link to={{
@@ -199,7 +201,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         dataGoingToList : currentUser,
         officeID: currentOfficeID,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Empresários(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -217,7 +220,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderSecretaryCard = () => (
     <Link to={{
@@ -229,7 +232,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Secretários(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -247,7 +251,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderManagerAssistantCard = () => (
     <Link to={{
@@ -258,7 +262,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.managerAssistants,
         employeeToAssociate: regularManager.concat(ceo),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Gerentes.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -267,7 +272,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderTeamLeaderCard = () => (
     <Link to={{
@@ -278,7 +283,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.teamLeaders,
         employeeToAssociate: regularManager.concat(managerAssistants.concat(ceo)),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Team Leaders.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -287,7 +293,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderInstructorCard = () => (
     <Link to={{
@@ -300,7 +306,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeOBJ: currentOfficeObject,
         employeeToAssociate: managerAssistants.concat(teamLeaders.concat(regularManager).concat(ceo)),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Instrutores(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -322,7 +329,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeOBJ: currentOfficeObject,
         employeeToAssociate: managerAssistants.concat(teamLeaders.concat(instructors.concat(allEmployees?.manager))),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Comerciais.'
       }  
     }}>
       <MDCard className={"card"}>
