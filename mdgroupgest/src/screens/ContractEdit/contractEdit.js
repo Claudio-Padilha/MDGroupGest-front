@@ -302,7 +302,7 @@ const ContractEdit = (props) => {
         contractsRequests.updateContract(contractData).then(async (res) => {
           await dataRequests.getResultsToPresent(currentOfficeID)
           await dataRequests.getOfficeResults(currentOfficeID)
-          contractsRequests.getContracts(currentOfficeID)
+          contractsRequests.monthContracts(currentOfficeID)
           .then(
             () => {
               swalWithBootstrapButtons.fire({

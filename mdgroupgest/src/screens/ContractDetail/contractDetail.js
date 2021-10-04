@@ -227,7 +227,7 @@ const ContractDetail = (props) => {
           .then(async () => {
             await dataRequests.getOfficeResults(currentOfficeID)
             await dataRequests.getMySalary()
-            contractsRequests.getContracts(currentOfficeID).then(
+            contractsRequests.monthContracts(currentOfficeID).then(
               swalWithBootstrapButtons.fire(
                 'Contrato Apagado!',
                 'A operação foi concluída com sucesso.',

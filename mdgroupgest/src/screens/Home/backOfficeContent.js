@@ -79,7 +79,7 @@ const BackOfficeContent = (props) => {
 
   async function _getOffice() {
     await officesRequests.getOffice(ramCurrentOfficeID)
-    await contractsRequests.getContracts(ramCurrentOfficeID)
+    await contractsRequests.monthContracts(ramCurrentOfficeID)
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
     await contractsRequests.getAllContracts()
     await employeesRequests.getMyTeamResults()

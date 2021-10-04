@@ -411,12 +411,12 @@ const CreateContract = (props) => {
                         reverseButtons: true
                       }).then(async (result) => {
                         if(result.isConfirmed) {
-                          await contractsRequests.getContracts(currentOfficeID)
+                          await contractsRequests.monthContracts(currentOfficeID)
                           await dataRequests.getOfficeResults(currentOfficeID)
                           await dataRequests.getMySalary()
                           return history.push({pathname:"/ChooseTypeOfContract"});
                         } else if(!result.isConfirmed) {
-                          await contractsRequests.getContracts(currentOfficeID)
+                          await contractsRequests.monthContracts(currentOfficeID)
                           await dataRequests.getOfficeResults(currentOfficeID)
                           await dataRequests.getMySalary()
                           return history.push({
@@ -512,12 +512,12 @@ const CreateContract = (props) => {
                   reverseButtons: true
                 }).then(async (result) => {
                   if(result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
+                    await contractsRequests.monthContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({pathname:"/ChooseTypeOfContract"});
                   } else if(!result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
+                    await contractsRequests.monthContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({
