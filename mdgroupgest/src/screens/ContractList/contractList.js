@@ -68,6 +68,8 @@ const ContractList = (props) => {
   const cameFromBackoffice = props?.location?.state?.cameFromBackoffice
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
+  console.log(cameFromBackoffice, 'Came from backoffice')
+
   const contractsFromBackoffice = props?.location?.state?.data
   const contractsFromDetail = props?.location?.state?.contractsToReturn
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete
@@ -555,7 +557,7 @@ const ContractList = (props) => {
         </MainContainer>
       </>
     )
-  }, [contracts, cameFromBackoffice, isLoading])
+  }, [contracts, cameFromBackoffice, isLoading, fuseMatchedContracts])
 
   return handleContent()
 }

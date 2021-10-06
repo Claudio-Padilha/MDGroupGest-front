@@ -678,6 +678,8 @@ const BackOfficeContent = (props) => {
                 pathname: "/ContractList",
                 state: {
                   data: contracts,
+                  currentUser: currentUser,
+                  cameFromBackoffice: true,
                 }
               })
             }}
@@ -695,6 +697,8 @@ const BackOfficeContent = (props) => {
                   pathname: "/ContractList",
                   state: {
                     data: allContractsToSend,
+                    currentUser: currentUser,
+                    cameFromBackoffice: true,
                   }
                 })
               }}
