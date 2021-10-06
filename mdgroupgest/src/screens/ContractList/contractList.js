@@ -68,8 +68,6 @@ const ContractList = (props) => {
   const cameFromBackoffice = props?.location?.state?.cameFromBackoffice
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-  console.log(cameFromBackoffice, 'Came from backoffice')
-
   const contractsFromBackoffice = props?.location?.state?.data
   const contractsFromDetail = props?.location?.state?.contractsToReturn
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete
@@ -415,24 +413,24 @@ const ContractList = (props) => {
       setIsSearching(false)
     }
     if (contracts) {
-      const keys = [
-        {
-          name: 'client_nif',
-          weight: 2
-        },
-        'user__name',
-        'contract_type',
-        'sell_state__name'
-      ]
 
-      const options = {
-        keys,
+      const newFuse = new Fuse(contracts, {
+        keys: [
+          'client_nif',
+          'client_name',
+          'user__name',
+          'contract_type',
+          'sell_state__name'
+        ],
         includeScore: true,
-        minMatchCharLength: 1,
-        findAllMatches: true
-      }
-
-      const newFuse = new Fuse(contracts, options)
+        includeMatches: true,
+        minMatchCharLength: 2,
+        findAllMatches: true,
+        threshold: 0,
+        useExtendedSearch: true,
+        ignoreFieldNorm: true,
+        ignoreLocation: true,
+      })
 
       setFuse(newFuse)
     }
@@ -441,7 +439,12 @@ const ContractList = (props) => {
 
   const _handleSearchChange = (value) => {
     setIsSearching(true)
-    setQuery(value?.toString())
+    let auxValue = value
+    if (value[value?.length - 1] === ' ') {
+      auxValue = value.replace(' ', '')
+    }
+
+    setQuery(auxValue)
   }
   
   const renderSearchBar = useCallback(() => (
@@ -459,14 +462,14 @@ const ContractList = (props) => {
           }
         }
       }}
-      label="NIF, Colaborador, Tipo de Contrato, Estado da venda..."
-      onChange={e =>  _handleSearchChange(e?.target?.value?.toLowerCase()) }
+      label="NIF, Colaborador, Nome do cliente, Tipo de Contrato, Estado da venda..."
+      onChange={e =>  _handleSearchChange(e?.target?.value) }
       style={{marginTop: '2vh'}}
     />
   ), [isSearching])
 
   const fuseMatchedContracts = useMemo(() => (
-    fuse?.search(query).filter(value => ( value?.score <= 0.0001 ))
+    fuse?.search(query).filter(value => ( value?.score <= 0.001 ))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [query])
 
@@ -483,6 +486,9 @@ const ContractList = (props) => {
       <h1>Não encontramos nada...</h1>
     </div>
   )
+
+  console.log(contracts, 'Contracts')
+  console.log(fuse, 'Fuse')
 
   const handleContent = useCallback(() => {
     return (
@@ -557,7 +563,7 @@ const ContractList = (props) => {
         </MainContainer>
       </>
     )
-  }, [contracts, cameFromBackoffice, isLoading, fuseMatchedContracts])
+  }, [contracts, cameFromBackoffice, isLoading, fuseMatchedContracts, isSearching])
 
   return handleContent()
 }
