@@ -32,12 +32,12 @@ import CONSTANTS from '../../constants';
 
 import dataRequests from '../../hooks/requests/dataRequests';
 import officesRequests from '../../hooks/requests/officesRequests';
-import contractsRequests from '../../hooks/requests/contractsRequests';
 import { useEmployees } from '../../hooks/employees/employees';
 import { useRefresh } from '../../hooks/window/refresh';
 import { useStartApp } from '../../hooks/backoffice/startApp';
 import { useAuth } from '../../hooks/employees/auth';
 import employeesRequests from '../../hooks/requests/employeesRequests';
+import contractsRequests from '../../hooks/requests/contractsRequests';
 
 import './styles.css'
 
@@ -81,8 +81,8 @@ const BackOfficeContent = (props) => {
     await officesRequests.getOffice(ramCurrentOfficeID)
     await contractsRequests.monthContracts(ramCurrentOfficeID)
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
-    await contractsRequests.getAllContracts()
     await employeesRequests.getMyTeamResults()
+    await contractsRequests.getAllContracts()
   }
 
   _getOffice()

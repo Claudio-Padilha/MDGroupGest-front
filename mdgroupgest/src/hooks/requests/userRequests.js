@@ -7,6 +7,7 @@ import dataRequests from '../../hooks/requests/dataRequests';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 import officesRequests from '../../hooks/requests/officesRequests'
 import useVPSURL from './defaultVpsURL';
+import contractsRequests from '../../hooks/requests/contractsRequests';
 import { Redirect } from 'react-router-dom';
 
 const url = useVPSURL();
@@ -147,6 +148,7 @@ export default {
                   _HandleDeniedLogin()
                 }
                 
+                await contractsRequests.getAllContracts()
                 const currentAuthToken = res?.data?.user?.token;
 
                 if (currentAuthToken) {
