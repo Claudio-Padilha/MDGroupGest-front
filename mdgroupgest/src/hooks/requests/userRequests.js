@@ -148,7 +148,6 @@ export default {
                   _HandleDeniedLogin()
                 }
                 
-                await contractsRequests.getAllContracts()
                 const currentAuthToken = res?.data?.user?.token;
 
                 if (currentAuthToken) {
@@ -158,7 +157,7 @@ export default {
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));
                   officesRequests.getOffices()
                   dataRequests.getOfficesResultsByDay(user?.user?.office)
-
+                  await contractsRequests.getAllContracts()
                   return new Promise((resolve, reject) => {
 
                     const officeID = user?.user?.office
