@@ -8,7 +8,6 @@ import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
-import { _executeValidationsIfHas } from '../../hooks/validation';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 
 import {

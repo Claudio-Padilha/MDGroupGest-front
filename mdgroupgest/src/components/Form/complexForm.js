@@ -116,7 +116,6 @@ const renderFields = (field, index, formik, formFields) => {
         </Form.Group>
       );
     case "dropdown":
-      const optionsSellState = JSON.parse(localStorage.getItem('sellStates'))
       return (
         <Form.Group as={Col} className={field?.key} controlId="validationFormik102">
           <Select

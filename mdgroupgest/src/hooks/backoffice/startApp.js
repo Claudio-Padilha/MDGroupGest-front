@@ -1,26 +1,8 @@
-import { useMemo, useEffect, useCallback } from 'react'
-import { bindActionCreators } from 'redux'
-import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 
-import dataRequests from '../requests/dataRequests';
+import dataRequests from '../requests/dataRequests'
 
 export const useStartAppActions = () => {
-  const dispatch = useDispatch()
-
-  const actions = useMemo(
-    () => bindActionCreators(
-      {
-        feedbackCalls: dataRequests.getFeedbackCall(),
-        getSellStates: dataRequests.getSellState(),
-        getPayments: dataRequests.getPayment(),
-        getGasScales: dataRequests.getGasScale(),
-        getPowers: dataRequests.getPower(),
-        getResultsToPresent: dataRequests.getResultsToPresent()
-      }, 
-      dispatch
-    ),  
-    [dispatch]
-  )
 
   const getFeedbackCalls = () => {
     return dataRequests.getFeedbackCall()

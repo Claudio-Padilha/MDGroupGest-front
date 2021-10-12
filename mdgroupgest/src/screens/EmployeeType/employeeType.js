@@ -1,41 +1,39 @@
-import React, { useMemo, useCallback } from "react";
-import { Link, useHistory, Redirect } from "react-router-dom";
+import React, { useMemo, useCallback } from "react"
+import { Link, Redirect } from "react-router-dom"
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading, Body } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 
 import {
   MDCard,
   MDCardBody,
   MDButton 
-} from '../../screens/Home/md';
+} from '../../screens/Home/md'
 
-import { useAuth } from '../../hooks/employees/auth';
-import { useEmployees } from '../../hooks/employees/employees';
-import employeesRequests from "../../hooks/requests/employeesRequests";
-import officesRequests from "../../hooks/requests/officesRequests"; 
-import { GoHomeButton } from "../EmployeeList/styles";
+import { useAuth } from '../../hooks/employees/auth'
+import { useEmployees } from '../../hooks/employees/employees'
+import employeesRequests from "../../hooks/requests/employeesRequests"
+import officesRequests from "../../hooks/requests/officesRequests" 
+import { GoHomeButton } from "../EmployeeList/styles"
 
 import {
   MainContainer,
   CardsContainer,
   FirstRow,
-  FirstRowForAdmin,
   SecondRow,
-  HomePageButton,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
 const EmployeeType = (props) => {
   function _goBack() {
-    window.location.replace('#/BackOffice');    
+    window.location.replace('#/BackOffice')
   }
 
-  const isFromBackOffice = props?.location?.state?.isFromBackOffice;
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
-  const currentUser = props?.location?.state?.user;
+  const isFromBackOffice = props?.location?.state?.isFromBackOffice
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
+  const currentUser = props?.location?.state?.user
 
   const { isCEO, isRegularManager, isAdministrator, isRegularSecretary } = useAuth()
   const {
@@ -53,12 +51,10 @@ const EmployeeType = (props) => {
 
   const _allEmployees = useCallback(() => {
     return employeesRequests.getAllEmployees(currentOfficeID)
-    
-  }, [isFromBackOffice]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isFromBackOffice])
 
   _allEmployees()
-
-  const allEmployees = _allEmployees()
 
   const renderAdminCard = () => (
     <Link to={{
@@ -96,7 +92,7 @@ const EmployeeType = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderSecretaryCard = () => (
     <Link to={{
@@ -115,9 +111,7 @@ const EmployeeType = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
-
-
+  )
 
   const renderComercialCard = () => (
     <Link to={{
@@ -137,7 +131,7 @@ const EmployeeType = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
     // ceo e admin deverão ver um shouldShowOffice assim como employeeToAssociate
   const ceoView = () => (
     <CardsContainer>
@@ -208,25 +202,6 @@ const EmployeeType = (props) => {
     </CardsContainer>
   )
 
-  const regularSecretaryView = () => (
-    <CardsContainer>
-
-      <FirstRow>
-        {renderComercialCard()}
-      </FirstRow>
-      
-      <SecondRow>   
-        <GoHomeButton>
-          <Body>
-            <Link to={"/BackOffice"}>
-              <MDButton style={{height: '4vh', width: '6vw'}}>Cancelar</MDButton>
-            </Link>
-          </Body>
-        </GoHomeButton>
-      </SecondRow>
-    
-    </CardsContainer>
-  )
   function _navigateToEmployeeForm() {
     return (
       <Redirect
@@ -246,7 +221,6 @@ const EmployeeType = (props) => {
     )
   }
   
-
   const handleUserView = useCallback(
     () => {
       if(isCEO) {
@@ -259,6 +233,7 @@ const EmployeeType = (props) => {
         return _navigateToEmployeeForm()
       }
     },
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [currentUser],
   )
 
@@ -283,7 +258,7 @@ const EmployeeType = (props) => {
         { handleUserView(currentUser) }
       </MainContainer>
     </>
-  );
-};
+  )
+}
 
-export default EmployeeType;
+export default EmployeeType

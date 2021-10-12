@@ -30,8 +30,8 @@ const StyledCard = styled(Card)`
   box-shadow: 0 1px 3px #000;
   font-family: "Nunito", sans-serif;
   margin-bottom: 20px;
-  margin-left: ${props => props.isTheMiddleCard ? "2%" : "0"}; 
-  margin-right: ${props => props.isTheMiddleCard ? "2%" : "0"}
+  margin-left: ${props => props.isthemiddlecard ? "2%" : "0"}; 
+  margin-right: ${props => props.isthemiddlecard ? "2%" : "0"}
 `;
 
 const StyledCardSubtitle = styled(Card.Subtitle)`

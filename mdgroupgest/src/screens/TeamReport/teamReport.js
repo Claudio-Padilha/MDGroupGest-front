@@ -1,6 +1,6 @@
-import React, { useMemo, useReducer, useEffect, useState } from "react"
-import { Link, useHistory } from "react-router-dom"
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import React, { useMemo, useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { SwishSpinner } from 'react-spinners-kit'
 import { Avatar } from '@material-ui/core'
 
 import { Heading, SubHeading, Body } from '../../components/Text/text'
@@ -9,27 +9,21 @@ import { BackIcon } from '../../components/Icon/icons'
 import {
   MDCard,
   MDCardBody,
-  MDButton,
-  MDRow,
-  MDCol
+  MDRow
 } from '../../screens/Home/md'
 
 import CONSTANTS from '../../constants'
 import {
   TeamContainer,
   FirstRow,
-  SecondRow,
-  GoHomeButton,
-  ExportButton,
   MainContainerEType,
   WidthMessageContainer,
   useStyles
-} from "./styles"
+} from './styles'
 
 import { useAuth } from '../../hooks/employees/auth'
 import { useRefresh } from '../../hooks/window/refresh'
-import employeesRequests from "../../hooks/requests/employeesRequests"
-import officesRequests from '../../hooks/requests/officesRequests'
+import employeesRequests from '../../hooks/requests/employeesRequests'
 
 const TeamReport = (props) => {
   const history = useHistory()
@@ -43,14 +37,9 @@ const TeamReport = (props) => {
     })
   }
 
-  const { 
-    isCEO,
-    isAdministrator,
-    isRegularManager,
-    isRegularSecretary
-  } = useAuth()
+  const { isAdministrator } = useAuth()
 
-  const screenStyle = useStyles();
+  const screenStyle = useStyles()
 
   const { wasRefreshed } = useRefresh()
 
@@ -74,12 +63,6 @@ const TeamReport = (props) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
   const currentOfficeID = currentUser?.user?.office
-
-  const currentOfficeObject = useMemo(() => {
-    officesRequests.getOffice(currentOfficeID)
-
-    return JSON.parse(localStorage.getItem('currentOffice'))
-  }, [currentOfficeID])
 
   function _allEmployees() {
     if(isFromBackOffice) {
@@ -189,31 +172,31 @@ const TeamReport = (props) => {
     const resultStatus = () => {
     
       if (total === 0) {
-        return "⚪️";
+        return '⚪️';
       } else if (okPercentage < 70) {
-        return "🔴";
+        return '🔴';
       } else if (okPercentage < 80){
-        return "🟡";
+        return '🟡';
       } else if (okPercentage > 80) {
-        return "🟢"
+        return '🟢'
       } else {
-        return "⚪️"
+        return '⚪️'
       }
     }
 
     return (
       <Link style={linkStyle} key={i} to={{
-        pathname:"/teamReportDetail",
+        pathname:'/teamReportDetail',
         state: {
           employee,
           fromTeamReportList: true
         }
       }}>
-        <MDCard className={"card"} style={{margin: '1vh'}}>
+        <MDCard className={'card'} style={{margin: '1vh'}}>
           <MDCardBody style={{...column, width: '100%'}}>
             <div className={'AVATAR CONTAINER'} style={avatarContainerStyle}>
               <Avatar
-                alt="Profile Image"
+                alt='Profile Image'
                 className={screenStyle?.large}
                 src={
                   employee?.profile_url ?? 
@@ -371,7 +354,7 @@ const TeamReport = (props) => {
   )  
   
   const loadingContainer = () => (
-    <SwishSpinner size={200} color="#686769" loading={isLoading} />
+    <SwishSpinner size={200} color='#686769' loading={isLoading} />
   )
  
   return(

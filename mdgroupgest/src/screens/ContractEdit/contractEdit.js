@@ -16,14 +16,11 @@ import { LogoMD } from '../../components/Logo/logo'
 import { BackIcon } from '../../components/Icon/icons'
 import SwitchButton from "../../components/ToggleComponent/toggleButton"
 
-import { _executeValidationsIfHas } from '../../hooks/validation'
 import contractsRequests from '../../hooks/requests/contractsRequests'
 import dataRequests from '../../hooks/requests/dataRequests'
 import { useRefresh } from '../../hooks/window/refresh'
 
 import CONSTANTS from '../../constants'
-
-import { _formatDate } from '../../utils/date'
 
 import {
   Row,
@@ -203,6 +200,7 @@ const ContractEdit = (props) => {
       powersList,
       powersListCond
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label
@@ -233,6 +231,7 @@ const ContractEdit = (props) => {
         )
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromDetail])
 
   const reducer = useCallback((firstState, action) => {
@@ -254,6 +253,7 @@ const ContractEdit = (props) => {
     }, [800]);
 
     return reducerState
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -349,19 +349,19 @@ const ContractEdit = (props) => {
       powerValue = JSON.parse(value)
     }
 
-    if (document.getElementById("name").value !== "" ) {
+    if (document.getElementById('name') !== null && document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
     }
-    if (document.getElementById("nif").value !== "") {
+    if (document.getElementById('nif') !== null && document.getElementById("nif").value !== "") {
       contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
     }
-    if (document.getElementById("contact").value !== "") {
+    if (document.getElementById('contact') !== null && document.getElementById("contact").value !== "") {
       contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
     }
-    if (document.getElementById("delivery_date").value !== "") {
+    if (document.getElementById('delivery_date') !== null && document.getElementById("delivery_date").value !== "") {
       contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
     }
-    if (document.getElementById("signature_date").value !== "") {
+    if (document.getElementById('signature_date') !== null && document.getElementById("signature_date").value !== "") {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
     }
     
@@ -405,19 +405,17 @@ const ContractEdit = (props) => {
     // if (typeof(state?.contractFromDetail?.gas_ppi) !== 'undefined' && document.getElementById("select-sell-state").value !== "") {
     //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
     // }
-    if (document.getElementById("select-gas-scale").value !== "") {
+    if (document.getElementById('select-gas-scale') !== null && document.getElementById("select-gas-scale").value !== "") {
       contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
     }
 
-    if (document.getElementById("select-feedback-call").value !== "") {
+    if (document.getElementById('select-feedback-call') !== null && document.getElementById("select-feedback-call").value !== "") {
       contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
     }
 
-    if (document.getElementById("select-sell-state").value !== "") {
+    if (document.getElementById('select-sell-state') !== null &&document.getElementById("select-sell-state").value !== "") {
       contractData = { ...contractData, ...{ sell_state: Number(document.getElementById("select-sell-state").value) } }
     }
-
-    console.log(contractData, 'CONTRACT DATA')
 
     if (powerValue !== "") {
       if ((powerValue?.name === 'BTE' || powerValue?.name === 'MT')) {
@@ -493,8 +491,6 @@ const ContractEdit = (props) => {
   )
 
   const sellStatesToUpdate = infoForFields?.sellStates
-
-  console.log(sellStatesToUpdate, 'TESTE FINAL')
 
   useEffect(() => {
     if (state?.contractFromDetail) {

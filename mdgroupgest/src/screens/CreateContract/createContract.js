@@ -9,7 +9,6 @@ import { Corner, Corner180 } from '../../components/Corner/corner'
 import { LogoMD } from '../../components/Logo/logo'
 import { BackIcon } from '../../components/Icon/icons'
 
-import { _executeValidationsIfHas } from '../../hooks/validation'
 import contractsRequests from '../../hooks/requests/contractsRequests'
 import dataRequests from '../../hooks/requests/dataRequests'
 import { useRefresh } from '../../hooks/window/refresh'
@@ -34,7 +33,6 @@ const CreateContract = (props) => {
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
   const [currentForm, setCurrentForm] = useState('')
-  const [dynamicPowerConfirmation, setDynamicPowerConfirmation] = useState('')
 
   function _allEmployees() {
     var allEmployees = []
@@ -159,6 +157,7 @@ const CreateContract = (props) => {
       gasScales,
       powersList
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label

@@ -4,7 +4,7 @@ import Divider from '@material-ui/core/Divider'
 import _ from 'lodash'
 import Swal from 'sweetalert2'
 import Fuse from 'fuse.js'
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import { SwishSpinner } from "react-spinners-kit"
 import TextField from '@material-ui/core/TextField'
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
@@ -83,10 +83,10 @@ const ContractList = (props) => {
   }
 
   useEffect(() => {
-    if(cameFromEdit) {
+    if(cameFromEdit || cameFromBackoffice) {
       window.location.reload()
     }
-  }, [])
+  }, [cameFromEdit, cameFromBackoffice])
 
   const initialState = {
     contracts: contractsFromBackoffice,
@@ -486,9 +486,6 @@ const ContractList = (props) => {
       <h1>Não encontramos nada...</h1>
     </div>
   )
-
-  console.log(contracts, 'Contracts')
-  console.log(fuse, 'Fuse')
 
   const handleContent = useCallback(() => {
     return (

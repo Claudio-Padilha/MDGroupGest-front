@@ -164,12 +164,16 @@ export default function MenuNavbar(props) {
 
           { !isAdmin && (isCEO || isAdministrator)  && 
             <Body isReverseColor={true} style={{marginBottom: '20%'}}>
-              <Link style={{
-                backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
-                boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
-                fontSize: 16,
-                padding: 10
-              }} onClick={() => _setToAdmin(isAdmin)}>{isAdministrator ? 'Versão Admin' : 'Versão CEO'}</Link>
+              <Link
+                style={{
+                  backgroundColor: `${CONSTANTS?.colors?.mediumGrey}`,
+                  boxShadow: '0px 2px 5px rgba(190, 190, 190, 0.8)',
+                  fontSize: 16,
+                  padding: 10
+                }}
+                to={{}}
+                onClick={() => _setToAdmin(isAdmin)}>{isAdministrator ? 'Versão Admin' : 'Versão CEO'}  
+              </Link>
             </Body>
           }
 

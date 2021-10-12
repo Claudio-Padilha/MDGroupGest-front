@@ -424,8 +424,8 @@ const BackOfficeContent = (props) => {
         </MDContainer>
         <TeamAvatarsContainer>
           <AvatarGroup max={12}>
-            {totalEmployees.map(employee => (
-              <Avatar alt="Avatar Comercial" src={employee?.user?.avatar} />
+            {totalEmployees.map((employee, i) => (
+              <Avatar key={i} alt="Avatar Comercial" src={employee?.user?.avatar} />
             ))}
           </AvatarGroup>
         </TeamAvatarsContainer>
@@ -653,9 +653,9 @@ const BackOfficeContent = (props) => {
     )
 
     return (
-      <MDCard isTheMiddleCard>
+      <MDCard isthemiddlecard="true">
         <MDCard.Body className={"contractsCardBody"}>
-          <Link onClick={handleContractListNavigation}>
+          <Link to={{}} onClick={handleContractListNavigation}>
             <SubHeading style={titleStyle}>
               Contratos
             </SubHeading>

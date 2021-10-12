@@ -118,18 +118,6 @@ function _HandleDeniedLogin() {
 
 export default {
   login: (data) => {
-
-    // const dt = {
-    //   admin_comission: 0
-    // }
-
-    // const header = {
-    //   ContentType: "aplication/json"
-    // }
-
-    // axios.post(`http://localhost:8000/api/configurations/`, dt,header).then(res => {
-    //   console.log(res)
-    // }, err => {console.log(err.message, "ERRO")})
       
     return new Promise((resolve, reject) => {
 

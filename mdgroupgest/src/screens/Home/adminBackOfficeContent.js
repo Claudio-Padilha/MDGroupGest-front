@@ -1,37 +1,27 @@
-import React, { useMemo, useState } from 'react';
-import { Link, useHistory } from "react-router-dom";
+import React, { useMemo } from 'react'
 
-import {
-  MDCard,
-  MDCardBody,
+import { MDCard, MDCardBody } from './md'
 
-} from './md';
+import { Heading, SubHeading } from '../../components/Text/text'
 
-import Button from "../../components/Button/button";
-import { Heading, SubHeading, Body } from '../../components/Text/text';
+import { useAuth } from '../../hooks/employees/auth'
 
-import { useAuth } from '../../hooks/employees/auth';
+import { ContentContainerForAdmin, OfficesContainer } from './styles'
 
-import {
-  ContentContainerForAdmin,
-  OfficesContainer,
-  ResultsContainer
-} from './styles';
+const AdminBackOfficeContent = () => {
 
-const AdminBackOfficeContent = (props) => {
-
-  const { isCEO, isAdministrator } = useAuth();
+  const { isCEO, isAdministrator } = useAuth()
   
   const offices = useMemo(() => {
-    return JSON.parse(localStorage.getItem('offices'));
-  }, [localStorage])
+    return JSON.parse(localStorage.getItem('offices')) 
+  }, [])
   
   const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'))
 
-  const renderOfficeCard = (office) => {
+  const renderOfficeCard = (office, i) => {
 
     return (
-      <MDCard className={'cardForOffice'}>
+      <MDCard key={i} className={'cardForOffice'}>
         <MDCardBody className={'bodyCardForOffice'}>
           <SubHeading className={'officeName'}>{office?.name}</SubHeading>
           <Heading className={'officeResult'}>{ramMySalary}€</Heading>
@@ -44,8 +34,8 @@ const AdminBackOfficeContent = (props) => {
     (isCEO || isAdministrator) ?
       <ContentContainerForAdmin>
         <OfficesContainer>
-          { offices?.map((office) => {
-            return renderOfficeCard(office);
+          { offices?.map((office, i) => {
+            return renderOfficeCard(office, i)
           })}
         </OfficesContainer>
       </ContentContainerForAdmin>
@@ -53,7 +43,7 @@ const AdminBackOfficeContent = (props) => {
     <div style={{display: 'flex', justifyContent: 'center'}}>
       <p>Você precisa ser administrador para ver este ecrã.</p>
     </div>        
-  );
+  )
 }
 
-export default AdminBackOfficeContent;
+export default AdminBackOfficeContent

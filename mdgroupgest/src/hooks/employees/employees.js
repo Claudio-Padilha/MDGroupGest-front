@@ -13,6 +13,7 @@ export const useEmployeesActions = ({ officeId }) => {
         },
         dispatch
     ),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     [dispatch]
   )
 
