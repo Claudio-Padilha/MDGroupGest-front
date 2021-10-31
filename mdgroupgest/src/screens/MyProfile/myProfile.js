@@ -1,38 +1,39 @@
-import React, {useState}from 'react';
-import { useHistory } from 'react-router-dom';
-import { Avatar } from '@material-ui/core';
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import React, {useState}from 'react'
+import { useHistory } from 'react-router-dom'
+import { Avatar } from '@material-ui/core'
+import { SwishSpinner } from 'react-spinners-kit'
 
-import { BackIcon } from '../../components/Icon/icons';
-import { Heading, SubHeading, Body } from '../../components/Text/text';
+import { BackIcon } from '../../components/Icon/icons'
+import { Heading, SubHeading, Body } from '../../components/Text/text'
 
-import { MainContainer, DivUploadPhoto, UploadButton, useStyles, WidthMessageContainer } from './styles';
+import { MainContainer, DivUploadPhoto, UploadButton, useStyles, WidthMessageContainer } from './styles'
 
-import {storage} from "../../firebase/firebase"
+import {storage} from '../../firebase/firebase'
 
-import employeesRequests from "../../hooks/requests/employeesRequests"
+import employeesRequests from '../../hooks/requests/employeesRequests'
 
-const MyProfile = (props) => {
-  const currentUser = localStorage.getItem('userForPhoto');
-  const user = JSON.parse(currentUser);
+const MyProfile = () => {
+  const currentUser = localStorage.getItem('userForPhoto')
+  const user = JSON.parse(currentUser)
   const allImputs = {imgUrl: ''}
   const [imageAsFile, setImageAsFile] = useState('')
+  // eslint-disable-next-line no-unused-vars
   const [imageAsUrl, setImageAsUrl] = useState(allImputs)
 
-  const history = useHistory();
-  const avatarClasses = useStyles();
-  const [isLoading, setIsLoading] = useState(false);
+  const history = useHistory()
+  const avatarClasses = useStyles()
+  const [isLoading, setIsLoading] = useState(false)
 
-  const userName = user?.user?.name;
-  const email = user?.user?.email;
+  const userName = user?.user?.name
+  const email = user?.user?.email
 
  const handleImageAsFile = (e) => {
     const image = e.target.files[0]
-    setImageAsFile(imageFile => (image))
+    setImageAsFile(() => (image))
   }
 
   const handleFireBaseUpload = async (e) => {
-    setIsLoading(true);
+    setIsLoading(true)
     e.preventDefault()
 
     if(imageAsFile === '' ) {
@@ -68,7 +69,7 @@ const MyProfile = (props) => {
   }
 
   function _goBack() {
-    history.push("/BackOffice");    
+    history.push("/BackOffice")
   }
 
   return (
@@ -115,10 +116,9 @@ const MyProfile = (props) => {
         <UploadButton onClick={handleFireBaseUpload}>Escolher foto</UploadButton>
       </DivUploadPhoto>
 
-
       </MainContainer>
     </>
   )
-};
+}
 
-export default MyProfile;
+export default MyProfile

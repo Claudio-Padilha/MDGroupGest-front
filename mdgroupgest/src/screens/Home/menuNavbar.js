@@ -1,18 +1,18 @@
-import React, { useState } from 'react';
-import { Link, useHistory } from 'react-router-dom';
-import { Avatar } from '@material-ui/core';
-import { SwishSpinner } from "react-spinners-kit";
+import React, { useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { Avatar } from '@material-ui/core'
+import { SwishSpinner } from "react-spinners-kit"
 
-import { MDNavbar } from './md';
+import { MDNavbar } from './md'
 
-import { SubHeading, Body } from '../../components/Text/text';
-import { LogoutIcon } from '../../components/Icon/icons';
+import { SubHeading, Body } from '../../components/Text/text'
+import { LogoutIcon } from '../../components/Icon/icons'
 
-import userRequests from '../../hooks/requests/userRequests';
+import userRequests from '../../hooks/requests/userRequests'
 import { useAuth } from '../../hooks/employees/auth'
-import { usePhoto } from '../../hooks/userProfile/photo';
+import { usePhoto } from '../../hooks/userProfile/photo'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 
 import {
   ProfileContainer,
@@ -20,14 +20,13 @@ import {
   LogoutDiv,
   OptionsDiv,
   useStyles,
-} from './styles';
+} from './styles'
 
-export default function MenuNavbar(props) {
-  const userForPhoto = usePhoto();
-  const userName = userForPhoto?.user?.name;
-  const currentUserIsAdmin = userForPhoto?.user?.is_admin;
+export default function MenuNavbar() {
+  const userForPhoto = usePhoto()
+  const userName = userForPhoto?.user?.name
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   const { isCEO, isAdministrator, isRegularManager, isRegularSecretary, isSalesPerson } = useAuth()
 
@@ -156,8 +155,6 @@ export default function MenuNavbar(props) {
               <Link to="/CreateOffice">Inserir Escritório</Link>
             </Body>
           }
-
-
         </OptionsDiv>
 
         <LogoutDiv>

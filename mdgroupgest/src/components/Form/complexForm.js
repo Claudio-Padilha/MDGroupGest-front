@@ -1,25 +1,25 @@
-import React from 'react';
-import { Form, Col } from 'react-bootstrap';
-import { Formik } from 'formik';
-import Swal from 'sweetalert2';
+import React from 'react'
+import { Form, Col } from 'react-bootstrap'
+import { Formik } from 'formik'
+import Swal from 'sweetalert2'
 
-import 'date-fns';
-import DateFnsUtils from '@date-io/date-fns';
+import 'date-fns'
+import DateFnsUtils from '@date-io/date-fns'
 import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker,
-} from '@material-ui/pickers';
+} from '@material-ui/pickers'
 
-import { Body } from '../Text/text';
+import { Body } from '../Text/text'
 
-import TextInput from "../../components/TextInput/textInput";
-import TextArea from "../../components/TextArea/textArea";
-import Select from "../../components/Select/select";
-import Button from "../../components/Button/button";
-import SwitchButton from "../ToggleComponent/toggleButton";
-import { Heading, SubHeading } from "../Text/text";
+import TextInput from '../../components/TextInput/textInput'
+import TextArea from '../../components/TextArea/textArea'
+import Select from '../../components/Select/select'
+import Button from '../../components/Button/button'
+import SwitchButton from '../ToggleComponent/toggleButton'
+import { Heading, SubHeading } from '../Text/text'
 
-import { CFormContainer, StyledForm, WidthMessageContainer} from "./styles";
+import { CFormContainer, StyledForm, WidthMessageContainer} from './styles'
 
 const CForm = ({
   formFields,
@@ -31,17 +31,17 @@ const CForm = ({
 }) => {
 
   const getInitialValues = () => {
-    const initialValues = {};
-    const keys = formFields && Object.keys(formFields);
+    const initialValues = {}
+    const keys = formFields && Object.keys(formFields)
     
     if(keys) {
       keys.forEach((i) => {
-        const formField = formFields[i];
-        initialValues[formField?.key] = formField?.initialValue;
-      });
+        const formField = formFields[i]
+        initialValues[formField?.key] = formField?.initialValue
+      })
     }
 
-    return initialValues;
+    return initialValues
   }
 
   return (
@@ -63,7 +63,7 @@ const CForm = ({
                 <div>
                   {formFields &&
                     formFields.map((field, index) => {
-                      return renderFields(field, index, props, formFields);
+                      return renderFields(field, index, props, formFields)
                     })}
                 </div>
   
@@ -97,7 +97,7 @@ const renderFields = (field, index, formik, formFields) => {
     icon: field?.icon,
     initialValue: field?.initialValue,
     booleanValue: formik.values[field?.booleanValue],
-  };  
+  }
 
   switch (field?.type) {
     case "text":
@@ -108,13 +108,13 @@ const renderFields = (field, index, formik, formFields) => {
         <Form.Group as={Col} className={field?.key} controlId="validationFormik100">
           <TextInput {...fieldProps} className={"textInput"} placeholder={field?.place}/>
         </Form.Group>
-      );
+      )
     case "text-area":
       return (
         <Form.Group as={Col} className={field?.key} controlId="validationFormik101">
           <TextArea {...fieldProps} />
         </Form.Group>
-      );
+      )
     case "dropdown":
       return (
         <Form.Group as={Col} className={field?.key} controlId="validationFormik102">
@@ -123,7 +123,8 @@ const renderFields = (field, index, formik, formFields) => {
               if (field.key === 'feedbackCall'){
                 if (option.label !== 'OK') {
                   let obj 
-
+                  
+                  // eslint-disable-next-line array-callback-return
                   await formFields[index + 1]?.options?.map(el => {
                     if (el?.label === 'OK') {
                       obj = el
@@ -133,6 +134,7 @@ const renderFields = (field, index, formik, formFields) => {
 
                 } else {
 
+                  // eslint-disable-next-line array-callback-return
                   await formFields[index + 1]?.options.map(el => {
                     if (el?.label === '') {
                       el.label = 'OK'
@@ -149,7 +151,7 @@ const renderFields = (field, index, formik, formFields) => {
             placeholder={field.placeholder}
           />
         </Form.Group>
-      );
+      )
     case "dateField":
       function _handleDateChange(selectedDate) {
         field.date = selectedDate;
@@ -197,7 +199,7 @@ const renderFields = (field, index, formik, formFields) => {
             />
           </MuiPickersUtilsProvider>
         </Form.Group>
-      );
+      )
     case "toggle":
 
       function _handleChecked () {
@@ -218,10 +220,10 @@ const renderFields = (field, index, formik, formFields) => {
             onChange={() => formik.setFieldValue(field.key, _handleChecked())}
           />
         </Form.Group>
-      );
+      )
     default:
-      return;
+      return
   }
-};
+}
 
-export default CForm;
+export default CForm

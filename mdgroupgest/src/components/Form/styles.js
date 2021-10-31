@@ -1,20 +1,20 @@
-import styled from "styled-components";
-import { Form } from "formik";
-import { Row, Col } from 'react-bootstrap';
-import CONSTANTS from '../../constants';
+import styled from 'styled-components'
+import { Form } from 'formik'
+import { Row } from 'react-bootstrap'
+import CONSTANTS from '../../constants'
 
 const getSelectedBackground = props => {
   switch (props.bg) {
     case "alt":
-      return props.CONSTANTS?.colors.lightBeige;
+      return props.CONSTANTS?.colors.lightBeige
     case "secondary":
-      return props.CONSTANTS?.colors.brand.yellow;
+      return props.CONSTANTS?.colors.brand.yellow
     case "terceary":
-      return props.CONSTANTS?.colors.brand.lightBlue;
+      return props.CONSTANTS?.colors.brand.lightBlue
     default:
-      return props.CONSTANTS?.colors.white;
+      return props.CONSTANTS?.colors.white
   }
-};
+}
 
 export const FormContainer = styled.div`
   padding: 20px;

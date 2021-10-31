@@ -1,12 +1,9 @@
 import axios from 'axios'
-import Swal from 'sweetalert2';
 
-import _currentTokenOnRAM from './currentToken';
-import dataRequests from './dataRequests';
-import { FormField } from 'semantic-ui-react';
-import useVPSURL from './defaultVpsURL';
+import _currentTokenOnRAM from './currentToken'
+import useVPSURL from './defaultVpsURL'
 
-const url = useVPSURL();
+const url = useVPSURL()
 
 export default {
   getAllEmployees: (officeID) => {
@@ -94,9 +91,9 @@ export default {
   },
   createEmployee: (user_type, data) => {
 
-    var userType = localStorage.getItem('currentUserType');
-    var userTypeBody = userType
+    var userType = localStorage.getItem('currentUserType')
 
+    // eslint-disable-next-line no-redeclare
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
     return new Promise((resolve) => {

@@ -27,29 +27,16 @@ export const useEmployeesActions = ({ officeId }) => {
   return { getAllEmployees }
 }
 
-
 export const useEmployees = () => {
   const allEmployees = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [localStorage])
 
-  const ceo = useMemo(() => {
-    return allEmployees?.ceo
-  }, [allEmployees])
-
-  const administrator = useMemo(() => {
-    return allEmployees?.admin
-  }, [allEmployees])
-
-  const regularManager = useMemo(() => {
-    const managers = allEmployees?.manager
-
-    return managers
-  }, [allEmployees])
-
-  const regularSecretary = useMemo(() => {
-    return allEmployees?.secretary
-  }, [allEmployees])
+  const ceo = useMemo(() => allEmployees?.ceo, [allEmployees])
+  const administrator = useMemo(() => allEmployees?.admin, [allEmployees])
+  const regularManager = useMemo(() => allEmployees?.manager, [allEmployees])
+  const regularSecretary = useMemo(() => allEmployees?.secretary, [allEmployees])
 
   const salesPerson = useMemo(() => {
     const salesPersonArr = allEmployees?.sales_person

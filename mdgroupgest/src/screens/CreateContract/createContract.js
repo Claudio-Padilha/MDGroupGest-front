@@ -39,6 +39,7 @@ const CreateContract = (props) => {
 
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
+        // eslint-disable-next-line array-callback-return
         employeeType.map(type => {
           if ((
             type?.user?.user_type === "ceo" ||
@@ -51,7 +52,7 @@ const CreateContract = (props) => {
             allEmployees.push({value: type?.user?.id, label: type?.user?.name})
           }
         })
-      });
+      })
     }
 
     return allEmployees
@@ -141,7 +142,7 @@ const CreateContract = (props) => {
     return powersListArr
   }
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   const infoForFields = useMemo(() => {
     const feedbackCalls = _getFeedbackCalls()
@@ -163,10 +164,9 @@ const CreateContract = (props) => {
   const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label
   const mtId = infoForFields?.powersList.find(power => power?.label === 'MT')?.value?.label
 
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
 
-  const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
-  //const handleSubmitForm = formFields => console.log(formFields)
+  const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) }
   const history = useHistory()
 
   function _goBack() {
@@ -596,7 +596,7 @@ const CreateContract = (props) => {
       question: "Potência contratada",
       options: infoForFields.powersList,
     },
-  ];
+  ]
 
   const GASFIELDS = [
     { 
@@ -654,7 +654,7 @@ const CreateContract = (props) => {
       question: "Escalão Gás",
       options: _getGasScales()
     },   
-  ];
+  ]
 
   const DUALFIELDS = [
     { 
@@ -725,26 +725,27 @@ const CreateContract = (props) => {
       question: "Escalão Gás",
       options: _getGasScales()
     },   
-  ];
+  ]
 
   const DYNAMICFORMFIELDS = useMemo(() => {
     switch (typeOfContractFromProps) {
       case "electricity":
       case "condominium_electricity":
         setCurrentForm('electricity')
-        return ELECTRICITYFIELDS;
+        return ELECTRICITYFIELDS
 
       case "gas":
       case "condominium_gas":
         setCurrentForm('gas')
-        return GASFIELDS;
+        return GASFIELDS
 
       case "dual":
       case "condominium_dual":
         setCurrentForm('dual')
-        return DUALFIELDS;
-    
+        return DUALFIELDS
+      // no default
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeOfContractFromProps, window])
 
   const Yup = require('yup')
@@ -777,7 +778,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchemaElectricity = Yup.object().shape({
     clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
@@ -804,7 +805,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchemaDual = Yup.object().shape({
     clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
@@ -841,7 +842,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchema = useMemo(() => {
     switch (currentForm) {
@@ -853,8 +854,9 @@ const CreateContract = (props) => {
         return validationSchemaDual
     
       default:
-        return;
+        return
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentForm])
 
   const initialState = {
@@ -872,6 +874,7 @@ const CreateContract = (props) => {
         localStorage.setItem('createContractScreenState', JSON.stringify(initialState))
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromChoice])
 
   const reducer = useCallback((firstState, action) => {
@@ -881,6 +884,7 @@ const CreateContract = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('createContractScreenState')
@@ -893,6 +897,7 @@ const CreateContract = (props) => {
     }, [800]);
 
     return reducerState
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -905,6 +910,7 @@ const CreateContract = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameFromChoice, wasRefreshed])
 
   return ( isLoading ?

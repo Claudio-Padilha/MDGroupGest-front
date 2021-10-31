@@ -1,12 +1,11 @@
-import React, { useState, useMemo, useReducer, useEffect } from 'react';
-import { Link, useHistory } from "react-router-dom";
-import _ from 'lodash';
-import Swal from 'sweetalert2'
+import React, { useState, useMemo, useReducer, useEffect } from 'react'
+import { Link, useHistory } from "react-router-dom"
+import _ from 'lodash'
 
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
-import { Avatar } from '@material-ui/core';
-import { AvatarGroup } from '@material-ui/lab';
-import { useDate } from '../../hooks/date';
+import { SwishSpinner} from "react-spinners-kit"
+import { Avatar } from '@material-ui/core'
+import { AvatarGroup } from '@material-ui/lab'
+import { useDate } from '../../hooks/date'
 
 import {
   MDCol,
@@ -16,9 +15,8 @@ import {
   MDContainer,
 } from './md';
 
-import Button from "../../components/Button/button";
-import { Heading, SmallSubHeading, SubHeading, Body } from '../../components/Text/text';
-import { LogoMD } from '../../components/Logo/logo';
+import Button from "../../components/Button/button"
+import { Heading, SubHeading, Body } from '../../components/Text/text'
 
 import {
   TeamContainer,
@@ -26,18 +24,17 @@ import {
   ContentContainerLoader,
   ResultsContainer,
   TeamAvatarsContainer 
-} from './styles';
+} from './styles'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 
-import dataRequests from '../../hooks/requests/dataRequests';
-import officesRequests from '../../hooks/requests/officesRequests';
-import { useEmployees } from '../../hooks/employees/employees';
-import { useRefresh } from '../../hooks/window/refresh';
-import { useStartApp } from '../../hooks/backoffice/startApp';
-import { useAuth } from '../../hooks/employees/auth';
-import employeesRequests from '../../hooks/requests/employeesRequests';
-import contractsRequests from '../../hooks/requests/contractsRequests';
+import dataRequests from '../../hooks/requests/dataRequests'
+import officesRequests from '../../hooks/requests/officesRequests'
+import { useRefresh } from '../../hooks/window/refresh'
+import { useStartApp } from '../../hooks/backoffice/startApp'
+import { useAuth } from '../../hooks/employees/auth'
+import employeesRequests from '../../hooks/requests/employeesRequests'
+import contractsRequests from '../../hooks/requests/contractsRequests'
 
 import './styles.css'
 
@@ -113,8 +110,8 @@ const BackOfficeContent = (props) => {
     switch(action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
-
-      return reducerState
+        return reducerState
+        // no default
     }
 
     localStorage.removeItem('backofficeScreenState')
@@ -144,7 +141,8 @@ const BackOfficeContent = (props) => {
     } else {
       return state
     }
-  }, [start])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [start, fromContractsList, fromMyResults, fromEmployeeType, fromMyTeam, wasRefreshed])
 
   const currentUser = state?.ramCurrentUser;
   const currentOfficeID = state?.ramCurrentOfficeID;
@@ -156,15 +154,7 @@ const BackOfficeContent = (props) => {
   const contracts = state?.ramContracts;
   const allContractsToSend = state?.ramAllContracts;
   let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {};
-  const userType =  currentUser?.user?.user_type;
-
-  const {
-    ceo, 
-    regularManager,
-    administrator,
-    regularSecretary,
-    comercials
-  } = useEmployees()
+  const userType =  currentUser?.user?.user_type
 
   const { 
     isCEO,
@@ -181,15 +171,17 @@ const BackOfficeContent = (props) => {
     dataToForm.push(dataToPopulateGraphic[item])
    });
 
-  var teamLeadersCounter = 0;
-  var instructorsCounter = 0;
-  var salesPersonsCounter = 0;
+  // eslint-disable-next-line no-unused-vars
+  var teamLeadersCounter = 0
+  // eslint-disable-next-line no-unused-vars
+  var instructorsCounter = 0
+  // eslint-disable-next-line no-unused-vars
+  var salesPersonsCounter = 0
 
-  const teamLeadersArr = [];
-  const instructorsArr = [];
-  const salesPersonsArr = [];
+  const teamLeadersArr = []
+  const instructorsArr = []
+  const salesPersonsArr = []
 
-  var employeeCounter = 0
   const totalEmployeeTypes = []
   const totalEmployees = []
 
@@ -197,6 +189,7 @@ const BackOfficeContent = (props) => {
     totalEmployeeTypes.push(myTeam[employee])
   }
 
+  // eslint-disable-next-line array-callback-return
   totalEmployeeTypes.map(employeeType => {
     for(let i = 0; i < employeeType?.length; i++) {
       totalEmployees.push(employeeType[i])
@@ -276,6 +269,7 @@ const BackOfficeContent = (props) => {
     } else {
       return monthContractsForEmployee
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[contracts])
 
   const koContracts = []
@@ -310,9 +304,8 @@ const BackOfficeContent = (props) => {
       }
     }
 
-
-
-    return monthKoContracts, monthOkContracts, monthRContracts, okContracts, rContracts;
+    // eslint-disable-next-line no-sequences
+    return monthKoContracts, monthOkContracts, monthRContracts, okContracts, rContracts
   }
 
   _sellStateOfContract()
@@ -345,9 +338,9 @@ const BackOfficeContent = (props) => {
     }
   }
 
-  const koPercentage = _getPercentage(x, a);
-  const okPercentage = _getPercentage(y, a);
-  const rPercentage = _getPercentage(z, a);
+  const koPercentage = _getPercentage(x, a)
+  const okPercentage = _getPercentage(y, a)
+  const rPercentage = _getPercentage(z, a)
 
   // const handleMessageButton = () => (
   //   <div style={{
@@ -635,6 +628,7 @@ const BackOfficeContent = (props) => {
         </MDCol>
         <MDCol style={{marginRight: '5%'}}>
           <Body>
+          {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
             🔴
           </Body>
         </MDCol>

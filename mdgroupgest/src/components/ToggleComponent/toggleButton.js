@@ -1,12 +1,11 @@
-import React from 'react';
+import React from 'react'
 
-import Switch from '@material-ui/core/Switch';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
+import Switch from '@material-ui/core/Switch'
+import FormControlLabel from '@material-ui/core/FormControlLabel'
 
-import { ErrorText, Body } from "../Text/text";
+import { ErrorText, Body } from "../Text/text"
 
-import { MainContainer, ToggleContainer } from './styles'; 
-import { datePickerDefaultProps } from '@material-ui/pickers/constants/prop-types';
+import { MainContainer, ToggleContainer } from './styles' 
 
 const SwitchButton = ({
   label,
@@ -14,7 +13,6 @@ const SwitchButton = ({
   onChange,
   ...props
 }) => {
-
 
   return (
     <MainContainer>

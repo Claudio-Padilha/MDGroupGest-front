@@ -1,31 +1,15 @@
-import React, { useState, useMemo, useReducer, useEffect } from "react"
-import { useHistory } from "react-router-dom"
-import { Col } from 'react-bootstrap'
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import React, { useState, useMemo, useReducer, useEffect } from 'react'
+import { useHistory } from 'react-router-dom'
+import { SwishSpinner } from 'react-spinners-kit'
 import Swal from 'sweetalert2'
-import { List } from "semantic-ui-react"
+import { List } from 'semantic-ui-react'
 
-import InputLabel from '@material-ui/core/InputLabel'
-import Select from '@material-ui/core/Select'
-import { makeStyles } from '@material-ui/core/styles'
-import Dialog from '@material-ui/core/Dialog'
 import Divider from '@material-ui/core/Divider'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
-import CloseIcon from '@material-ui/icons/Close'
-import Slide from '@material-ui/core/Slide'
-import DialogActions from '@material-ui/core/DialogActions'
-import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
-import DialogTitle from '@material-ui/core/DialogTitle'
-import TextField from '@material-ui/core/TextField'
-import { MenuItem } from "@material-ui/core"
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
 import { LogoMD } from '../../components/Logo/logo'
 import Button from "../../components/Button/button"
 import { BackIcon, EditIcon } from '../../components/Icon/icons'
-import SwitchButton from "../../components/ToggleComponent/toggleButton"
 
 import { useRefresh } from '../../hooks/window/refresh'
 import contractsRequests from "../../hooks/requests/contractsRequests"
@@ -45,6 +29,7 @@ import './styles.css'
 const ContractDetail = (props) => {
 
   const [isLoading, setIsLoading] = useState(true)
+  // eslint-disable-next-line no-unused-vars
   const [maintainState, setMaintainState] = useState(false)
   const history = useHistory()
 
@@ -71,7 +56,7 @@ const ContractDetail = (props) => {
   const optionsPower = JSON.parse(localStorage.getItem('powerList'))
   optionsPower.forEach(el => el['value'] = el.id)
 
-  const propsState = props?.location?.state;
+  const propsState = props?.location?.state
   const cameFromList = propsState?.cameFromList
 
   const initialState = {
@@ -87,8 +72,8 @@ const ContractDetail = (props) => {
       localStorage.setItem('contractDetailScreenState', JSON.stringify(initialState))
       window.location.reload()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameFromList])
-
   
   const reducer = (firstState, action) => {
     let reducerState = {}
@@ -98,6 +83,7 @@ const ContractDetail = (props) => {
     switch(action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('contractDetailScreenState')
@@ -116,6 +102,7 @@ const ContractDetail = (props) => {
     } else {
       return stateOfCurrentContract
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromList])
 
   const contract = useMemo(() => { 

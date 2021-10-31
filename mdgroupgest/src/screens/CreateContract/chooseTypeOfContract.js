@@ -1,30 +1,24 @@
-import React, { useCallback } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useCallback } from "react"
+import { Link, useHistory } from "react-router-dom"
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
 
 import {
   CardsContainer,
   FirstRow,
   SecondRow,
-  GoHomeButton,
   WidthMessageContainer,
   MainContainerEType
-} from "./styles";
+} from "./styles"
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 
-import {
-  MDCard,
-  MDCardBody,
-  MDButton 
-} from '../../screens/Home/md';
+import { MDCard, MDCardBody } from '../../screens/Home/md'
 
-import dataRequests from "../../hooks/requests/dataRequests";
-import { useStartApp } from "../../hooks/backoffice/startApp";
+import { useStartApp } from "../../hooks/backoffice/startApp"
 
-const ChooseTypeOfContract = (props) => {
+const ChooseTypeOfContract = () => {
   let contractInfoNeeded = []
   async function _getAllInfoNeeded() {
     await contractInfoNeeded.push({ 
@@ -51,45 +45,10 @@ const ChooseTypeOfContract = (props) => {
       }
     })  
   }
-  
-  const _getFeedbackCall = useCallback(() => {
-    const feedbackCallList = JSON.parse(localStorage.getItem('feedbackCalls'))
-
-    var ret = feedbackCallList?.map(feedbackCall => {
-      return {
-        value: feedbackCall?.id,
-        label: feedbackCall?.name
-      }
-    })
-    
-    return ret
-  },[])
-
-  const _getSellState = useCallback(() => {
-    const sellStatesList = JSON.parse(localStorage.getItem('sellStates'));
-    
-    return sellStatesList?.map(sellState => {
-      return {
-        value: sellState?.id,
-        label: sellState?.name
-      }
-    })
-  },[])
-
-  const _getPayment = useCallback(() => {
-    const paymentsList = JSON.parse(localStorage.getItem('payments'));
-    
-    return paymentsList?.map(payment => {
-      return {
-        value: payment?.id,
-        label: payment?.name
-      }
-    })
-  }, [])
 
   const _getGasScale = useCallback((isCondominium) => {
     
-    const gasScalesList = JSON.parse(localStorage.getItem('gasScales'));
+    const gasScalesList = JSON.parse(localStorage.getItem('gasScales'))
     
     var filteredGasScale = []
 
@@ -106,10 +65,10 @@ const ChooseTypeOfContract = (props) => {
   },[])
 
   const _getPower = useCallback((isCondominium) => {
-    const powersList = JSON.parse(localStorage.getItem('powerList'));
+    const powersList = JSON.parse(localStorage.getItem('powerList'))
     var filteredPowerList = []
 
-    for(let i=0; i < powersList?.length; i++) {
+    for (let i = 0; i < powersList?.length; i++) {
       if(powersList[i]?.is_condominium === isCondominium) {
         filteredPowerList.push( {
           value: powersList[i]?.id,
@@ -117,15 +76,6 @@ const ChooseTypeOfContract = (props) => {
         })
       }
     }
-    
-    // powersList.forEach(power => {
-    //   if(power?.is_condominium === isCondominium) {
-    //     filteredPowerList.push( {
-    //       value: power?.id,
-    //       label: power?.name,
-    //     })
-    //   }
-    // })
 
     return filteredPowerList
   },[])

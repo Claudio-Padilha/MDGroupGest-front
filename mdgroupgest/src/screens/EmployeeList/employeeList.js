@@ -1,20 +1,16 @@
-import React, { useReducer, useEffect, useCallback } from "react";
-import { useHistory } from "react-router-dom";
-import Divider from '@material-ui/core/Divider';
-import _ from 'lodash';
-import Swal from 'sweetalert2';
-import { PDFDownloadLink } from '@react-pdf/renderer';
-import { jsPDF } from "jspdf";
+import React, { useReducer, useEffect, useCallback } from "react"
+import { useHistory } from "react-router-dom"
+import Divider from '@material-ui/core/Divider'
+import Swal from 'sweetalert2'
+import { jsPDF } from "jspdf"
 
-import { Heading, SubHeading, Body, SmallBody, SmallSubHeading } from '../../components/Text/text';
-import { LogoMD } from '../../components/Logo/logo';
-import Button from "../../components/Button/button";
-import { BackIcon, EditIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading, Body } from '../../components/Text/text'
+import { LogoMD } from '../../components/Logo/logo'
+import Button from "../../components/Button/button"
+import { BackIcon, EditIcon } from '../../components/Icon/icons'
 
-import ContractDocumentPDF from './employmentContract';
-
-import employeesRequests from "../../hooks/requests/employeesRequests";
-import { useRefresh } from '../../hooks/window/refresh';
+import employeesRequests from "../../hooks/requests/employeesRequests"
+import { useRefresh } from '../../hooks/window/refresh'
 
 import {
   MainContainer,
@@ -23,27 +19,25 @@ import {
   LogoContainer,
   EmptyContainer,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import { List } from "semantic-ui-react";
-import { useTheme } from "@material-ui/core";
-import dataRequests from "../../hooks/requests/dataRequests";
+import { List } from "semantic-ui-react"
+import dataRequests from "../../hooks/requests/dataRequests"
 
 const EmployeeList = (props) => {
-  const history = useHistory();
+  const history = useHistory()
 
-  const employees = props?.location?.state?.data;
-  const userType = props?.location?.state?.userType;
-  const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation;
-  const title = props?.location?.state?.title;
-  const officeID = props?.location?.state?.officeID;
-  const employeeToAssociate = props?.location?.state?.employeeToAssociate;
-  const isFromEdit = props?.location?.state?.isFromEdit;
-  const employeesListStateFromEdit = props?.location?.state?.employeeListState;
-  const employeesReturningFromEdit = props?.location?.state?.employeesReturningFromEdit;
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
-  const dataToGoBack = props?.location?.state?.dataGoingToList;
-  const isFromEmployeeTypeSelection = props?.location?.state?.isFromEmployeeTypeSelection;
+  const employees = props?.location?.state?.data
+  const userType = props?.location?.state?.userType
+  const shouldRenderEmployeeAssociation = props?.location?.state?.shouldRenderEmployeeAssociation
+  const title = props?.location?.state?.title
+  const officeID = props?.location?.state?.officeID
+  const employeeToAssociate = props?.location?.state?.employeeToAssociate
+  const isFromEdit = props?.location?.state?.isFromEdit
+  const employeesListStateFromEdit = props?.location?.state?.employeeListState
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
+  const dataToGoBack = props?.location?.state?.dataGoingToList
+  const isFromEmployeeTypeSelection = props?.location?.state?.isFromEmployeeTypeSelection
   const emptyPhrase = props?.location?.state?.emptyPhrase
 
   const { wasRefreshed } = useRefresh()
@@ -67,6 +61,7 @@ const EmployeeList = (props) => {
         localStorage.setItem('employeeListScreenState', JSON.stringify(initialState))
       } 
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, isFromEdit])
 
   const reducer = (firstState, action) => {
@@ -75,7 +70,8 @@ const EmployeeList = (props) => {
     
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
-        reducerState = stateOnRAM;
+        reducerState = stateOnRAM
+      // no default
     }
     
     localStorage.removeItem('employeeListScreenState')
@@ -98,6 +94,7 @@ const EmployeeList = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed])
 
   function _goBack() {
@@ -130,12 +127,10 @@ const EmployeeList = (props) => {
       }
   }, [state])
 
-  const renderEmployee = (employee, i) => {
+  const renderEmployee = (employee) => {
 
     const userType = employee?.user?.user_type;
     const userTypeCapitalized = userType.charAt(0).toUpperCase() + userType.slice(1);
-
-    const isManagerAssistant = employee?.is_manager_assistant
     const isTeamLeader = employee?.is_team_leader;
     const isInstructor = employee?.is_instructor;
 
@@ -144,21 +139,21 @@ const EmployeeList = (props) => {
     function _userTypeInPortuguese() {
       switch (userTypeCapitalized) {
         case "Ceo":
-          return "CEO";
+          return "CEO"
         case "Admin":
           return "Administrador(a)"
         case "Manager":
-          return "Empresário";
+          return "Empresário"
         case "Manager_assistant":
-          return "Gerente";
+          return "Gerente"
         case "Secretary":
-          return "Secretária";
+          return "Secretária"
         case "Team_leader":
-          return "Team Leader";
+          return "Team Leader"
         case "Instructor":
-          return "Instrutor";
+          return "Instrutor"
         case "Sales_person":
-          return "Comercial";      
+          return "Comercial"   
         default:
           return;
       }
@@ -497,10 +492,9 @@ const EmployeeList = (props) => {
       // doc.text("Contratado", 130, 239)
       // doc.text("Lisboa, " + String(today.getDate()) + "/" + String((today.getMonth() + 1) > 9 ? today.getMonth() + 1 : "0") + String(today.getMonth() + 1) + "/" + String(today.getFullYear()), 140, 279)
      
-      doc.save(name + ".pdf");
-    };
+      doc.save(name + ".pdf")
+    }
 
-    const roleToPromotion = isInstructor ? 'teamLeader': 'instructor'
     return (
       <>
         <Row  key={employee?.id} className={"titleRow"}>
@@ -593,18 +587,17 @@ const EmployeeList = (props) => {
         </List.Item>
         <Divider />
       </>
-    );
-  };
+    )
+  }
 
-  const employeesFromEdit = state?.employeesReturningFromEdit;
   const employeesToLoop = state?.employees
 
   const employeesToRender = () => {
     if (isFromEdit) {
-      return state?.employees?.map((employee, index) => {
-        return renderEmployee(employee, index)
+      return state?.employees?.map((employee) => {
+        return renderEmployee(employee)
       }) 
-    } else if(!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null && !state?.employeesReturningFromEdit) {
+    } else if((!state?.employees || state?.employees?.length === 0 || state?.employees === undefined || state?.employees === null) && !state?.employeesReturningFromEdit) {
       return (
         <EmptyContainer>
           <SubHeading>{state?.emptyPhrase}</SubHeading>

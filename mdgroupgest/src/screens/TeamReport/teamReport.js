@@ -22,7 +22,6 @@ import {
 } from './styles'
 
 import { useAuth } from '../../hooks/employees/auth'
-import { useRefresh } from '../../hooks/window/refresh'
 import employeesRequests from '../../hooks/requests/employeesRequests'
 
 const TeamReport = (props) => {
@@ -40,8 +39,6 @@ const TeamReport = (props) => {
   const { isAdministrator } = useAuth()
 
   const screenStyle = useStyles()
-
-  const { wasRefreshed } = useRefresh()
 
   const [isLoading, setIsLoading] = useState(true)
 
@@ -71,38 +68,10 @@ const TeamReport = (props) => {
   }
   _allEmployees()
 
-  const allEmployees = useMemo(() => {
-    return JSON.parse(localStorage.getItem('allEmployees'))
-  }, [isFromBackOffice])
-
   const myTeam = useMemo(() => {
     return JSON.parse(localStorage.getItem('myTeamResults'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFromBackOffice, fromTeamReportDetail])
-
-  // const reducer = (firstState, action) => {
-  //   let reducerState = {}
-  //   const stateOnRAM = JSON.parse(localStorage.getItem('exportPaymentSheetState'))
-
-  //   switch (action) {
-  //     case 'MAINTAIN_SCREEN_STATE':
-  //       reducerState = stateOnRAM
-  //   }
-
-  //   localStorage.removeItem('exportPaymentSheetState')
-  //   localStorage.setItem('exportPaymentSheetState', JSON.stringify(reducerState))
-
-  //   return reducerState
-  // }
-
-  // const [state, dispatch] = useReducer(reducer, initialState)
-
-  // useEffect(() => {
-  //   if(wasRefreshed) {
-  //     return dispatch('MAINTAIN_SCREEN_STATE')
-  //   } else {
-  //     return state
-  //   }
-  // }, [wasRefreshed])
 
   const renderCard = (employee, i) => {
 
@@ -119,7 +88,6 @@ const TeamReport = (props) => {
   
     const koPercentage = _getPercentage(employee?.ko_contract_amount)
     const okPercentage = _getPercentage(employee?.ok_contract_amount)
-    const rPercentage = _getPercentage(employee?.r_contract_amount)
 
     const darkGrey = CONSTANTS?.colors?.darkGrey
     const rowInfoStyle = {

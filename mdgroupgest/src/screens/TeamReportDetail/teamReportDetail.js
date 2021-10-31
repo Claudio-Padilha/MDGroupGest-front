@@ -1,34 +1,24 @@
-import React, { useMemo, useReducer, useEffect, useState } from "react"
-import { Link, useHistory } from "react-router-dom"
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
+import React, { useReducer, useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { SwishSpinner } from 'react-spinners-kit'
 import { Avatar } from '@material-ui/core'
 
 import { Heading, SubHeading, Body } from '../../components/Text/text'
 import { BackIcon } from '../../components/Icon/icons'
 
-import {
-  MDCard,
-  MDCardBody,
-  MDButton,
-  MDRow,
-  MDCol
-} from '../../screens/Home/md'
+import { MDCard, MDCardBody, MDRow } from '../../screens/Home/md'
 
 import CONSTANTS from '../../constants'
 import {
   TeamContainer,
   FirstRow,
-  SecondRow,
-  GoHomeButton,
-  ExportButton,
   MainContainerEType,
   WidthMessageContainer,
   useStyles
-} from "./styles"
+} from './styles'
 
 import { useRefresh } from '../../hooks/window/refresh'
-import employeesRequests from "../../hooks/requests/employeesRequests"
-import officesRequests from '../../hooks/requests/officesRequests'
+import employeesRequests from '../../hooks/requests/employeesRequests'
 
 const TeamReportDetail = (props) => {
   const history = useHistory()
@@ -62,22 +52,12 @@ const TeamReportDetail = (props) => {
 
   const currentOfficeID = currentUser?.user?.office
 
-  const currentOfficeObject = useMemo(() => {
-    officesRequests.getOffice(currentOfficeID)
-
-    return JSON.parse(localStorage.getItem('currentOffice'))
-  }, [currentOfficeID])
-
   function _allEmployees() {
     if(isFromBackOffice) {
       return employeesRequests.getAllEmployees(currentOfficeID)
     }
   }
   _allEmployees()
-
-  const allEmployees = useMemo(() => {
-    return JSON.parse(localStorage.getItem('allEmployees'))
-  }, [isFromBackOffice])
 
   const initialState = { employee }
 
@@ -92,6 +72,7 @@ const TeamReportDetail = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('teamReportDetailState')
@@ -108,11 +89,13 @@ const TeamReportDetail = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed])
 
   const employeeWithState = state?.employee
 
-  const total = employeeWithState?.ok_contract_amount + employeeWithState?.r_contract_amount + employeeWithState?.ko_contract_amount
+  const total =
+    employeeWithState?.ok_contract_amount + employeeWithState?.r_contract_amount + employeeWithState?.ko_contract_amount
 
   function _getPercentage(percent) {
     if (percent !== 0 || total !== 0) {
@@ -148,11 +131,6 @@ const TeamReportDetail = (props) => {
       flexDirection: 'column'
     }
 
-    const row = {
-      display: 'flex',
-      flexDirection: 'row'
-    }
-
     const nameStyle = {
       color: mediumGrey,
       textAlign: 'center',
@@ -161,7 +139,7 @@ const TeamReportDetail = (props) => {
 
     return (
       <Link style={linkStyle} key={i}>
-        <MDCard className={"card"} style={{margin: '1vh'}}>
+        <MDCard className={'card'} style={{margin: '1vh'}}>
           <MDCardBody style={{...column, width: '100%'}}>
 
             <div style={{...column, width: '100%', alignItems: 'center'}}>
@@ -203,7 +181,7 @@ const TeamReportDetail = (props) => {
 
     return (
       <Link style={linkStyle} key={i}>
-        <MDCard className={"card"} style={{margin: '1vh'}}>
+        <MDCard className={'card'} style={{margin: '1vh'}}>
           <MDCardBody style={{...column, width: '100%'}}>
 
             <div style={{...column, width: '100%', alignItems: 'center'}}>
@@ -243,7 +221,7 @@ const TeamReportDetail = (props) => {
 
     return (
       <Link style={linkStyle} key={i}>
-        <MDCard className={"card"} style={{margin: '1vh'}}>
+        <MDCard className={'card'} style={{margin: '1vh'}}>
           <MDCardBody style={{...column, width: '100%'}}>
 
             <div style={{...column, width: '100%', alignItems: 'center'}}>
@@ -258,7 +236,7 @@ const TeamReportDetail = (props) => {
                     ...nameStyle, 
                     color: koPercentage > 30 ? CONSTANTS?.colors?.red : CONSTANTS?.colors?.green
                   }
-                } id={koPercentage > 30 ? "pulse" : ""}>{employeeWithState?.total}€</SubHeading>
+                } id={koPercentage > 30 ? 'pulse' : ''}>{employeeWithState?.total}€</SubHeading>
                 
               </MDRow>
             </div>
@@ -390,7 +368,7 @@ const TeamReportDetail = (props) => {
       <TeamContainer>
         <div className={'AVATAR CONTAINER'} style={avatarContainerStyle}>
           <Avatar
-            alt="Profile Image"
+            alt='Profile Image'
             className={screenStyle?.large}
             src={
               employeeWithState?.profile_url ?? 
@@ -436,7 +414,7 @@ const TeamReportDetail = (props) => {
   }
   
   const loadingContainer = () => (
-    <SwishSpinner size={200} color="#686769" loading={isLoading} />
+    <SwishSpinner size={200} color='#686769' loading={isLoading} />
   )
  
   return(

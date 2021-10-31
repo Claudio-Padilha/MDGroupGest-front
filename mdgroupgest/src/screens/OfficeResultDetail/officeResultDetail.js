@@ -1,14 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import Chart from "react-google-charts";
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import React from "react"
+import { Link } from "react-router-dom"
+import Chart from "react-google-charts"
+import { SwishSpinner } from "react-spinners-kit"
 
-import {  SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import {  SubHeading, Body, SmallSubHeading, Heading } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
 
-import { useDate } from '../../hooks/date';
+import { useDate } from '../../hooks/date'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 import {
   MainContainer,
   OfficeMonthResultContainer,
@@ -18,33 +18,25 @@ import {
   HomePageButton,
   EmptyContainer,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import {
-  MDCard,
-  MDCardBody,
-  MDRow,
-  MDCol,
-  MDButton 
-} from '../../screens/Home/md';
-
+import { MDRow, MDCol, MDButton } from '../../screens/Home/md'
 
 const OfficeMonthResult = (props) => {
 
-  const valid_contract_value = JSON.parse(localStorage.getItem('officeResults'));
+  const valid_contract_value = JSON.parse(localStorage.getItem('officeResults'))
 
   const data = props?.location?.state?.contracts?.dataToDiagram
-  const user = JSON.parse(localStorage.getItem('currentUser'))
 
-  const ko = props?.location?.state?.contracts?.ko?.length;
-  const ok = props?.location?.state?.contracts?.ok?.length;
-  const pending = props?.location?.state?.contracts?.pending?.length;
-  const all = props?.location?.state?.contracts?.all?.length;
+  const ko = props?.location?.state?.contracts?.ko?.length
+  const ok = props?.location?.state?.contracts?.ok?.length
+  const pending = props?.location?.state?.contracts?.pending?.length
+  const all = props?.location?.state?.contracts?.all?.length
 
-  const currentMonth = useDate();
+  const currentMonth = useDate()
 
   function _goBack() {
-    window.location.replace('#/BackOffice');    
+    window.location.replace('#/BackOffice')    
   }
 
   function _chart(){
@@ -79,8 +71,8 @@ const OfficeMonthResult = (props) => {
           {_chart()}
         </div>
       </>
-    );
-  };
+    )
+  }
 
   return(
     <>
@@ -143,7 +135,7 @@ const OfficeMonthResult = (props) => {
 
       </MainContainer>
     </>
-  );
-};
+  )
+}
 
-export default OfficeMonthResult;
+export default OfficeMonthResult

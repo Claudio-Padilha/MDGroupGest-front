@@ -1,16 +1,14 @@
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import React from 'react';
+import axios from 'axios'
+import Swal from 'sweetalert2'
 
-import _currentTokenOnRAM from './currentToken';
-import dataRequests from '../../hooks/requests/dataRequests';
-import employeesRequests from '../../hooks/requests/employeesRequests';
+import _currentTokenOnRAM from './currentToken'
+import dataRequests from '../../hooks/requests/dataRequests'
+import employeesRequests from '../../hooks/requests/employeesRequests'
 import officesRequests from '../../hooks/requests/officesRequests'
-import useVPSURL from './defaultVpsURL';
-import contractsRequests from '../../hooks/requests/contractsRequests';
-import { Redirect } from 'react-router-dom';
+import useVPSURL from './defaultVpsURL'
+import contractsRequests from '../../hooks/requests/contractsRequests'
 
-const url = useVPSURL();
+const url = useVPSURL()
 
 function _firstTimeOfAnUser(user_id) {
   return (

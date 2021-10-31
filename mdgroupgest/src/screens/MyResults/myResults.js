@@ -242,6 +242,7 @@ const MyResults = (props) => {
                   justifyContent: 'center'
                 }
               }>
+                {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
                 <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>⬆️</SmallSubHeading>
               </Row>
             }

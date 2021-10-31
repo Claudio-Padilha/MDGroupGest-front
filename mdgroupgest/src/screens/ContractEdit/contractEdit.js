@@ -2,19 +2,19 @@ import React, { useMemo, useState, useReducer, useEffect, useCallback } from 'r
 import { useHistory } from 'react-router-dom'
 import { Col } from 'react-bootstrap'
 import Swal from 'sweetalert2'
-import { SwishSpinner } from "react-spinners-kit"
+import { SwishSpinner } from 'react-spinners-kit'
 import TextField from '@material-ui/core/TextField'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
-import { MenuItem } from "@material-ui/core"
+import { MenuItem } from '@material-ui/core'
 import { useStyles } from 'react-styles-hook'
 
-import Button from "../../components/Button/button"
+import Button from '../../components/Button/button'
 import { Heading, SubHeading } from '../../components/Text/text'
 import { Corner, Corner180 } from '../../components/Corner/corner'
 import { LogoMD } from '../../components/Logo/logo'
 import { BackIcon } from '../../components/Icon/icons'
-import SwitchButton from "../../components/ToggleComponent/toggleButton"
+import SwitchButton from '../../components/ToggleComponent/toggleButton'
 
 import contractsRequests from '../../hooks/requests/contractsRequests'
 import dataRequests from '../../hooks/requests/dataRequests'
@@ -241,6 +241,7 @@ const ContractEdit = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('editContractScreenState')
@@ -250,7 +251,7 @@ const ContractEdit = (props) => {
 
     setTimeout(() => {
       setIsLoading(false)
-    }, [800]);
+    }, [800])
 
     return reducerState
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -266,22 +267,23 @@ const ContractEdit = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameFromDetail, wasRefreshed])
 
   const contractType = useMemo(() => {
     switch (state?.contractFromDetail?.contract_type) {
-      case "dual":
-        return "Dual"
-      case "gas":
-        return "Gás"
-      case "electricity":
-        return "Electricidade"
-      case "condominium_dual":
-        return "Dual Condomínio"
-      case "condominium_gas":
-        return "Gás Condomínio"
-      case "condominium_electricity":
-        return "Electricidade Condomínio"
+      case 'dual':
+        return 'Dual'
+      case 'gas':
+        return 'Gás'
+      case 'electricity':
+        return 'Electricidade'
+      case 'condominium_dual':
+        return 'Dual Condomínio'
+      case 'condominium_gas':
+        return 'Gás Condomínio'
+      case 'condominium_electricity':
+        return 'Electricidade Condomínio'
     
       default:
         break;
@@ -435,6 +437,7 @@ const ContractEdit = (props) => {
               var officeComission = state?.contractFromDetail?.office_comission
               var employeeComission = state?.contractFromDetail?.employee_comission
 
+              // eslint-disable-next-line no-unused-vars
               let comissionObj = {
                 dynamic_power: dynamicPower,
                 office_comission: officeComission,

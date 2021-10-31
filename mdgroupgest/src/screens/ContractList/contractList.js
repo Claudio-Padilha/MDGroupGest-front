@@ -1,19 +1,19 @@
-import React, { useMemo, useState, useEffect, useReducer, useCallback } from "react"
-import { useHistory } from "react-router-dom"
+import React, { useMemo, useState, useEffect, useReducer, useCallback } from 'react'
+import { useHistory } from 'react-router-dom'
 import Divider from '@material-ui/core/Divider'
 import _ from 'lodash'
 import Swal from 'sweetalert2'
 import Fuse from 'fuse.js'
-import { SwishSpinner } from "react-spinners-kit"
+import { SwishSpinner } from 'react-spinners-kit'
 import TextField from '@material-ui/core/TextField'
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
 import { LogoMD } from '../../components/Logo/logo'
-import Button from "../../components/Button/button"
+import Button from '../../components/Button/button'
 import { BackIcon } from '../../components/Icon/icons'
 
-import contractsRequests from "../../hooks/requests/contractsRequests"
-import dataRequests from "../../hooks/requests/dataRequests"
+import contractsRequests from '../../hooks/requests/contractsRequests'
+import dataRequests from '../../hooks/requests/dataRequests'
 import { useRefresh } from '../../hooks/window/refresh'
 import { useAuth } from '../../hooks/employees/auth'
 
@@ -24,10 +24,10 @@ import {
   Column,
   LogoContainer,
   WidthMessageContainer
-} from "./styles"
+} from './styles'
 
-import { List } from "semantic-ui-react"
-import CONSTANTS from "../../constants"
+import { List } from 'semantic-ui-react'
+import CONSTANTS from '../../constants'
 
 const ContractList = (props) => {
   const history = useHistory()
@@ -48,7 +48,7 @@ const ContractList = (props) => {
     }
 
     history.push({
-      pathname: "/BackOffice",
+      pathname: '/BackOffice',
       state: {
         fromContractsList: true,
         deletedID: deletedID
@@ -110,6 +110,7 @@ const ContractList = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('contractListScreenState')
@@ -139,6 +140,7 @@ const ContractList = (props) => {
     } else {
       return state?.contracts
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice, cameFromDetailUpdate])
 
   var deletedID = props?.location?.state?.deletedID
@@ -174,7 +176,8 @@ const ContractList = (props) => {
         }
       }
       return contractsToReturn?.sort((a, b) => b.id - a.id)    
-    } 
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   },[wasRefreshed, cameFromDelete, cameFromDetail, cameFromBackoffice, isLoading])
   
   function _ConfirmContractActivation(contract, i) {
@@ -206,7 +209,7 @@ const ContractList = (props) => {
         reverseButtons: true
       }).then(async (result) => {
 
-        // "result.isConfimed significa clicar em "É isto"
+        // 'result.isConfimed significa clicar em 'É isto'
           if (result.isConfirmed) {
             await contractsRequests.updateContract(
               {
@@ -250,7 +253,7 @@ const ContractList = (props) => {
                 })
               }
             })
-        // "!result.isConfimed significa clicar em "Refazer!"
+        // '!result.isConfimed significa clicar em 'Refazer!'
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
               'Cancelado',
@@ -289,12 +292,12 @@ const ContractList = (props) => {
 
     function _contractType () {
       switch (contract?.contract_type) {
-        case "dual":                    return "Dual"
-        case "gas":                     return "Gás"
-        case "electricity":             return "Electricidade"
-        case "condominium_dual":        return "Dual Condomínio"
-        case "condominium_gas":         return "Gás Condomínio"
-        case "condominium_electricity": return "Electricidade Condomínio"
+        case 'dual':                    return 'Dual'
+        case 'gas':                     return 'Gás'
+        case 'electricity':             return 'Electricidade'
+        case 'condominium_dual':        return 'Dual Condomínio'
+        case 'condominium_gas':         return 'Gás Condomínio'
+        case 'condominium_electricity': return 'Electricidade Condomínio'
   
         default:
           break;
@@ -466,6 +469,7 @@ const ContractList = (props) => {
       onChange={e =>  _handleSearchChange(e?.target?.value) }
       style={{marginTop: '2vh'}}
     />
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [isSearching])
 
   const fuseMatchedContracts = useMemo(() => (
@@ -515,6 +519,7 @@ const ContractList = (props) => {
                 marginTop: '.75vh',
                 justifyContent: 'space-between',
               }}>
+                {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
                 <SubHeading style={{
                   marginBottom: '0%',
                   color: CONSTANTS?.colors?.mediumGrey,
@@ -560,6 +565,7 @@ const ContractList = (props) => {
         </MainContainer>
       </>
     )
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contracts, cameFromBackoffice, isLoading, fuseMatchedContracts, isSearching])
 
   return handleContent()
