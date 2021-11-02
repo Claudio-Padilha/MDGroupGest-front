@@ -40,27 +40,27 @@ import './styles.css'
 
 const BackOfficeContent = (props) => {
   
-  const history = useHistory();
-  const [isLoading, setIsLoading] = useState(true);
+  const history = useHistory()
+  const [isLoading, setIsLoading] = useState(true)
 
   const start = useStartApp()
 
-  const fromContractsList = props?.location?.state?.fromContractsList;
-  const fromMyResults = props?.location?.state?.fromMyResults;
-  const fromEmployeeType = props?.location?.state?.fromEmployeeType;
-  const fromMyTeam = props?.location?.state?.fromMyTeam;
+  const fromContractsList = props?.location?.state?.fromContractsList
+  const fromMyResults = props?.location?.state?.fromMyResults
+  const fromEmployeeType = props?.location?.state?.fromEmployeeType
+  const fromMyTeam = props?.location?.state?.fromMyTeam
 
-  const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
-  const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
-  const ramResultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
-  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
-  const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'));
-  const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'));
-  const ramContracts = JSON.parse(localStorage.getItem('contracts'));
-  const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'));
-  const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'));
-  const ramMyTeamResults = JSON.parse(localStorage.getItem('myTeamResults'));
+  const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
+  const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
+  const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'))
+  const ramResultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'))
+  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'))
+  const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'))
+  const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'))
+  const ramContracts = JSON.parse(localStorage.getItem('contracts'))
+  const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'))
+  const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
+  const ramMyTeamResults = JSON.parse(localStorage.getItem('myTeamResults'))
 
   setTimeout(() => {
     setIsLoading(false)
@@ -674,6 +674,7 @@ const BackOfficeContent = (props) => {
                   data: contracts,
                   currentUser: currentUser,
                   cameFromBackoffice: true,
+                  shouldRenderAll: false
                 }
               })
             }}
@@ -693,6 +694,7 @@ const BackOfficeContent = (props) => {
                     data: allContractsToSend,
                     currentUser: currentUser,
                     cameFromBackoffice: true,
+                    shouldRenderAll: true
                   }
                 })
               }}

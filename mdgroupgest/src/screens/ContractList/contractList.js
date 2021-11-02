@@ -73,6 +73,10 @@ const ContractList = (props) => {
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete
   const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate
 
+  const allContractsTogether = JSON.parse(localStorage.getItem('allContracts'))
+
+  const shouldRenderAll = props?.location?.state?.shouldRenderAll
+
   const [isLoading, setIsLoading] = useState(true)
   const [isSearching, setIsSearching] = useState(false)
 
@@ -83,13 +87,13 @@ const ContractList = (props) => {
   }
 
   useEffect(() => {
-    if(cameFromEdit || cameFromBackoffice) {
+    if(cameFromEdit || (cameFromBackoffice && !shouldRenderAll)) {
       window.location.reload()
     }
-  }, [cameFromEdit, cameFromBackoffice])
+  }, [cameFromEdit, cameFromBackoffice, shouldRenderAll])
 
   const initialState = {
-    contracts: contractsFromBackoffice,
+    contracts: shouldRenderAll ? allContractsTogether : contractsFromBackoffice,
     contractsFromDetail,
     contractsFromDelete,
     contractsFromUpdate
