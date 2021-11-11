@@ -74,15 +74,17 @@ const BackOfficeContent = (props) => {
 
   const { wasRefreshed } = useRefresh()
 
-  async function _getOffice() {
+  async function _getOfficeInformation() {
     await officesRequests.getOffice(ramCurrentOfficeID)
     await contractsRequests.monthContracts(ramCurrentOfficeID)
+    await contractsRequests.getAllContracts()
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
     await employeesRequests.getMyTeamResults()
-    await contractsRequests.getAllContracts()
   }
 
-  _getOffice()
+  useEffect(() => {
+    _getOfficeInformation()
+  }, [])
 
   const initialState = {
     ramCurrentUser,
@@ -242,7 +244,7 @@ const BackOfficeContent = (props) => {
   const _getMonthContracts = useMemo(() => {
     const currentDateJS = new Date()
 
-    const monthContractsForManagerOrSecretary = contracts.filter(contract => {
+    const monthContractsForManagerOrSecretary = contracts?.filter(contract => {
       var date = new Date(contract.delivery_date)
       return (
         date.getMonth() === currentDateJS?.getMonth() 
@@ -635,6 +637,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
+              localStorage.removeItem('contractsVector')
               localStorage.setItem('contractsVector', false)
               history.push({
                 pathname: "/ContractList",
@@ -656,6 +659,7 @@ const BackOfficeContent = (props) => {
               fullWidth={false}
               disabled={false}
               action={() => {
+                localStorage.removeItem('contractsVector')
                 localStorage.setItem('contractsVector', true)
                 history.push({
                   pathname: "/ContractList",

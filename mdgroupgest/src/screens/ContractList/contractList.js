@@ -163,28 +163,43 @@ const ContractList = (props) => {
 
   const contracts = useMemo(() => {
     if (contractsFromBackoffice) {
+      console.log('Primeiro if')
       return Object.values(contractsFromBackoffice)?.sort((a, b) => b.id - a.id)  
     } else if (cameFromDelete) {
+      console.log('Primeiro else if')
       _removeContractFromRAM()
       return contractsFromDelete?.sort((a, b) => b.id - a.id)
-    } else if (cameFromDetail){
+    } else if (cameFromDetail) {
+      console.log('Segundo else if')
       return contractsFromDetail?.sort((a, b) => b.id - a.id)
     } else if (cameFromUpdate) {
+      console.log('Terceiro else if')
       return contractsFromUpdate?.sort((a, b) => b.id - a.id)
     } else {
-      console.log(shouldRenderAll, "SHOULD RENDERRRRR")
-      const contracts = JSON.parse(localStorage.getItem(`${JSON.parse(localStorage.getItem('contractsVector'))? 'allContracts' : 'contracts'}`));
-      console.log(contracts, "CONTRATOSSSS")
+      console.log('Else')
+      const contractsObj = 
+        JSON.parse(localStorage.getItem(
+          `${JSON.parse(localStorage.getItem('contractsVector')
+        ) ? 'allContracts' : 'contracts'}`))
+      
+      
+      const contracts = Object.values(contractsObj)
+      console.log(contracts, 'Contracts')
+
       let contractsToReturn = []
       for(let i = 0; i < contracts?.length; i++) {
-        if (contracts[i]?.user__id === currentUser?.user?.id || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
+        if ((contracts[i]?.user__id === currentUser?.user?.id) || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
+          console.log('entrei no if do push')
           contractsToReturn.push(contracts[i])
         }
       }
+      console.log(contractsToReturn, 'Contracts to return')
       return contractsToReturn?.sort((a, b) => b.id - a.id)    
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   },[wasRefreshed, cameFromDelete, cameFromDetail, cameFromBackoffice, isLoading])
+
+  console.log(contracts, 'Contrato já tendo tomado a decisão')
   
   function _ConfirmContractActivation(contract, i) {
     const sellStateID = () => {
@@ -337,7 +352,7 @@ const ContractList = (props) => {
     return (
       <>
         <List.Item
-          key={contract?.id}
+          key={i}
           className={searched ? "eachContractSearched" : "eachContract"}
           style={{display: 'flex'}}
         >
@@ -555,7 +570,7 @@ const ContractList = (props) => {
               })
           : contracts &&
             contracts.map(function(contract, index) {
-              return renderContract(contract, index, false);
+              return renderContract(contract, index, false)
             })
           }        
           </List>
