@@ -87,10 +87,10 @@ const ContractList = (props) => {
   }
 
   useEffect(() => {
-    if(cameFromEdit || (cameFromBackoffice && !shouldRenderAll)) {
+    if(cameFromEdit || cameFromBackoffice) {
       window.location.reload()
     }
-  }, [cameFromEdit, cameFromBackoffice, shouldRenderAll])
+  }, [cameFromEdit, cameFromBackoffice])
 
   const initialState = {
     contracts: shouldRenderAll ? allContractsTogether : contractsFromBackoffice,
@@ -163,7 +163,7 @@ const ContractList = (props) => {
 
   const contracts = useMemo(() => {
     if (contractsFromBackoffice) {
-      return contractsFromBackoffice?.sort((a, b) => b.id - a.id)  
+      return Object.values(contractsFromBackoffice)?.sort((a, b) => b.id - a.id)  
     } else if (cameFromDelete) {
       _removeContractFromRAM()
       return contractsFromDelete?.sort((a, b) => b.id - a.id)
@@ -172,7 +172,9 @@ const ContractList = (props) => {
     } else if (cameFromUpdate) {
       return contractsFromUpdate?.sort((a, b) => b.id - a.id)
     } else {
-      const contracts = JSON.parse(localStorage.getItem('contracts'));
+      console.log(shouldRenderAll, "SHOULD RENDERRRRR")
+      const contracts = JSON.parse(localStorage.getItem(`${JSON.parse(localStorage.getItem('contractsVector'))? 'allContracts' : 'contracts'}`));
+      console.log(contracts, "CONTRATOSSSS")
       let contractsToReturn = []
       for(let i = 0; i < contracts?.length; i++) {
         if (contracts[i]?.user__id === currentUser?.user?.id || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
@@ -224,11 +226,12 @@ const ContractList = (props) => {
               }
             )
             .then(async (res) => {
-              Promise.all([
-                dataRequests.getResultsToPresent(currentOfficeID),
-                dataRequests.getOfficeResults(currentOfficeID),
-                contractsRequests.monthContracts(currentOfficeID)
-              ])
+              
+              await dataRequests.getResultsToPresent(currentOfficeID)
+              await dataRequests.getOfficeResults(currentOfficeID)
+              await contractsRequests.monthContracts(currentOfficeID)
+              await contractsRequests.getAllContracts()
+           
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
 

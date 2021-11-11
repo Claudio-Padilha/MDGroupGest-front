@@ -342,42 +342,6 @@ const BackOfficeContent = (props) => {
   const okPercentage = _getPercentage(y, a)
   const rPercentage = _getPercentage(z, a)
 
-  // const handleMessageButton = () => (
-  //   <div style={{
-  //     position: 'absolute',
-  //     top: '5vh',
-  //     right: '10vw'
-  //   }}>
-  //     <Button
-  //       fullWidth={false}
-  //       disabled={false}
-  //       action={() => createNotification('error')}
-  //       small={true}
-  //       text="Tens uma notificação"
-  //     />
-  //   </div>
-
-  // )
-
-  // const [showPenalizationMessage, setShowPenalizationMessage] = useState(koPercentage > 30)
-
-  // useEffect(() => {
-
-  //   if (showPenalizationMessage) {
-  //     Swal.fire({
-  //       position: 'top-end',
-  //       icon: 'warning',
-  //       iconColor: '',
-  //       titleText: haveAccess ? 'Atenção!' : 'Atenção! Estás a ser penalizado.',
-  //       text: haveAccess ? `A Taxa de anulados do escritório está em: ${parseInt(koPercentage)}%`  : `A Taxa de anulados é: ${parseInt(koPercentage)}%`,
-  //       showConfirmButton: false,
-  //       timer: 4500
-  //     })
-
-  //     setShowPenalizationMessage(false)
-  //   }
-  // }, [showPenalizationMessage])
-
   var deletedID = props?.location?.state?.deletedID;
 
   function _removeContractFromRAM() {
@@ -395,6 +359,10 @@ const BackOfficeContent = (props) => {
   
   _getOfficeComissions()
 
+  function getAllContracts() {
+    return JSON.parse(localStorage.getItem('allContracts'))
+  }
+
   if(deletedID)
     { _removeContractFromRAM() }
 
@@ -408,7 +376,6 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
-              // dataRequests.getMyTeam(currentOfficeID)
               history.push("/MyTeam")
             }}
             small={true}
@@ -668,6 +635,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
+              localStorage.setItem('contractsVector', false)
               history.push({
                 pathname: "/ContractList",
                 state: {
@@ -688,10 +656,11 @@ const BackOfficeContent = (props) => {
               fullWidth={false}
               disabled={false}
               action={() => {
+                localStorage.setItem('contractsVector', true)
                 history.push({
                   pathname: "/ContractList",
                   state: {
-                    data: allContractsToSend,
+                    data: getAllContracts(),
                     currentUser: currentUser,
                     cameFromBackoffice: true,
                     shouldRenderAll: true

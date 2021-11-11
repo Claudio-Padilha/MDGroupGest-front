@@ -411,6 +411,7 @@ const CreateContract = (props) => {
                       }).then(async (result) => {
                         if(result.isConfirmed) {
                           await contractsRequests.monthContracts(currentOfficeID)
+                          await contractsRequests.getAllContracts()
                           await dataRequests.getOfficeResults(currentOfficeID)
                           await dataRequests.getMySalary()
                           return history.push({pathname:"/ChooseTypeOfContract"});

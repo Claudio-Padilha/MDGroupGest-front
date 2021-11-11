@@ -304,6 +304,7 @@ const ContractEdit = (props) => {
         contractsRequests.updateContract(contractData).then(async (res) => {
           await dataRequests.getResultsToPresent(currentOfficeID)
           await dataRequests.getOfficeResults(currentOfficeID)
+          await contractsRequests.getAllContracts()
           contractsRequests.monthContracts(currentOfficeID)
           .then(
             () => {
@@ -403,10 +404,6 @@ const ContractEdit = (props) => {
         mgi: document.getElementById('mgi')?.checked,
       }
     }
-
-    // if (typeof(state?.contractFromDetail?.gas_ppi) !== 'undefined' && document.getElementById("select-sell-state").value !== "") {
-    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
-    // }
     if (document.getElementById('select-gas-scale') !== null && document.getElementById("select-gas-scale").value !== "") {
       contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
     }
@@ -415,7 +412,7 @@ const ContractEdit = (props) => {
       contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
     }
 
-    if (document.getElementById('select-sell-state') !== null &&document.getElementById("select-sell-state").value !== "") {
+    if (document.getElementById('select-sell-state') !== null && document.getElementById("select-sell-state").value !== "") {
       contractData = { ...contractData, ...{ sell_state: Number(document.getElementById("select-sell-state").value) } }
     }
 
