@@ -6,11 +6,19 @@ import { SwishSpinner } from 'react-spinners-kit'
 import { BackIcon } from '../../components/Icon/icons'
 import { Heading, SubHeading, Body } from '../../components/Text/text'
 
-import { MainContainer, DivUploadPhoto, UploadButton, useStyles, WidthMessageContainer } from './styles'
+import {
+  MainContainer,
+  DivUploadPhoto,
+  UploadButton,
+  RecoverPasswordButton,
+  useStyles,
+  WidthMessageContainer
+} from './styles'
 
 import {storage} from '../../firebase/firebase'
 
 import employeesRequests from '../../hooks/requests/employeesRequests'
+import { recoverPassword } from '../../hooks/requests/userRequests'
 
 const MyProfile = () => {
   const currentUser = localStorage.getItem('userForPhoto')
@@ -92,6 +100,9 @@ const MyProfile = () => {
         />
         <Body>{userName}</Body>
         <Body>{email}</Body>
+        <RecoverPasswordButton onClick={() => recoverPassword(user?.user?.id, false)}>
+          Mudar senha
+        </RecoverPasswordButton>
 
       <DivUploadPhoto>
         <input
