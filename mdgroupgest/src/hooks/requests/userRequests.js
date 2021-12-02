@@ -10,16 +10,16 @@ import contractsRequests from '../../hooks/requests/contractsRequests'
 
 const url = useVPSURL()
 
-function _firstTimeOfAnUser(user_id) {
+function recoverPassword(user_id, firstTime) {
   return (
     Swal.fire({
-      title: 'Bem vindo(a), escolha uma password.',
+      title: `${firstTime ? 'Bem vindo(a), e': 'E'}scolha uma password.`,
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off'
       },
       confirmButtonText: 'Confirmar',
-      allowOutsideClick: false,
+      allowOutsideClick: !firstTime,
       preConfirm: (data) => {
 
           return axios.post(`${url}auth/definePassword/`, 
@@ -45,7 +45,7 @@ function _firstTimeOfAnUser(user_id) {
   ))
 }
 
-async function  _HandleConfirmLoginAlert() {
+async function _HandleConfirmLoginAlert() {
   dataRequests.getPower()
   dataRequests.getGasScale()
   dataRequests.getPayment()
@@ -122,8 +122,9 @@ export default {
         axios.post(`${url}auth/login/`, data)
 
             .then(async (res) => {
+              // Recover password when its first time
               if(res?.data?.user?.last_login === null) {
-                await _firstTimeOfAnUser(res.data.user.id)
+                await recoverPassword(res.data.user.id, true)
                 window.location.reload()
                 resolve(res)
               } else {             
@@ -193,20 +194,15 @@ export default {
         axios(authOptions)
 
         .then((res) => {
-            window.localStorage.clear();
-
-            
-            // localStorage.removeItem('myTeam')
-            // localStorage.removeItem('employeeDetail')
-            // localStorage.removeItem('currentToken')
-            
-
-            resolve(res);
+            window.localStorage.clear()
+            resolve(res)
         })
         .catch(error => {
-            const message = 'Erro do servidor.';
-            reject(message);
+            const message = 'Erro do servidor.'
+            reject(message)
         })
     })
   },
 }
+
+export { recoverPassword }
