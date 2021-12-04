@@ -173,6 +173,8 @@ const BackOfficeContent = (props) => {
     dataToForm.push(dataToPopulateGraphic[item])
    });
 
+  console.log(dataToForm, 'DATA TO FORM')
+
   // eslint-disable-next-line no-unused-vars
   var teamLeadersCounter = 0
   // eslint-disable-next-line no-unused-vars
