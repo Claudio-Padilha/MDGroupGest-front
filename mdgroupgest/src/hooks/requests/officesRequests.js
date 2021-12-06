@@ -95,7 +95,33 @@ export default {
       })
     });
   },
+  officeResultsByPeriod: (data) => {
+    
+    return new Promise((resolve) => {
 
+      var request = {
+          method: 'POST',
+          url: `${url}officeResultsByPeriod/`,
+          headers: {
+            'Authorization': 'Token ' + _currentTokenOnRAM(),
+          },
+          json: true,
+          data,
+          dataType: "json",
+          contentType: "application/json"
+        }
+      
+      axios(request)
+        .then((res) => {
+          localStorage.removeItem('officeResultsByPeriod')
+          localStorage.setItem('officeResultsByPeriod', JSON.stringify(res?.data))
+          resolve(res)
+        })
+        .catch(error => {
+          resolve(error)
+        })
+    });
+  },
   paymentSheetByPeriod: (data) => {
     
     return new Promise((resolve) => {

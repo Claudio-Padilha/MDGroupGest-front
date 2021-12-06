@@ -120,7 +120,6 @@ const ExportButton = styled.div`
   height: 80%;
 `;
 
-
 export {
   FirstRow,
   SecondRow,

@@ -244,30 +244,21 @@ const BackOfficeContent = (props) => {
   const _getMonthContracts = useMemo(() => {
     const currentDateJS = new Date()
 
-    const monthContractsForManagerOrSecretary = contracts?.filter(contract => {
-      var date = new Date(contract.delivery_date)
-      return (
-        date.getMonth() === currentDateJS?.getMonth() 
-        && 
-        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
-      )
-    })
+    // const monthContractsForManagerOrSecretary = contracts?.filter(contract => {
+    //   var date = new Date(contract.delivery_date)
+    //   return (
+    //     date.getMonth() === currentDateJS?.getMonth() 
+    //     && 
+    //     date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+    //   )
+    // })
 
     const monthContractsForEmployee = contracts.filter(contract => {
-      var date = new Date(contract.delivery_date)
-      return (
-        date.getMonth() === currentDateJS?.getMonth() 
-        && 
-        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
-        &&
-        contract?.user === currentUser?.id
-      )
+      return contract?.user === currentUser?.id
     })
 
-    if (haveAccess) {
-      return monthContractsForManagerOrSecretary
-    } else if(userType === "secretary") {
-      return monthContractsForManagerOrSecretary
+    if (haveAccess || userType === "secretary") {
+      return contracts
     } else {
       return monthContractsForEmployee
     }

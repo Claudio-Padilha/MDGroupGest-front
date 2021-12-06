@@ -7,6 +7,7 @@ import { BackIcon } from '../../components/Icon/icons'
 
 import { useRefresh } from '../../hooks/window/refresh'
 import { useAuth } from '../../hooks/employees/auth'
+import { usePassedPeriodDays } from '../../hooks/date'
 
 import {
   MainContainer,
@@ -36,8 +37,7 @@ const MyResults = (props) => {
   const currentSalary = props?.location?.state?.currentSalary
   const currentFacturing = props?.location?.state?.currentFacturing
 
-  const today = new Date()
-  const todayNumber = today.getDate()
+  const passedDays = usePassedPeriodDays()
 
   const {
     isCEO,
@@ -46,11 +46,11 @@ const MyResults = (props) => {
     isRegularSecretary
   } = useAuth()
 
-  var contractQtdAverage = allContractsQtd / todayNumber;
-  const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2);
+  let contractQtdAverage = allContractsQtd / passedDays
+  const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2)
   
-  var salaryAverage = currentSalary / todayNumber;
-  const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
+  let salaryAverage = currentSalary / passedDays
+  const salaryAverageFixedBy2 = salaryAverage.toFixed(2)
 
   const initialState = { 
     results: resultsInfo,
@@ -69,7 +69,7 @@ const MyResults = (props) => {
     salaryAverageFixedBy2
   }
 
-  if(!wasRefreshed) {
+  if (!wasRefreshed) {
     localStorage.setItem('myResultsScreenState', JSON.stringify(initialState))
   }
   
