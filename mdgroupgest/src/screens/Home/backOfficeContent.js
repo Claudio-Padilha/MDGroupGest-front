@@ -488,7 +488,7 @@ const BackOfficeContent = (props) => {
 
     const currentMonthTitleStyle = {
       marginLeft: '0',
-      marginRight: '50%'
+      marginRight: '5rem'
     }
 
     const titleStyle = {

@@ -96,8 +96,6 @@ export default {
     });
   },
   officeResultsByPeriod: (data) => {
-
-    console.log(data, 'DATA')
     
     return new Promise((resolve) => {
 
