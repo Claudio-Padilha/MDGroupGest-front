@@ -160,7 +160,7 @@ const MyResults = (props) => {
             </Col>
           }
 
-          { (isAdministrator || isRegularSecretary) && 
+          { (isCEO || isAdministrator || isRegularSecretary) && 
             <Col style={colStyle}>
 
               <SmallSubHeading style={
