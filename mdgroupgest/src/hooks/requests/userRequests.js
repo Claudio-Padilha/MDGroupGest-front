@@ -22,7 +22,6 @@ function recoverPassword(user_id, firstTime) {
       focusConfirm: false,
       preConfirm: () => {
         if (document.getElementById('swal-input1').value !== document.getElementById('swal-input2').value) {
-          console.log('Senhas diferem')
           Swal.showValidationMessage(
             '<i class="fa fa-info-circle"></i> As senhas são diferentes.'
           )
