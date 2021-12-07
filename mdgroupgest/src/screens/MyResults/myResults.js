@@ -123,8 +123,6 @@ const MyResults = (props) => {
     } 
   }
 
-  console.log(state, 'ESTADO')
-
   const renderMyProfit = () => {
     const colStyle = {
       width: '100%',
