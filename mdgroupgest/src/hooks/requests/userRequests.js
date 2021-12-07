@@ -14,17 +14,24 @@ function recoverPassword(user_id, firstTime) {
   return (
     Swal.fire({
       title: `${firstTime ? 'Bem vindo(a), e': 'E'}scolha uma password.`,
-      input: 'text',
-      inputAttributes: {
-        autocapitalize: 'off'
-      },
       confirmButtonText: 'Confirmar',
       allowOutsideClick: !firstTime,
-      preConfirm: (data) => {
-
-          return axios.post(`${url}auth/definePassword/`, 
-          { password: data, id: user_id }, 
-          { Authorization: 'Token ' + _currentTokenOnRAM()})
+      html:
+        '<input id="swal-input1" class="swal2-input">' +
+        '<input id="swal-input2" class="swal2-input">',
+      focusConfirm: false,
+      preConfirm: () => {
+        if (document.getElementById('swal-input1').value !== document.getElementById('swal-input2').value) {
+          console.log('Senhas diferem')
+          Swal.showValidationMessage(
+            '<i class="fa fa-info-circle"></i> As senhas são diferentes.'
+          )
+        } else {
+            return axios.post(
+              `${url}auth/definePassword/`, 
+              { password: document.getElementById('swal-input2').value, id: user_id }, 
+              { Authorization: 'Token ' + _currentTokenOnRAM() }
+            )
             .then(response => {
               Swal.fire({
                 position: 'top-end',
@@ -40,8 +47,9 @@ function recoverPassword(user_id, firstTime) {
                 `A senha deve ter tamanho mínimo de 6 caracteres, um caracter grande e um caracter especial!`
               )
             })
-          }
+        }
       }
+    }
   ))
 }
 
