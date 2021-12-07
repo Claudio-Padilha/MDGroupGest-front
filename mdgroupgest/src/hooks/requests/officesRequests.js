@@ -96,17 +96,19 @@ export default {
     });
   },
   officeResultsByPeriod: (data) => {
+
+    console.log(data, 'DATA')
     
     return new Promise((resolve) => {
 
-      var request = {
-          method: 'POST',
+      let request = {
+          method: 'GET',
           url: `${url}officeResultsByPeriod/`,
           headers: {
             'Authorization': 'Token ' + _currentTokenOnRAM(),
           },
+          params: data,
           json: true,
-          data,
           dataType: "json",
           contentType: "application/json"
         }

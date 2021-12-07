@@ -33,6 +33,7 @@ import officesRequests from '../../hooks/requests/officesRequests'
 import { useRefresh } from '../../hooks/window/refresh'
 import { useStartApp } from '../../hooks/backoffice/startApp'
 import { useAuth } from '../../hooks/employees/auth'
+import useChart from '../../hooks/chart'
 import employeesRequests from '../../hooks/requests/employeesRequests'
 import contractsRequests from '../../hooks/requests/contractsRequests'
 
@@ -84,6 +85,7 @@ const BackOfficeContent = (props) => {
 
   useEffect(() => {
     _getOfficeInformation()
+  //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const initialState = {
@@ -146,16 +148,15 @@ const BackOfficeContent = (props) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start, fromContractsList, fromMyResults, fromEmployeeType, fromMyTeam, wasRefreshed])
 
-  const currentUser = state?.ramCurrentUser;
-  const currentOfficeID = state?.ramCurrentOfficeID;
-  const officeResults = state?.ramOfficeResults;
-  const resultsToPresent = state?.ramResultsToPresent;
-  const mySalary = state?.ramMySalary;
-  const myTeam = state?.ramMyTeam;
-  const currentOfficeObject = state?.ramCurrentOfficeObject;
-  const contracts = state?.ramContracts;
-  const allContractsToSend = state?.ramAllContracts;
-  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {};
+  const currentUser = state?.ramCurrentUser
+  const currentOfficeID = state?.ramCurrentOfficeID
+  const officeResults = state?.ramOfficeResults
+  const resultsToPresent = state?.ramResultsToPresent
+  const mySalary = state?.ramMySalary
+  const myTeam = state?.ramMyTeam
+  const currentOfficeObject = state?.ramCurrentOfficeObject
+  const contracts = state?.ramContracts
+  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {}
   const userType =  currentUser?.user?.user_type
 
   const { 
@@ -167,18 +168,12 @@ const BackOfficeContent = (props) => {
 
   const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
 
-  const dataToForm = []
-
-  Object.keys(dataToPopulateGraphic).forEach(function(item){
-    dataToForm.push(dataToPopulateGraphic[item])
-   });
-
   // eslint-disable-next-line no-unused-vars
-  var teamLeadersCounter = 0
+  let teamLeadersCounter = 0
   // eslint-disable-next-line no-unused-vars
-  var instructorsCounter = 0
+  let instructorsCounter = 0
   // eslint-disable-next-line no-unused-vars
-  var salesPersonsCounter = 0
+  let salesPersonsCounter = 0
 
   const teamLeadersArr = []
   const instructorsArr = []
@@ -242,16 +237,6 @@ const BackOfficeContent = (props) => {
   }
 
   const _getMonthContracts = useMemo(() => {
-    const currentDateJS = new Date()
-
-    // const monthContractsForManagerOrSecretary = contracts?.filter(contract => {
-    //   var date = new Date(contract.delivery_date)
-    //   return (
-    //     date.getMonth() === currentDateJS?.getMonth() 
-    //     && 
-    //     date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
-    //   )
-    // })
 
     const monthContractsForEmployee = contracts.filter(contract => {
       return contract?.user === currentUser?.id
@@ -263,7 +248,7 @@ const BackOfficeContent = (props) => {
       return monthContractsForEmployee
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[contracts])
+  },[contracts, haveAccess, currentUser])
 
   const koContracts = []
   const okContracts = []
@@ -315,17 +300,17 @@ const BackOfficeContent = (props) => {
   // "k" is total contracts qtd
   const a = haveAccess ? _getMonthContracts?.length : contracts?.length;
 
-  const dataOfficeResult = [[
-    'Dias',
-    `${y === 1 || y === 0 ? `(${y}) Válido` : `(${y}) Válidos`}`,
-    `${z === 1 || z === 0 ? `(${z}) Pendente` : `(${z}) Pendentes`}`,
-    `${x === 1 || x === 0 ? `(${x}) Anulado` : `(${x}) Anulados`}`,
-  ], ...dataToForm]
+  const dataOfficeResult = useChart({
+    dataToPopulateGraphic,
+    ko: x,
+    ok: y,
+    r: z
+  })
 
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {
-      const p = (percent / total) * 100;
-      return p.toFixed(2);
+      const p = (percent / total) * 100
+      return p.toFixed(2)
     } else {
       return 0;
     }
@@ -415,9 +400,10 @@ const BackOfficeContent = (props) => {
                     all: _getMonthContracts,
                     ok: monthOkContracts,
                     ko: monthKoContracts,
-                    pending: monthRContracts,
-                    dataToDiagram: dataOfficeResult,
-                  }
+                    r: monthRContracts,
+                    dataToChartFromBackOffice: dataOfficeResult,
+                  },
+                  cameFromBackoffice: true
                 }
               }}
             >
