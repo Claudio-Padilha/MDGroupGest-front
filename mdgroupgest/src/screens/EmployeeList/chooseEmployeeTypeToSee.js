@@ -1,11 +1,11 @@
-import React, { useMemo, useCallback, useReducer, useEffect, useState } from "react";
-import { Link, useHistory } from "react-router-dom";
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import React, { useMemo, useCallback, useReducer, useEffect, useState } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import { SwishSpinner } from 'react-spinners-kit'
 
-import { Heading, SubHeading, Body } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading, Body } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
 
-import CONSTANTS from '../../constants';
+import CONSTANTS from '../../constants'
 import {
   CardsContainer,
   FirstRow,
@@ -13,19 +13,19 @@ import {
   GoHomeButton,
   MainContainerEType,
   WidthMessageContainer
-} from "./styles";
+} from './styles'
 
 import {
   MDCard,
   MDCardBody,
   MDButton 
-} from '../../screens/Home/md';
+} from '../../screens/Home/md'
 
-import { useEmployees, useEmployeesActions } from '../../hooks/employees/employees';
-import { useAuth } from '../../hooks/employees/auth';
-import { useRefresh } from '../../hooks/window/refresh';
-import employeesRequests from "../../hooks/requests/employeesRequests";
-import officesRequests from '../../hooks/requests/officesRequests';
+import { useEmployees } from '../../hooks/employees/employees'
+import { useAuth } from '../../hooks/employees/auth'
+import { useRefresh } from '../../hooks/window/refresh'
+import employeesRequests from '../../hooks/requests/employeesRequests'
+import officesRequests from '../../hooks/requests/officesRequests'
 
 const ChooseEmployeeTypeToSee = (props) => {
   const history = useHistory()
@@ -42,22 +42,22 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const { wasRefreshed } = useRefresh()
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   if (isLoading) {
     setTimeout(() => {
       setIsLoading(false)
-    }, [500]);
+    }, [500])
   }
 
-  const isFromList = props?.location?.state?.cameFromList;
-  const isFromBackOffice = props?.location?.state?.isFromBackOffice;
-  const isFromCreation = props?.location?.state?.cameFromCreation;
-  const isFromEdit = props?.location?.state?.cameFromEdit;
-  const employeesAfterUpdate = props?.location?.state?.employeesAfterUpdate;
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const isFromList = props?.location?.state?.cameFromList
+  const isFromBackOffice = props?.location?.state?.isFromBackOffice
+  const isFromCreation = props?.location?.state?.cameFromCreation
+  const isFromEdit = props?.location?.state?.cameFromEdit
+  const employeesAfterUpdate = props?.location?.state?.employeesAfterUpdate
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
 
-  const currentOfficeID = currentUser?.user?.office;
+  const currentOfficeID = currentUser?.user?.office
 
   const currentOfficeObject = useMemo(() => {
     officesRequests.getOffice(currentOfficeID)
@@ -79,6 +79,7 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   const allEmployees = useMemo(() => {
     return JSON.parse(localStorage.getItem('allEmployees'))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isFromBackOffice, isFromCreation, isFromEdit])
 
   let initialState = {
@@ -95,6 +96,7 @@ const ChooseEmployeeTypeToSee = (props) => {
 
   useEffect(() => {
     if(isFromList) {
+      // eslint-disable-next-line react-hooks/exhaustive-deps
       initialState = props?.location?.state?.dataToGoBack
       window.location.reload()
     }
@@ -110,7 +112,8 @@ const ChooseEmployeeTypeToSee = (props) => {
 
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
-        reducerState = stateOnRAM;
+        reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('chooseEmployeeTypeScreenState')
@@ -127,6 +130,7 @@ const ChooseEmployeeTypeToSee = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed])
 
   const renderCEOCard = () => ( 
@@ -139,7 +143,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         dataGoingToList: state,
         officeID: currentOfficeID,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há CEO.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -169,7 +174,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Administradores(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -187,7 +193,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderManagerCard = () => (
     <Link to={{
@@ -199,7 +205,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         dataGoingToList : currentUser,
         officeID: currentOfficeID,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Empresários(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -217,7 +224,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderSecretaryCard = () => (
     <Link to={{
@@ -229,7 +236,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeID: currentOfficeID,
         officeOBJ: currentOfficeObject,
         shouldRenderEmployeeAssociation: false,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Secretários(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -247,7 +255,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderManagerAssistantCard = () => (
     <Link to={{
@@ -258,7 +266,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.managerAssistants,
         employeeToAssociate: regularManager.concat(ceo),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Gerentes.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -267,7 +276,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderTeamLeaderCard = () => (
     <Link to={{
@@ -278,7 +287,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         data: state?.teamLeaders,
         employeeToAssociate: regularManager.concat(managerAssistants.concat(ceo)),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Team Leaders.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -287,7 +297,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderInstructorCard = () => (
     <Link to={{
@@ -300,7 +310,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeOBJ: currentOfficeObject,
         employeeToAssociate: managerAssistants.concat(teamLeaders.concat(regularManager).concat(ceo)),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Instrutores(as).'
       }  
     }}>
       <MDCard className={"card"}>
@@ -309,7 +320,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const renderComercialCard = () => (
     <Link to={{
@@ -322,7 +333,8 @@ const ChooseEmployeeTypeToSee = (props) => {
         officeOBJ: currentOfficeObject,
         employeeToAssociate: managerAssistants.concat(teamLeaders.concat(instructors.concat(allEmployees?.manager))),
         shouldRenderEmployeeAssociation: true,
-        isFromEmployeeTypeSelection: true
+        isFromEmployeeTypeSelection: true,
+        emptyPhrase: 'Ainda não há Comerciais.'
       }  
     }}>
       <MDCard className={"card"}>
@@ -331,7 +343,7 @@ const ChooseEmployeeTypeToSee = (props) => {
         </MDCardBody>
       </MDCard>
     </Link>
-  );
+  )
 
   const ceoView = () => (
     <CardsContainer>
@@ -414,21 +426,18 @@ const ChooseEmployeeTypeToSee = (props) => {
     </CardsContainer>
   )
 
-  const handleUserView = useCallback(
-    () => {
-
-      if (isCEO) {
-        return ceoView()
-      } else if (isAdministrator) {
-        return administratorView()
-      } else if (isRegularManager) {
-        return managerAndSecretaryView()
-      } else if (isRegularSecretary) {
-        return managerAndSecretaryView()
-      }
-    },
-    [currentUser],
-  )
+  const handleUserView = useCallback(() => {
+    if (isCEO) {
+      return ceoView()
+    } else if (isAdministrator) {
+      return administratorView()
+    } else if (isRegularManager) {
+      return managerAndSecretaryView()
+    } else if (isRegularSecretary) {
+      return managerAndSecretaryView()
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentUser])
   
   const contentOfThisPage = () => (
     <>

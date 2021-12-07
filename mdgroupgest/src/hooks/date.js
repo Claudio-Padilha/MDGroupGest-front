@@ -1,25 +1,45 @@
 const useDate = () => {
-  const date = new Date();
+  const date = new Date()
+  
+  let months = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ]
 
-  var months = new Array();
-  months[0] = "Janeiro";
-  months[1] = "Fevereiro";
-  months[2] = "Março";
-  months[3] = "Abril";
-  months[4] = "Maio";
-  months[5] = "Junho";
-  months[6] = "Julho";
-  months[7] = "Agosto";
-  months[8] = "Setembro";
-  months[9] = "Outubro";
-  months[10] = "Novembro";
-  months[11] = "Dezembro";
+  let currentMonthNumber = date.getDate() <= 20 ?
+    date.getMonth() === 0 ?
+    11 : date.getMonth() : date.getMonth() === 11 ?
+    0 : date.getMonth() + 1
 
-  let currentMonthNumber = date?.getMonth();
+  const currentMonth = months[currentMonthNumber]
 
-  const currentMonth = months[currentMonthNumber];
-
-  return currentMonth;
+  return currentMonth
 }
 
-export { useDate };
+const usePassedPeriodDays = () => {
+  const date = new Date()
+  const currentMonthDay = date.getDate()
+
+  let passedDays
+
+  if (currentMonthDay <= 20) {
+    const lastMonthDays = new Date(date.getFullYear(), date.getMonth() - 1, 0).getDate()
+    passedDays = currentMonthDay + lastMonthDays - 20
+  } else {
+    passedDays = currentMonthDay - 20
+  }
+
+  return passedDays
+} 
+
+export { useDate, usePassedPeriodDays }

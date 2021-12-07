@@ -9,7 +9,6 @@ import { Corner, Corner180 } from '../../components/Corner/corner'
 import { LogoMD } from '../../components/Logo/logo'
 import { BackIcon } from '../../components/Icon/icons'
 
-import { _executeValidationsIfHas } from '../../hooks/validation'
 import contractsRequests from '../../hooks/requests/contractsRequests'
 import dataRequests from '../../hooks/requests/dataRequests'
 import { useRefresh } from '../../hooks/window/refresh'
@@ -34,13 +33,13 @@ const CreateContract = (props) => {
 
   const [typeOfContractFromProps, setTypeOfContractFromProps] = useState(props?.location?.state?.typeOfContract)
   const [currentForm, setCurrentForm] = useState('')
-  const [dynamicPowerConfirmation, setDynamicPowerConfirmation] = useState('')
 
   function _allEmployees() {
     var allEmployees = []
 
     if(_allEmployeesFromRAM) {
       Object.values(_allEmployeesFromRAM).forEach(function(employeeType){
+        // eslint-disable-next-line array-callback-return
         employeeType.map(type => {
           if ((
             type?.user?.user_type === "ceo" ||
@@ -53,7 +52,7 @@ const CreateContract = (props) => {
             allEmployees.push({value: type?.user?.id, label: type?.user?.name})
           }
         })
-      });
+      })
     }
 
     return allEmployees
@@ -143,7 +142,7 @@ const CreateContract = (props) => {
     return powersListArr
   }
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true)
 
   const infoForFields = useMemo(() => {
     const feedbackCalls = _getFeedbackCalls()
@@ -159,15 +158,15 @@ const CreateContract = (props) => {
       gasScales,
       powersList
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label
   const mtId = infoForFields?.powersList.find(power => power?.label === 'MT')?.value?.label
 
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
 
-  const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) };
-  //const handleSubmitForm = formFields => console.log(formFields)
+  const handleSubmitForm = formFields => { _ConfirmContractCreation(formFields) }
   const history = useHistory()
 
   function _goBack() {
@@ -177,8 +176,6 @@ const CreateContract = (props) => {
   }
 
   async function _ConfirmContractCreation(data) {
-
-    console.log(data, 'DATA');
 
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -220,11 +217,6 @@ const CreateContract = (props) => {
     const feedbackCallValue = feedbackCall?.value
     const sellStateValue = sellState?.value
 
-    console.log(paymentMethods, 'paymentMethods')
-    console.log(feedbackCall, 'feedbackCall')
-    console.log(powerForElectricity, 'powerForElectricity')
-    console.log(sellState, 'sellState')
-
     var powerForElectricityConfirmation = data?.powerForElectricity?.label || null
     var powerDUALConfirmation = data?.powerDUAL?.label || null
 
@@ -244,7 +236,7 @@ const CreateContract = (props) => {
       powerForElectricityConfirmation === mtId
     )
 
-    const electricityMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const electricityMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -259,7 +251,7 @@ const CreateContract = (props) => {
     <b>Estado da venda:</b> ${sellState ? sellState.label : `❌`} <br>
     <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods.label : `❌`} <br>`; 
 
-    const gasMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const gasMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -275,7 +267,7 @@ const CreateContract = (props) => {
     <b>Método de pagamento:</b> ${paymentMethods ? paymentMethods.label : `❌`} <br>
     <b>Escalão Gás:</b> ${gasScaleForGas ? gasScaleForGas.label : `❌`} <br>`; 
 
-    const dualMessage = `<b>Comercial:</b> ${user ? user : `❌`} <br>
+    const dualMessage = `<b>Colaborador:</b> ${user ? user : `❌`} <br>
     <b>Cliente:</b> ${clientName ? clientName : `❌`} <br>                                               
     <b>NIF / NIPC:</b> ${clientNif ? clientNif : `❌`} <br>                                                               
     <b>Contacto Cliente:</b> ${clientContact ? clientContact : `❌`} <br>
@@ -373,8 +365,6 @@ const CreateContract = (props) => {
             comissions: comissionObj
           }
 
-          console.log(contractObj, 'OBJETO DO CONTRATO')
-
           if (result?.isConfirmed) {
             return (
               swalWithBootstrapButtons.fire({
@@ -420,12 +410,13 @@ const CreateContract = (props) => {
                         reverseButtons: true
                       }).then(async (result) => {
                         if(result.isConfirmed) {
-                          await contractsRequests.getContracts(currentOfficeID)
+                          await contractsRequests.monthContracts(currentOfficeID)
+                          await contractsRequests.getAllContracts()
                           await dataRequests.getOfficeResults(currentOfficeID)
                           await dataRequests.getMySalary()
                           return history.push({pathname:"/ChooseTypeOfContract"});
                         } else if(!result.isConfirmed) {
-                          await contractsRequests.getContracts(currentOfficeID)
+                          await contractsRequests.monthContracts(currentOfficeID)
                           await dataRequests.getOfficeResults(currentOfficeID)
                           await dataRequests.getMySalary()
                           return history.push({
@@ -521,12 +512,12 @@ const CreateContract = (props) => {
                   reverseButtons: true
                 }).then(async (result) => {
                   if(result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
+                    await contractsRequests.monthContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({pathname:"/ChooseTypeOfContract"});
                   } else if(!result.isConfirmed) {
-                    await contractsRequests.getContracts(currentOfficeID)
+                    await contractsRequests.monthContracts(currentOfficeID)
                     await dataRequests.getOfficeResults(currentOfficeID)
                     await dataRequests.getMySalary()
                     return history.push({
@@ -557,7 +548,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
@@ -606,7 +597,7 @@ const CreateContract = (props) => {
       question: "Potência contratada",
       options: infoForFields.powersList,
     },
-  ];
+  ]
 
   const GASFIELDS = [
     { 
@@ -615,7 +606,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
   },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
@@ -664,7 +655,7 @@ const CreateContract = (props) => {
       question: "Escalão Gás",
       options: _getGasScales()
     },   
-  ];
+  ]
 
   const DUALFIELDS = [
     { 
@@ -673,7 +664,7 @@ const CreateContract = (props) => {
       placeholder: "Escolha o nome",
       side: "right",
       key: "employeeName",
-      question: "Nome do Comercial",  
+      question: "Nome do Colaborador",  
       options: _allEmployees() 
     },
     { type: "text", subType: "twoColumns", side: "right", key: "clientName", question: "Nome do Cliente" },
@@ -735,26 +726,27 @@ const CreateContract = (props) => {
       question: "Escalão Gás",
       options: _getGasScales()
     },   
-  ];
+  ]
 
   const DYNAMICFORMFIELDS = useMemo(() => {
     switch (typeOfContractFromProps) {
       case "electricity":
       case "condominium_electricity":
         setCurrentForm('electricity')
-        return ELECTRICITYFIELDS;
+        return ELECTRICITYFIELDS
 
       case "gas":
       case "condominium_gas":
         setCurrentForm('gas')
-        return GASFIELDS;
+        return GASFIELDS
 
       case "dual":
       case "condominium_dual":
         setCurrentForm('dual')
-        return DUALFIELDS;
-    
+        return DUALFIELDS
+      // no default
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [typeOfContractFromProps, window])
 
   const Yup = require('yup')
@@ -787,7 +779,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchemaElectricity = Yup.object().shape({
     clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
@@ -814,7 +806,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchemaDual = Yup.object().shape({
     clientNif: Yup.number().test('len', 'Deve ter exatos 9 caracteres', val => val?.toString()?.length === 9),
@@ -851,7 +843,7 @@ const CreateContract = (props) => {
       label: Yup.string().required(),
       value: Yup.string().required()
     })
-  });
+  })
 
   const validationSchema = useMemo(() => {
     switch (currentForm) {
@@ -863,8 +855,9 @@ const CreateContract = (props) => {
         return validationSchemaDual
     
       default:
-        return;
+        return
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentForm])
 
   const initialState = {
@@ -882,6 +875,7 @@ const CreateContract = (props) => {
         localStorage.setItem('createContractScreenState', JSON.stringify(initialState))
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromChoice])
 
   const reducer = useCallback((firstState, action) => {
@@ -891,6 +885,7 @@ const CreateContract = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('createContractScreenState')
@@ -903,6 +898,7 @@ const CreateContract = (props) => {
     }, [800]);
 
     return reducerState
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -915,9 +911,8 @@ const CreateContract = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameFromChoice, wasRefreshed])
-
-  console.log(typeOfContractFromProps, 'TYPE')
 
   return ( isLoading ?
     <MainDiv style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>

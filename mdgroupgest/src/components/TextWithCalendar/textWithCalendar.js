@@ -12,6 +12,7 @@ import { InputContainer } from './styles';
 const TextWithCalendar = ({label, error, onChange, type}) => {
   var today = Date.now()
   const [selectedDate, setSelectedDate] = useState(today);
+  // eslint-disable-next-line no-unused-vars
   const [inputType, setInputType] = useState(type || "date-field");
 
   const handleDateChange = (date) => {

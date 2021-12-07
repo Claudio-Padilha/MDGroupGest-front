@@ -1,10 +1,9 @@
 import axios from 'axios'
-import Swal from 'sweetalert2';
 
-import _currentTokenOnRAM from './currentToken';
-import useVPSURL from './defaultVpsURL';
+import _currentTokenOnRAM from './currentToken'
+import useVPSURL from './defaultVpsURL'
 
-const url = useVPSURL();
+const url = useVPSURL()
 
 export default {
   getFeedbackCall:  () => {

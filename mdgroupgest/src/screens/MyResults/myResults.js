@@ -1,12 +1,13 @@
-import React, { useReducer, useEffect, useState } from "react";
-import { Col, Row } from 'react-bootstrap';
-import { useHistory } from 'react-router-dom';
+import React, { useReducer, useEffect } from "react"
+import { Col, Row } from 'react-bootstrap'
+import { useHistory } from 'react-router-dom'
 
-import {  Heading, SubHeading, SmallSubHeading, Body } from '../../components/Text/text';
-import { BackIcon } from '../../components/Icon/icons';
+import {  Heading, SubHeading, SmallSubHeading, Body } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons'
 
 import { useRefresh } from '../../hooks/window/refresh'
 import { useAuth } from '../../hooks/employees/auth'
+import { usePassedPeriodDays } from '../../hooks/date'
 
 import {
   MainContainer,
@@ -15,33 +16,28 @@ import {
   YellowCircle,
   RedCircle,
   WidthMessageContainer
-} from "./styles";
+} from "./styles"
 
-import CONSTANTS from "../../constants";
+import CONSTANTS from "../../constants"
 
 const MyResults = (props) => {
   
-  const { wasRefreshed } = useRefresh();
+  const { wasRefreshed } = useRefresh()
 
-  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const currentUserType = currentUser?.user?.user_type;
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'))
   const history = useHistory()
 
-  const percentageState = props?.location?.state?.percentages;
-  const okPercentage = `${percentageState?.ok}%`;
-  const okNumber = parseInt(okPercentage);
-  const rPercentage = `${percentageState?.r}%`;
-  const rNumber = parseInt(rPercentage);
-  const koPercentage = `${percentageState?.ko}%`;
-  const koNumber = parseInt(koPercentage);
+  const percentageState = props?.location?.state?.percentages
+  const okPercentage = `${percentageState?.ok}%`
+  const rPercentage = `${percentageState?.r}%`
+  const koPercentage = `${percentageState?.ko}%`
 
-  const resultsInfo = props?.location?.state?.resultsInfo;
-  const allContractsQtd = props?.location?.state?.contracts?.all?.length;
-  const currentSalary = props?.location?.state?.currentSalary;
-  const currentFacturing = props?.location?.state?.currentFacturing;
+  const resultsInfo = props?.location?.state?.resultsInfo
+  const allContractsQtd = props?.location?.state?.contracts?.all?.length
+  const currentSalary = props?.location?.state?.currentSalary
+  const currentFacturing = props?.location?.state?.currentFacturing
 
-  const today = new Date();
-  const todayNumber = today.getDate();
+  const passedDays = usePassedPeriodDays()
 
   const {
     isCEO,
@@ -50,11 +46,11 @@ const MyResults = (props) => {
     isRegularSecretary
   } = useAuth()
 
-  var contractQtdAverage = allContractsQtd / todayNumber;
-  const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2);
+  let contractQtdAverage = allContractsQtd / passedDays
+  const contractQtdAverageFixedBy2 = contractQtdAverage.toFixed(2)
   
-  var salaryAverage = currentSalary / todayNumber;
-  const salaryAverageFixedBy2 = salaryAverage.toFixed(2);
+  let salaryAverage = currentSalary / passedDays
+  const salaryAverageFixedBy2 = salaryAverage.toFixed(2)
 
   const initialState = { 
     results: resultsInfo,
@@ -73,7 +69,7 @@ const MyResults = (props) => {
     salaryAverageFixedBy2
   }
 
-  if(!wasRefreshed) {
+  if (!wasRefreshed) {
     localStorage.setItem('myResultsScreenState', JSON.stringify(initialState))
   }
   
@@ -85,7 +81,8 @@ const MyResults = (props) => {
     if (wasRefreshed) {
       switch (action) {
         case 'MAINTAIN_SCREEN_STATE':
-          reducerState = stateOnRAM;
+          reducerState = stateOnRAM
+        // no default
       }
       return reducerState
     }
@@ -102,6 +99,7 @@ const MyResults = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed])
 
   function _goBack() {
@@ -117,11 +115,11 @@ const MyResults = (props) => {
 
   function _colorToRender() {
     if (state?.okNumber >= 80) {
-      return <GreenCircle />;
+      return <GreenCircle />
     } else if (state?.koNumber <= 30 && state?.rNumber <= 70 && state?.okNumber < 80) {
-      return <YellowCircle />;
+      return <YellowCircle />
     } else if (state?.koNumber >= 30 && state?.rNumber < 70 && state?.okNumber <=70){
-      return <RedCircle />;
+      return <RedCircle />
     } 
   }
 
@@ -133,7 +131,7 @@ const MyResults = (props) => {
       flexDirection: 'column',
       alignItems: 'center',
     };
-    console.log(state, 'ESTADO');
+    
     return (
       <>
         <Row style={{display: 'flex', height: '20%', justifyContent: 'space-between', alignItems: 'flex-start'}}>
@@ -244,6 +242,7 @@ const MyResults = (props) => {
                   justifyContent: 'center'
                 }
               }>
+                {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
                 <SmallSubHeading style={{marginTop: '1%', marginBottom: '0'}}>⬆️</SmallSubHeading>
               </Row>
             }

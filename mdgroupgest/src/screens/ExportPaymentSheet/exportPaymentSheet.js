@@ -1,8 +1,7 @@
 import React, { useMemo, useReducer, useEffect, useState } from "react"
 import { Link, useHistory } from "react-router-dom"
-import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
-import { DateRangePicker, DateRange } from 'react-date-range'
-import { addDays } from 'date-fns'
+import { SwishSpinner } from "react-spinners-kit"
+import { DateRange } from 'react-date-range'
 import { pt } from 'react-date-range/src/locale/index'
 import { saveAs } from "file-saver"
 
@@ -25,8 +24,9 @@ import {
 import { MDButton } from '../../screens/Home/md'
 
 import { useRefresh } from '../../hooks/window/refresh'
-import employeesRequests from "../../hooks/requests/employeesRequests"
+import employeesRequests from '../../hooks/requests/employeesRequests'
 import officesRequests from '../../hooks/requests/officesRequests'
+import { useDate } from '../../hooks/date'
 
 import 'react-date-range/dist/styles.css' // main css file
 import 'react-date-range/dist/theme/default.css' // theme css file
@@ -45,6 +45,13 @@ const ExportPaymentSheet = (props) => {
   }
 
   const { wasRefreshed } = useRefresh()
+  const currentMonth = useDate()
+
+  const upperCasedMonth = currentMonth.replace(/(?:^|\s)\S/g, (a) => a.toUpperCase())
+
+  let currentYear = new Date().getFullYear()
+
+  const currentDateForTitle = `${upperCasedMonth} ${currentYear}`
 
   const [isLoading, setIsLoading] = useState(true)
   // const [date, setDate] = useState([
@@ -92,44 +99,70 @@ const ExportPaymentSheet = (props) => {
     for (let i = 0; i < sheet?.length; i++) {
       // Create a sheet
       var eachSheet = workbook.addWorksheet(`${sheet[i]?.funcionario} - ${period}`)
+      
       // A table header
       eachSheet.columns = [
-          { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
-          { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
-          { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
-          { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
-          { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
-          { header: 'PEL', key: 'pel', width: 8 },
-          { header: 'PPI GÁS', key: 'gas_ppi', width: 8 },
-          { header: 'MGI', key: 'mgi', width: 8 },
-          { header: 'LUZ - CPE', key: 'cpe', width: 8 },
-          { header: 'POTÊNCIA', key: 'power', width: 8 },
-          { header: 'GÁS - CUI', key: 'cui', width: 8 },
-          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 8 },
-          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 8 },
-          { header: 'OBS BO', key: 'observations', width: 18 },
+          { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 20 },
+          { header: 'TIPO DE\n VENDA', key: 'contract_type', width: 10 },
+          { header: 'DATA DE\n ASSINATURA', key: 'signature_date', width: 12 },
+          { header: 'NIF / NIPC', key: 'client_nif', width: 10 },
+          { header: 'NOME DO TITULAR', key: 'client_name', width: 34 },
+          { header: 'PPI\n LUZ', key: 'electricity_ppi', width: 4, style: { textAlign: 'center'}},
+          { header: 'PEL', key: 'pel', width: 4 },
+          { header: 'PPI\n GÁS', key: 'gas_ppi', width: 4 },
+          { header: 'MGI', key: 'mgi', width: 4 },
+          { header: 'CPE', key: 'cpe', width: 20 },
+          { header: 'POTÊNCIA', key: 'power', width: 10 },
+          { header: 'CUI', key: 'cui', width: 20 },
+          { header: 'ESCALÃO\n GÁS', key: 'gas_scale', width: 8 },
+          { header: 'ESTADO\n DA VENDA', key: 'sell_state', width: 8 },
+          { header: 'OBS BO', key: 'observations', width: 24 },
           { header: 'VALOR', key: 'employee_comission', width: 8 },
-          { header: 'TOTAL', key: 'total', width: 10 },
+          { header: 'TOTAL', key: 'total', width: 8 },
       ]
 
+      eachSheet.getCell(`A1`).value = currentDateForTitle 
+      eachSheet.mergeCells('A1:Q1')
+      eachSheet.getCell(`A1`).alignment = { horizontal: 'center' }
+
       eachSheet.addRow({
-          employee_name: `${sheet[i]?.funcionario}`,
-          contract_type: '',
-          signature_date: '',
-          client_name: '',
-          electricity_ppi: '',
-          pel: '',
-          gas_ppi: '',
-          mgi: '',
-          cpe: '',
-          power: '',
-          cui: '',
-          gas_scale: '',
-          sell_state: '',
-          observations: '',
-          employee_comission: '',
-        
-      })
+        employee_name: 'NOME DO COMERCIAL',
+        contract_type: 'TIPO DE\n VENDA',
+        signature_date: 'DATA DE\n ASSINATURA',
+        client_nif: 'NIF / NIPC',
+        client_name: 'NOME DO TITULAR',
+        electricity_ppi: 'PPI\n LUZ',
+        pel: 'MGI',
+        gas_ppi: 'PPI\n GÁS',
+        mgi: 'MGI',
+        cpe: 'CPE',
+        power: 'POTÊNCIA',
+        cui: 'CUI',
+        gas_scale: 'ESCALÃO\n GÁS',
+        sell_state: 'ESTADO\n DA VENDA',
+        observations: 'OBS BO',
+        employee_comission: 'VALOR',
+        total: 'TOTAL',
+    })
+
+    eachSheet.addRow({
+        employee_name: `${sheet[i]?.funcionario}`,
+        contract_type: '',
+        signature_date: '',
+        client_nif: '',
+        client_name: '',
+        electricity_ppi: '',
+        pel: '',
+        gas_ppi: '',
+        mgi: '',
+        cpe: '',
+        power: '',
+        cui: '',
+        gas_scale: '',
+        sell_state: '',
+        observations: '',
+        employee_comission: '',
+    })
 
       for (let j = 0; j < sheet[i]?.itens?.length; j++) {
         const hasPower = (
@@ -155,11 +188,12 @@ const ExportPaymentSheet = (props) => {
                 
             }`,
             signature_date: sheet[i]?.itens[j]?.signature_date,
+            client_nif: sheet[i]?.itens[j]?.client_nif,
             client_name: sheet[i]?.itens[j]?.client_name,
-            electricity_ppi: `${sheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
-            pel: `${sheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
-            gas_ppi: `${sheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
-            mgi: `${sheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
+            electricity_ppi: `${sheet[i]?.itens[j]?.electricity_ppi ? '  ✓' : '  ✕'}`,
+            pel: `${sheet[i]?.itens[j]?.pel ? '  ✓' : '  ✕'}`,
+            gas_ppi: `${sheet[i]?.itens[j]?.gas_ppi ? '  ✓' : '  ✕'}`,
+            mgi: `${sheet[i]?.itens[j]?.mgi ? '  ✓' : '  ✕'}`,
             cpe: sheet[i]?.itens[j]?.cpe,
             power: 
               hasPower ? `${
@@ -171,7 +205,10 @@ const ExportPaymentSheet = (props) => {
             gas_scale: sheet[i]?.itens[j]?.gas_scale__name,
             sell_state: sheet[i]?.itens[j]?.sell_state__name.toUpperCase(),
             observations: sheet[i]?.itens[j]?.observations,
-            employee_comission: sheet[i]?.itens[j]?.employee_comission === null ? 'anulado' : `${sheet[i]?.itens[j]?.employee_comission}€`,
+            employee_comission:
+              sheet[i]?.itens[j]?.employee_comission === null ? 
+              'anulado' :
+              `${sheet[i]?.itens[j]?.employee_comission}€`,
           }
         )
       }
@@ -179,34 +216,61 @@ const ExportPaymentSheet = (props) => {
       eachSheet.addRow({ total: `${sheet[i]?.total ? `${sheet[i]?.total}€` : '0€'}` })
     }
 
-    let cellAddress
+    let totalCell
 
     workbook.eachSheet(function (sheet) {
+      sheet.properties.outlineLevelCol = 2
+      sheet.properties.defaultRowHeight = 30
+
+      sheet.pageSetup.blackAndWhite = true
+      sheet.pageSetup.showGridLines = true
+      sheet.pageSetup.horizontalCentered = true
+
       sheet.eachRow(function(row) {
+        row.border = {
+          top: {style:'double', color: {argb:'00000000'}},
+          left: {style:'double', color: {argb:'00000000'}},
+          bottom: {style:'double', color: {argb:'00000000'}},
+          right: {style:'double', color: {argb:'00000000'}}
+        }
         row.eachCell(function(cell) {
           if (cell?._column?._key === 'total') {
-            cellAddress = cell?._address
+            totalCell = cell?._address
           }
         })
       })
 
-      sheet.getCell(cellAddress).border = {
+      sheet.eachColumnKey(function(column) {
+        column.border = {
+          top: {style:'double', color: {argb:'00000000'}},
+          left: {style:'double', color: {argb:'00000000'}},
+          bottom: {style:'double', color: {argb:'00000000'}},
+          right: {style:'double', color: {argb:'00000000'}}
+        }
+        column.eachCell(function(cell) {
+          cell.border = {
+            top: {style:'double', color: {argb:'00000000'}},
+            left: {style:'double', color: {argb:'00000000'}},
+            bottom: {style:'double', color: {argb:'00000000'}},
+            right: {style:'double', color: {argb:'00000000'}}
+          }
+          if (cell?._column?._key === 'total') {
+            totalCell = cell?._address
+          }
+        })
+      })
+
+      sheet.getCell(totalCell).border = {
         top: {style:'thick', color: {argb:'00000000'}},
         left: {style:'thick', color: {argb:'00000000'}},
         bottom: {style:'thick', color: {argb:'00000000'}},
         right: {style:'thick', color: {argb:'00000000'}}
-      };
+      }
 
-      sheet.getCell(cellAddress).font = { bold: true }
+      sheet.getCell(totalCell).font = { bold: true }
+      sheet.getCell('A1').font = { bold: true, size: 24 }
+      sheet.getCell('A3').font = { bold: true }
     })
-
-
-
-    // console.log(test1, 'TESTE 1')
-
-    // console.log(eachSheet, 'TESTE');
-    // console.log(workbook, 'WORK BOOK');
-    // Add rows in the above header
 
     const buffer = await workbook.xlsx.writeBuffer()
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -248,31 +312,55 @@ const ExportPaymentSheet = (props) => {
     let auxTotal = 0
 
     for (let i = 0; i < allContractsSheet?.length; i++) {
-      
+
       // A table header
       defaultSheet.columns = [
-          { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 22 },
-          { header: 'TIPO DE VENDA', key: 'contract_type', width: 14 },
-          { header: 'DATA DE ASSINATURA', key: 'signature_date', width: 18 },
-          { header: 'NOME DO TITULAR', key: 'client_name', width: 18 },
-          { header: 'PPI LUZ', key: 'electricity_ppi', width: 8, style: { alignment: 'center'}},
-          { header: 'PEL', key: 'pel', width: 8 },
-          { header: 'PPI GÁS', key: 'gas_ppi', width: 8 },
-          { header: 'MGI', key: 'mgi', width: 8 },
-          { header: 'LUZ - CPE', key: 'cpe', width: 8 },
-          { header: 'POTÊNCIA', key: 'power', width: 8 },
-          { header: 'GÁS - CUI', key: 'cui', width: 8 },
-          { header: 'ESCALÃO GÁS', key: 'gas_scale', width: 8 },
-          { header: 'ESTADO EM VENDA', key: 'sell_state', width: 8 },
-          { header: 'OBS BO', key: 'observations', width: 18 },
-          { header: 'VALOR', key: 'employee_comission', width: 8 },
-          { header: 'TOTAL', key: 'total', width: 10 },
+        { header: 'NOME DO COMERCIAL', key: 'employee_name', width: 20 },
+        { header: 'TIPO DE\n VENDA', key: 'contract_type', width: 10 },
+        { header: 'DATA DE\n ASSINATURA', key: 'signature_date', width: 12 },
+        { header: 'NIF / NIPC', key: 'client_nif', width: 10 },
+        { header: 'NOME DO TITULAR', key: 'client_name', width: 34 },
+        { header: 'PPI\n LUZ', key: 'electricity_ppi', width: 4, style: { alignment: 'center'}},
+        { header: 'PEL', key: 'pel', width: 4 },
+        { header: 'PPI\n GÁS', key: 'gas_ppi', width: 4 },
+        { header: 'MGI', key: 'mgi', width: 4 },
+        { header: 'CPE', key: 'cpe', width: 20 },
+        { header: 'POTÊNCIA', key: 'power', width: 10 },
+        { header: 'CUI', key: 'cui', width: 20 },
+        { header: 'ESCALÃO\n GÁS', key: 'gas_scale', width: 8 },
+        { header: 'ESTADO\n DA VENDA', key: 'sell_state', width: 8 },
+        { header: 'OBS BO', key: 'observations', width: 24 },
+        { header: 'VALOR', key: 'employee_comission', width: 8 },
+        { header: 'TOTAL', key: 'total', width: 8 },
       ]
+
+      if (i === 0) {
+        defaultSheet.addRow({
+          employee_name: 'NOME DO COMERCIAL',
+          contract_type: 'TIPO DE\n VENDA',
+          signature_date: 'DATA DE\n ASSINATURA',
+          client_nif: 'NIF / NIPC',
+          client_name: 'NOME DO TITULAR',
+          electricity_ppi: 'PPI\n LUZ',
+          pel: 'MGI',
+          gas_ppi: 'PPI\n GÁS',
+          mgi: 'MGI',
+          cpe: 'CPE',
+          power: 'POTÊNCIA',
+          cui: 'CUI',
+          gas_scale: 'ESCALÃO\n GÁS',
+          sell_state: 'ESTADO\n DA VENDA',
+          observations: 'OBS BO',
+          employee_comission: 'VALOR',
+          total: 'TOTAL',
+        })
+      }
 
       defaultSheet.addRow({
           employee_name: `${allContractsSheet[i]?.funcionario}`,
           contract_type: '',
           signature_date: '',
+          client_nif: '',
           client_name: '',
           electricity_ppi: '',
           pel: '',
@@ -285,7 +373,7 @@ const ExportPaymentSheet = (props) => {
           sell_state: '',
           observations: '',
           employee_comission: '',
-        
+          total: ''
       })
 
       for (let j = 0; j < allContractsSheet[i]?.itens?.length; j++) {
@@ -294,7 +382,7 @@ const ExportPaymentSheet = (props) => {
           allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_electricity' ||
           allContractsSheet[i]?.itens[j]?.contract_type === 'dual' ||
           allContractsSheet[i]?.itens[j]?.contract_type === 'condominium_dual' 
-        )
+        ) 
 
         auxTotal += allContractsSheet[i]?.itens[j]?.employee_comission
 
@@ -313,14 +401,13 @@ const ExportPaymentSheet = (props) => {
                 : 'Eletricidade'
                 
             }`,
- 
-
             signature_date: allContractsSheet[i]?.itens[j]?.signature_date,
+            client_nif: allContractsSheet[i]?.itens[j]?.client_nif,
             client_name: allContractsSheet[i]?.itens[j]?.client_name,
-            electricity_ppi: `${allContractsSheet[i]?.itens[j]?.electricity_ppi ? 'S' : 'N'}`,
-            pel: `${allContractsSheet[i]?.itens[j]?.pel ? 'S' : 'N'}`,
-            gas_ppi: `${allContractsSheet[i]?.itens[j]?.gas_ppi ? 'S' : 'N'}`,
-            mgi: `${allContractsSheet[i]?.itens[j]?.mgi ? 'S' : 'N'}`,
+            electricity_ppi: `${allContractsSheet[i]?.itens[j]?.electricity_ppi ? '  ✓' : '  ✕'}`,
+            pel: `${allContractsSheet[i]?.itens[j]?.pel ? '  ✓' : '  ✕'}`,
+            gas_ppi: `${allContractsSheet[i]?.itens[j]?.gas_ppi ? '  ✓' : '  ✕'}`,
+            mgi: `${allContractsSheet[i]?.itens[j]?.mgi ? '  ✓' : '  ✕'}`,
             cpe: allContractsSheet[i]?.itens[j]?.cpe,
             power: 
               hasPower ? `${
@@ -336,9 +423,69 @@ const ExportPaymentSheet = (props) => {
           }
         )
       }
-
+      defaultSheet.addRow({
+        total: `${allContractsSheet[i]?.total ? `${allContractsSheet[i]?.total}€` : '0€'}`
+      })
     }
-    defaultSheet.addRow({ total: `${auxTotal ? `-> ${auxTotal}€` : '0€'}` })
+
+    defaultSheet.getCell(`A1`).value = currentDateForTitle
+    defaultSheet.mergeCells('A1:Q1')
+    defaultSheet.getCell(`A1`).alignment = { horizontal: 'center' }
+    
+    defaultSheet.addRow({ total: `TOTAL\n${auxTotal}€` })
+
+    let totalCell
+
+    defaultSheet.eachRow(function(row) {
+      row.border = {
+        top: {style:'double', color: {argb:'00000000'}},
+        left: {style:'double', color: {argb:'00000000'}},
+        bottom: {style:'double', color: {argb:'00000000'}},
+        right: {style:'double', color: {argb:'00000000'}}
+      }
+      row.eachCell(function(cell) {
+        if (cell?._column?._key === 'total') {
+          totalCell = cell?._address
+        }
+      })
+    })
+
+    defaultSheet.properties.outlineLevelCol = 2
+    defaultSheet.properties.defaultRowHeight = 30
+
+    defaultSheet.pageSetup.blackAndWhite = true
+    defaultSheet.pageSetup.showGridLines = true
+    defaultSheet.pageSetup.horizontalCentered = true
+
+    defaultSheet.eachColumnKey(function(column) {
+      column.border = {
+        top: {style:'double', color: {argb:'00000000'}},
+        left: {style:'double', color: {argb:'00000000'}},
+        bottom: {style:'double', color: {argb:'00000000'}},
+        right: {style:'double', color: {argb:'00000000'}}
+      }
+      column.eachCell(function(cell) {
+        cell.border = {
+          top: {style:'double', color: {argb:'00000000'}},
+          left: {style:'double', color: {argb:'00000000'}},
+          bottom: {style:'double', color: {argb:'00000000'}},
+          right: {style:'double', color: {argb:'00000000'}}
+        }
+        if (cell?._column?._key === 'total') {
+          totalCell = cell?._address
+        }
+      })
+    })
+
+    defaultSheet.getCell(totalCell).border = {
+      top: {style:'thick', color: {argb:'00000000'}},
+      left: {style:'thick', color: {argb:'00000000'}},
+      bottom: {style:'thick', color: {argb:'00000000'}},
+      right: {style:'thick', color: {argb:'00000000'}}
+    }
+
+    defaultSheet.getCell(totalCell).font = { bold: true }
+    defaultSheet.getCell('A1').font = { bold: true, size: 24 }
 
     const buffer = await workbook.xlsx.writeBuffer()
     const fileType = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
@@ -356,7 +503,6 @@ const ExportPaymentSheet = (props) => {
       timer: 2000
     })
   }
-
 
   const dateToAPI = (date) => {
 
@@ -418,6 +564,7 @@ const ExportPaymentSheet = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      //no default
     }
 
     localStorage.removeItem('exportPaymentSheetState')
@@ -434,6 +581,7 @@ const ExportPaymentSheet = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed])
 
   const handleScreen = () => (

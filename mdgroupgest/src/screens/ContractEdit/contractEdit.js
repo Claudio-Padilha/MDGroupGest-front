@@ -2,28 +2,25 @@ import React, { useMemo, useState, useReducer, useEffect, useCallback } from 'r
 import { useHistory } from 'react-router-dom'
 import { Col } from 'react-bootstrap'
 import Swal from 'sweetalert2'
-import { SwishSpinner } from "react-spinners-kit"
+import { SwishSpinner } from 'react-spinners-kit'
 import TextField from '@material-ui/core/TextField'
 import InputLabel from '@material-ui/core/InputLabel'
 import Select from '@material-ui/core/Select'
-import { MenuItem } from "@material-ui/core"
+import { MenuItem } from '@material-ui/core'
 import { useStyles } from 'react-styles-hook'
 
-import Button from "../../components/Button/button"
+import Button from '../../components/Button/button'
 import { Heading, SubHeading } from '../../components/Text/text'
 import { Corner, Corner180 } from '../../components/Corner/corner'
 import { LogoMD } from '../../components/Logo/logo'
 import { BackIcon } from '../../components/Icon/icons'
-import SwitchButton from "../../components/ToggleComponent/toggleButton"
+import SwitchButton from '../../components/ToggleComponent/toggleButton'
 
-import { _executeValidationsIfHas } from '../../hooks/validation'
 import contractsRequests from '../../hooks/requests/contractsRequests'
 import dataRequests from '../../hooks/requests/dataRequests'
 import { useRefresh } from '../../hooks/window/refresh'
 
 import CONSTANTS from '../../constants'
-
-import { _formatDate } from '../../utils/date'
 
 import {
   Row,
@@ -98,10 +95,7 @@ const ContractEdit = (props) => {
     let sellStatesArr = []
     for(let i = 0; i < sellStates?.length; i++) {
       sellStatesArr.push({
-        value: {
-          value: sellStates[i]?.id,
-          label: sellStates[i]?.name.toUpperCase()
-        },
+        value: sellStates[i]?.id,
         label: sellStates[i]?.name.toUpperCase()
       })
     }
@@ -206,6 +200,7 @@ const ContractEdit = (props) => {
       powersList,
       powersListCond
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const bteId = infoForFields?.powersList.find(power => power?.label === 'BTE')?.value?.label
@@ -236,6 +231,7 @@ const ContractEdit = (props) => {
         )
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromDetail])
 
   const reducer = useCallback((firstState, action) => {
@@ -245,6 +241,7 @@ const ContractEdit = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
+      // no default
     }
 
     localStorage.removeItem('editContractScreenState')
@@ -254,9 +251,10 @@ const ContractEdit = (props) => {
 
     setTimeout(() => {
       setIsLoading(false)
-    }, [800]);
+    }, [800])
 
     return reducerState
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading])
 
   const [state, dispatch] = useReducer(reducer, initialState)
@@ -269,22 +267,23 @@ const ContractEdit = (props) => {
     } else {
       return state
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [cameFromDetail, wasRefreshed])
 
   const contractType = useMemo(() => {
     switch (state?.contractFromDetail?.contract_type) {
-      case "dual":
-        return "Dual"
-      case "gas":
-        return "Gás"
-      case "electricity":
-        return "Electricidade"
-      case "condominium_dual":
-        return "Dual Condomínio"
-      case "condominium_gas":
-        return "Gás Condomínio"
-      case "condominium_electricity":
-        return "Electricidade Condomínio"
+      case 'dual':
+        return 'Dual'
+      case 'gas':
+        return 'Gás'
+      case 'electricity':
+        return 'Electricidade'
+      case 'condominium_dual':
+        return 'Dual Condomínio'
+      case 'condominium_gas':
+        return 'Gás Condomínio'
+      case 'condominium_electricity':
+        return 'Electricidade Condomínio'
     
       default:
         break;
@@ -302,8 +301,11 @@ const ContractEdit = (props) => {
       reverseButtons: true
     }).then((result) => {
       if (result?.isConfirmed) {
-        contractsRequests.updateContract(contractData).then((res) => {
-          contractsRequests.getContracts(currentOfficeID)
+        contractsRequests.updateContract(contractData).then(async (res) => {
+          await dataRequests.getResultsToPresent(currentOfficeID)
+          await dataRequests.getOfficeResults(currentOfficeID)
+          await contractsRequests.getAllContracts()
+          contractsRequests.monthContracts(currentOfficeID)
           .then(
             () => {
               swalWithBootstrapButtons.fire({
@@ -350,23 +352,23 @@ const ContractEdit = (props) => {
       powerValue = JSON.parse(value)
     }
 
-    if (document.getElementById("name").value !== "" ) {
+    if (document.getElementById('name') !== null && document.getElementById("name").value !== "" ) {
       contractData = {...contractData, ...{client_name: document.getElementById("name").value}}
     }
-    if (document.getElementById("nif").value !== "") {
+    if (document.getElementById('nif') !== null && document.getElementById("nif").value !== "") {
       contractData = {...contractData, ...{client_nif: document.getElementById("nif").value}}
     }
-    if (document.getElementById("contact").value !== "") {
+    if (document.getElementById('contact') !== null && document.getElementById("contact").value !== "") {
       contractData = {...contractData, ...{client_contact: document.getElementById("contact").value}}
     }
-    if (document.getElementById("delivery_date").value !== "") {
+    if (document.getElementById('delivery_date') !== null && document.getElementById("delivery_date").value !== "") {
       contractData = {...contractData, ...{delivery_date: document.getElementById("delivery_date").value}}
     }
-    if (document.getElementById("signature_date").value !== "") {
+    if (document.getElementById('signature_date') !== null && document.getElementById("signature_date").value !== "") {
       contractData = {...contractData, ...{signature_date: document.getElementById("signature_date").value}}
     }
     
-    if (document.getElementById('pel')?.checked !== state?.contractFromDetail?.pel) {
+    if (typeof(document.getElementById('pel')?.checked) !== 'undefined' && document.getElementById('pel')?.checked !== state?.contractFromDetail?.pel) {
       contractData = {
         ...contractData,
         ...{ 
@@ -375,47 +377,43 @@ const ContractEdit = (props) => {
       }
     }
 
-    if (document.getElementById('gas_ppi')?.checked !== state?.contractFromDetail?.gas_ppi) {
+    if (typeof(document.getElementById('gas_ppi')?.checked) !== 'undefined' && document.getElementById('gas_ppi')?.checked !== state?.contractFromDetail?.gas_ppi) {
       contractData = {
         ...contractData,
         gas_ppi: document.getElementById('gas_ppi')?.checked,
       }
     }
 
-    if (document.getElementById('electricity_ppi')?.checked !== state?.contractFromDetail?.electricity_ppi) {
+    if (typeof(document.getElementById('electricity_ppi')?.checked) !== 'undefined' && document.getElementById('electricity_ppi')?.checked !== state?.contractFromDetail?.electricity_ppi) {
       contractData = {
         ...contractData,
-        electricity_ppi: document.getElementById('electricity_ppi').checked,
+        electricity_ppi: document.getElementById('electricity_ppi')?.checked,
       }
     }
 
-    if (document.getElementById('electronic_bill')?.checked !== state?.contractFromDetail?.electronic_bill) {
+    if (typeof(document.getElementById('electronic_bill')?.checked)  !== 'undefined' && document.getElementById('electronic_bill')?.checked !== state?.contractFromDetail?.electronic_bill) {
       contractData = {
         ...contractData,
-        electronic_bill: document.getElementById('electronic_bill').checked,
+        electronic_bill: document.getElementById('electronic_bill')?.checked,
       }
     }
 
-    if (document.getElementById('mgi')?.checked !== state?.contractFromDetail?.mgi) {
+    if (typeof(document.getElementById('mgi')?.checked) !== 'undefined' && document.getElementById('mgi')?.checked !== state?.contractFromDetail?.mgi) {
       contractData = {
         ...contractData,
         mgi: document.getElementById('mgi')?.checked,
       }
     }
-
-    // if (document.getElementById("select-sell-state").value !== "") {
-    //   contractData = {...contractData, ...{sell_state: document.getElementById("select-sell-state").value}}
-    // }
-    if (document.getElementById("select-gas-scale") !== null && document.getElementById("select-gas-scale").value !== "") {
+    if (document.getElementById('select-gas-scale') !== null && document.getElementById("select-gas-scale").value !== "") {
       contractData = {...contractData, ...{gas_scale: document.getElementById("select-gas-scale").value}}
     }
 
-    if (document.getElementById("select-feedback-call").value !== "") {
+    if (document.getElementById('select-feedback-call') !== null && document.getElementById("select-feedback-call").value !== "") {
       contractData = {...contractData, ...{feedback_call: document.getElementById("select-feedback-call").value}}
     }
 
-    if (document.getElementById("select-sell-state").value !== "") {
-      contractData = { ...contractData, ... { sell_state: document.getElementById("select-sell-state").value } }
+    if (document.getElementById('select-sell-state') !== null && document.getElementById("select-sell-state").value !== "") {
+      contractData = { ...contractData, ...{ sell_state: Number(document.getElementById("select-sell-state").value) } }
     }
 
     if (powerValue !== "") {
@@ -436,6 +434,7 @@ const ContractEdit = (props) => {
               var officeComission = state?.contractFromDetail?.office_comission
               var employeeComission = state?.contractFromDetail?.employee_comission
 
+              // eslint-disable-next-line no-unused-vars
               let comissionObj = {
                 dynamic_power: dynamicPower,
                 office_comission: officeComission,
@@ -491,11 +490,7 @@ const ContractEdit = (props) => {
     contractType === "Gás Condomínio"
   )
 
-  const sellStatesToUpdate = [
-    {name: "ok", value: 1},
-    {name: "ko", value: 2},
-    {name: "r", value: 3}
-  ]
+  const sellStatesToUpdate = infoForFields?.sellStates
 
   useEffect(() => {
     if (state?.contractFromDetail) {
@@ -670,7 +665,7 @@ const ContractEdit = (props) => {
                   >
                     {sellStatesToUpdate !== null ? sellStatesToUpdate.map(sellState => (
                       <MenuItem value={sellState.value}>
-                        {sellState.name}
+                        {sellState.label}
                       </MenuItem>
                     )) : []}
                   </Select>
