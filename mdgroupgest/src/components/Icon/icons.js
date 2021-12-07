@@ -1,15 +1,16 @@
-import React from 'react'
+import React from 'react';
 
-import CONSTANTS from '../../constants'
-import { ReactComponent as CheckCircle } from '../../assets/icons/check-circle-regular.svg'
-import { ReactComponent as Back } from '../../assets/icons/back-arrow.svg'
-import { ReactComponent as Logout } from '../../assets/icons/logout.svg'
-import { ReactComponent as Add } from '../../assets/icons/plus-solid.svg'
-import { ReactComponent as Office } from '../../assets/icons/plus-solid.svg'
-import { ReactComponent as SeeMore } from '../../assets/icons/seeMore.svg'
-import { ReactComponent as Edit } from '../../assets/icons/edit.svg'
-import { ReactComponent as ShowPass } from '../../assets/icons/show-pass.svg'
-import { ReactComponent as HidePass } from '../../assets/icons/hide-pass.svg'
+import { MainContainer } from './styles';
+import CONSTANTS from '../../constants';
+import { ReactComponent as CheckCircle } from '../../assets/icons/check-circle-regular.svg';
+import { ReactComponent as Back } from '../../assets/icons/back-arrow.svg';
+import { ReactComponent as Logout } from '../../assets/icons/logout.svg';
+import { ReactComponent as Add } from '../../assets/icons/plus-solid.svg';
+import { ReactComponent as Office } from '../../assets/icons/plus-solid.svg';
+import { ReactComponent as SeeMore } from '../../assets/icons/seeMore.svg';
+import { ReactComponent as Edit } from '../../assets/icons/edit.svg';
+import { ReactComponent as ShowPass } from '../../assets/icons/show-pass.svg';
+import { ReactComponent as HidePass } from '../../assets/icons/hide-pass.svg';
 
 const passwordIconStyle = {
   width: '4vw',
@@ -20,15 +21,41 @@ const passwordIconStyle = {
   right: '38.5%'
 }
 
-const CheckCircleIcon = ({...props}) => <CheckCircle {...props}/>
-const LogoutIcon = ({...props}) => <Logout {...props} />
-const BackIcon = ({...props}) => <Back style={{color: CONSTANTS?.colors?.darkGrey}} {...props}/>
-const AddIcon = ({...props}) => <Add {...props} />
-const OfficeIcon = ({...props}) => <Office {...props} />
-const SeeMoreIcon = ({...props}) => <SeeMore {...props} />
-const EditIcon = ({...props}) => <Edit {...props} />
-const ShowPassIcon = ({...props}) => <ShowPass {...props} style={passwordIconStyle} />
-const HidePassIcon = ({...props}) => <HidePass {...props} style={passwordIconStyle} />
+const CheckCircleIcon = ({...props}) => {
+  return <CheckCircle {...props}/>;
+};
+
+const LogoutIcon = ({...props}) => {
+  return <Logout {...props} />;
+};
+
+const BackIcon = ({...props}) => {
+  return <Back style={{color: CONSTANTS?.colors?.darkGrey}} {...props}/>;
+};
+
+const AddIcon = ({...props}) => {
+  return <Add {...props} />;
+};
+
+const OfficeIcon = ({...props}) => {
+  return <Office {...props} />;
+}
+
+const SeeMoreIcon = ({...props}) => {
+  return <SeeMore {...props} />;
+}
+
+const EditIcon = ({...props}) => {
+  return <Edit {...props} />;
+}
+
+const ShowPassIcon = ({...props}) => {
+  return <ShowPass {...props} style={passwordIconStyle} />;
+}
+
+const HidePassIcon = ({...props}) => {
+  return <HidePass {...props} style={passwordIconStyle} />;
+}
 
 export {
   CheckCircleIcon,
@@ -40,4 +67,4 @@ export {
   SeeMoreIcon,
   ShowPassIcon,
   HidePassIcon
-}
+};

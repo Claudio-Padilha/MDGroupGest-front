@@ -1,6 +1,6 @@
-import styled from 'styled-components'
-import CONSTANTS from '../../constants'
-import { fadeIn } from '../../utils/animations'
+import styled from 'styled-components';
+import CONSTANTS from '../../constants';
+import { fadeIn, increaseSize, increaseSizeVertical } from "../../utils/animations";
 
 const MainContainer = styled.div`
   display: flex;
@@ -177,6 +177,15 @@ const Row = styled.div`
 const Col = styled.div`
 display: flex;
 flex-direction: column;
+`;
+
+const HomePageButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 25%;
+  height: 73%;
 `;
 
 const LogoContainer = styled.span`

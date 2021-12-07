@@ -1,11 +1,12 @@
-import React, { useState, useMemo, useReducer, useEffect } from 'react'
-import { Link, useHistory } from "react-router-dom"
-import _ from 'lodash'
+import React, { useState, useMemo, useReducer, useEffect } from 'react';
+import { Link, useHistory } from "react-router-dom";
+import _ from 'lodash';
+import Swal from 'sweetalert2'
 
-import { SwishSpinner} from "react-spinners-kit"
-import { Avatar } from '@material-ui/core'
-import { AvatarGroup } from '@material-ui/lab'
-import { useDate } from '../../hooks/date'
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
+import { Avatar } from '@material-ui/core';
+import { AvatarGroup } from '@material-ui/lab';
+import { useDate } from '../../hooks/date';
 
 import {
   MDCol,
@@ -15,8 +16,9 @@ import {
   MDContainer,
 } from './md';
 
-import Button from "../../components/Button/button"
-import { Heading, SubHeading, Body } from '../../components/Text/text'
+import Button from "../../components/Button/button";
+import { Heading, SmallSubHeading, SubHeading, Body } from '../../components/Text/text';
+import { LogoMD } from '../../components/Logo/logo';
 
 import {
   TeamContainer,
@@ -24,44 +26,44 @@ import {
   ContentContainerLoader,
   ResultsContainer,
   TeamAvatarsContainer 
-} from './styles'
+} from './styles';
 
-import CONSTANTS from '../../constants'
+import CONSTANTS from '../../constants';
 
-import dataRequests from '../../hooks/requests/dataRequests'
-import officesRequests from '../../hooks/requests/officesRequests'
-import { useRefresh } from '../../hooks/window/refresh'
-import { useStartApp } from '../../hooks/backoffice/startApp'
-import { useAuth } from '../../hooks/employees/auth'
-import useChart from '../../hooks/chart'
-import employeesRequests from '../../hooks/requests/employeesRequests'
-import contractsRequests from '../../hooks/requests/contractsRequests'
+import dataRequests from '../../hooks/requests/dataRequests';
+import officesRequests from '../../hooks/requests/officesRequests';
+import contractsRequests from '../../hooks/requests/contractsRequests';
+import { useEmployees } from '../../hooks/employees/employees';
+import { useRefresh } from '../../hooks/window/refresh';
+import { useStartApp } from '../../hooks/backoffice/startApp';
+import { useAuth } from '../../hooks/employees/auth';
+import employeesRequests from '../../hooks/requests/employeesRequests';
 
 import './styles.css'
 
 const BackOfficeContent = (props) => {
   
-  const history = useHistory()
-  const [isLoading, setIsLoading] = useState(true)
+  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
 
   const start = useStartApp()
 
-  const fromContractsList = props?.location?.state?.fromContractsList
-  const fromMyResults = props?.location?.state?.fromMyResults
-  const fromEmployeeType = props?.location?.state?.fromEmployeeType
-  const fromMyTeam = props?.location?.state?.fromMyTeam
+  const fromContractsList = props?.location?.state?.fromContractsList;
+  const fromMyResults = props?.location?.state?.fromMyResults;
+  const fromEmployeeType = props?.location?.state?.fromEmployeeType;
+  const fromMyTeam = props?.location?.state?.fromMyTeam;
 
-  const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'))
-  const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
-  const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'))
-  const ramResultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'))
-  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'))
-  const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'))
-  const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'))
-  const ramContracts = JSON.parse(localStorage.getItem('contracts'))
-  const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'))
-  const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'))
-  const ramMyTeamResults = JSON.parse(localStorage.getItem('myTeamResults'))
+  const ramCurrentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const ramCurrentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  const ramOfficeResults = JSON.parse(localStorage.getItem('officeResults'));
+  const ramResultsToPresent = JSON.parse(localStorage.getItem('resultsToPresent'));
+  const ramMySalary = JSON.parse(localStorage.getItem('myCurrentSalary'));
+  const ramMyTeam = JSON.parse(localStorage.getItem('allEmployees'));
+  const ramCurrentOfficeObject = JSON.parse(localStorage.getItem('currentOffice'));
+  const ramContracts = JSON.parse(localStorage.getItem('contracts'));
+  const ramAllContracts = JSON.parse(localStorage.getItem('allContracts'));
+  const ramDataToPopulateGraphic = JSON.parse(localStorage.getItem('officeResultsByDay'));
+  const ramMyTeamResults = JSON.parse(localStorage.getItem('myTeamResults'));
 
   setTimeout(() => {
     setIsLoading(false)
@@ -75,18 +77,15 @@ const BackOfficeContent = (props) => {
 
   const { wasRefreshed } = useRefresh()
 
-  async function _getOfficeInformation() {
+  async function _getOffice() {
     await officesRequests.getOffice(ramCurrentOfficeID)
-    await contractsRequests.monthContracts(ramCurrentOfficeID)
-    await contractsRequests.getAllContracts()
+    await contractsRequests.getContracts(ramCurrentOfficeID)
     await dataRequests.getOfficesResultsByDay(ramCurrentOfficeID)
+    await contractsRequests.getAllContracts()
     await employeesRequests.getMyTeamResults()
   }
 
-  useEffect(() => {
-    _getOfficeInformation()
-  //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  _getOffice()
 
   const initialState = {
     ramCurrentUser,
@@ -114,8 +113,8 @@ const BackOfficeContent = (props) => {
     switch(action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
-        return reducerState
-        // no default
+
+      return reducerState
     }
 
     localStorage.removeItem('backofficeScreenState')
@@ -145,19 +144,27 @@ const BackOfficeContent = (props) => {
     } else {
       return state
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [start, fromContractsList, fromMyResults, fromEmployeeType, fromMyTeam, wasRefreshed])
+  }, [start])
 
-  const currentUser = state?.ramCurrentUser
-  const currentOfficeID = state?.ramCurrentOfficeID
-  const officeResults = state?.ramOfficeResults
-  const resultsToPresent = state?.ramResultsToPresent
-  const mySalary = state?.ramMySalary
-  const myTeam = state?.ramMyTeam
-  const currentOfficeObject = state?.ramCurrentOfficeObject
-  const contracts = state?.ramContracts
-  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {}
-  const userType =  currentUser?.user?.user_type
+  const currentUser = state?.ramCurrentUser;
+  const currentOfficeID = state?.ramCurrentOfficeID;
+  const officeResults = state?.ramOfficeResults;
+  const resultsToPresent = state?.ramResultsToPresent;
+  const mySalary = state?.ramMySalary;
+  const myTeam = state?.ramMyTeam;
+  const currentOfficeObject = state?.ramCurrentOfficeObject;
+  const contracts = state?.ramContracts;
+  const allContractsToSend = state?.ramAllContracts;
+  let dataToPopulateGraphic = state?.ramDataToPopulateGraphic || {};
+  const userType =  currentUser?.user?.user_type;
+
+  const {
+    ceo, 
+    regularManager,
+    administrator,
+    regularSecretary,
+    comercials
+  } = useEmployees()
 
   const { 
     isCEO,
@@ -168,17 +175,21 @@ const BackOfficeContent = (props) => {
 
   const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
 
-  // eslint-disable-next-line no-unused-vars
-  let teamLeadersCounter = 0
-  // eslint-disable-next-line no-unused-vars
-  let instructorsCounter = 0
-  // eslint-disable-next-line no-unused-vars
-  let salesPersonsCounter = 0
+  const dataToForm = []
 
-  const teamLeadersArr = []
-  const instructorsArr = []
-  const salesPersonsArr = []
+  Object.keys(dataToPopulateGraphic).forEach(function(item){
+    dataToForm.push(dataToPopulateGraphic[item])
+   });
 
+  var teamLeadersCounter = 0;
+  var instructorsCounter = 0;
+  var salesPersonsCounter = 0;
+
+  const teamLeadersArr = [];
+  const instructorsArr = [];
+  const salesPersonsArr = [];
+
+  var employeeCounter = 0
   const totalEmployeeTypes = []
   const totalEmployees = []
 
@@ -186,7 +197,6 @@ const BackOfficeContent = (props) => {
     totalEmployeeTypes.push(myTeam[employee])
   }
 
-  // eslint-disable-next-line array-callback-return
   totalEmployeeTypes.map(employeeType => {
     for(let i = 0; i < employeeType?.length; i++) {
       totalEmployees.push(employeeType[i])
@@ -237,18 +247,36 @@ const BackOfficeContent = (props) => {
   }
 
   const _getMonthContracts = useMemo(() => {
+    const currentDateJS = new Date()
 
-    const monthContractsForEmployee = contracts.filter(contract => {
-      return contract?.user === currentUser?.id
+    const monthContractsForManagerOrSecretary = contracts.filter(contract => {
+      var date = new Date(contract.delivery_date)
+      return (
+        date.getMonth() === currentDateJS?.getMonth() 
+        && 
+        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+      )
     })
 
-    if (haveAccess || userType === "secretary") {
-      return contracts
+    const monthContractsForEmployee = contracts.filter(contract => {
+      var date = new Date(contract.delivery_date)
+      return (
+        date.getMonth() === currentDateJS?.getMonth() 
+        && 
+        date.getUTCFullYear() === currentDateJS?.getUTCFullYear()
+        &&
+        contract?.user === currentUser?.id
+      )
+    })
+
+    if (haveAccess) {
+      return monthContractsForManagerOrSecretary
+    } else if(userType === "secretary") {
+      return monthContractsForManagerOrSecretary
     } else {
       return monthContractsForEmployee
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  },[contracts, haveAccess, currentUser])
+  },[contracts])
 
   const koContracts = []
   const okContracts = []
@@ -282,8 +310,9 @@ const BackOfficeContent = (props) => {
       }
     }
 
-    // eslint-disable-next-line no-sequences
-    return monthKoContracts, monthOkContracts, monthRContracts, okContracts, rContracts
+
+
+    return monthKoContracts, monthOkContracts, monthRContracts, okContracts, rContracts;
   }
 
   _sellStateOfContract()
@@ -300,25 +329,61 @@ const BackOfficeContent = (props) => {
   // "k" is total contracts qtd
   const a = haveAccess ? _getMonthContracts?.length : contracts?.length;
 
-  const dataOfficeResult = useChart({
-    dataToPopulateGraphic,
-    ko: x,
-    ok: y,
-    r: z
-  })
+  const dataOfficeResult = [[
+    'Dias',
+    `${y === 1 || y === 0 ? `(${y}) Válido` : `(${y}) Válidos`}`,
+    `${z === 1 || z === 0 ? `(${z}) Pendente` : `(${z}) Pendentes`}`,
+    `${x === 1 || x === 0 ? `(${x}) Anulado` : `(${x}) Anulados`}`,
+  ], ...dataToForm]
 
   function _getPercentage(percent, total) {
     if (percent !== 0 || total !== 0) {
-      const p = (percent / total) * 100
-      return p.toFixed(2)
+      const p = (percent / total) * 100;
+      return p.toFixed(2);
     } else {
       return 0;
     }
   }
 
-  const koPercentage = _getPercentage(x, a)
-  const okPercentage = _getPercentage(y, a)
-  const rPercentage = _getPercentage(z, a)
+  const koPercentage = _getPercentage(x, a);
+  const okPercentage = _getPercentage(y, a);
+  const rPercentage = _getPercentage(z, a);
+
+  // const handleMessageButton = () => (
+  //   <div style={{
+  //     position: 'absolute',
+  //     top: '5vh',
+  //     right: '10vw'
+  //   }}>
+  //     <Button
+  //       fullWidth={false}
+  //       disabled={false}
+  //       action={() => createNotification('error')}
+  //       small={true}
+  //       text="Tens uma notificação"
+  //     />
+  //   </div>
+
+  // )
+
+  // const [showPenalizationMessage, setShowPenalizationMessage] = useState(koPercentage > 30)
+
+  // useEffect(() => {
+
+  //   if (showPenalizationMessage) {
+  //     Swal.fire({
+  //       position: 'top-end',
+  //       icon: 'warning',
+  //       iconColor: '',
+  //       titleText: haveAccess ? 'Atenção!' : 'Atenção! Estás a ser penalizado.',
+  //       text: haveAccess ? `A Taxa de anulados do escritório está em: ${parseInt(koPercentage)}%`  : `A Taxa de anulados é: ${parseInt(koPercentage)}%`,
+  //       showConfirmButton: false,
+  //       timer: 4500
+  //     })
+
+  //     setShowPenalizationMessage(false)
+  //   }
+  // }, [showPenalizationMessage])
 
   var deletedID = props?.location?.state?.deletedID;
 
@@ -337,10 +402,6 @@ const BackOfficeContent = (props) => {
   
   _getOfficeComissions()
 
-  function getAllContracts() {
-    return JSON.parse(localStorage.getItem('allContracts'))
-  }
-
   if(deletedID)
     { _removeContractFromRAM() }
 
@@ -354,6 +415,7 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
+              // dataRequests.getMyTeam(currentOfficeID)
               history.push("/MyTeam")
             }}
             small={true}
@@ -362,8 +424,8 @@ const BackOfficeContent = (props) => {
         </MDContainer>
         <TeamAvatarsContainer>
           <AvatarGroup max={12}>
-            {totalEmployees.map((employee, i) => (
-              <Avatar key={i} alt="Avatar Comercial" src={employee?.user?.avatar} />
+            {totalEmployees.map(employee => (
+              <Avatar alt="Avatar Comercial" src={employee?.user?.avatar} />
             ))}
           </AvatarGroup>
         </TeamAvatarsContainer>
@@ -400,10 +462,9 @@ const BackOfficeContent = (props) => {
                     all: _getMonthContracts,
                     ok: monthOkContracts,
                     ko: monthKoContracts,
-                    r: monthRContracts,
-                    dataToChartFromBackOffice: dataOfficeResult,
-                  },
-                  cameFromBackoffice: true
+                    pending: monthRContracts,
+                    dataToDiagram: dataOfficeResult,
+                  }
                 }
               }}
             >
@@ -574,7 +635,6 @@ const BackOfficeContent = (props) => {
         </MDCol>
         <MDCol style={{marginRight: '5%'}}>
           <Body>
-          {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
             🔴
           </Body>
         </MDCol>
@@ -593,9 +653,9 @@ const BackOfficeContent = (props) => {
     )
 
     return (
-      <MDCard isthemiddlecard="true">
+      <MDCard isTheMiddleCard>
         <MDCard.Body className={"contractsCardBody"}>
-          <Link to={{}} onClick={handleContractListNavigation}>
+          <Link onClick={handleContractListNavigation}>
             <SubHeading style={titleStyle}>
               Contratos
             </SubHeading>
@@ -614,15 +674,10 @@ const BackOfficeContent = (props) => {
             fullWidth={false}
             disabled={false}
             action={() => {
-              localStorage.removeItem('contractsVector')
-              localStorage.setItem('contractsVector', false)
               history.push({
                 pathname: "/ContractList",
                 state: {
                   data: contracts,
-                  currentUser: currentUser,
-                  cameFromBackoffice: true,
-                  shouldRenderAll: false
                 }
               })
             }}
@@ -636,15 +691,10 @@ const BackOfficeContent = (props) => {
               fullWidth={false}
               disabled={false}
               action={() => {
-                localStorage.removeItem('contractsVector')
-                localStorage.setItem('contractsVector', true)
                 history.push({
                   pathname: "/ContractList",
                   state: {
-                    data: getAllContracts(),
-                    currentUser: currentUser,
-                    cameFromBackoffice: true,
-                    shouldRenderAll: true
+                    data: allContractsToSend,
                   }
                 })
               }}

@@ -1,5 +1,6 @@
-import styled from 'styled-components'
-import { pulse } from '../../utils/animations'
+import styled from 'styled-components';
+import CONSTANTS from '../../constants';
+import { pulse } from '../../utils/animations';
 
 const MainContainer = styled.div`
   display: flex;

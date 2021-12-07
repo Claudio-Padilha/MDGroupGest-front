@@ -57,22 +57,10 @@ const UploadButton = styled.button`
   height: 4vh;
   background-color: black;
   color: white;
-  font-size: 16px;
   border: none;
   box-shadow: 2px 2px 4px rgba(200,200,200,0.8);
   cursor: pointer;
   width: 10%;
-`;
-
-const RecoverPasswordButton = styled.button`
-  height: 4vh;
-  background-color: black;
-  color: white;
-  font-size: 18px;
-  border: none;
-  box-shadow: 2px 2px 4px rgba(200,200,200,0.8);
-  cursor: pointer;
-  width: 15%;
 `;
 
 
@@ -87,10 +75,4 @@ export const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export {
-  MainContainer,
-  DivUploadPhoto,
-  UploadButton,
-  RecoverPasswordButton,
-  WidthMessageContainer
-}
+export { MainContainer, DivUploadPhoto, UploadButton, WidthMessageContainer }

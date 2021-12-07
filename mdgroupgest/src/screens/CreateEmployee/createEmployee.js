@@ -8,6 +8,7 @@ import { Corner, Corner180 } from '../../components/Corner/corner';
 import { LogoMD } from '../../components/Logo/logo';
 import { BackIcon } from '../../components/Icon/icons';
 
+import { _executeValidationsIfHas } from '../../hooks/validation';
 import employeesRequests from '../../hooks/requests/employeesRequests';
 
 import {
@@ -70,10 +71,40 @@ const CreateEmployee = (props) => {
     var zipCode = data?.zipCode;
     var nr = data?.nr;
 
+    // Vai genericamente
+    var nipc = '';
+    var clientName='';
+    var clientNif='';
+    var clientContact='';
+    var CUIDUAL='';
+    var CUIForGas='';
+    var CPEDUAL='';
+    var CPEForElectricity='';
+    var observations='';
+    
+    // await _executeValidationsIfHas(
+    //   name,
+    //   nif,
+    //   nipc,
+    //   address,
+    //   contact,
+    //   email,
+    //   zipCode,
+    //   clientName,
+    //   clientNif,
+    //   clientContact,
+    //   CUIDUAL,
+    //   CUIForGas,
+    //   CPEDUAL,
+    //   CPEForElectricity,
+    //   observations
+    // )
+    const formWasValidated = JSON.parse(localStorage.getItem('formWasValidated'));
+
     const salesPersonObj = {
       manager: employeeTypeOfList === "manager" ? data?.employeeAbove?.id : null,
-      team_leader: employeeTypeOfList === "team_leader" ? data?.employeeAbove?.id : null,
-      instructor: employeeTypeOfList === "instructor" ? data?.employeeAbove?.id : null,
+      team_leader: data?.employeeAbove?.is_team_leader ? data?.employeeAbove?.id : null,
+      instructor: data?.employeeAbove?.is_instructor ? data?.employeeAbove?.id : null,
       office: officeID,
       user: {
         name: name,
@@ -198,7 +229,7 @@ const CreateEmployee = (props) => {
     }
       return (
         swalWithBootstrapButtons.fire({
-        title: 'Confirme os dados do colaborador:',
+        title: 'Confirme os dados do comercial:',
         html: 
           `<b>Nome:</b> ${name ? name : `❌`} <br>
             <b>NIF:</b> ${nif ? nif : `❌`} <br>                                            
@@ -223,7 +254,7 @@ const CreateEmployee = (props) => {
               if(clientSideError) {
                 return swalWithBootstrapButtons.fire(
                   'Erro',
-                  'Colaborador não inserido, tente de novo. (Verifique os campos)',
+                  'Comercial não inserido, tente de novo. (Verifique os campos)',
                   'error'
                 )
               } else if (serverSideError) {
@@ -235,7 +266,7 @@ const CreateEmployee = (props) => {
               } else {
                 swalWithBootstrapButtons.fire(
                   'Boa!',
-                  'Colaborador inserido com sucesso.',
+                  'Comercial inserido com sucesso.',
                   'success'
                 ).then(async (result) => {
                   if(result) {
@@ -283,7 +314,7 @@ const CreateEmployee = (props) => {
       subType: "twoColumns",
       side: "right",
       key: "employeeAbove",
-      question: "Colaborador responsável",
+      question: "Comercial responsável",
       placeholder: "Escolha o nome",
       options: _employeeToAssociation() 
     }

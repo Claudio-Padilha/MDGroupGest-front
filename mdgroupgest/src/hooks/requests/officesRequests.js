@@ -95,35 +95,7 @@ export default {
       })
     });
   },
-  officeResultsByPeriod: (data) => {
 
-    console.log(data, 'DATA')
-    
-    return new Promise((resolve) => {
-
-      let request = {
-          method: 'GET',
-          url: `${url}officeResultsByPeriod/`,
-          headers: {
-            'Authorization': 'Token ' + _currentTokenOnRAM(),
-          },
-          params: data,
-          json: true,
-          dataType: "json",
-          contentType: "application/json"
-        }
-      
-      axios(request)
-        .then((res) => {
-          localStorage.removeItem('officeResultsByPeriod')
-          localStorage.setItem('officeResultsByPeriod', JSON.stringify(res?.data))
-          resolve(res)
-        })
-        .catch(error => {
-          resolve(error)
-        })
-    });
-  },
   paymentSheetByPeriod: (data) => {
     
     return new Promise((resolve) => {
@@ -149,6 +121,7 @@ export default {
       axios(request)
 
       .then((res) => {
+        console.log(res?.data, 'RES DATA');
         localStorage.removeItem('payrollSheet');
         localStorage.setItem('payrollSheet', JSON.stringify(res?.data));
         resolve(res);

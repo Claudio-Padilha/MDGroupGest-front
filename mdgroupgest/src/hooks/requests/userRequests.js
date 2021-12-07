@@ -1,25 +1,26 @@
-import axios from 'axios'
-import Swal from 'sweetalert2'
+import axios from 'axios';
+import Swal from 'sweetalert2';
+import React from 'react';
 
-import _currentTokenOnRAM from './currentToken'
-import dataRequests from '../../hooks/requests/dataRequests'
-import employeesRequests from '../../hooks/requests/employeesRequests'
+import _currentTokenOnRAM from './currentToken';
+import dataRequests from '../../hooks/requests/dataRequests';
+import employeesRequests from '../../hooks/requests/employeesRequests';
 import officesRequests from '../../hooks/requests/officesRequests'
-import useVPSURL from './defaultVpsURL'
-import contractsRequests from '../../hooks/requests/contractsRequests'
+import useVPSURL from './defaultVpsURL';
+import { Redirect } from 'react-router-dom';
 
-const url = useVPSURL()
+const url = useVPSURL();
 
-function recoverPassword(user_id, firstTime) {
+function _firstTimeOfAnUser(user_id) {
   return (
     Swal.fire({
-      title: `${firstTime ? 'Bem vindo(a), e': 'E'}scolha uma password.`,
+      title: 'Bem vindo(a), escolha uma password.',
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off'
       },
       confirmButtonText: 'Confirmar',
-      allowOutsideClick: !firstTime,
+      allowOutsideClick: false,
       preConfirm: (data) => {
 
           return axios.post(`${url}auth/definePassword/`, 
@@ -45,7 +46,7 @@ function recoverPassword(user_id, firstTime) {
   ))
 }
 
-async function _HandleConfirmLoginAlert() {
+async function  _HandleConfirmLoginAlert() {
   dataRequests.getPower()
   dataRequests.getGasScale()
   dataRequests.getPayment()
@@ -116,20 +117,32 @@ function _HandleDeniedLogin() {
 
 export default {
   login: (data) => {
+
+    // const dt = {
+    //   admin_comission: 0
+    // }
+
+    // const header = {
+    //   ContentType: "aplication/json"
+    // }
+
+    // axios.post(`http://localhost:8000/api/configurations/`, dt,header).then(res => {
+    //   console.log(res)
+    // }, err => {console.log(err.message, "ERRO")})
       
     return new Promise((resolve, reject) => {
 
         axios.post(`${url}auth/login/`, data)
 
             .then(async (res) => {
-              // Recover password when its first time
               if(res?.data?.user?.last_login === null) {
-                await recoverPassword(res.data.user.id, true)
+                await _firstTimeOfAnUser(res.data.user.id)
                 window.location.reload()
                 resolve(res)
               } else {             
                 resolve(res);
                 const user = res?.data;
+                console.log(user, 'USER NO LOGIN');
 
                 if (user[0] === "invalid credentials") {
                   _HandleDeniedLogin()
@@ -144,7 +157,7 @@ export default {
                   localStorage.setItem('isAdmin', JSON.stringify(user.user?.is_admin));
                   officesRequests.getOffices()
                   dataRequests.getOfficesResultsByDay(user?.user?.office)
-                  await contractsRequests.getAllContracts()
+
                   return new Promise((resolve, reject) => {
 
                     const officeID = user?.user?.office
@@ -194,15 +207,20 @@ export default {
         axios(authOptions)
 
         .then((res) => {
-            window.localStorage.clear()
-            resolve(res)
+            window.localStorage.clear();
+
+            
+            // localStorage.removeItem('myTeam')
+            // localStorage.removeItem('employeeDetail')
+            // localStorage.removeItem('currentToken')
+            
+
+            resolve(res);
         })
         .catch(error => {
-            const message = 'Erro do servidor.'
-            reject(message)
+            const message = 'Erro do servidor.';
+            reject(message);
         })
     })
   },
 }
-
-export { recoverPassword }

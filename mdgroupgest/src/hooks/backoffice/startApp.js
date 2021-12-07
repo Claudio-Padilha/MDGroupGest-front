@@ -1,15 +1,50 @@
-import { useEffect } from 'react'
+import { useMemo, useEffect, useCallback } from 'react'
+import { bindActionCreators } from 'redux'
+import { useDispatch } from 'react-redux'
 
-import dataRequests from '../requests/dataRequests'
+import dataRequests from '../requests/dataRequests';
 
 export const useStartAppActions = () => {
+  const dispatch = useDispatch()
 
-  const getFeedbackCalls = () => dataRequests.getFeedbackCall()
-  const getSellStates = () =>dataRequests.getSellState()
-  const getPayments =  () => dataRequests.getPayment()
-  const getGasScales = () => dataRequests.getGasScale()
-  const getPowers = () => dataRequests.getPower()
-  const getResultsToPresent = () => dataRequests.getResultsToPresent()
+  const actions = useMemo(
+    () => bindActionCreators(
+      {
+        feedbackCalls: dataRequests.getFeedbackCall(),
+        getSellStates: dataRequests.getSellState(),
+        getPayments: dataRequests.getPayment(),
+        getGasScales: dataRequests.getGasScale(),
+        getPowers: dataRequests.getPower(),
+        getResultsToPresent: dataRequests.getResultsToPresent()
+      }, 
+      dispatch
+    ),  
+    [dispatch]
+  )
+
+  const getFeedbackCalls = () => {
+    return dataRequests.getFeedbackCall()
+  }
+
+  const getSellStates =  () => {
+    return dataRequests.getSellState()
+  }
+
+  const getPayments =  () => {
+    return dataRequests.getPayment()
+  }
+
+  const getGasScales = () => {
+    return dataRequests.getGasScale()
+  }
+
+  const getPowers = () => {
+    return dataRequests.getPower()
+  }
+
+  const getResultsToPresent = () => {
+      return dataRequests.getResultsToPresent()
+    }
 
   return {
     getFeedbackCalls,
@@ -34,13 +69,13 @@ export const useStartApp = () => {
   } = useStartAppActions()
   
   useEffect(() => {
+    
     getFeedbackCalls()
     getSellStates()
     getPayments()
     getGasScales()
     getPowers()
     getResultsToPresent()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [start])
 
   return start

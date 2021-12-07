@@ -1,20 +1,20 @@
-import React, { useMemo, useState, useEffect, useReducer, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
+import React, { useMemo, useState, useEffect, useReducer, useCallback } from "react"
+import { useHistory } from "react-router-dom"
 import Divider from '@material-ui/core/Divider'
 import _ from 'lodash'
 import Swal from 'sweetalert2'
 import Fuse from 'fuse.js'
-import { SwishSpinner } from 'react-spinners-kit'
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit"
 import TextField from '@material-ui/core/TextField'
 
 import { Heading, SubHeading, Body, SmallSubHeading } from '../../components/Text/text'
 import { LogoMD } from '../../components/Logo/logo'
-import Button from '../../components/Button/button'
+import Button from "../../components/Button/button"
 import { BackIcon } from '../../components/Icon/icons'
 
-import contractsRequests from '../../hooks/requests/contractsRequests'
-import dataRequests from '../../hooks/requests/dataRequests'
+import contractsRequests from "../../hooks/requests/contractsRequests"
 import { useRefresh } from '../../hooks/window/refresh'
+import { useDebounce } from '../../hooks/utils'
 import { useAuth } from '../../hooks/employees/auth'
 
 import {
@@ -24,19 +24,16 @@ import {
   Column,
   LogoContainer,
   WidthMessageContainer
-} from './styles'
+} from "./styles"
 
-import { List } from 'semantic-ui-react'
-import CONSTANTS from '../../constants'
+import { List } from "semantic-ui-react"
+import SearchBar from "../../components/SearchArea/search"
+import CONSTANTS from "../../constants"
 
 const ContractList = (props) => {
-  const history = useHistory()
-
-  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office
-
-  useEffect(() => {
-    contractsRequests.monthContracts(currentOfficeID)
-  }, [currentOfficeID])
+  const currentOfficeID = JSON.parse(localStorage.getItem('currentUser'))?.user?.office;
+  
+  contractsRequests.getContracts(currentOfficeID)
 
   const { wasRefreshed } = useRefresh()
 
@@ -48,7 +45,7 @@ const ContractList = (props) => {
     }
 
     history.push({
-      pathname: '/BackOffice',
+      pathname: "/BackOffice",
       state: {
         fromContractsList: true,
         deletedID: deletedID
@@ -60,6 +57,7 @@ const ContractList = (props) => {
 
   const haveAccess = (isCEO || isAdministrator || isRegularManager || isRegularSecretary)
 
+  const history = useHistory()
   const cameFromDetail = props?.location?.state?.cameFromDetail
   const cameFromEdit = props?.location?.state?.cameFromEdit
   const cameFromDetailUpdate = props?.location?.state?.cameFromDetailUpdate
@@ -73,12 +71,7 @@ const ContractList = (props) => {
   const contractsFromDelete = props?.location?.state?.contractsToReturnFromDelete
   const contractsFromUpdate = props?.location?.state?.contractsToReturnFromUpdate
 
-  const allContractsTogether = JSON.parse(localStorage.getItem('allContracts'))
-
-  const shouldRenderAll = props?.location?.state?.shouldRenderAll
-
   const [isLoading, setIsLoading] = useState(true)
-  const [isSearching, setIsSearching] = useState(false)
 
   if (isLoading) {
     setTimeout(() => {
@@ -87,13 +80,13 @@ const ContractList = (props) => {
   }
 
   useEffect(() => {
-    if(cameFromEdit || cameFromBackoffice) {
+    if(cameFromEdit) {
       window.location.reload()
     }
-  }, [cameFromEdit, cameFromBackoffice])
+  }, [])
 
   const initialState = {
-    contracts: shouldRenderAll ? allContractsTogether : contractsFromBackoffice,
+    contracts: contractsFromBackoffice,
     contractsFromDetail,
     contractsFromDelete,
     contractsFromUpdate
@@ -114,7 +107,6 @@ const ContractList = (props) => {
     switch (action) {
       case 'MAINTAIN_SCREEN_STATE':
         reducerState = stateOnRAM
-      // no default
     }
 
     localStorage.removeItem('contractListScreenState')
@@ -144,9 +136,9 @@ const ContractList = (props) => {
     } else {
       return state?.contracts
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wasRefreshed, cameFromDetail, cameFromUpdate, cameFromDelete, cameFromBackoffice, cameFromDetailUpdate])
 
+  var fromDelete = props?.location?.state?.fromDelete
   var deletedID = props?.location?.state?.deletedID
 
   function _removeContractFromRAM() {
@@ -157,49 +149,36 @@ const ContractList = (props) => {
     return contractsFromDelete
   }
 
+  const [display, setDisplay] = useState('flex')
+  const [isSearching, setIsSearching] = useState(false)
+
   if(deletedID) {
     _removeContractFromRAM()
   }
+  
+  const [activeContract, setActiveContract] = useState(false)
 
   const contracts = useMemo(() => {
     if (contractsFromBackoffice) {
-      console.log('Primeiro if')
-      return Object.values(contractsFromBackoffice)?.sort((a, b) => b.id - a.id)  
+      return contractsFromBackoffice?.sort((a, b) => b.id - a.id)  
     } else if (cameFromDelete) {
-      console.log('Primeiro else if')
       _removeContractFromRAM()
       return contractsFromDelete?.sort((a, b) => b.id - a.id)
-    } else if (cameFromDetail) {
-      console.log('Segundo else if')
+    } else if (cameFromDetail){
       return contractsFromDetail?.sort((a, b) => b.id - a.id)
     } else if (cameFromUpdate) {
-      console.log('Terceiro else if')
       return contractsFromUpdate?.sort((a, b) => b.id - a.id)
     } else {
-      console.log('Else')
-      const contractsObj = 
-        JSON.parse(localStorage.getItem(
-          `${JSON.parse(localStorage.getItem('contractsVector')
-        ) ? 'allContracts' : 'contracts'}`))
-      
-      
-      const contracts = Object.values(contractsObj)
-      console.log(contracts, 'Contracts')
-
+      const contracts = JSON.parse(localStorage.getItem('contracts'));
       let contractsToReturn = []
       for(let i = 0; i < contracts?.length; i++) {
-        if ((contracts[i]?.user__id === currentUser?.user?.id) || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
-          console.log('entrei no if do push')
+        if (contracts[i]?.user__id === currentUser?.user?.id || isCEO || isAdministrator || isRegularManager || isRegularSecretary) {
           contractsToReturn.push(contracts[i])
         }
       }
-      console.log(contractsToReturn, 'Contracts to return')
       return contractsToReturn?.sort((a, b) => b.id - a.id)    
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    } 
   },[wasRefreshed, cameFromDelete, cameFromDetail, cameFromBackoffice, isLoading])
-
-  console.log(contracts, 'Contrato já tendo tomado a decisão')
   
   function _ConfirmContractActivation(contract, i) {
     const sellStateID = () => {
@@ -230,7 +209,7 @@ const ContractList = (props) => {
         reverseButtons: true
       }).then(async (result) => {
 
-        // 'result.isConfimed significa clicar em 'É isto'
+        // "result.isConfimed significa clicar em "É isto"
           if (result.isConfirmed) {
             await contractsRequests.updateContract(
               {
@@ -241,12 +220,7 @@ const ContractList = (props) => {
               }
             )
             .then(async (res) => {
-              
-              await dataRequests.getResultsToPresent(currentOfficeID)
-              await dataRequests.getOfficeResults(currentOfficeID)
-              await contractsRequests.monthContracts(currentOfficeID)
-              await contractsRequests.getAllContracts()
-           
+              await contractsRequests.getContracts(currentOfficeID)
               const clientSideError = res?.message?.match(/400/g);
               const serverSideError = res?.message?.match(/500/g);
 
@@ -263,6 +237,7 @@ const ContractList = (props) => {
                   'error'
                 )
               } else {
+                setActiveContract(true)
                 swalWithBootstrapButtons.fire(
                   'Boa!',
                   'Contrato ativado com sucesso.',
@@ -275,7 +250,7 @@ const ContractList = (props) => {
                 })
               }
             })
-        // '!result.isConfimed significa clicar em 'Refazer!'
+        // "!result.isConfimed significa clicar em "Refazer!"
           } else if (!result.isConfirmed) {
             swalWithBootstrapButtons.fire(
               'Cancelado',
@@ -314,48 +289,52 @@ const ContractList = (props) => {
 
     function _contractType () {
       switch (contract?.contract_type) {
-        case 'dual':                    return 'Dual'
-        case 'gas':                     return 'Gás'
-        case 'electricity':             return 'Electricidade'
-        case 'condominium_dual':        return 'Dual Condomínio'
-        case 'condominium_gas':         return 'Gás Condomínio'
-        case 'condominium_electricity': return 'Electricidade Condomínio'
-  
+        case "dual":
+          return "Dual"
+        case "gas":
+          return "Gás"
+        case "electricity":
+          return "Electricidade"
+        case "condominium_dual":
+          return "Dual Condomínio"
+        case "condominium_gas":
+          return "Gás Condomínio"
+        case "condominium_electricity":
+          return "Electricidade Condomínio"
+      
         default:
           break;
       }
     }
 
     const stateOfContract = () => {
-      const renderRow = (state, signal) => (
-        <Row>
-          <Body style={{marginRight: "2%"}}>{state}</Body>
-          <Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>{signal}</Body>
-          <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
-        </Row>
-      )
-
-      if (sellState === "r") return renderRow('Por recuperar', '🟡')
-      else if (sellState === "ok") return renderRow('Válido', '🟢')
-      else return renderRow('Anulado', '🔴')
+      if(sellState === "r") {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Por recuperar</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟡</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
+          </Row>
+        )
+      } else if (sellState === "ok") {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Válido</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🟢</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
+          </Row>
+        )
+      } else {
+        return (
+          <Row>
+            <Body style={{marginRight: "2%"}}>Anulado</Body><Body style={{textShadow: "3px 3px 12px rgba(200, 200, 200, 0.8)"}}>🔴</Body>
+            <Body style={{marginLeft: "5%", fontWeight: "bold"}}>{_contractType()}</Body>
+          </Row>
+        )
+      }
     }
-
-    const renderListContent = (title, content) => (
-      <List.Content>
-        <Body className={"clientInfoTitle"}><b>{title}</b></Body>
-        <Body className={"clientInfoContent"}>  
-          {content}
-        </Body>
-      </List.Content>
-    )
     
     return (
       <>
-        <List.Item
-          key={i}
-          className={searched ? "eachContractSearched" : "eachContract"}
-          style={{display: 'flex'}}
-        >
+        <List.Item key={contract?.id} className={searched ? "eachContractSearched" : "eachContract"} style={{display: display}}>
           <Column className={"clientInfo"}>
             <Column>
               <Row>
@@ -377,12 +356,33 @@ const ContractList = (props) => {
             </Column> 
             <Row className={"rowOfClientInfo"}>
               <Column className={"pairOfClientInfo"}>
-                { renderListContent('Nome do Cliente:', contract?.client_name) }
-                { renderListContent('Contato do Cliente:', contract?.client_contact) }
+                <List.Content>
+                  <Body className={"clientInfoTitle"}><b>Nome do Cliente:</b></Body>
+                  <Body className={"clientInfoContent"}>  
+                    {contract?.client_name}
+                  </Body>
+                </List.Content>
+                <List.Content>
+                  <Body className={"clientInfoTitle"}><b>Contato do Cliente:</b></Body> 
+                  <Body className={"clientInfoContent"}>               
+                    {contract?.client_contact}
+                  </Body>
+                </List.Content>
               </Column>
               <Column className={"pairOfClientInfo"}>
-                { renderListContent('Data de entrega:', contract?.delivery_date) }
-                { renderListContent('NIF / NIPC:', contract?.client_nif) }
+                <List.Content>
+                  <Body className={"clientInfoTitle"}><b>Data de entrega:</b></Body>
+                  <Body className={"clientInfoContent"}> 
+                    {contract?.delivery_date}
+                  </Body>
+                </List.Content>
+                <List.Content>
+                  <Body className={"clientInfoTitle"}><b>NIF / NIPC:</b></Body> 
+                  <Body className={"clientInfoContent"}>
+                    {contract?.client_nif}
+                  </Body>
+                </List.Content>
+
               </Column>
             </Row>
           </Column>
@@ -390,7 +390,7 @@ const ContractList = (props) => {
           { contract?.sell_state__name === "ok" &&
             <Column className={"contractComission"}>
               <List.Content>
-                <SmallSubHeading><b>Comissão do colaborador:</b></SmallSubHeading>
+                <SmallSubHeading><b>Comissão do comercial:</b></SmallSubHeading>
                 <Body className={"employeeComission"}>
                   {`${contract?.employee_comission === null ? '0' : `${contract?.employee_comission}`}€`}
                 </Body>
@@ -427,7 +427,7 @@ const ContractList = (props) => {
         </List.Item>
         <Divider />
       </>
-    )
+    );
   }
 
   const [query, setQuery] = useState('')
@@ -438,24 +438,24 @@ const ContractList = (props) => {
       setIsSearching(false)
     }
     if (contracts) {
+      const keys = [
+        {
+          name: 'client_nif',
+          weight: 2
+        },
+        'user__name',
+        'contract_type',
+        'sell_state__name'
+      ]
 
-      const newFuse = new Fuse(contracts, {
-        keys: [
-          'client_nif',
-          'client_name',
-          'user__name',
-          'contract_type',
-          'sell_state__name'
-        ],
+      const options = {
+        keys,
         includeScore: true,
-        includeMatches: true,
-        minMatchCharLength: 2,
-        findAllMatches: true,
-        threshold: 0,
-        useExtendedSearch: true,
-        ignoreFieldNorm: true,
-        ignoreLocation: true,
-      })
+        minMatchCharLength: 1,
+        findAllMatches: true
+      }
+
+      const newFuse = new Fuse(contracts, options)
 
       setFuse(newFuse)
     }
@@ -464,12 +464,7 @@ const ContractList = (props) => {
 
   const _handleSearchChange = (value) => {
     setIsSearching(true)
-    let auxValue = value
-    if (value[value?.length - 1] === ' ') {
-      auxValue = value.replace(' ', '')
-    }
-
-    setQuery(auxValue)
+    setQuery(value?.toString())
   }
   
   const renderSearchBar = useCallback(() => (
@@ -487,15 +482,14 @@ const ContractList = (props) => {
           }
         }
       }}
-      label="NIF, Colaborador, Nome do cliente, Tipo de Contrato, Estado da venda..."
-      onChange={e =>  _handleSearchChange(e?.target?.value) }
+      label="NIF, Comercial, Tipo de Contrato, Estado da venda..."
+      onChange={e =>  _handleSearchChange(e?.target?.value?.toLowerCase()) }
       style={{marginTop: '2vh'}}
     />
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [isSearching])
 
   const fuseMatchedContracts = useMemo(() => (
-    fuse?.search(query).filter(value => ( value?.score <= 0.001 ))
+    fuse?.search(query).filter(value => ( value?.score <= 0.0001 ))
   // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [query])
 
@@ -513,84 +507,156 @@ const ContractList = (props) => {
     </div>
   )
 
-  const handleContent = useCallback(() => {
-    return (
-      isLoading ?
-      <MainContainer>
-        <SwishSpinner size={200} color="#686769" loading={isLoading} />
-      </MainContainer>
-      :
-      <>
-        <WidthMessageContainer>
-          <Heading>Você precisa de mais espaço!</Heading>
-          <SubHeading>Volte ao tamanho necessário.</SubHeading>
-        </WidthMessageContainer>
-        <MainContainer id={"mainContainer"}>
-          <BackIcon onClick={_goBack} />
-          <Col style={{
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center'
-          }}>
-            <Col>
-              <Row style={{
-                width: '100%',
-                display: 'flex',
-                textAlign: 'center',
-                marginTop: '.75vh',
-                justifyContent: 'space-between',
-              }}>
-                {/* eslint-disable-next-line jsx-a11y/accessible-emoji */}
-                <SubHeading style={{
-                  marginBottom: '0%',
-                  color: CONSTANTS?.colors?.mediumGrey,
-                  textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
-                }}>Podes pesquisar aqui 🔍</SubHeading>
-              </Row>
-            </Col>
-  
-            <Col>
-              {renderSearchBar()}
-            </Col>
+  return (
+    isLoading ?
+    <MainContainer>
+      <SwishSpinner size={200} color="#686769" loading={isLoading} />
+    </MainContainer>
+    :
+    <>
+      <WidthMessageContainer>
+        <Heading>Você precisa de mais espaço!</Heading>
+        <SubHeading>Volte ao tamanho necessário.</SubHeading>
+      </WidthMessageContainer>
+      <MainContainer id={"mainContainer"}>
+        <BackIcon onClick={_goBack} />
+        <Col style={{
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Col>
+            <Row style={{
+              width: '100%',
+              display: 'flex',
+              textAlign: 'center',
+              marginTop: '.75vh',
+              justifyContent: 'space-between',
+            }}>
+              <SubHeading style={{
+                marginBottom: '0%',
+                color: CONSTANTS?.colors?.mediumGrey,
+                textShadow: '1px 1px 1px rgba(200, 200, 200, 0.8)'
+              }}>Podes pesquisar aqui 🔍</SubHeading>
+            </Row>
           </Col>
-          <List divided verticalAlign="middle" className={"listContainer"}>
-          { isSearching ?
-            fuseMatchedContracts?.length !== 0 ? fuseMatchedContracts?.map(
-              function(contract, index) {
-                return renderContract(contract?.item, index, true)
-              }
-            ) : handleEmptySearch()
-          : contracts?.length === 0 ?
-            <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
-          cameFromDetail ?
-            stateOfContractsFromDetail &&
-            stateOfContractsFromDetail.map(function(contract, index) {
-                return renderContract(contract, index, false);
-              })
-          : contracts &&
-            contracts.map(function(contract, index) {
-              return renderContract(contract, index, false)
-            })
-          }        
-          </List>
-          <LogoContainer>
-            <LogoMD action={
-              () => history.push({
-                pathname: "/BackOffice",
-                state: {
-                  fromContractsList: true
-                }}
-              )}
+
+          <Col>
+            {renderSearchBar()}
+          </Col>
+          {/* <Col>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Potência"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
             />
-          </LogoContainer>
-        </MainContainer>
-      </>
-    )
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [contracts, cameFromBackoffice, isLoading, fuseMatchedContracts, isSearching])
+          </Col>
+          <Col>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="NIF / NIPC"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
+          </Col>
+          <Col>
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Tipo de contrato"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
+          </Col>  
+          <Col> 
+            <TextField
+              id="outlined-basic"
+              variant="outlined"
+              InputProps={{
+                style: {
+                  color: 'black',
+                  borderBottomColor: 'black',
+                  '& .MuiInput-underline:after': {
+                    color: 'black',
+                    borderBottomColor: 'black'
+                  }
+                }
+              }}
+              label="Estado da venda"
+              onChange={(e) => _handleSearchChange(e.target.value.toLowerCase()) }
+              style={{marginTop: '2vh'}}
+            />
+          </Col>
+          */}
+        </Col>
+        <List divided verticalAlign="middle" className={"listContainer"}>
+        { isSearching ?
+          fuseMatchedContracts?.length !== 0 ? fuseMatchedContracts?.map(
+            function(contract, index) {
+              return renderContract(contract?.item, index, true)
+            }
+          ) : handleEmptySearch()
+        : contracts?.length === 0 ?
+          <SubHeading style={{display: 'flex', justifyContent: 'center', marginTop: '25%'}}>Ainda não há contratos...</SubHeading> :
+        cameFromDetail ?
+          stateOfContractsFromDetail &&
+          stateOfContractsFromDetail.map(function(contract, index) {
+              return renderContract(contract, index, false);
+            })
+        : contracts &&
+          contracts.map(function(contract, index) {
+            return renderContract(contract, index, false);
+          })
+        }        
+        </List>
+        <LogoContainer>
+          <LogoMD action={
+            () => history.push({
+              pathname: "/BackOffice",
+              state: {
+                fromContractsList: true
+              }}
+            )}
+          />
+        </LogoContainer>
+      </MainContainer>
+    </>
+  )
 
-  return handleContent()
-}
+};
 
-export default ContractList
+export default ContractList;

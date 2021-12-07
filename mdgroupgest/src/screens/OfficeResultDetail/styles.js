@@ -63,7 +63,7 @@ const OfficeMonthResultContainer = styled.div`
 
 const FirstRow = styled.div`
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: space-around;
   width: 100%;
   height: 100%;
@@ -82,14 +82,23 @@ const FirstRow = styled.div`
   }
 `;
 
-const CalculateButton = styled.div`
+const SecondRow = styled.div`
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 10px;
-  width: 30%;
-  height: 80%;
+  flex-direction: row;
+  justify-content: space-around;
+  width: 100%;
+  height: 100%;
+  a {
+    height: 80%;
+    width: 25%;
+    text-decoration: none;
+    div {
+      align-self: center;
+    }
+    &:hover {
+      animation: ${pulse} 1s infinite;
+    }
+  }
 `;
 
 const ContractsInfo = styled.div`
@@ -100,6 +109,14 @@ const ContractsInfo = styled.div`
   width: 100%;
   margin-left: 0%;
   margin-right: 3%;
+`;
+
+const HomePageButton = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
 `;
 
 const EmptyContainer = styled.div`
@@ -114,8 +131,9 @@ export {
   MainContainer,
   OfficeMonthResultContainer,
   FirstRow,
-  CalculateButton,
+  SecondRow,
   ContractsInfo,
+  HomePageButton,
   EmptyContainer,
   WidthMessageContainer
 };

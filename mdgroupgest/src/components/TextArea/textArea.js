@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
-import PropTypes from 'prop-types'
+import React, { useState } from "react";
+import PropTypes from "prop-types";
 
-import { ErrorText, Body } from '../Text/text'
-import { StyledTextArea, TextAreaContainer } from './styles'
+import { ErrorText, Body } from "../Text/text";
+import { StyledTextArea, TextAreaContainer } from "./styles";
 
 const TextArea = ({ 
   error,
@@ -13,8 +13,7 @@ const TextArea = ({
   type,
   ...otherProps
 }) => {
-  // eslint-disable-next-line no-unused-vars
-  const [inputType, setInputType] = useState(type || 'text-area')
+  const [inputType, setInputType] = useState(type || "text-area");
 
   return (
     <TextAreaContainer error={error}>
@@ -30,7 +29,8 @@ const TextArea = ({
       {error && <ErrorText>{error}</ErrorText>}
     </TextAreaContainer>
   )
-}
+
+};
 
 TextArea.propTypes = {
   error: PropTypes.string,
@@ -38,6 +38,6 @@ TextArea.propTypes = {
   label: PropTypes.string,
   defaultValue: PropTypes.string,
   onChange: PropTypes.func
-}
+};
 
-export default TextArea
+export default TextArea;

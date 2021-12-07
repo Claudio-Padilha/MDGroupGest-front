@@ -1,6 +1,7 @@
-import styled from 'styled-components'
-import { makeStyles } from '@material-ui/core/styles'
-import { pulse } from '../../utils/animations'
+import styled from 'styled-components';
+import CONSTANTS from '../../constants';
+import { makeStyles } from '@material-ui/core/styles';
+import { pulse } from '../../utils/animations';
 
 const WidthMessageContainer = styled.div`
   display: flex;

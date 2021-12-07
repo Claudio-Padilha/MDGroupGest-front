@@ -64,7 +64,7 @@ const EditEmployee = (props) => {
 
       return (
         swalWithBootstrapButtons.fire({
-        title: `${nothingWasChanged ? "Você não alterou nenhuma informação." : "Confirme os dados do colaborador:"}`,
+        title: `${nothingWasChanged ? "Você não alterou nenhuma informação." : "Confirme os dados do comercial:"}`,
         html: 
             `${name ? `O novo nome será: <b>${name}</b> <br>` : ``}
              ${nr ? `O novo CC/BI será: <b>${nr}</b> <br>` : ``}
@@ -73,7 +73,7 @@ const EditEmployee = (props) => {
              ${address ? `A nova morada será: <b>${address}</b> <br>` : ``}
              ${email ? `O novo email será: <b>${email}</b> <br>` : ``}
              ${contact ? `O novo contacto será: <b>${contact}</b> <br>` : ``}
-             ${employeeAbove ? `Você mudará o colaborador associado. <br>` : ``}
+             ${employeeAbove ? `Você mudará o comercial associado. <br>` : ``}
             `,
         icon: 'warning',
         showCancelButton: !nothingWasChanged,
@@ -163,7 +163,7 @@ const EditEmployee = (props) => {
       subType: "twoColumns",
       side: "right",
       key: "employeeAbove",
-      question: "Colaborador responsável",
+      question: "Comercial responsável",
       placeholder: associatePlaceholder(),
       options: _employeeToAssociation() 
     }

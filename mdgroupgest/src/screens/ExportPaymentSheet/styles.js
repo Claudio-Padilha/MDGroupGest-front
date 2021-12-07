@@ -1,5 +1,6 @@
-import styled from 'styled-components'
-import { pulse } from '../../utils/animations'
+import styled from 'styled-components';
+import CONSTANTS from '../../constants';
+import { pulse } from '../../utils/animations';
 
 const WidthMessageContainer = styled.div`
   display: flex;
@@ -119,6 +120,7 @@ const ExportButton = styled.div`
   width: 30%;
   height: 80%;
 `;
+
 
 export {
   FirstRow,

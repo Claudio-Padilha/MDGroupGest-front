@@ -21,4 +21,6 @@ const _formatDate = (date) => {
   return "";
 }
 
-export { _formatDate }
+export {
+  _formatDate
+}

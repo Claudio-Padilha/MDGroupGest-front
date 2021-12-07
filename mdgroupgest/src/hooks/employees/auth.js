@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 export const useAuth = () => {
   const currentUser = useMemo(() => {
     return JSON.parse(localStorage.getItem('currentUser'))
-  }, [])
+  }, [localStorage])
 
   const isCEO = currentUser?.user?.user_type === "ceo"
   const isAdministrator = currentUser?.user?.user_type === "admin"

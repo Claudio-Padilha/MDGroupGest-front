@@ -1,30 +1,38 @@
-import React, { useState, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
-import Tree from 'react-tree-graph'
-import { SwishSpinner } from 'react-spinners-kit'
+import React, { useState, useMemo, useEffect } from "react";
+import { useHistory } from "react-router-dom";
+import Tree from 'react-tree-graph';
+import { SwishSpinner, GuardSpinner, CombSpinner } from "react-spinners-kit";
 
-import { BackIcon } from '../../components/Icon/icons'
-import { Heading, SubHeading } from '../../components/Text/text'
+import { BackIcon } from '../../components/Icon/icons';
+import { Heading, SubHeading } from "../../components/Text/text";
 
-import { MainContainer, WidthMessageContainer } from './styles'
-import dataRequests from '../../hooks/requests/dataRequests'
+import { MainContainer, WidthMessageContainer } from "./styles";
+import dataRequests from '../../hooks/requests/dataRequests';
+import { Autocomplete } from "@material-ui/lab";
 
 const MyTeam = () => {
 
-  const currentOffice = JSON.parse(localStorage.getItem('currentOffice'))
-  const history = useHistory()
-  const [isLoading, setIsLoading] = useState(true)
+  const currentOffice = JSON.parse(localStorage.getItem('currentOffice'));
+  const user = JSON.parse(localStorage.getItem('currentUser'))
+  const history = useHistory();
+  const [isLoading, setIsLoading] = useState(true);
 
   setTimeout(() => {
     setIsLoading(false)
-  }, [2000])
+  }, [2000]);
 
   // aqui cada clique leva a pagina de detalhe de cada funcionário
-  // function _handleMainClick (event, nodeKey) {
+  function _handleMainClick (event, nodeKey) {
 
-  //   localStorage.setItem('employeeDetail', nodeKey)
-  //   history.push('/EmployeeDetail');
-  // }
+    localStorage.setItem('employeeDetail', nodeKey)
+    history.push("/EmployeeDetail");
+  }
+
+  // caso haja lógica para o right click
+  function _handleRightClick(event, nodeKey) {
+    event.preventDefault();
+    alert(`Right clicked ${nodeKey}`);
+  }
   
   function maketree(instance, father, employees) {
     
@@ -56,8 +64,10 @@ const MyTeam = () => {
             employees.splice(i, 1)
             i--
           }
+
+
           
-        } else if (instance.user.user_type === 'manager_assistant'){
+        }else if (instance.user.user_type === 'manager_assistant'){
           if (instance.id === employees[i].manager_assistant){
             father.children.push(
               {
@@ -131,7 +141,7 @@ const MyTeam = () => {
 
   function _goBack() {
     history.push({
-      pathname: '/BackOffice',
+      pathname: "/BackOffice",
       state: {
         fromMyTeam: true,
       }
@@ -182,13 +192,12 @@ const MyTeam = () => {
       })
 
     return finalData
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
   
   return (
     isLoading ?
-    <MainContainer className='custom-container'>
-      <SwishSpinner size={300} color='#686769' loading={isLoading} />
+    <MainContainer className="custom-container">
+      <SwishSpinner size={300} color="#686769" loading={isLoading} />
     </MainContainer>  
     :
     <>
@@ -196,8 +205,8 @@ const MyTeam = () => {
         <Heading>Você precisa de mais espaço!</Heading>
         <SubHeading>Volte ao tamanho necessário.</SubHeading>
       </WidthMessageContainer>
-      <MainContainer className='custom-container'>
-        <BackIcon onClick={_goBack} className={'backIcon'}/>
+      <MainContainer className="custom-container">
+        <BackIcon onClick={_goBack} className={"backIcon"}/>
         <Tree
           data={finalData}
           height={900}
@@ -212,7 +221,7 @@ const MyTeam = () => {
           //   onClick: _handleMainClick,
           //   onContextMenu: _handleRightClick
           // }}
-          nodeShape='image'
+          nodeShape="image"
           nodeProps={{
             height: 45,
             width: 45,

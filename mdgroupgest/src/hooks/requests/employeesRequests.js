@@ -1,9 +1,12 @@
 import axios from 'axios'
+import Swal from 'sweetalert2';
 
-import _currentTokenOnRAM from './currentToken'
-import useVPSURL from './defaultVpsURL'
+import _currentTokenOnRAM from './currentToken';
+import dataRequests from './dataRequests';
+import { FormField } from 'semantic-ui-react';
+import useVPSURL from './defaultVpsURL';
 
-const url = useVPSURL()
+const url = useVPSURL();
 
 export default {
   getAllEmployees: (officeID) => {
@@ -91,9 +94,9 @@ export default {
   },
   createEmployee: (user_type, data) => {
 
-    var userType = localStorage.getItem('currentUserType')
+    var userType = localStorage.getItem('currentUserType');
+    var userTypeBody = userType
 
-    // eslint-disable-next-line no-redeclare
     var user_type = userType === "sales_person" ? "salesPerson" : userType === "team_leader" ? "teamLeader" : userType;
     
     return new Promise((resolve) => {
@@ -158,12 +161,7 @@ export default {
     return new Promise((resolve, reject) => {
 
       var userType = data?.user.user_type;
-      const convertToSalesperson = (
-        userType === "sales_person" ||
-        userType === "instructor" ||
-        userType === "team_leader" ||
-        userType === 'manager_assistant'
-      )
+      const convertToSalesperson = (userType === "sales_person" || userType === "instructor" || userType === "team_leader")
       var user_type = convertToSalesperson ? "salesPerson" : userType;
       
       var employeeDeleteRequest = {
@@ -243,6 +241,7 @@ export default {
       axios(employeeUpdateRequest)
 
       .then(res => {
+        console.log(res, 'RESPOSTA DO PATCH');
         localStorage.removeItem('userForPhoto');
         localStorage.setItem('userForPhoto', JSON.stringify(res.data))
 
