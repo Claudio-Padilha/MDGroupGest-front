@@ -123,6 +123,8 @@ const MyResults = (props) => {
     } 
   }
 
+  console.log(state, 'ESTADO')
+
   const renderMyProfit = () => {
     const colStyle = {
       width: '100%',
@@ -160,7 +162,7 @@ const MyResults = (props) => {
             </Col>
           }
 
-          { (isAdministrator || isRegularSecretary) && 
+          { (isCEO || isAdministrator || isRegularSecretary) && 
             <Col style={colStyle}>
 
               <SmallSubHeading style={
